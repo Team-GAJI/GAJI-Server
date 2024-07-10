@@ -1,0 +1,10 @@
+version: "3" # 버전 지정
+
+services: # 컨테이너 설정
+  backend:
+    container_name: gaji-server
+    image: shim1510/gaji-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - 8080:8080
