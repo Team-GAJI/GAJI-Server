@@ -3,19 +3,6 @@ server:
 
 spring:
   application:
-    name: umc-service-prod
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
+    name: gaji-service-prod
     config:
       import: classpath:application.yml
-
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true
-        jdbc:
-          time_zone: Asia/Seoul

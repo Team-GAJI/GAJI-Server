@@ -4,16 +4,5 @@ server:
 spring:
   application:
     name: gaji-service-local
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
     config:
       import: classpath:application.yml
-
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true
