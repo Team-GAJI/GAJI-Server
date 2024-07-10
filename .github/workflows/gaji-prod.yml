@@ -1,4 +1,4 @@
-name: UMC Service Prod CI/CD
+name: GAJI Service Prod CI/CD
 
 on:
   push:
