@@ -62,7 +62,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: 22
           script: |
-            sudo docker-compose -f docker-compose-prod.yml down
+            sudo docker-compose -f docker/docker-compose-prod.yml down
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}
-            sudo docker-compose -f docker-compose-prod.yml up -d
+            sudo docker-compose -f docker/docker-compose-prod.yml up -d
             sudo docker image prune -f
