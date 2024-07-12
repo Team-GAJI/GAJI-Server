@@ -2,6 +2,7 @@ package gaji.service.global.base;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import gaji.service.global.exception.code.status.SuccessStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -22,7 +23,7 @@ public class BaseResponse<T> {
 
     //성공한 경우 응답 생성
     public static <T> BaseResponse<T> onSuccess(T result) {
-        return new BaseResponse<>(true, "COMMON200", "요청에 성공하였습니다.", result);
+        return new BaseResponse<>(true, SuccessStatus._OK.getCode(), SuccessStatus._OK.getMessage(), result);
     }
 
     // 실패한 경우 응답 생성
