@@ -1,6 +1,6 @@
 package gaji.service.domain;
 
-import com.example.gaji_dev.domain.enums.RepeatType;
+import gaji.service.domain.enums.RepeatType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
