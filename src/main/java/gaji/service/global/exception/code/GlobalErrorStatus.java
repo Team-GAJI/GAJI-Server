@@ -1,15 +1,15 @@
 package gaji.service.global.exception.code;
 
 
-import gaji.service.global.exception.ErrorCode;
-import gaji.service.global.exception.ErrorCodeInterface;
+import gaji.service.global.exception.BaseErrorCodeDTO;
+import gaji.service.global.exception.BaseErrorCodeInterface;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum GlobalErrorCode implements ErrorCodeInterface {
+public enum GlobalErrorStatus implements BaseErrorCodeInterface {
 
     // 가장 일반적인 응답
     _INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버 에러, 관리자에게 문의 바랍니다."),
@@ -26,13 +26,15 @@ public enum GlobalErrorCode implements ErrorCodeInterface {
     ;
 
     private final HttpStatus httpStatus;
+    private final boolean isSuccess = false;
     private final String code;
     private final String message;
 
     @Override
-    public ErrorCode getErrorCode() {
-        return ErrorCode.builder()
+    public BaseErrorCodeDTO getErrorCode() {
+        return BaseErrorCodeDTO.builder()
                 .httpStatus(httpStatus)
+                .isSuccess(isSuccess)
                 .code(code)
                 .message(message)
                 .build();
