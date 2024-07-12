@@ -1,4 +1,4 @@
-package gaji.service.global.exception;
+package gaji.service.global.exception.code;
 
 public interface BaseErrorCodeInterface {
     BaseErrorCodeDto getErrorCode();

@@ -1,4 +1,4 @@
-package gaji.service.global.exception;
+package gaji.service.global.exception.code;
 
 import lombok.Builder;
 import lombok.Getter;
