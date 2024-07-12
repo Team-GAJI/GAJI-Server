@@ -1,7 +1,7 @@
 package gaji.service.global.exception;
 
 import gaji.service.global.base.BaseResponse;
-import gaji.service.global.exception.code.GlobalErrorCode;
+import gaji.service.global.exception.code.GlobalErrorStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +28,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     // @ExceptionHandler는 Controller계층에서 발생하는 에러를 잡아서 메서드로 처리해주는 기능
     @ExceptionHandler(value = RestApiException.class)
     public ResponseEntity<BaseResponse<String>> handleRestApiException(RestApiException e) {
-        ErrorCode errorCode = e.getErrorCode();
+        BaseErrorCodeDTO errorCode = e.getErrorCode();
         return handleExceptionInternal(errorCode);
     }
 
@@ -39,7 +39,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<BaseResponse<String>> handleException(Exception e) {
         e.printStackTrace(); //예외 정보 출력
 
-        return handleExceptionInternalFalse(GlobalErrorCode._INTERNAL_SERVER_ERROR.getErrorCode(), e.getMessage());
+        return handleExceptionInternalFalse(GlobalErrorStatus._INTERNAL_SERVER_ERROR.getErrorCode(), e.getMessage());
     }
 
     /*
@@ -48,7 +48,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler
     public ResponseEntity<BaseResponse<String>> handleConstraintViolationException(ConstraintViolationException e) {
-        return handleExceptionInternal(GlobalErrorCode._VALIDATION_ERROR.getErrorCode());
+        return handleExceptionInternal(GlobalErrorStatus._VALIDATION_ERROR.getErrorCode());
     }
 
     /*
@@ -58,7 +58,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<BaseResponse<String>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e) {
         // 예외 처리 로직
-        return handleExceptionInternal(GlobalErrorCode._METHOD_ARGUMENT_ERROR.getErrorCode());
+        return handleExceptionInternal(GlobalErrorStatus._METHOD_ARGUMENT_ERROR.getErrorCode());
     }
 
     /*
@@ -77,23 +77,23 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                     errors.merge(fieldName, errorMessage, (existingErrorMessage, newErrorMessage) -> existingErrorMessage + ", " + newErrorMessage);
                 });
 
-        return handleExceptionInternalArgs(GlobalErrorCode._VALIDATION_ERROR.getErrorCode(), errors);
+        return handleExceptionInternalArgs(GlobalErrorStatus._VALIDATION_ERROR.getErrorCode(), errors);
 
     }
 
-    private ResponseEntity<BaseResponse<String>> handleExceptionInternal(ErrorCode errorCode) {
+    private ResponseEntity<BaseResponse<String>> handleExceptionInternal(BaseErrorCodeDTO errorCode) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), null));
     }
 
-    private ResponseEntity<Object> handleExceptionInternalArgs(ErrorCode errorCode, Map<String, String> errorArgs) {
+    private ResponseEntity<Object> handleExceptionInternalArgs(BaseErrorCodeDTO errorCode, Map<String, String> errorArgs) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errorArgs));
     }
 
-    private ResponseEntity<BaseResponse<String>> handleExceptionInternalFalse(ErrorCode errorCode, String errorPoint) {
+    private ResponseEntity<BaseResponse<String>> handleExceptionInternalFalse(BaseErrorCodeDTO errorCode, String errorPoint) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errorPoint));

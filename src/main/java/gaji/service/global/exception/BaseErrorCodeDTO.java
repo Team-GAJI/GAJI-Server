@@ -6,8 +6,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Builder
-public class ErrorCode {
+public class BaseErrorCodeDTO {
     private final HttpStatus httpStatus;
+    private final boolean isSuccess;
     private final String code;
     private final String message;
 }
