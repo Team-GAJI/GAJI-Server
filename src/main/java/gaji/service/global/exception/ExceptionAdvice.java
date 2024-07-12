@@ -1,7 +1,7 @@
 package gaji.service.global.exception;
 
 import gaji.service.global.base.BaseResponse;
-import gaji.service.global.exception.code.BaseErrorCodeDto;
+import gaji.service.global.exception.code.BaseCodeDto;
 import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
@@ -29,7 +29,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     // @ExceptionHandler는 Controller계층에서 발생하는 에러를 잡아서 메서드로 처리해주는 기능
     @ExceptionHandler(value = RestApiException.class)
     public ResponseEntity<BaseResponse<String>> handleRestApiException(RestApiException e) {
-        BaseErrorCodeDto errorCode = e.getErrorCode();
+        BaseCodeDto errorCode = e.getErrorCode();
         return handleExceptionInternal(errorCode);
     }
 
@@ -82,19 +82,19 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     }
 
-    private ResponseEntity<BaseResponse<String>> handleExceptionInternal(BaseErrorCodeDto errorCode) {
+    private ResponseEntity<BaseResponse<String>> handleExceptionInternal(BaseCodeDto errorCode) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), null));
     }
 
-    private ResponseEntity<Object> handleExceptionInternalArgs(BaseErrorCodeDto errorCode, Map<String, String> errorArgs) {
+    private ResponseEntity<Object> handleExceptionInternalArgs(BaseCodeDto errorCode, Map<String, String> errorArgs) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errorArgs));
     }
 
-    private ResponseEntity<BaseResponse<String>> handleExceptionInternalFalse(BaseErrorCodeDto errorCode, String errorPoint) {
+    private ResponseEntity<BaseResponse<String>> handleExceptionInternalFalse(BaseCodeDto errorCode, String errorPoint) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errorPoint));

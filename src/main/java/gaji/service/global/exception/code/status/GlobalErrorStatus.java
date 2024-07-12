@@ -1,7 +1,7 @@
 package gaji.service.global.exception.code.status;
 
 
-import gaji.service.global.exception.code.BaseErrorCodeDto;
+import gaji.service.global.exception.code.BaseCodeDto;
 import gaji.service.global.exception.code.BaseErrorCodeInterface;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,8 +31,8 @@ public enum GlobalErrorStatus implements BaseErrorCodeInterface {
     private final String message;
 
     @Override
-    public BaseErrorCodeDto getErrorCode() {
-        return BaseErrorCodeDto.builder()
+    public BaseCodeDto getErrorCode() {
+        return BaseCodeDto.builder()
                 .httpStatus(httpStatus)
                 .isSuccess(isSuccess)
                 .code(code)
