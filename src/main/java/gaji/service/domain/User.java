@@ -1,6 +1,8 @@
 package gaji.service.domain;
 
 import gaji.service.domain.common.BaseEntity;
+import gaji.service.domain.enums.Gender;
+import gaji.service.domain.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
