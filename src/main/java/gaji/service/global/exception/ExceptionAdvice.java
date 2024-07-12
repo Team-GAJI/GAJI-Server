@@ -1,7 +1,8 @@
 package gaji.service.global.exception;
 
 import gaji.service.global.base.BaseResponse;
-import gaji.service.global.exception.code.GlobalErrorStatus;
+import gaji.service.global.exception.code.BaseErrorCodeDto;
+import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
