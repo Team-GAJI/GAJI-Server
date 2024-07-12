@@ -1,5 +1,5 @@
 package gaji.service.global.exception.code;
 
 public interface BaseErrorCodeInterface {
-    BaseErrorCodeDto getErrorCode();
+    BaseCodeDto getErrorCode();
 }
