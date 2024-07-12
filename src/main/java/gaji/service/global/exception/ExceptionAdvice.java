@@ -28,7 +28,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     // @ExceptionHandler는 Controller계층에서 발생하는 에러를 잡아서 메서드로 처리해주는 기능
     @ExceptionHandler(value = RestApiException.class)
     public ResponseEntity<BaseResponse<String>> handleRestApiException(RestApiException e) {
-        BaseErrorCodeDTO errorCode = e.getErrorCode();
+        BaseErrorCodeDto errorCode = e.getErrorCode();
         return handleExceptionInternal(errorCode);
     }
 
@@ -81,19 +81,19 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     }
 
-    private ResponseEntity<BaseResponse<String>> handleExceptionInternal(BaseErrorCodeDTO errorCode) {
+    private ResponseEntity<BaseResponse<String>> handleExceptionInternal(BaseErrorCodeDto errorCode) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), null));
     }
 
-    private ResponseEntity<Object> handleExceptionInternalArgs(BaseErrorCodeDTO errorCode, Map<String, String> errorArgs) {
+    private ResponseEntity<Object> handleExceptionInternalArgs(BaseErrorCodeDto errorCode, Map<String, String> errorArgs) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errorArgs));
     }
 
-    private ResponseEntity<BaseResponse<String>> handleExceptionInternalFalse(BaseErrorCodeDTO errorCode, String errorPoint) {
+    private ResponseEntity<BaseResponse<String>> handleExceptionInternalFalse(BaseErrorCodeDto errorCode, String errorPoint) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errorPoint));
