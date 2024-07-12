@@ -1,4 +1,4 @@
-package gaji.service.global.common.base;
+package gaji.service.global.base;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

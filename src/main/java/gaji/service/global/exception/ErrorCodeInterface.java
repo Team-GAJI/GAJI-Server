@@ -1,4 +1,4 @@
-package gaji.service.global.common.exception;
+package gaji.service.global.exception;
 
 public interface ErrorCodeInterface {
     ErrorCode getErrorCode();
