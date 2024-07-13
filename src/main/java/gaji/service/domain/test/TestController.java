@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
+        //Get 요청으로 api 테스트
         @GetMapping
         public String test() {
             return "test ok";
         }
-}
+
+    }
