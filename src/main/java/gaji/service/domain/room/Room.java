@@ -1,6 +1,7 @@
 package gaji.service.domain.room;
 
 import gaji.service.domain.Event;
+import gaji.service.domain.RecruitPost;
 import gaji.service.studyMate.Assignment;
 import gaji.service.studyMate.Chat;
 import jakarta.persistence.*;
@@ -39,6 +40,10 @@ public class Room {
     //과제 매핑
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Assignment> assignmentList = new ArrayList<>();
+
+    //모집 게시글 작성
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<RecruitPost> recruitPostList = new ArrayList<>();
 
 
     private String name;
