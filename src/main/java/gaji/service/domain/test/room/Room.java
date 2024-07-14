@@ -1,5 +1,6 @@
-package gaji.service.domain;
+package gaji.service.domain.test.room;
 
+import gaji.service.domain.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
