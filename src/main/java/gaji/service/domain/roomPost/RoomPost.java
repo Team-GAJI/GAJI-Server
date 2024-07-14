@@ -41,6 +41,7 @@ public class RoomPost {
     @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
     private List<RoomComment> roomCommentList  = new ArrayList<>() ;
 
-
+    @OneToMany(mappedBy = "roomPost", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoomPostImage> roomPostImageList = new ArrayList<>();
 
 }
