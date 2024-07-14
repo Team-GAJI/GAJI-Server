@@ -1,6 +1,6 @@
-package gaji.service.domain;
+package gaji.service.domain.recruite;
 
-import gaji.service.domain.recruite.RecruitPost;
+import gaji.service.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Report {
+public class RecruitPostBookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +20,8 @@ public class Report {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recruitPost")
+    @JoinColumn(name = "recruitPost_id")
     private RecruitPost recruitPost;
+
+
 }

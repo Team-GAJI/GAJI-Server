@@ -1,5 +1,6 @@
-package gaji.service.domain;
+package gaji.service.domain.recruite;
 
+import gaji.service.domain.User;
 import gaji.service.domain.common.BaseEntity;
 import gaji.service.domain.enums.Status;
 import gaji.service.domain.room.Room;
@@ -7,9 +8,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -27,6 +29,10 @@ public class RecruitPost extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @OneToMany(mappedBy = "recruitPost", cascade =  CascadeType.ALL)
+    private List<RecruitPostBookmark> recruitPostBookmarkList = new ArrayList<>();
+
 
     @Column(length = 20)
     private String title;
