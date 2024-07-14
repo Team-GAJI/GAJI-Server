@@ -19,7 +19,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Event> eventList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

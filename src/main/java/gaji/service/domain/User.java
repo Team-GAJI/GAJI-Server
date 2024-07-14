@@ -45,7 +45,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SearchKeyword> searchKeywordList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Event> eventList = new ArrayList<>();
 
 
