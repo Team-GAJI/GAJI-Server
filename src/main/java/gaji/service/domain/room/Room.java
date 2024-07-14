@@ -35,6 +35,11 @@ public class Room {
     @OneToOne(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private Chat chat;
 
+    //과제 매핑
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<Assignment> assignmentList = new ArrayList<>();
+
+
     private String name;
     private int headCount;
     private LocalDate startDay;
