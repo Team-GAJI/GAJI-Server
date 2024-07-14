@@ -49,6 +49,7 @@ public class User extends BaseEntity {
     private List<Event> eventList = new ArrayList<>();
 
 
-
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
+    private List<StudyMate> studyMateList;
 
 }
