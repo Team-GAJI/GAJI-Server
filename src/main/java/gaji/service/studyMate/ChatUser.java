@@ -15,9 +15,10 @@ public class ChatUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "studyMate_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private StudyMate studyMate;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id")
