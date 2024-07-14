@@ -1,31 +1,22 @@
-package gaji.service.domain.roomPost;
+package gaji.service.domain;
 
-import gaji.service.domain.StudyMate;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Builder
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoomPost {
+public class StudyMate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private StudyMate studyMate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomBoard_id")
-    private RoomBoard roomBoard;
-
-    private String title;
-    private String body;
-
-
-
+    User user;
 }
