@@ -34,5 +34,6 @@ public class StudyMate {
     @OneToMany(mappedBy = "studyMate", cascade = CascadeType.ALL)
     private List<ChatUser> chatUserList = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "studyMate", cascade = CascadeType.ALL)
+    private List<UserAssignment> userAssignmentLIst = new ArrayList<>();
 }
