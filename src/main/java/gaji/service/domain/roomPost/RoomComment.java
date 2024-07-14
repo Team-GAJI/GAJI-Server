@@ -1,6 +1,6 @@
 package gaji.service.domain.roomPost;
 
-import gaji.service.domain.StudyMate;
+import gaji.service.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
