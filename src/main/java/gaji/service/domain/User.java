@@ -5,6 +5,7 @@ import gaji.service.domain.blog.BlogLikes;
 import gaji.service.domain.common.BaseEntity;
 import gaji.service.domain.enums.Gender;
 import gaji.service.domain.enums.Status;
+import gaji.service.domain.message.Message;
 import gaji.service.domain.recruite.RecruitPost;
 import gaji.service.domain.recruite.RecruitPostBookmark;
 import gaji.service.domain.roomPost.RoomCommentLikes;
@@ -76,6 +77,11 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<BlogLikes> blogLikesList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "sender")
+    private List<Message> sentMessages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Message> receivedMessages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
