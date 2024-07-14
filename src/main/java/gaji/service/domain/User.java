@@ -3,6 +3,7 @@ package gaji.service.domain;
 import gaji.service.domain.common.BaseEntity;
 import gaji.service.domain.enums.Gender;
 import gaji.service.domain.enums.Status;
+import gaji.service.domain.roomPost.RoomCommentLikes;
 import gaji.service.domain.roomPost.RoomPostBookmark;
 import gaji.service.domain.roomPost.RoomPostLikes;
 import gaji.service.domain.roomPost.RoomPostReport;
@@ -65,5 +66,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<RoomPostBookmark> roomPostBookmarkList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
+    private List<RoomCommentLikes> roomCommentLikesList = new ArrayList<>();
 
 }

@@ -35,6 +35,9 @@ public class RoomComment {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoomComment> replies = new ArrayList<>();
 
+    @OneToMany(mappedBy = "roomComment", cascade = CascadeType.ALL)
+    private List<RoomCommentLikes> roomCommentLikesList = new ArrayList<>();
+
     private String CommentBody;
     private Integer order;
     private Integer depth;
