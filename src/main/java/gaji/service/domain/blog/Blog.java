@@ -25,12 +25,12 @@ public class Blog {
     @OneToMany(mappedBy = "blogLikes", cascade = CascadeType.ALL)
     private List<BlogLikes> blogLikes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+    private List<BlogImage> blogImages = new ArrayList<>();
+
     @Column(length = 30)
     private String title;
 
     private int views;
-
-
-
 
 }
