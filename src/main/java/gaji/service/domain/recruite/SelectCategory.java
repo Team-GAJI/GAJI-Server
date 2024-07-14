@@ -5,21 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class SelectCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<SelectCategory> categoryList = new ArrayList<>();
+    @ManyToOne(fetch =  FetchType.LAZY)
+    @JoinColumn(name = "recruitPost_id")
+    private RecruitPost recruitPost;
 
-    @Column(length = 30)
-    private String name;
+    @ManyToOne(fetch =  FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 }

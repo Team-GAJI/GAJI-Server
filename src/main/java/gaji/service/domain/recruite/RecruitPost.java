@@ -36,6 +36,9 @@ public class RecruitPost extends BaseEntity {
     @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
     private List<SelectHashtag> selectHashtagList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
+    private List<SelectCategory> selectCategoryList = new ArrayList<>();
+
     @Column(length = 20)
     private String title;
     private String body;
