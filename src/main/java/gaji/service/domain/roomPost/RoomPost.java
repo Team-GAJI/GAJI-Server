@@ -38,4 +38,9 @@ public class RoomPost {
     @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
     private List<RoomPostBookmark> roomPostBookmarkList = new ArrayList<>() ;
 
+    @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
+    private List<RoomComment> roomCommentList  = new ArrayList<>() ;
+
+
+
 }
