@@ -35,24 +35,11 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Gender gender;
-
-    @Column(nullable = false)
-    private LocalDate birthday;
-
-    private LocalDateTime inactiveTime;
-
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SearchKeyword> searchKeywordList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Event> eventList = new ArrayList<>();
-
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<StudyMate> studyMateList;
@@ -69,5 +56,24 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<RoomCommentLikes> roomCommentLikesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
+    private List<Report> ReportList = new ArrayList<>();
+
+
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Gender gender;
+
+    @Column(nullable = false)
+    private LocalDate birthday;
+
+    private LocalDateTime inactiveTime;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
 
 }
