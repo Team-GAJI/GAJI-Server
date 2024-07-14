@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class Room {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="curriculum_id" )
-    private Curriculum curriculm;
+    private Curriculum curriculum;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "way_id")
