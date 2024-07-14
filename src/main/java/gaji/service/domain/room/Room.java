@@ -1,7 +1,7 @@
 package gaji.service.domain.room;
 
 import gaji.service.domain.Event;
-import gaji.service.domain.RecruitPost;
+import gaji.service.domain.recruite.RecruitPost;
 import gaji.service.studyMate.Assignment;
 import gaji.service.studyMate.Chat;
 import jakarta.persistence.*;
