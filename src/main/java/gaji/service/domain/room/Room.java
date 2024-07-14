@@ -1,6 +1,7 @@
 package gaji.service.domain.room;
 
 import gaji.service.domain.Event;
+import gaji.service.studyMate.Chat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,10 @@ public class Room {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "way_id")
     private Way way;
+
+    // 채팅방 일대일 매핑
+    @OneToOne(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private Chat chat;
 
     private String name;
     private int headCount;
