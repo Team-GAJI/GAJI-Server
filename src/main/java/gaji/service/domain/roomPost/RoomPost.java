@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,5 +35,7 @@ public class RoomPost {
     @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
     private List<RoomPostLikes> roomPostLikesList;
 
+    @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
+    private List<RoomPostBookmark> roomPostBookmarkList = new ArrayList<>() ;
 
 }
