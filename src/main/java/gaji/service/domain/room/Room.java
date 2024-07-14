@@ -1,4 +1,4 @@
-package gaji.service.domain.test.room;
+package gaji.service.domain.room;
 
 import gaji.service.domain.Event;
 import jakarta.persistence.*;

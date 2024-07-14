@@ -1,7 +1,7 @@
 package gaji.service.domain;
 
 import gaji.service.domain.enums.RepeatType;
-import gaji.service.domain.test.room.Room;
+import gaji.service.domain.room.Room;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
