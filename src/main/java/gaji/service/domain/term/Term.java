@@ -21,6 +21,6 @@ public class Term {
 
     private Boolean isRequired;
 
-    @OneToMany(mappedBy = "termAgree", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "term", cascade = CascadeType.ALL)
     private List<TermAgree> termAgreeList = new ArrayList<>();
 }
