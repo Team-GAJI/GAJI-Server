@@ -1,4 +1,4 @@
-package gaji.service.domain;
+package gaji.service.domain.term;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
