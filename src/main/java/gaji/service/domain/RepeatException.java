@@ -20,6 +20,7 @@ public class RepeatException {
     @JoinColumn(name = "repeat_id")
     private Repeat repeat;
 
+    @Column(nullable = false)
     private LocalDate date;
 
     private LocalDate isRemoved;
