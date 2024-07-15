@@ -42,13 +42,12 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Assignment> assignmentList = new ArrayList<>();
 
-    //모집 게시글 작성
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RecruitPost> recruitPostList = new ArrayList<>();
 
-    //모집 게시글 작성
+
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    private List<RoomAlarm> roomAlarmList = new ArrayList<>();
+    private List<VoiceChat> voiceChatList = new ArrayList<>();
 
 
     private String name;
