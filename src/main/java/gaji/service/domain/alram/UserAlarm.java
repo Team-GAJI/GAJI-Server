@@ -22,8 +22,9 @@ public class UserAlarm {
 
     private Long entity_id;
 
-    @Enumerated(EnumType.STRING)
-    private Type type;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "userAlarmType_id")
+    private UserAlarmType userAlarmType;
 
     private String body;
 
