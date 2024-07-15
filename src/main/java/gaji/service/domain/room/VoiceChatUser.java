@@ -1,28 +1,27 @@
 package gaji.service.domain.room;
 
+import gaji.service.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
 @Builder
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class VoiceChat {
+public class VoiceChatUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToMany(mappedBy = "voiceChat", cascade = CascadeType.ALL)
-    private List<VoiceChatUser> voiceChatUserList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "voiceChat_id")
+    private VoiceChat voiceChat;
 
 
 }

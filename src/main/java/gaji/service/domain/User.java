@@ -10,6 +10,7 @@ import gaji.service.domain.enums.Status;
 import gaji.service.domain.message.Message;
 import gaji.service.domain.recruite.RecruitPost;
 import gaji.service.domain.recruite.RecruitPostBookmark;
+import gaji.service.domain.room.VoiceChatUser;
 import gaji.service.domain.roomPost.RoomCommentLikes;
 import gaji.service.domain.roomPost.RoomPostBookmark;
 import gaji.service.domain.roomPost.RoomPostLikes;
@@ -90,6 +91,10 @@ public class User extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private UserAlarm userAlarm;
+
+    @OneToMany(mappedBy = "user")
+    private List<VoiceChatUser> voiceChatUserList = new ArrayList<>();
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
