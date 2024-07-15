@@ -27,6 +27,7 @@ public class RoomAlarm {
     @JoinColumn(name = "roomAlarmType_id")
     private RoomAlarmType type;
 
+    private Long entity_id;
     private String boardName;
     private String body;
 }

@@ -1,6 +1,7 @@
 package gaji.service.domain;
 
 import gaji.service.domain.alram.Alarm;
+import gaji.service.domain.alram.UserAlarm;
 import gaji.service.domain.blog.Blog;
 import gaji.service.domain.blog.BlogLikes;
 import gaji.service.domain.common.BaseEntity;
@@ -87,6 +88,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Alarm> alarmList = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    private UserAlarm userAlarm;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
