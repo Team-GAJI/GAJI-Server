@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoomAlarmType {
+public class UserAlarmType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +18,6 @@ public class RoomAlarmType {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "userAlarm")
-    private RoomAlarm roomAlarm;
-
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "roomAlarm")
+    private UserAlarm userAlarm;
 }
