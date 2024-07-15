@@ -19,4 +19,8 @@ public class Alarm {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(mappedBy = "Alarm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RoomAlarm roomAlarm;
+
 }
