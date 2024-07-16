@@ -46,8 +46,13 @@ public class RecruitPost extends BaseEntity {
     private String thumbnailUrl;
     private LocalDate StartTime;
     private LocalDate EndTime;
-    private Boolean isRecruited;
-    private Boolean isPrivate;
+
+    // True:recruiting // False : end
+    private boolean isRecruited;
+
+    // True:oepn // False : end
+    private boolean isPrivate;
+
     //초대코드
     @Column(length = 20)
     private String invite_code;
