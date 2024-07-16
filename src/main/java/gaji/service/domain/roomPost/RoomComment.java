@@ -3,17 +3,16 @@ package gaji.service.domain.roomPost;
 import gaji.service.domain.enums.CommentStatus;
 import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomComment {
 
     @Id

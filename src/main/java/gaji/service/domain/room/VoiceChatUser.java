@@ -2,14 +2,13 @@ package gaji.service.domain.room;
 
 import gaji.service.domain.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VoiceChatUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

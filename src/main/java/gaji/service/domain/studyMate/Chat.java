@@ -2,17 +2,16 @@ package gaji.service.domain.studyMate;
 
 import gaji.service.domain.room.Room;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

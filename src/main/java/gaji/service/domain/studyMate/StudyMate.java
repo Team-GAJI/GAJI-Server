@@ -4,17 +4,16 @@ package gaji.service.domain.studyMate;
 import gaji.service.domain.User;
 import gaji.service.domain.roomPost.RoomComment;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyMate {
 
     @Id
@@ -28,7 +27,7 @@ public class StudyMate {
     @OneToMany(mappedBy = "studyMate", cascade = CascadeType.ALL)
     private List<RoomComment> roomCommentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "studyMate", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
     private List<ChatMessage> chatMessageList = new ArrayList<>();
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)

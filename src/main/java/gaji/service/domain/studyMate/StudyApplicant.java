@@ -4,16 +4,13 @@ import gaji.service.domain.User;
 import gaji.service.domain.enums.ApplicantStatus;
 import gaji.service.domain.room.Room;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyApplicant {
     @Id
     @GeneratedValue

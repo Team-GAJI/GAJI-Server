@@ -3,16 +3,15 @@ package gaji.service.domain.repeat;
 import gaji.service.domain.Event;
 import gaji.service.domain.enums.Frequency;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Builder
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Repeat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
