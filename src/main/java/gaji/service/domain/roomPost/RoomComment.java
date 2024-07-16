@@ -27,7 +27,6 @@ public class RoomComment {
     @JoinColumn(name = "roomPost_id")
     private RoomPost roomPost;
 
-    // 부모 댓글, 자기 참조 방식
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private RoomComment parent;
@@ -38,9 +37,8 @@ public class RoomComment {
     @OneToMany(mappedBy = "roomComment", cascade = CascadeType.ALL)
     private List<RoomCommentLikes> roomCommentLikesList = new ArrayList<>();
 
-    private String CommentBody;
-    private Integer order;
+    private String commentBody;
+    private Integer commentOrder;
     private Integer depth;
     private Boolean isDeleted;
-
 }
