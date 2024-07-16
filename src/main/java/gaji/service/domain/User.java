@@ -15,7 +15,7 @@ import gaji.service.domain.roomPost.RoomCommentLikes;
 import gaji.service.domain.roomPost.RoomPostBookmark;
 import gaji.service.domain.roomPost.RoomPostLikes;
 import gaji.service.domain.roomPost.RoomPostReport;
-import gaji.service.studyMate.StudyMate;
+import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
