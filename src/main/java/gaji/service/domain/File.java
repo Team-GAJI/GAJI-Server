@@ -27,11 +27,11 @@ public class File {
     //원본이름
     private String originalName;
 
+    //원본이름
+    private String FileName;
+
     //파일 경로
     private String path;
-
-    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL)
-    private List<RoomPostImage> roomPostImageList = new ArrayList<>();
 
 
 
