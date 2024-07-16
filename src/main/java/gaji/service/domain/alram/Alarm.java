@@ -25,4 +25,8 @@ public class Alarm {
     @OneToOne(mappedBy = "alarm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserAlarm userAlarm;
 
+    @Enumerated(EnumType.STRING)
+    private IsConfirmed isConfirmed;
+
+
 }
