@@ -9,7 +9,7 @@ import gaji.service.domain.message.Message;
 import gaji.service.domain.recruite.RecruitPost;
 import gaji.service.domain.recruite.RecruitPostBookmark;
 import gaji.service.domain.room.VoiceChatUser;
-import gaji.service.domain.roomPost.*;
+import gaji.service.domain.Post.*;
 import gaji.service.domain.studyMate.StudyApplicant;
 import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
@@ -54,6 +54,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<RoomPostLikes> roomPostLikesList = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<RoomPost> roomPostList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<RoomPostBookmark> roomPostBookmarkList = new ArrayList<>();

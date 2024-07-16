@@ -5,6 +5,7 @@ import gaji.service.domain.recruite.RecruitPost;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.Chat;
 import gaji.service.domain.studyMate.StudyApplicant;
+import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -51,6 +52,8 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<StudyApplicant> studyApplicantList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<StudyMate> studyMateList = new ArrayList<>();
 
     private String name;
     private int headCount;
