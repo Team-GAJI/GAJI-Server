@@ -22,4 +22,7 @@ public class Alarm {
     @OneToOne(mappedBy = "alarm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private RoomAlarm roomAlarm;
 
+    @OneToOne(mappedBy = "alarm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private UserAlarm userAlarm;
+
 }
