@@ -17,7 +17,7 @@ public class RoomBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "roomBoard", cascade = CascadeType.ALL)
     private List<RoomPost> roomPostList;
 
     @ManyToOne(fetch = FetchType.LAZY)
