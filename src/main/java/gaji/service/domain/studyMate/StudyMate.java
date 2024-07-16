@@ -2,7 +2,8 @@ package gaji.service.domain.studyMate;
 
 
 import gaji.service.domain.User;
-import gaji.service.domain.roomPost.RoomComment;
+import gaji.service.domain.Post.RoomComment;
+import gaji.service.domain.room.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,6 +24,10 @@ public class StudyMate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    Room room;
 
     @OneToMany(mappedBy = "studyMate", cascade = CascadeType.ALL)
     private List<RoomComment> roomCommentList = new ArrayList<>();

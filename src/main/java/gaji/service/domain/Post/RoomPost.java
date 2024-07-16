@@ -1,5 +1,6 @@
-package gaji.service.domain.roomPost;
+package gaji.service.domain.Post;
 
+import gaji.service.domain.User;
 import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,7 +20,7 @@ public class RoomPost {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private StudyMate studyMate;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roomBoard_id")

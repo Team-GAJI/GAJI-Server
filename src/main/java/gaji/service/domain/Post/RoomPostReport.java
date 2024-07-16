@@ -1,4 +1,4 @@
-package gaji.service.domain.roomPost;
+package gaji.service.domain.Post;
 
 import gaji.service.domain.User;
 import jakarta.persistence.*;

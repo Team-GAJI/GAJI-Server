@@ -1,4 +1,4 @@
-package gaji.service.domain.roomPost;
+package gaji.service.domain.Post;
 
 import gaji.service.domain.User;
 import jakarta.persistence.*;
@@ -9,16 +9,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomPostLikes {
+public class RoomCommentLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "roomComment_id")
+    private RoomComment roomComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomPost_id")
-    private RoomPost roomPost;
+    @JoinColumn(name = "user_id")
+    private User user;
 }
