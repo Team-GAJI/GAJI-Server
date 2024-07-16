@@ -18,6 +18,6 @@ public class UserAlarmType {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "roomAlarm")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "userAlarmType")
     private UserAlarm userAlarm;
 }
