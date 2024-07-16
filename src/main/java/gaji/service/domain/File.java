@@ -1,6 +1,5 @@
 package gaji.service.domain;
 
-import gaji.service.domain.roomPost.RoomPostImage;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
