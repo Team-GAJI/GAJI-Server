@@ -16,11 +16,10 @@ public class RoomCommentLikes {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomCommet_id")
+    @JoinColumn(name = "roomComment_id")
     private RoomComment roomComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 }
