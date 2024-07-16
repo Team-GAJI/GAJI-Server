@@ -8,6 +8,7 @@ import gaji.service.domain.enums.Status;
 import gaji.service.domain.message.Message;
 import gaji.service.domain.recruite.RecruitPost;
 import gaji.service.domain.recruite.RecruitPostBookmark;
+import gaji.service.domain.recruite.RecruitPostLikes;
 import gaji.service.domain.room.VoiceChatUser;
 import gaji.service.domain.Post.*;
 import gaji.service.domain.studyMate.StudyApplicant;
@@ -93,6 +94,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<RoomPostFile> roomPostFileList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<RecruitPostLikes> recruitPostLikesList = new ArrayList<>();
 
 
     @Enumerated(EnumType.STRING)

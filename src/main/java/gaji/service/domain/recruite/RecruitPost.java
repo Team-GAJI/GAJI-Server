@@ -38,6 +38,10 @@ public class RecruitPost extends BaseEntity {
     @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
     private List<SelectCategory> selectCategoryList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
+    private List<RecruitPostLikes> recruitPostLikesList = new ArrayList<>();
+
+
     @Column(length = 20)
     private String title;
     private String content;
