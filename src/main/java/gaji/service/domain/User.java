@@ -11,10 +11,7 @@ import gaji.service.domain.message.Message;
 import gaji.service.domain.recruite.RecruitPost;
 import gaji.service.domain.recruite.RecruitPostBookmark;
 import gaji.service.domain.room.VoiceChatUser;
-import gaji.service.domain.roomPost.RoomCommentLikes;
-import gaji.service.domain.roomPost.RoomPostBookmark;
-import gaji.service.domain.roomPost.RoomPostLikes;
-import gaji.service.domain.roomPost.RoomPostReport;
+import gaji.service.domain.roomPost.*;
 import gaji.service.domain.studyMate.StudyApplicant;
 import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
@@ -99,6 +96,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<StudyApplicant> studyApplicantList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<RoomPostFile> roomPostFileList = new ArrayList<>();
 
 
     @Enumerated(EnumType.STRING)

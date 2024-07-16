@@ -41,4 +41,7 @@ public class RoomPost {
     @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
     private List<RoomComment> roomCommentList  = new ArrayList<>() ;
 
+    @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
+    private List<RoomPostFile> roomPostFileList  = new ArrayList<>() ;
+
 }
