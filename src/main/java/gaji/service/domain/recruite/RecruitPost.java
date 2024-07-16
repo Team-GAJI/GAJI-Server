@@ -40,10 +40,20 @@ public class RecruitPost extends BaseEntity {
 
     @Column(length = 20)
     private String title;
-    private String body;
-    private Integer reviews;
+    private String content;
+
+    //조회수
+    private int views;
+
+    //좋아요수
+    private int likes;
+
+    //북마크수
+    private int bookmarks;
+
     // 썸네일 경로
     private String thumbnailUrl;
+
     private LocalDate StartTime;
     private LocalDate EndTime;
 
@@ -55,13 +65,20 @@ public class RecruitPost extends BaseEntity {
 
     //초대코드
     @Column(length = 20)
-    private String invite_code;
+    private String inviteCode;
 
     //게시글 상태
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    //인원
+    private int headCount;
 
+    //인원제한
+    private  int peopleMaximum;
+
+    //인원제한 여부 Ture : 제한있음 / False : 제한없음
+    private boolean peopleLimited;
 
 
 }
