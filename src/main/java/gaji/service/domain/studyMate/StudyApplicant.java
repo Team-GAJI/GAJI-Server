@@ -28,5 +28,6 @@ public class StudyApplicant {
     private Room room;
 
     //수락 대기 여부
+    @Enumerated(EnumType.STRING)
     private ApplicantStatus applicantStatus;
 }

@@ -1,5 +1,6 @@
 package gaji.service.domain.roomPost;
 
+import gaji.service.domain.enums.CommentStatus;
 import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -41,4 +42,7 @@ public class RoomComment {
     private Integer commentOrder;
     private Integer depth;
     private Boolean isDeleted;
+
+    @Enumerated(EnumType.STRING)
+    private CommentStatus commentStatus;
 }
