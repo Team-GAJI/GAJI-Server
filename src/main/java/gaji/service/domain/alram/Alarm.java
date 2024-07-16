@@ -1,6 +1,5 @@
 package gaji.service.domain.alram;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import gaji.service.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ public class Alarm {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "Alarm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "alarm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private RoomAlarm roomAlarm;
 
 }
