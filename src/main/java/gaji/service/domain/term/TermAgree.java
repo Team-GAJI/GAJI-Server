@@ -2,16 +2,15 @@ package gaji.service.domain.term;
 
 import gaji.service.domain.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TermAgree {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

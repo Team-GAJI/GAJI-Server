@@ -1,16 +1,15 @@
 package gaji.service.domain.repeat;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Builder
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RepeatException {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

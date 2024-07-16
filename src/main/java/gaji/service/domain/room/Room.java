@@ -6,18 +6,17 @@ import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.Chat;
 import gaji.service.domain.studyMate.StudyApplicant;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
