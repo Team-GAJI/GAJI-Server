@@ -4,6 +4,7 @@ import gaji.service.domain.Event;
 import gaji.service.domain.recruite.RecruitPost;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.Chat;
+import gaji.service.domain.studyMate.StudyApplicant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,6 +48,9 @@ public class Room {
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<VoiceChat> voiceChatList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<StudyApplicant> studyApplicantList = new ArrayList<>();
 
 
     private String name;
