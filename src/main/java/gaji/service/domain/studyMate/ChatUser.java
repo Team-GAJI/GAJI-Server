@@ -17,9 +17,9 @@ public class ChatUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private StudyMate studyMate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private StudyMate sender;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
