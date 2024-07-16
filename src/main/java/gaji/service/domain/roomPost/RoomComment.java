@@ -40,7 +40,9 @@ public class RoomComment {
     private String commentBody;
     private Integer commentOrder;
     private Integer depth;
-    private Boolean isDeleted;
+
+    // True : Deleted / False : Not deleted
+    private boolean isDeleted;
 
     @Enumerated(EnumType.STRING)
     private CommentStatus commentStatus;

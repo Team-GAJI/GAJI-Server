@@ -18,7 +18,8 @@ public class Term {
 
     private String name;
 
-    private Boolean isRequired;
+    // True : 동의 / False : 미동의
+    private boolean isRequired;
 
     @OneToMany(mappedBy = "term", cascade = CascadeType.ALL)
     private List<TermAgree> termAgreeList = new ArrayList<>();
