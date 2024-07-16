@@ -1,6 +1,7 @@
 package gaji.service.domain.alram;
 
 import gaji.service.domain.User;
+import gaji.service.domain.enums.IsConfirmed;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
