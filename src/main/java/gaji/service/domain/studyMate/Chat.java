@@ -1,4 +1,4 @@
-package gaji.service.studyMate;
+package gaji.service.domain.studyMate;
 
 import gaji.service.domain.room.Room;
 import jakarta.persistence.*;

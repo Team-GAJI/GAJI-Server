@@ -1,6 +1,5 @@
-package gaji.service.studyMate;
+package gaji.service.domain.studyMate;
 
-import gaji.service.domain.room.Room;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,17 +9,21 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Assignment {
+public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
 
-    private Integer weeks;
+    // 메시지 발신인
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "studyMate_id")
+    private StudyMate studyMate;
 
-    @Column(length = 30)
+    @Column(nullable = false)
     private String body;
+
 }

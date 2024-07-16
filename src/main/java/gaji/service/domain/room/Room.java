@@ -1,10 +1,9 @@
 package gaji.service.domain.room;
 
 import gaji.service.domain.Event;
-import gaji.service.domain.alram.RoomAlarm;
 import gaji.service.domain.recruite.RecruitPost;
-import gaji.service.studyMate.Assignment;
-import gaji.service.studyMate.Chat;
+import gaji.service.domain.studyMate.Assignment;
+import gaji.service.domain.studyMate.Chat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
