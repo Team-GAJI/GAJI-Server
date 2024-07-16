@@ -26,6 +26,10 @@ public class UserAlarm {
     @JoinColumn(name = "userAlarmType_id")
     private UserAlarmType userAlarmType;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "alarm_id")
+    private Alarm alarm;
+
     private String body;
 
 }
