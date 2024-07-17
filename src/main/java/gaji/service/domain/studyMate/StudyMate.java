@@ -40,4 +40,7 @@ public class StudyMate {
 
     @OneToMany(mappedBy = "studyMate", cascade = CascadeType.ALL)
     private List<UserAssignment> userAssignmentLIst = new ArrayList<>();
+
+
+
 }

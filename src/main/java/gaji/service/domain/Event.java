@@ -1,6 +1,5 @@
 package gaji.service.domain;
 
-import gaji.service.domain.enums.RepeatType;
 import gaji.service.domain.room.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -18,7 +17,7 @@ public class Event {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,8 +33,12 @@ public class Event {
     @Column(nullable = false)
     private LocalDate endTime;
 
-    @Enumerated(EnumType.STRING)
-    private RepeatType repeatType;
+    private boolean meeting;
+    private boolean allday;
+
+
+
+
 
 
 
