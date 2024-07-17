@@ -35,6 +35,9 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostLikes> postLikesList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<PostReport> postReportList = new ArrayList<>();
+
     private String title;
     private String body;
     private int views;

@@ -112,6 +112,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<PostLikes> postLikesList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<PostReport> postReportList = new ArrayList<>();
+
     private String nickname;
 
     @Enumerated(EnumType.STRING)
