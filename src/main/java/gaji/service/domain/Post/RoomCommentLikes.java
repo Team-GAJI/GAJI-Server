@@ -1,6 +1,7 @@
 package gaji.service.domain.Post;
 
 import gaji.service.domain.User;
+import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,10 +16,10 @@ public class RoomCommentLikes {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomComment_id")
+    @JoinColumn(name = "comment_id")
     private RoomComment roomComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private StudyMate studyMate;
 }

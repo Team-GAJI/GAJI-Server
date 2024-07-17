@@ -1,6 +1,7 @@
 package gaji.service.domain.Post;
 
 import gaji.service.domain.enums.CommentStatus;
+import gaji.service.domain.enums.Status;
 import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,11 +21,11 @@ public class RoomComment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "studyMate_id")
+    @JoinColumn(name = "user_id")
     private StudyMate studyMate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomPost_id")
+    @JoinColumn(name = "post_id")
     private RoomPost roomPost;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,13 +38,10 @@ public class RoomComment {
     @OneToMany(mappedBy = "roomComment", cascade = CascadeType.ALL)
     private List<RoomCommentLikes> roomCommentLikesList = new ArrayList<>();
 
-    private String commentBody;
-    private Integer commentOrder;
+    private String body;
+    private Integer order;
     private Integer depth;
 
-    // True : Deleted / False : Not deleted
-    private boolean isDeleted;
-
     @Enumerated(EnumType.STRING)
-    private CommentStatus commentStatus;
+    private Status status;
 }
