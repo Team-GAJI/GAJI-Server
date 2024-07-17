@@ -24,7 +24,7 @@ public class RoomAlarm {
     private Room room;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomAlarmType_id")
+    @JoinColumn(name = "type_id")
     private RoomAlarmType type;
 
     private Long entity_id;

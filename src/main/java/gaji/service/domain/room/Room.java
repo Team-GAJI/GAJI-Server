@@ -34,9 +34,6 @@ public class Room {
     @JoinColumn(name = "way_id")
     private Way way;
 
-    // 채팅방 일대일 매핑
-    @OneToOne(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    private Chat chat;
 
     //과제 매핑
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
@@ -44,7 +41,6 @@ public class Room {
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RecruitPost> recruitPostList = new ArrayList<>();
-
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<VoiceChat> voiceChatList = new ArrayList<>();

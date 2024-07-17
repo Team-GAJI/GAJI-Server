@@ -20,10 +20,6 @@ public class Chat {
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     private List<ChatMessage> chatMessageList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
-
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     private List<ChatUser> chatUserList = new ArrayList<>();
 
