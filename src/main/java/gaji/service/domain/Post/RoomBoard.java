@@ -23,4 +23,6 @@ public class RoomBoard {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    private String name;
+
 }
