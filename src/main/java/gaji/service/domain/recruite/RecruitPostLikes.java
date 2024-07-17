@@ -20,7 +20,7 @@ public class RecruitPostLikes {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recruitPost_id")
+    @JoinColumn(name = "post_id")
     private RecruitPost recruitPost;
 
 }
