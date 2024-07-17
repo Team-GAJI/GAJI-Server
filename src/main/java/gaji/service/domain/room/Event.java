@@ -1,12 +1,15 @@
 package gaji.service.domain.room;
 
 import gaji.service.domain.User;
+import gaji.service.domain.repeat.RepeatException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +26,9 @@ public class Event {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<RepeatException> repeatExceptionList = new ArrayList<>();
 
     @Column(nullable = false, length = 200)
     private String description;
