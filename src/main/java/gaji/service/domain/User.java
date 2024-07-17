@@ -10,6 +10,7 @@ import gaji.service.domain.enums.Status;
 import gaji.service.domain.message.Message;
 import gaji.service.domain.psot.Comment;
 import gaji.service.domain.psot.Post;
+import gaji.service.domain.psot.PostBookmark;
 import gaji.service.domain.recruite.*;
 import gaji.service.domain.room.Event;
 import gaji.service.domain.room.VoiceChatUser;
@@ -103,6 +104,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Post> postList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<PostBookmark> postBookmarkList = new ArrayList<>();
 
     private String nickname;
 
