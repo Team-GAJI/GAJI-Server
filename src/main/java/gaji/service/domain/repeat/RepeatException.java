@@ -1,5 +1,6 @@
 package gaji.service.domain.repeat;
 
+import gaji.service.domain.room.Event;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,8 +17,8 @@ public class RepeatException {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "repeat_id")
-    private Repeat repeat;
+    @JoinColumn(name = "event_id")
+    private Event event;
 
     @Column(nullable = false)
     private LocalDate date;
