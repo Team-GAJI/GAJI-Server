@@ -8,10 +8,7 @@ import gaji.service.domain.enums.Role;
 import gaji.service.domain.enums.SocialType;
 import gaji.service.domain.enums.Status;
 import gaji.service.domain.message.Message;
-import gaji.service.domain.psot.Comment;
-import gaji.service.domain.psot.Post;
-import gaji.service.domain.psot.PostBookmark;
-import gaji.service.domain.psot.PostFile;
+import gaji.service.domain.psot.*;
 import gaji.service.domain.recruite.*;
 import gaji.service.domain.room.Event;
 import gaji.service.domain.room.VoiceChatUser;
@@ -111,6 +108,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<PostFile> postFileList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<PostLikes> postLikesList = new ArrayList<>();
 
     private String nickname;
 
