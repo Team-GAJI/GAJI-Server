@@ -1,6 +1,6 @@
-package gaji.service.domain;
+package gaji.service.domain.room;
 
-import gaji.service.domain.room.Room;
+import gaji.service.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

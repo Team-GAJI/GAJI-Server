@@ -26,5 +26,5 @@ public class StudyApplicant {
 
     //수락 대기 여부
     @Enumerated(EnumType.STRING)
-    private ApplicantStatus applicantStatus;
+    private ApplicantStatus status;
 }

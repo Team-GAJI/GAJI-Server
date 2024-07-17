@@ -14,7 +14,7 @@ public class SelectHashtag {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recruitPost_id")
+    @JoinColumn(name = "post_id")
     private RecruitPost recruitPost;
 
     @ManyToOne(fetch = FetchType.LAZY)

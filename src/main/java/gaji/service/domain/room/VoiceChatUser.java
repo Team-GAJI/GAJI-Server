@@ -19,7 +19,7 @@ public class VoiceChatUser {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voiceChat_id")
+    @JoinColumn(name = "chat_id")
     private VoiceChat voiceChat;
 
 

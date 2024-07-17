@@ -1,6 +1,5 @@
-package gaji.service.domain.Post;
+package gaji.service.domain.roomPost;
 
-import gaji.service.domain.enums.CommentStatus;
 import gaji.service.domain.enums.Status;
 import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;

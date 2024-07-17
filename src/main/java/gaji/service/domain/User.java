@@ -4,13 +4,15 @@ import gaji.service.domain.alram.Alarm;
 import gaji.service.domain.alram.UserAlarm;
 import gaji.service.domain.common.BaseEntity;
 import gaji.service.domain.enums.Gender;
+import gaji.service.domain.enums.Role;
+import gaji.service.domain.enums.SocialType;
 import gaji.service.domain.enums.Status;
 import gaji.service.domain.message.Message;
-import gaji.service.domain.recruite.RecruitPost;
-import gaji.service.domain.recruite.RecruitPostBookmark;
-import gaji.service.domain.recruite.RecruitPostLikes;
+import gaji.service.domain.psot.Comment;
+import gaji.service.domain.recruite.*;
+import gaji.service.domain.room.Event;
 import gaji.service.domain.room.VoiceChatUser;
-import gaji.service.domain.Post.*;
+import gaji.service.domain.roomPost.*;
 import gaji.service.domain.studyMate.StudyApplicant;
 import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
@@ -94,7 +96,10 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<RecruitPostLikes> recruitPostLikesList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Comment> commentList = new ArrayList<>();
 
+    private String nickname;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -103,10 +108,17 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private LocalDate birthday;
 
-    private LocalDateTime inactiveTime;
+    private SocialType socialType;
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    private LocalDateTime inactiveTime;
+    private Role role;
+    private String profileImagePth;
+
+
+
 
 
 }

@@ -19,8 +19,8 @@ public class Curriculum {
     private String title;
     protected String body;
 
-    @OneToMany(mappedBy = "curiculum", cascade = CascadeType.ALL)
-    private List<Curriculum> curriculumList = new ArrayList<>();
+    @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL)
+    private List<CurriculumFile> curriculumFileList = new ArrayList<>();
 
 
 }

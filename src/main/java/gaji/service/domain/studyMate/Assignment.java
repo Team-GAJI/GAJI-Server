@@ -6,6 +6,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,4 +25,8 @@ public class Assignment {
 
     @Column(length = 30)
     private String body;
+
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
+    private List<UserAssignment> userAssignmentList = new ArrayList<>();
+
 }
