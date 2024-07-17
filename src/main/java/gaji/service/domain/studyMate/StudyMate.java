@@ -2,7 +2,8 @@ package gaji.service.domain.studyMate;
 
 
 import gaji.service.domain.User;
-import gaji.service.domain.Post.RoomComment;
+import gaji.service.domain.roomPost.RoomComment;
+import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -41,6 +42,7 @@ public class StudyMate {
     @OneToMany(mappedBy = "studyMate", cascade = CascadeType.ALL)
     private List<UserAssignment> userAssignmentLIst = new ArrayList<>();
 
-
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 }

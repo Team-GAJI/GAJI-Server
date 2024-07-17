@@ -1,9 +1,13 @@
 package gaji.service.domain;
 
+import gaji.service.domain.enums.IsRevoked;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -16,4 +20,9 @@ public class token {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    private String refreshToken;
+    private LocalDateTime issuedAt;
+    private LocalDateTime expiredAt;
+    private IsRevoked isRevoked;
 }

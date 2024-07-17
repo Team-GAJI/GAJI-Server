@@ -24,6 +24,7 @@ public class TermAgree {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private boolean isAgree;
     private LocalDate agreeDate;
 
 

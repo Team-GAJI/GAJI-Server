@@ -23,4 +23,6 @@ public class Term {
 
     @OneToMany(mappedBy = "term", cascade = CascadeType.ALL)
     private List<TermAgree> termAgreeList = new ArrayList<>();
+
+    private String content;
 }
