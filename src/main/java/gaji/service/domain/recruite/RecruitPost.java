@@ -71,10 +71,6 @@ public class RecruitPost extends BaseEntity {
     @Column(length = 20)
     private String inviteCode;
 
-    //게시글 상태
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
     //인원
     private int headCount;
 
