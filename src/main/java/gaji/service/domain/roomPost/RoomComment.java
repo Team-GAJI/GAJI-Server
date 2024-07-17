@@ -38,7 +38,7 @@ public class RoomComment {
     private List<RoomCommentLikes> roomCommentLikesList = new ArrayList<>();
 
     private String body;
-    private Integer order;
+    private Integer commentOrder;
     private Integer depth;
 
     @Enumerated(EnumType.STRING)
