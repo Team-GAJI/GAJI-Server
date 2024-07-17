@@ -20,6 +20,6 @@ public class RoomPostBookmark {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomPost_id")
+    @JoinColumn(name = "room_id")
     private RoomPost roomPost;
 }
