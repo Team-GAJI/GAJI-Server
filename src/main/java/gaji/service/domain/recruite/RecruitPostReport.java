@@ -20,7 +20,7 @@ public class RecruitPostReport {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recruitPost_id")
+    @JoinColumn(name = "post_id")
     private RecruitPost recruitPost;
 
     @Enumerated(EnumType.STRING)
