@@ -9,6 +9,7 @@ import gaji.service.domain.enums.SocialType;
 import gaji.service.domain.enums.Status;
 import gaji.service.domain.message.Message;
 import gaji.service.domain.psot.Comment;
+import gaji.service.domain.psot.Post;
 import gaji.service.domain.recruite.*;
 import gaji.service.domain.room.Event;
 import gaji.service.domain.room.VoiceChatUser;
@@ -96,8 +97,12 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<RecruitPostLikes> recruitPostLikesList = new ArrayList<>();
+
     @OneToMany(mappedBy = "user")
     private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> postList = new ArrayList<>();
 
     private String nickname;
 
