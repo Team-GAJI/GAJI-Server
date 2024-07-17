@@ -51,6 +51,9 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<StudyMate> studyMateList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<RoomBoard> roomBoardList = new ArrayList<>();
+
     private String name;
     private int headCount;
     private LocalDate startDay;
