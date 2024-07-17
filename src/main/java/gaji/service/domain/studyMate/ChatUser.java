@@ -17,7 +17,7 @@ public class ChatUser {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id")
+    @JoinColumn(name = "user_id")
     private StudyMate sender;
 
 
