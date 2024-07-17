@@ -29,6 +29,9 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostBookmark> postBookmarkList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostFile> postFileList = new ArrayList<>();
+
     private String title;
     private String body;
     private int views;
