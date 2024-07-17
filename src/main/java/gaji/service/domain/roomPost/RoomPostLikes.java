@@ -19,6 +19,6 @@ public class RoomPostLikes {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomPost_id")
+    @JoinColumn(name = "post_id")
     private RoomPost roomPost;
 }

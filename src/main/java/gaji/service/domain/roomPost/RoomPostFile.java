@@ -15,12 +15,13 @@ public class RoomPostFile {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomPost_id")
+    @JoinColumn(name = "post_id")
     private RoomPost roomPost;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    private String path;
 
 }

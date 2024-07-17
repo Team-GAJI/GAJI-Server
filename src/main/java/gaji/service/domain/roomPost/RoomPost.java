@@ -1,6 +1,7 @@
 package gaji.service.domain.roomPost;
 
 import gaji.service.domain.User;
+import gaji.service.domain.enums.Status;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class RoomPost {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomBoard_id")
+    @JoinColumn(name = "board_id")
     private RoomBoard roomBoard;
 
     private String title;
@@ -43,4 +44,12 @@ public class RoomPost {
     @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
     private List<RoomPostFile> roomPostFileList  = new ArrayList<>() ;
 
+    private int views;
+    private int likes;
+    private int bookmarks;
+
+    private String file;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
