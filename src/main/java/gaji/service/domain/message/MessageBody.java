@@ -19,5 +19,6 @@ public class MessageBody {
     @OneToMany(mappedBy = "messageBody", cascade = CascadeType.ALL)
     private List<Message> messageList = new ArrayList<>();
 
+    private String body;
 
 }
