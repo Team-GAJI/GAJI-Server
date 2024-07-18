@@ -80,5 +80,7 @@ public class RecruitPost extends BaseEntity {
     //인원제한 여부 Ture : 제한있음 / False : 제한없음
     private boolean peopleLimited;
 
+    private Status status;
+
 
 }
