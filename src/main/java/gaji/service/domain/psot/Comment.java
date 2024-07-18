@@ -1,6 +1,7 @@
 package gaji.service.domain.psot;
 
 import gaji.service.domain.User;
+import gaji.service.domain.enums.Status;
 import gaji.service.domain.roomPost.RoomComment;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -34,4 +35,8 @@ public class Comment {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> replies = new ArrayList<>();
 
+    private String body;
+    private int commentOrder;
+    private int depth;
+    private Status status;
 }
