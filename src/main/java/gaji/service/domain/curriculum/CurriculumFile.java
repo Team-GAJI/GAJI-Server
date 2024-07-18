@@ -16,4 +16,7 @@ public class CurriculumFile {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curriculum_id")
     private Curriculum curriculum;
+
+    private String path;
+    private String description;
 }
