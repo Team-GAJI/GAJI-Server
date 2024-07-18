@@ -21,7 +21,7 @@ public class UserAlarm {
     private Long entity_id;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "userAlarmType_id")
+    @JoinColumn(name = "type")
     private UserAlarmType userAlarmType;
 
     @OneToOne(fetch = FetchType.LAZY)
