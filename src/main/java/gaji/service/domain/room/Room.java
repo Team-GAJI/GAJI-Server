@@ -58,6 +58,10 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Chat> chatList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<Material> materialList = new ArrayList<>();
+
+
     private String name;
     private int headCount;
     private LocalDate startDay;
