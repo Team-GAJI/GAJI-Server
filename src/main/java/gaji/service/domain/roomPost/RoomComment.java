@@ -1,5 +1,7 @@
 package gaji.service.domain.roomPost;
 
+import gaji.service.domain.enums.RoomAlarmTypeEnum;
+import gaji.service.domain.enums.UserAlarmTypeEnum;
 import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -41,5 +43,5 @@ public class RoomComment {
     private Integer depth;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private UserAlarmTypeEnum status;
 }
