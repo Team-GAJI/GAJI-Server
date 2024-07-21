@@ -4,6 +4,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import gaji.service.config.AmazonConfig;
+import gaji.service.global.exception.RestApiException;
+import gaji.service.global.exception.code.status.GlobalErrorStatus;
+import gaji.service.util.uuid.Uuid;
 import gaji.service.util.uuid.UuidRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -23,15 +27,37 @@ public class AmazonS3Manager{
 
     private final UuidRepository uuidRepository;
 
-    public String uploadFile(String keyName, MultipartFile file){
+    public String uploadFile(String keyName, MultipartFile file) throws IOException{
+        // generateKeyName() 메소드로 keyName 받아오기
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
+
+        amazonS3.putObject(new PutObjectRequest(amazonConfig.getBucket(), keyName, file.getInputStream(), metadata));
+
         try {
             amazonS3.putObject(new PutObjectRequest(amazonConfig.getBucket(), keyName, file.getInputStream(), metadata));
         }catch (IOException e){
-            log.error("error at AmazonS3Manager uploadFile : {}", (Object) e.getStackTrace());
+            throw new RestApiException(GlobalErrorStatus._S3_UPLOAD_ERROR);
         }
 
         return amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();
     }
+
+    public void deleteFile(String keyName) {
+        try {
+            amazonS3.deleteObject(amazonConfig.getBucket(), keyName);
+        }catch (Exception e){
+            throw new RestApiException(GlobalErrorStatus._S3_DELETE_ERROR);
+        }
+
+    }
+
+    public String generateKeyName(MultipartFile file, String directoryPath) { // 추후 서비스 단에서 디렉터리에 따른 패스 가져오기
+        String uuid = UUID.randomUUID().toString();
+        Uuid savedUuid = uuidRepository.save(Uuid.builder()
+                .uuid(uuid).build());
+
+        return directoryPath + '/' + file.getOriginalFilename() + savedUuid;
+    }
+
 }
