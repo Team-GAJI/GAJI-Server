@@ -1,5 +1,5 @@
 package gaji.service.domain.enums;
 
-public enum PostTypeEnum {
+public enum ReportPostEnum {
     BLOG, QUESTION, PROJECT_RECRUITMENT
 }
