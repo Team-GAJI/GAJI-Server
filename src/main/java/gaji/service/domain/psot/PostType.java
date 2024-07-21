@@ -20,7 +20,4 @@ public class PostType {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @OneToMany(mappedBy = "postType", cascade = CascadeType.ALL)
-    private List<Post> postList = new ArrayList<>();
-
 }

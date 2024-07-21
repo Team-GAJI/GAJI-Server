@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "Files")
-public class File {
+public class Files {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

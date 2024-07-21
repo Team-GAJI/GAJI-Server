@@ -48,8 +48,11 @@ public class RoomPost {
     private int likes;
     private int bookmarks;
 
+    //첨부파일
     private String file;
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    private int weeks;
 }
