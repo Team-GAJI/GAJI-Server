@@ -2,6 +2,7 @@ package gaji.service.domain.psot;
 
 import gaji.service.domain.User;
 import gaji.service.domain.enums.PostStatusEnum;
+import gaji.service.domain.enums.PostTypeEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
