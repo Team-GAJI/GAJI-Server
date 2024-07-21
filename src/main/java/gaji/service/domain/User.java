@@ -77,8 +77,6 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Alarm> alarmList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
-    private UserAlarm userAlarm;
 
     @OneToMany(mappedBy = "user")
     private List<VoiceChatUser> voiceChatUserList = new ArrayList<>();
