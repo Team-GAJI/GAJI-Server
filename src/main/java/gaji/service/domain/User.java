@@ -6,7 +6,6 @@ import gaji.service.domain.common.BaseEntity;
 import gaji.service.domain.enums.Gender;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.enums.SocialType;
-import gaji.service.domain.enums.Status;
 import gaji.service.domain.message.Message;
 import gaji.service.domain.psot.*;
 import gaji.service.domain.recruite.*;
@@ -106,6 +105,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<PostLikes> postLikesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Report> reportList = new ArrayList<>();
 
     private String nickname;
 

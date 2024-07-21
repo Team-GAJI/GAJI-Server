@@ -2,7 +2,7 @@ package gaji.service.domain.recruite;
 
 import gaji.service.domain.User;
 import gaji.service.domain.common.BaseEntity;
-import gaji.service.domain.enums.Status;
+import gaji.service.domain.enums.RecruitePostTypeEnum;
 import gaji.service.domain.room.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -56,13 +56,13 @@ public class RecruitPost extends BaseEntity {
     private int bookmarks;
 
     // 썸네일 경로
-    private String thumbnailUrl;
+    private String thumbnailPath;
+
+    private RecruitePostTypeEnum recruitePostTypeEnum;
 
     private LocalDate StartTime;
     private LocalDate EndTime;
 
-    // True:recruiting // False : end
-    private boolean isRecruited;
 
     // True:oepn // False : end
     private boolean isPrivate;
@@ -79,8 +79,5 @@ public class RecruitPost extends BaseEntity {
 
     //인원제한 여부 Ture : 제한있음 / False : 제한없음
     private boolean peopleLimited;
-
-    private Status status;
-
 
 }

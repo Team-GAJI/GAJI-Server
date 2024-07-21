@@ -1,7 +1,7 @@
 package gaji.service.domain.roomPost;
 
 import gaji.service.domain.User;
-import gaji.service.domain.enums.Status;
+import gaji.service.domain.enums.PostStatusEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -52,7 +52,7 @@ public class RoomPost {
     private String file;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private PostStatusEnum postStatusEnum;
 
     private int weeks;
 }
