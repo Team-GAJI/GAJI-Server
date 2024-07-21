@@ -128,8 +128,6 @@ public class User extends BaseEntity {
     private Role role;
     private String profileImagePth;
 
-    private String profile_image_path;
-
 
 
 }
