@@ -63,6 +63,9 @@ public class RecruitPost extends BaseEntity {
     private LocalDate StartTime;
     private LocalDate EndTime;
 
+    //True: 모집완료
+    private boolean isRecruited;
+
 
     // True:oepn // False : end
     private boolean isPrivate;
