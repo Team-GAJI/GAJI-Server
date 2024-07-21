@@ -1,5 +1,6 @@
 package gaji.service.domain.alram;
 
+import gaji.service.domain.enums.UserAlarmTypeEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +15,7 @@ public class UserAlarmType {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private UserAlarmTypeEnum type;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "userAlarmType")
     private UserAlarm userAlarm;

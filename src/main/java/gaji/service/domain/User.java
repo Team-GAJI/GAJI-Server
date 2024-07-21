@@ -6,6 +6,7 @@ import gaji.service.domain.common.BaseEntity;
 import gaji.service.domain.enums.Gender;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.enums.SocialType;
+import gaji.service.domain.enums.UserActive;
 import gaji.service.domain.message.Message;
 import gaji.service.domain.psot.*;
 import gaji.service.domain.recruite.*;
@@ -121,13 +122,13 @@ public class User extends BaseEntity {
     private SocialType socialType;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private UserActive status;
 
     private LocalDateTime inactiveTime;
     private Role role;
     private String profileImagePth;
 
-
+    private String profile_image_path;
 
 
 
