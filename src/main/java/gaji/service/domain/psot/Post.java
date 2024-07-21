@@ -1,6 +1,7 @@
 package gaji.service.domain.psot;
 
 import gaji.service.domain.User;
+import gaji.service.domain.enums.PostStatusEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,8 +38,8 @@ public class Post {
     private int bookmarks;
 
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private PostTypeEnum type;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private PostStatusEnum status;
 }
