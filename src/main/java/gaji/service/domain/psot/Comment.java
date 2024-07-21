@@ -1,6 +1,7 @@
 package gaji.service.domain.psot;
 
 import gaji.service.domain.User;
+import gaji.service.domain.enums.CommentStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -36,5 +37,5 @@ public class Comment {
     private String body;
     private int commentOrder;
     private int depth;
-    private Status status;
+    private CommentStatus status;
 }
