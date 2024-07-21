@@ -2,6 +2,7 @@ package gaji.service.domain.psot;
 
 import gaji.service.domain.User;
 import gaji.service.domain.enums.Status;
+import gaji.service.domain.enums.Type;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,10 +23,6 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "type")
-    private PostType postType;
-
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostBookmark> postBookmarkList = new ArrayList<>();
 
@@ -35,14 +32,14 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostLikes> postLikesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
-    private List<PostReport> postReportList = new ArrayList<>();
-
     private String title;
     private String body;
     private int views;
     private int likes;
     private int bookmarks;
+
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
     @Enumerated(EnumType.STRING)
     private Status status;
