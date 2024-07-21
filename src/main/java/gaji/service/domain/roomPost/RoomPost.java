@@ -44,6 +44,7 @@ public class RoomPost {
     @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
     private List<RoomPostFile> roomPostFileList  = new ArrayList<>() ;
 
+    //erd 설계에는 없지만 추가
     private int views;
     private int likes;
     private int bookmarks;
