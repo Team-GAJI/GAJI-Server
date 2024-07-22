@@ -1,5 +1,6 @@
 package gaji.service.domain.studyMate;
 
+import gaji.service.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class ChatMessage {
     // 메시지 발신인
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
-    private StudyMate sender;
+    private User user;
 
     @Column(nullable = false)
     private String body;

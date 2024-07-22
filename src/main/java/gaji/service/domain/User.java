@@ -13,8 +13,7 @@ import gaji.service.domain.recruite.*;
 import gaji.service.domain.room.Event;
 import gaji.service.domain.room.VoiceChatUser;
 import gaji.service.domain.roomPost.*;
-import gaji.service.domain.studyMate.StudyApplicant;
-import gaji.service.domain.studyMate.StudyMate;
+import gaji.service.domain.studyMate.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -107,6 +106,15 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Report> reportList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<UserAssignment> userAssignmentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<ChatUser> chatUserList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<ChatMessage> chatMessageList = new ArrayList<>();
 
     private String nickname;
 
