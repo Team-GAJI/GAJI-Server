@@ -1,8 +1,8 @@
 package gaji.service.domain.room;
 
 import gaji.service.domain.User;
-import gaji.service.domain.repeat.MyRepeat;
-import gaji.service.domain.repeat.RepeatException;
+import gaji.service.domain.myRepeat.MyRepeat;
+import gaji.service.domain.myRepeat.RepeatException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

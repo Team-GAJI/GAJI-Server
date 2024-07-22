@@ -1,4 +1,4 @@
-package gaji.service.domain.repeat;
+package gaji.service.domain.myRepeat;
 
 import gaji.service.domain.room.Event;
 import gaji.service.domain.enums.Frequency;
