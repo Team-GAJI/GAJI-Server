@@ -14,6 +14,7 @@ public class FileServiceImpl implements FileService {
 
     private final AmazonS3Manager amazonS3Manager;
 
+    @Transactional
     public FileCreateResponse createFile(String domain , final MultipartFile file) {
         String imageUrl = amazonS3Manager.uploadFile(domain, file);
         return new FileCreateResponse(imageUrl);
