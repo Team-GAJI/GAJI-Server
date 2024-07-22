@@ -1,5 +1,6 @@
 package gaji.service.domain.roomPost;
 
+import gaji.service.domain.User;
 import gaji.service.domain.enums.RoomAlarmTypeEnum;
 import gaji.service.domain.enums.UserAlarmTypeEnum;
 import gaji.service.domain.studyMate.StudyMate;
@@ -22,7 +23,7 @@ public class RoomComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private StudyMate studyMate;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
