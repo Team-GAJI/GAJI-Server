@@ -1,6 +1,7 @@
 package gaji.service.aws.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import gaji.service.config.AmazonConfig;
@@ -34,7 +35,7 @@ public class AmazonS3Manager{
 
         try {
             amazonS3.putObject(new PutObjectRequest(amazonConfig.getBucket(), keyName, file.getInputStream(), metadata));
-        }catch (IOException e){
+        }catch (AmazonS3Exception e){
             throw new RestApiException(GlobalErrorStatus._S3_UPLOAD_ERROR);
         }
 
@@ -44,7 +45,7 @@ public class AmazonS3Manager{
     public void deleteFile(String keyName) {
         try {
             amazonS3.deleteObject(amazonConfig.getBucket(), keyName);
-        }catch (Exception e){
+        }catch (AmazonS3Exception e){
             throw new RestApiException(GlobalErrorStatus._S3_DELETE_ERROR);
         }
 
@@ -55,7 +56,7 @@ public class AmazonS3Manager{
         Uuid savedUuid = uuidRepository.save(Uuid.builder()
                 .uuid(uuid).build());
 
-        return directoryPath + '/' + file.getOriginalFilename() + savedUuid;
+        return directoryPath + '/' + file.getOriginalFilename() + "-" + savedUuid;
     }
 
 }
