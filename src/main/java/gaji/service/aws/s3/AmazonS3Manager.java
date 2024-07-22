@@ -1,5 +1,6 @@
 package gaji.service.aws.s3;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -45,8 +46,8 @@ public class AmazonS3Manager{
 
         try {
             amazonS3.putObject(new PutObjectRequest(amazonConfig.getBucket(), keyName, stream, metadata));
-        }catch (AmazonS3Exception e){
-            log.error("AmazonS3Exception : {}", e.getMessage(),e);
+        }catch (AmazonClientException e){
+            log.error("AmazonClientException : {}", e.getMessage(),e);
             throw new RestApiException(GlobalErrorStatus._S3_UPLOAD_ERROR);
         }
 
