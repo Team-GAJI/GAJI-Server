@@ -30,10 +30,6 @@ public class StudyMate {
     @JoinColumn(name = "room_id")
     Room room;
 
-    @OneToMany(mappedBy = "studyMate", cascade = CascadeType.ALL)
-    private List<RoomComment> roomCommentList = new ArrayList<>();
-
-
 
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -1,5 +1,6 @@
 package gaji.service.domain.roomPost;
 
+import gaji.service.domain.User;
 import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,5 +21,5 @@ public class RoomCommentLikes {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private StudyMate studyMate;
+    private User user;
 }
