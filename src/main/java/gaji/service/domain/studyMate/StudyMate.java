@@ -33,14 +33,7 @@ public class StudyMate {
     @OneToMany(mappedBy = "studyMate", cascade = CascadeType.ALL)
     private List<RoomComment> roomCommentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
-    private List<ChatMessage> chatMessageList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
-    private List<ChatUser> chatUserList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "studyMate", cascade = CascadeType.ALL)
-    private List<UserAssignment> userAssignmentLIst = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;
