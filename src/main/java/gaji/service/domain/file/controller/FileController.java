@@ -21,11 +21,8 @@ public class FileController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "파일 생성 API")
-    public FileCreateResponse createFile(
-            @Valid @Parameter(
-                    content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE) )
-            @RequestPart("file") MultipartFile file
-    ) {
+    public FileCreateResponse createFile (@RequestPart("file") MultipartFile file)
+    {
         return fileService.createFile("test", file);
     }
 
