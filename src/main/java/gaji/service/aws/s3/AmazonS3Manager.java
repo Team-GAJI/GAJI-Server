@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 @Slf4j
@@ -28,13 +29,20 @@ public class AmazonS3Manager{
 
     private final UuidRepository uuidRepository;
 
-    public String uploadFile(String keyName, MultipartFile file) throws IOException{
+    public String uploadFile(String keyName, MultipartFile file) {
         // generateKeyName() 메소드로 keyName 받아오기
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
 
+        InputStream stream;
+        try{
+            stream = file.getInputStream();
+        }catch (IOException e){
+            throw new RestApiException(GlobalErrorStatus._FALIED_READ_FILE);
+        }
+
         try {
-            amazonS3.putObject(new PutObjectRequest(amazonConfig.getBucket(), keyName, file.getInputStream(), metadata));
+            amazonS3.putObject(new PutObjectRequest(amazonConfig.getBucket(), keyName, stream, metadata));
         }catch (AmazonS3Exception e){
             throw new RestApiException(GlobalErrorStatus._S3_UPLOAD_ERROR);
         }
