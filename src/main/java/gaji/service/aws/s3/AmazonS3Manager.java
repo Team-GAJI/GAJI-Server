@@ -29,8 +29,7 @@ public class AmazonS3Manager{
 
     private final UuidRepository uuidRepository;
 
-    public String uploadFile(String keyName, MultipartFile file) {
-        // generateKeyName() 메소드로 keyName 받아오기
+    public String uploadFile(String domain, MultipartFile file) {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
 
@@ -38,12 +37,16 @@ public class AmazonS3Manager{
         try{
             stream = file.getInputStream();
         }catch (IOException e){
+            log.error("File read Exception : {}", e.getMessage(),e);
             throw new RestApiException(GlobalErrorStatus._FALIED_READ_FILE);
         }
+
+        String keyName = generateKeyName(file, domain); // keyName 생성
 
         try {
             amazonS3.putObject(new PutObjectRequest(amazonConfig.getBucket(), keyName, stream, metadata));
         }catch (AmazonS3Exception e){
+            log.error("AmazonS3Exception : {}", e.getMessage(),e);
             throw new RestApiException(GlobalErrorStatus._S3_UPLOAD_ERROR);
         }
 
