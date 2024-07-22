@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Repeat {
+public class MyRepeat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

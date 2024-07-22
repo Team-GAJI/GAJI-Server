@@ -1,6 +1,7 @@
 package gaji.service.domain.room;
 
 import gaji.service.domain.User;
+import gaji.service.domain.repeat.MyRepeat;
 import gaji.service.domain.repeat.RepeatException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -29,6 +30,9 @@ public class Event {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<RepeatException> repeatExceptionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<MyRepeat> myRepeatList = new ArrayList<>();
 
     @Column(nullable = false, length = 200)
     private String description;
