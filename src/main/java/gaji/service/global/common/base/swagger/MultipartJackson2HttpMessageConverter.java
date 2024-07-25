@@ -1,4 +1,4 @@
-package gaji.service.global.base.swagger;
+package gaji.service.global.common.base.swagger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;

@@ -1,8 +1,8 @@
-package gaji.service.global.base;
+package gaji.service.global.common.base;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import gaji.service.global.exception.code.status.SuccessStatus;
+import gaji.service.global.common.exception.code.status.SuccessStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
