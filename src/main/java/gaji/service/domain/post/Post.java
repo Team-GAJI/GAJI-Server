@@ -1,4 +1,4 @@
-package gaji.service.domain.psot;
+package gaji.service.domain.post;
 
 import gaji.service.domain.User;
 import gaji.service.domain.enums.PostStatusEnum;
