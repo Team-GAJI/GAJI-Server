@@ -1,4 +1,4 @@
-package gaji.service.domain.file.servie;
+package gaji.service.domain.file.service;
 
 import gaji.service.domain.file.dto.response.FileCreateResponse;
 import org.springframework.web.multipart.MultipartFile;
