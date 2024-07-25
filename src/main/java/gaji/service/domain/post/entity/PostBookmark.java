@@ -1,4 +1,4 @@
-package gaji.service.domain.post;
+package gaji.service.domain.post.entity;
 
 import gaji.service.domain.User;
 import jakarta.persistence.*;

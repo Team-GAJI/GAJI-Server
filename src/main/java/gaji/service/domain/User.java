@@ -7,7 +7,7 @@ import gaji.service.domain.enums.Role;
 import gaji.service.domain.enums.SocialType;
 import gaji.service.domain.enums.UserActive;
 import gaji.service.domain.message.Message;
-import gaji.service.domain.post.*;
+import gaji.service.domain.post.entity.*;
 import gaji.service.domain.recruite.*;
 import gaji.service.domain.room.Event;
 import gaji.service.domain.room.VoiceChatUser;
