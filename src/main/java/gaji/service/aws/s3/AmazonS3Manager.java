@@ -63,12 +63,15 @@ public class AmazonS3Manager{
 
     }
 
-    public String generateKeyName(MultipartFile file, String directoryPath) { // 추후 서비스 단에서 디렉터리에 따른 패스 가져오기
-        String uuid = UUID.randomUUID().toString();
+    public String generateKeyName(String originalFileName, String directoryPath) { // 추후 서비스 단에서 디렉터리에 따른 패스 가져오기
         Uuid savedUuid = uuidRepository.save(Uuid.builder()
-                .uuid(uuid).build());
+                .uuid(UUID.randomUUID().toString()).build());
 
-        return directoryPath + '/' + file.getOriginalFilename() + "-" + savedUuid;
+        int fileExtensionIndex = originalFileName.lastIndexOf(".");
+        String fileExtension = originalFileName.substring(fileExtensionIndex);
+        String fileName = originalFileName.substring(0, fileExtensionIndex);
+
+        return directoryPath + '/' + fileName + "_" + savedUuid.getUuid()+fileExtension;
     }
 
 }
