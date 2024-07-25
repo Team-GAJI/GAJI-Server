@@ -34,6 +34,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2' //Swagger 의존성 추가
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // AWS 서비스 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-cache' // cache 의존성 추가
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
 	annotationProcessor 'org.projectlombok:lombok'
