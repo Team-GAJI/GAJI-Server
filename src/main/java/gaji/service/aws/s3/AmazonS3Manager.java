@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -42,7 +43,7 @@ public class AmazonS3Manager{
             throw new RestApiException(GlobalErrorStatus._FALIED_READ_FILE);
         }
 
-        String keyName = generateKeyName(file, domain); // keyName 생성
+        String keyName = generateKeyName(Objects.requireNonNull(file.getOriginalFilename()), domain); // keyName 생성
 
         try {
             amazonS3.putObject(new PutObjectRequest(amazonConfig.getBucket(), keyName, stream, metadata));
