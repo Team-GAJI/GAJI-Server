@@ -6,7 +6,7 @@ import lombok.Getter;
 public class MessageResponseDTO {
     @Builder
     @Getter
-    public static class SendResultDTO{
+    public static class CreateResultDTO{
         Long messageId;
     }
 }

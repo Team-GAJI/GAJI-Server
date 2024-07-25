@@ -5,7 +5,7 @@ import lombok.Getter;
 public class MessageRequestDTO {
 
     @Getter
-    public static class SendDTO{
+    public static class CreateDTO{
         private String body;
     }
 }
