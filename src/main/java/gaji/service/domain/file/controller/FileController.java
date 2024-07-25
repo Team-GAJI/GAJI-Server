@@ -2,7 +2,7 @@ package gaji.service.domain.file.controller;
 
 import gaji.service.domain.file.dto.response.FileCreateResponse;
 import gaji.service.domain.file.service.FileService;
-import gaji.service.global.common.enums.FIleCategory;
+import gaji.service.global.common.enums.FileCategory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class FileController {
 
     @PostMapping(value = "/{fileCategory}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "파일 생성 API")
-    public FileCreateResponse createFile (@RequestPart("file") MultipartFile file, @PathVariable("fileCategory") FIleCategory fileCategory )
+    public FileCreateResponse createFile (@RequestPart("file") MultipartFile file, @PathVariable("fileCategory") FileCategory fileCategory )
     {
         return fileService.createFile(fileCategory, file);
     }

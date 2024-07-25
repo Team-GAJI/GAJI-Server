@@ -2,7 +2,7 @@ package gaji.service.domain.file.service;
 
 import gaji.service.aws.s3.AmazonS3Manager;
 import gaji.service.domain.file.dto.response.FileCreateResponse;
-import gaji.service.global.common.enums.FIleCategory;
+import gaji.service.global.common.enums.FileCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ public class FileServiceImpl implements FileService {
 
     @Transactional
     @Override
-    public FileCreateResponse createFile(FIleCategory fIleCategory, final MultipartFile file) {
+    public FileCreateResponse createFile(FileCategory fIleCategory, final MultipartFile file) {
         String imageUrl = amazonS3Manager.uploadFile(fIleCategory.getCategory(), file);
         return new FileCreateResponse(imageUrl);
     }
