@@ -1,6 +1,6 @@
 package gaji.service.domain.studyMate;
 
-import gaji.service.domain.User;
+import gaji.service.domain.user.User;
 import gaji.service.domain.enums.ApplicantStatus;
 import gaji.service.domain.room.Room;
 import jakarta.persistence.*;
