@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import java.util.TimeZone;
 
 @EnableJpaAuditing
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+@SpringBootApplication
 public class ServiceApplication {
 
 	public static void main(String[] args) {
