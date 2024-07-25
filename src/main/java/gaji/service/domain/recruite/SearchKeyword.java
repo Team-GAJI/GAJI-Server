@@ -1,6 +1,6 @@
 package gaji.service.domain.recruite;
 
-import gaji.service.domain.User;
+import gaji.service.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

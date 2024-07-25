@@ -1,17 +1,13 @@
 package gaji.service.domain.studyMate;
 
 
-import gaji.service.domain.User;
-import gaji.service.domain.roomPost.RoomComment;
+import gaji.service.domain.user.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
