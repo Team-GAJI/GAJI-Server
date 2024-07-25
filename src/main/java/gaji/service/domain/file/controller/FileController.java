@@ -2,6 +2,7 @@ package gaji.service.domain.file.controller;
 
 import gaji.service.domain.file.dto.response.FileCreateResponse;
 import gaji.service.domain.file.service.FileService;
+import gaji.service.global.common.enums.FIleCategory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
     private final FileService fileService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{fileCategory}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "파일 생성 API")
-    public FileCreateResponse createFile (@RequestPart("file") MultipartFile file)
+    public FileCreateResponse createFile (@RequestPart("file") MultipartFile file, @PathVariable("fileCategory") FIleCategory fileCategory )
     {
-        return fileService.createFile("test", file);
+        return fileService.createFile(fileCategory, file);
     }
 
     @DeleteMapping
