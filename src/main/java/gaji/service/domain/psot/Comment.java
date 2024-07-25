@@ -1,6 +1,6 @@
 package gaji.service.domain.psot;
 
-import gaji.service.domain.User;
+import gaji.service.domain.user.User;
 import gaji.service.domain.enums.CommentStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
