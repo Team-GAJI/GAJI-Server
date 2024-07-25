@@ -1,4 +1,4 @@
-package gaji.service.domain.file.servie;
+package gaji.service.domain.file.service;
 
 import gaji.service.aws.s3.AmazonS3Manager;
 import gaji.service.domain.file.dto.response.FileCreateResponse;
