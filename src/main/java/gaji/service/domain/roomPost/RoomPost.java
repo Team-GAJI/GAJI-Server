@@ -1,6 +1,6 @@
 package gaji.service.domain.roomPost;
 
-import gaji.service.domain.user.User;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.PostStatusEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package gaji.service.domain.user;
+package gaji.service.domain.user.entity;
 
 import gaji.service.domain.Report;
 import gaji.service.domain.alram.Alarm;

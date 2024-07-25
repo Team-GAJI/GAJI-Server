@@ -1,6 +1,6 @@
 package gaji.service.domain.message;
 
-import gaji.service.domain.user.User;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
