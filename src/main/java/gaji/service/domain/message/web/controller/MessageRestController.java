@@ -18,7 +18,7 @@ public class MessageRestController {
     private final MessageQueryService messageQueryService;
 
     @PostMapping("/")
-    public BaseResponse<MessageResponseDTO.SendResultDTO> send(@PathVariable Long otherId, @RequestBody MessageRequestDTO.SendDTO request){
+    public BaseResponse<MessageResponseDTO.SendResultDTO> send(Long userId/*하드 코딩용 추후 수정.*/,@PathVariable Long otherId, @RequestBody MessageRequestDTO.SendDTO request){
         Message message = messageCommandService.sendMessage();
         return BaseResponse.onSuccess(MessageConverter.toSendResultDTO(message));
     }
