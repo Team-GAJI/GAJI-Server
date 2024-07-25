@@ -1,7 +1,7 @@
-package gaji.service.global.exception;
+package gaji.service.global.common.exception;
 
-import gaji.service.global.exception.code.BaseCodeDto;
-import gaji.service.global.exception.code.BaseErrorCodeInterface;
+import gaji.service.global.common.exception.code.BaseCodeDto;
+import gaji.service.global.common.exception.code.BaseErrorCodeInterface;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
