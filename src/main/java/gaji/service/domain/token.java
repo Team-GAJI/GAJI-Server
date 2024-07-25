@@ -1,7 +1,7 @@
 package gaji.service.domain;
 
 import gaji.service.domain.enums.IsRevoked;
-import gaji.service.domain.user.User;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
