@@ -1,6 +1,7 @@
 package gaji.service.domain.message.converter;
 
 import gaji.service.domain.message.Message;
+import gaji.service.domain.message.enums.MessageTypeEnum;
 import gaji.service.domain.message.web.dto.MessageRequestDTO;
 import gaji.service.domain.message.web.dto.MessageResponseDTO;
 
@@ -13,17 +14,20 @@ public class MessageConverter {
     }
 
     public static Message sendMessage(Long myId, Long otherId, MessageRequestDTO.CreateDTO messageRequestDTO){
-
         return Message.builder()
-                .sender(myId)
-                .receiver(otherId)
+                .myId()
+                .otherId(otherId)
+                .type(MessageTypeEnum.Send)
                 .sendDate(LocalDateTime.now())
+                .build();
     }
 
     public static Message receiveMessage(Long myId, Long otherId, MessageRequestDTO.CreateDTO messageRequestDTO){
         return Message.builder()
-                .sender(otherId)
-                .receiver(myId)
-                .sendDate(LocalDateTime.now())
+                .myId(otherId)
+                .otherId(myId)
+                .type(MessageTypeEnum.Receive)
+                .sendDate(LocalDateTime.now()).
+                build();
     }
 }
