@@ -1,7 +1,7 @@
 package gaji.service.domain;
 
 import gaji.service.domain.alram.Alarm;
-import gaji.service.domain.common.BaseEntity;
+import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.enums.Gender;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.enums.SocialType;
