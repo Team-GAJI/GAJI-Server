@@ -17,9 +17,13 @@ public class MessageRestController {
     private final MessageCommandService messageCommandService;
     private final MessageQueryService messageQueryService;
 
-    @PostMapping("/")
-    public BaseResponse<MessageResponseDTO.CreateResultDTO> create(Long userId/*하드 코딩용 추후 수정.*/,@PathVariable Long otherId, @RequestBody MessageRequestDTO.CreateDTO request){
-        Message message = messageCommandService.createMessage();
+    @PostMapping("/{otherId}")
+    public BaseResponse<MessageResponseDTO.CreateResultDTO> create(Long myId/*하드 코딩용 추후 수정.*/,
+                                                                   //@RequestHeader("Authorization") String token,
+                                                                   @PathVariable Long otherId,
+                                                                   @RequestBody MessageRequestDTO.CreateDTO request) {
+        //Long myId = getUserIdFromToken(token);
+        Message message = messageCommandService.createMessage(myId, otherId, request);
         return BaseResponse.onSuccess(MessageConverter.toCreateResultDTO(message));
     }
 }
