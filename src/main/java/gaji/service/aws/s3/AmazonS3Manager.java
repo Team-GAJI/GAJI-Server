@@ -3,6 +3,7 @@ package gaji.service.aws.s3;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import gaji.service.config.AmazonConfig;
@@ -55,16 +56,18 @@ public class AmazonS3Manager{
         return amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();
     }
 
-    public void deleteFile(String keyName) {
+    public void deleteFile(String fileUrl) {
         try {
-            amazonS3.deleteObject(amazonConfig.getBucket(), keyName);
+            String[] deleteKeyName = fileUrl.split("/", 4);
+            amazonS3.deleteObject(new DeleteObjectRequest(amazonConfig.getBucket(), deleteKeyName[3]));
+
         }catch (AmazonS3Exception e){
             throw new RestApiException(GlobalErrorStatus._S3_DELETE_ERROR);
         }
 
     }
 
-    public String generateKeyName(String originalFileName, String directoryPath) { // 추후 서비스 단에서 디렉터리에 따른 패스 가져오기
+    public String generateKeyName(String originalFileName, String directoryPath) {
         Uuid savedUuid = uuidRepository.save(Uuid.builder()
                 .uuid(UUID.randomUUID().toString()).build());
 
