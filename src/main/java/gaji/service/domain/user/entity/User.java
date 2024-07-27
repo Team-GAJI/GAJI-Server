@@ -7,7 +7,7 @@ import gaji.service.domain.enums.Gender;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.enums.SocialType;
 import gaji.service.domain.enums.UserActive;
-import gaji.service.domain.message.Message;
+import gaji.service.domain.message.entity.Message;
 import gaji.service.domain.psot.*;
 import gaji.service.domain.recruite.*;
 import gaji.service.domain.room.Event;
@@ -67,10 +67,10 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<RecruitPostBookmark> recruitPostBookmarkList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sender")
+    @OneToMany(mappedBy = "myId")
     private List<Message> sentMessages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "receiver")
+    @OneToMany(mappedBy = "otherId")
     private List<Message> receivedMessages = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
