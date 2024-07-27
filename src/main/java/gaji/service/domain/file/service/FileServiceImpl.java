@@ -3,7 +3,7 @@ package gaji.service.domain.file.service;
 import gaji.service.aws.s3.AmazonS3Manager;
 import gaji.service.domain.file.domain.Files;
 import gaji.service.domain.file.dto.response.FileCreateResponse;
-import gaji.service.domain.file.mapper.FilesMapper;
+import gaji.service.domain.file.mapper.FileMapper;
 import gaji.service.domain.file.repository.FileRepository;
 import gaji.service.global.common.enums.FileCategory;
 import gaji.service.global.common.exception.RestApiException;
@@ -20,7 +20,7 @@ public class FileServiceImpl implements FileService {
 
     private final AmazonS3Manager amazonS3Manager;
     private final FileRepository filesRepository;
-    private final FilesMapper filesMapper;
+    private final FileMapper filesMapper;
 
     @Override
     @Transactional

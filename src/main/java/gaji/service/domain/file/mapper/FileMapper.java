@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
-public class FilesMapper {
+public class FileMapper {
 
     public Files toEntity(MultipartFile file, String imageUrl) {
         try {
