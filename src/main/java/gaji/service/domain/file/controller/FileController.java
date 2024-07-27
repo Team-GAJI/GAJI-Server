@@ -20,9 +20,9 @@ public class FileController {
 
     @PostMapping(value = "/{fileCategory}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "파일 생성 API")
-    public FileCreateResponse createFile (@RequestPart("file") MultipartFile file, @PathVariable("fileCategory") FileCategory fileCategory )
+    public BaseResponse<FileCreateResponse> createFile (@RequestPart("file") MultipartFile file, @PathVariable("fileCategory") FileCategory fileCategory )
     {
-        return fileService.createFile(fileCategory, file);
+        return BaseResponse.onSuccess(fileService.createFile(fileCategory, file));
     }
 
     @DeleteMapping
