@@ -34,9 +34,6 @@ public class RecruitPost extends BaseEntity {
     private List<RecruitPostBookmark> recruitPostBookmarkList = new ArrayList<>();
 
     @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
-    private List<SelectHashtag> selectHashtagList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
     private List<SelectCategory> selectCategoryList = new ArrayList<>();
 
     @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
