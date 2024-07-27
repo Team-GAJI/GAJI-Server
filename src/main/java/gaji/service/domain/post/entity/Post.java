@@ -5,6 +5,7 @@ import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -43,4 +44,21 @@ public class Post {
 
     @Enumerated(EnumType.STRING)
     private PostStatusEnum status;
+
+    @Builder
+    public Post(User user, String title, String body, PostTypeEnum type, PostStatusEnum status) {
+        this.user = user;
+        this.title = title;
+        this.body = body;
+        this.type = type;
+        this.status = status;
+    }
+
+    // 엔티티 생성 시 초기값 설정
+    @PrePersist
+    public void prePersist() {
+        this.views = 0;
+        this.likes = 0;
+        this.bookmarks = 0;
+    }
 }
