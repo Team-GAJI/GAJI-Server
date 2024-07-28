@@ -1,4 +1,4 @@
-package gaji.service.domain.recruite;
+package gaji.service.domain.recruit;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package gaji.service.domain.recruite;
+package gaji.service.domain.recruit;
 
 import gaji.service.domain.User;
 import gaji.service.domain.common.entity.BaseEntity;

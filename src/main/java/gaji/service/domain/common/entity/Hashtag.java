@@ -1,7 +1,5 @@
 package gaji.service.domain.common.entity;
 
-import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.recruite.SelectCategory;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
