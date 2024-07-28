@@ -1,4 +1,4 @@
-package gaji.service.domain.room;
+package gaji.service.domain.room.entity;
 
 import gaji.service.domain.curriculum.Curriculum;
 import gaji.service.domain.recruite.RecruitPost;
