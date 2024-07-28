@@ -29,7 +29,7 @@ public class MessageCommandServiceImpl implements MessageCommandService{
 
     @Override
     @Transactional
-    public List<Message> createMessage(Long myId, Long otherId, MessageRequestDTO.CreateDTO request) {
+    public List<Message> createMessage(Long myId, Long otherId, MessageRequestDTO.CreateMessageDTO request) {
 
         User mine = userRepository.findById(myId)
                 .orElseThrow(()-> new RestApiException(UserErrorStatus._USER_NOT_FOUND));

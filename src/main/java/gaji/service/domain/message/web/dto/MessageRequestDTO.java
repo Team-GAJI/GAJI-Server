@@ -8,8 +8,8 @@ public class MessageRequestDTO {
 
     @Getter
     @RequiredArgsConstructor
-    public static class CreateDTO{
+    public static class CreateMessageDTO{
         @NotBlank(message = "쪽지 내용을 입력해주세요.")
-        private final String body;
+        private String body;
     }
 }
