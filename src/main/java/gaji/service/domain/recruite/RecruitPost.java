@@ -1,9 +1,10 @@
 package gaji.service.domain.recruite;
 
-import gaji.service.domain.user.entity.User;
-import gaji.service.domain.common.BaseEntity;
+import gaji.service.domain.common.entity.BaseEntity;
+import gaji.service.domain.common.entity.SelectHashtag;
 import gaji.service.domain.enums.RecruitePostTypeEnum;
 import gaji.service.domain.room.Room;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,9 +32,6 @@ public class RecruitPost extends BaseEntity {
 
     @OneToMany(mappedBy = "recruitPost", cascade =  CascadeType.ALL)
     private List<RecruitPostBookmark> recruitPostBookmarkList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
-    private List<SelectHashtag> selectHashtagList = new ArrayList<>();
 
     @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
     private List<SelectCategory> selectCategoryList = new ArrayList<>();
