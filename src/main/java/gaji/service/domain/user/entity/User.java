@@ -67,10 +67,10 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<RecruitPostBookmark> recruitPostBookmarkList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "myId")
+    @OneToMany(mappedBy = "self")
     private List<Message> sentMessages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "otherId")
+    @OneToMany(mappedBy = "other")
     private List<Message> receivedMessages = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
