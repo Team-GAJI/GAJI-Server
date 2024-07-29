@@ -1,4 +1,4 @@
-package gaji.service.domain.psot;
+package gaji.service.domain.post.entity;
 
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.CommentStatus;

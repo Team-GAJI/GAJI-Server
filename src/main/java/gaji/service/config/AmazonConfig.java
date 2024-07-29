@@ -28,19 +28,19 @@ public class AmazonConfig {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    @Value("${cloud.aws.s3.bucket")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @Value("${cloud.aws.s3.path.blog")
+    @Value("${cloud.aws.s3.path.blog}")
     private String blogPath;
 
-    @Value("${cloud.aws.s3.path.project")
+    @Value("${cloud.aws.s3.path.project}")
     private String projectPath;
 
-    @Value("${cloud.aws.s3.path.question")
+    @Value("${cloud.aws.s3.path.question}")
     private String questionPath;
 
-    @Value("${cloud.aws.s3.path.study")
+    @Value("${cloud.aws.s3.path.study}")
     private String studyPath;
 
     @PostConstruct
