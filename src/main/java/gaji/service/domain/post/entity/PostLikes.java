@@ -1,4 +1,4 @@
-package gaji.service.domain.psot;
+package gaji.service.domain.post.entity;
 
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostFile {
+public class PostLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,5 +22,5 @@ public class PostFile {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    private String path;
+
 }
