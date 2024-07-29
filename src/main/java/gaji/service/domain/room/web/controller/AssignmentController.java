@@ -1,5 +1,8 @@
 package gaji.service.domain.room.web.controller;
 
+import gaji.service.domain.room.service.PostAssignmentServiceImpl;
+import gaji.service.domain.room.web.dto.AssignmentRequestDto;
+import gaji.service.domain.room.web.dto.AssignmentResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
