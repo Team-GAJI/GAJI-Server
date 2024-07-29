@@ -67,5 +67,4 @@ public class Room {
     private LocalDate startDay;
     private LocalDate endDay;
 
-
 }
