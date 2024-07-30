@@ -1,8 +1,8 @@
 package gaji.service.domain.file.mapper;
 
 import gaji.service.domain.file.domain.Files;
-import gaji.service.global.common.exception.RestApiException;
-import gaji.service.global.common.exception.code.status.GlobalErrorStatus;
+import gaji.service.global.exception.RestApiException;
+import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
