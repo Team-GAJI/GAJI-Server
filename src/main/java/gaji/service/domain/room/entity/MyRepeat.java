@@ -1,6 +1,5 @@
-package gaji.service.domain.myRepeat;
+package gaji.service.domain.room.entity;
 
-import gaji.service.domain.room.entity.Event;
 import jakarta.persistence.*;
 import lombok.*;
 

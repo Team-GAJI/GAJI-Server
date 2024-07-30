@@ -2,7 +2,7 @@ package gaji.service.domain.room.service;
 
 import gaji.service.domain.User;
 import gaji.service.domain.enums.Role;
-import gaji.service.domain.myRepeat.MyRepeat;
+import gaji.service.domain.room.entity.MyRepeat;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.entity.Room;
