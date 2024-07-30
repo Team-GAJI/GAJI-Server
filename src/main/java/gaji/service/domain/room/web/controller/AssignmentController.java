@@ -1,6 +1,6 @@
 package gaji.service.domain.room.web.controller;
 
-import gaji.service.domain.room.service.PostAssignmentServiceImpl;
+import gaji.service.domain.room.service.RoomAssignmentServiceImpl;
 import gaji.service.domain.room.web.dto.AssignmentRequestDto;
 import gaji.service.domain.room.web.dto.AssignmentResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/studyRooms")
 public class AssignmentController {
 
-    private final PostAssignmentServiceImpl assignmentService;
+    private final RoomAssignmentServiceImpl assignmentService;
     @PostMapping("/assignments/{roomId}")
     @Operation(summary = "스터디룸 과제 등록 API",description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 등록하는 회원이 READER인지 검증합니다.")
     public ResponseEntity<AssignmentResponseDto> AssignmentController(@RequestBody @Valid AssignmentRequestDto.AssignmentDto requestDto, @PathVariable Long roomId){
