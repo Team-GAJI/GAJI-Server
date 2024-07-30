@@ -46,7 +46,7 @@ public class RoomRequestDTO {
         private String thumbnailPath;
 
         @Schema(description = "스터디 자료들")
-        private List<Material> materialList;
+        private List<String> materialList;
 
         @Schema(description = "스터디 공개 여부")
         @NotNull
