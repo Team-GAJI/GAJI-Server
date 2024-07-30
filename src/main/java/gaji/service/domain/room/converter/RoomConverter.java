@@ -13,13 +13,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomConverter {
 
-    public static Room toRoom(RoomRequestDTO.CreateStudyDTO request, String ThumbnailPath, List<Material> materialList, Curriculum curriculum, Way way) {
+    public static Room toRoom(RoomRequestDTO.CreateStudyDTO request, String ThumbnailPath, Curriculum curriculum, Way way) {
 
         return Room.builder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .thumbnailPath(ThumbnailPath)
-                .materialList(materialList)
                 .headCount(request.getHeadCount())
                 .isPrivate(request.isPrivate())
                 .recruitStartDay(request.getRecruitStartDay())
@@ -35,5 +34,14 @@ public class RoomConverter {
         return RoomResponseDTO.CreateStudyDTO.builder()
                 .roomId(room.getId())
                 .build();
+    }
+
+    public static Material toMaterial(String materialPath, Room room) {
+
+        return Material.builder()
+                .room(room)
+                .path(materialPath)
+                .build();
+
     }
 }
