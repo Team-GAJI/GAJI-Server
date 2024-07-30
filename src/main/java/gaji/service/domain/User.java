@@ -127,15 +127,17 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Gender gender;
 
-    @Column(nullable = false)
     private LocalDate birthday;
 
+    @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
     @Enumerated(EnumType.STRING)
     private UserActive status;
 
     private LocalDateTime inactiveTime;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
     private String profileImagePth;
 

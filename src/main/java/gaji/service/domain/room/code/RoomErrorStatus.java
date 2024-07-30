@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum PostErrorStatus implements BaseErrorCodeInterface {
+public enum RoomErrorStatus implements BaseErrorCodeInterface {
     // 스터디룸
     _ROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, "ROOM_4001", "존재하지 않는 스터디룸입니다."),
 
