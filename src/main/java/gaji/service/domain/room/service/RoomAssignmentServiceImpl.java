@@ -39,7 +39,7 @@ public class RoomAssignmentServiceImpl implements RoomAssignmentService {
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
 
         // 사용자가 해당 스터디룸에 참여하고 있는지 확인
-        studyMateRepository.findByUserIdAndRoomId(userId, roomId)
+        studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_IN_ROOM));
 
         // List<String>을 단일 String으로 변환
