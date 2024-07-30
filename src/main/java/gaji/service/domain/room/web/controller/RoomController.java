@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/studyRooms")
-public class AssignmentController {
+public class RoomController {
 
     private final RoomAssignmentServiceImpl assignmentService;
 
