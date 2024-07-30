@@ -1,10 +1,10 @@
 package gaji.service.domain.room.service;
 
-import gaji.service.domain.room.web.dto.AssignmentRequestDto;
-import gaji.service.domain.room.web.dto.AssignmentResponseDto;
+import gaji.service.domain.room.web.dto.RoomRequestDto;
+import gaji.service.domain.room.web.dto.RoomResponseDto;
 import jakarta.transaction.Transactional;
 
 public interface RoomAssignmentService {
     @Transactional
-    AssignmentResponseDto createAssignment(Long roomId, Long userId, AssignmentRequestDto.AssignmentDto requestDto);
+    RoomResponseDto createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto);
 }
