@@ -5,8 +5,8 @@ import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.AssignmentRepository;
 import gaji.service.domain.room.repository.RoomRepository;
-import gaji.service.domain.room.web.dto.AssignmentRequestDto;
-import gaji.service.domain.room.web.dto.AssignmentResponseDto;
+import gaji.service.domain.room.web.dto.RoomRequestDto;
+import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.repository.UserRepository;
@@ -25,7 +25,7 @@ public class RoomAssignmentServiceImpl implements RoomAssignmentService {
 
 
     @Override
-    public AssignmentResponseDto createAssignment(Long roomId, Long userId, AssignmentRequestDto.AssignmentDto requestDto){
+    public RoomResponseDto createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto){
 //        // 현재 로그인한 사용자의 정보를 가져옵니다. 추후 주석 해제
 //        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 //        User currentUser = userRepository.findByUsername(username)
@@ -53,7 +53,7 @@ public class RoomAssignmentServiceImpl implements RoomAssignmentService {
                 .build();
 
         Assignment savedAssignment = assignmentRepository.save(assignment);
-        return new AssignmentResponseDto(savedAssignment);
+        return new RoomResponseDto(savedAssignment);
     }
 
 }

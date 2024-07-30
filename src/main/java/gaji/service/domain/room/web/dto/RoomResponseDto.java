@@ -10,12 +10,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AssignmentResponseDto {
+public class RoomResponseDto {
     private Long id;
     private Integer weeks;
     private String body;
 
-    public AssignmentResponseDto(Assignment assignment) {
+    public RoomResponseDto(Assignment assignment) {
         this.id = assignment.getId();
         this.weeks = assignment.getWeeks();
         this.body = assignment.getBody();
