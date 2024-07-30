@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class RoomAssignmentServiceImpl implements RoomAssignmentService {
+public class RoomCommandServiceImpl implements RoomCommandService {
     private final RoomRepository roomRepository;
     private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;
