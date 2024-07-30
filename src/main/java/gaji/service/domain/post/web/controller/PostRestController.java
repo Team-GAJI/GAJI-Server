@@ -2,6 +2,8 @@ package gaji.service.domain.post.web.controller;
 
 import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.post.entity.PostBookmark;
+import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.service.PostCommandService;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.global.base.BaseResponse;
@@ -49,7 +51,7 @@ public class PostRestController {
     @Parameters({
             @Parameter(name = "commentId", description = "댓글 id"),
     })
-    public BaseResponse softDeleteComment(@PathVariable Long commentId) {
+    public BaseResponse softDeleteComment(Long userId, @PathVariable Long commentId) {
         postCommandService.softDeleteComment(commentId);
         return BaseResponse.onSuccess(null);
     }
@@ -58,8 +60,49 @@ public class PostRestController {
     @Operation(summary = "커뮤니티 게시글 삭제 API", description = "커뮤니티 게시글을 삭제하는 API입니다. 게시글과 관련된 북마크, 좋아요, 댓글 내역을 모두 삭제합니다.(hard delete)")
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
-    })    public BaseResponse hardDeleteCommunityPost(@PathVariable Long postId) {
+    })
+    public BaseResponse hardDeleteCommunityPost(Long userId, @PathVariable Long postId) {
         postCommandService.hardDeleteCommunityPost(postId);
+        return BaseResponse.onSuccess(null);
+    }
+
+    @PostMapping("/{postId}/bookmarks")
+    @Operation(summary = "커뮤니티 게시글 북마크 API", description = "커뮤니티 게시글을 북마크하는 API입니다.")
+    @Parameters({
+            @Parameter(name = "postId", description = "게시글 id"),
+    })
+    public BaseResponse<Long> bookmarkCommunityPost(Long userId, @PathVariable Long postId) {
+        PostBookmark newPostBookmark = postCommandService.bookmarkCommunityPost(userId, postId);
+        return BaseResponse.onSuccess(newPostBookmark.getId());
+    }
+
+    @DeleteMapping("/{postId}/bookmarks")
+    @Operation(summary = "커뮤니티 게시글 북마크 취소 API", description = "커뮤니티 게시글을 북마크 취소하는 API입니다.")
+    @Parameters({
+            @Parameter(name = "postId", description = "게시글 id"),
+    })
+    public BaseResponse cancelBookmarkCommunityPost(Long userId, @PathVariable Long postId) {
+        postCommandService.cancelbookmarkCommunityPost(userId, postId);
+        return BaseResponse.onSuccess(null);
+    }
+
+    @PostMapping("/{postId}/likes")
+    @Operation(summary = "커뮤니티 게시글 좋아요 API", description = "커뮤니티 게시글을 좋아요하는 API입니다.")
+    @Parameters({
+            @Parameter(name = "postId", description = "게시글 id"),
+    })
+    public BaseResponse<Long> likeCommunityPost(Long userId, @PathVariable Long postId) {
+        PostLikes newPostLikes = postCommandService.likeCommunityPost(userId, postId);
+        return BaseResponse.onSuccess(newPostLikes.getId());
+    }
+
+    @DeleteMapping("/{postId}/likes")
+    @Operation(summary = "커뮤니티 게시글 좋아요 취소 API", description = "커뮤니티 게시글을 좋아요 취소하는 API입니다.")
+    @Parameters({
+            @Parameter(name = "postId", description = "게시글 id"),
+    })
+    public BaseResponse cancelLikeCommunityPost(Long userId, @PathVariable Long postId) {
+        postCommandService.cancelLikeCommunityPost(userId, postId);
         return BaseResponse.onSuccess(null);
     }
 

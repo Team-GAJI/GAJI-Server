@@ -5,6 +5,8 @@ import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.post.entity.PostBookmark;
+import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
 
 public class PostConverter {
@@ -34,5 +36,17 @@ public class PostConverter {
                 .build();
     }
 
+    public static PostBookmark toPostBookmark(User user, Post post) {
+        return PostBookmark.builder()
+                .user(user)
+                .post(post)
+                .build();
+    }
 
+    public static PostLikes toPostLikes(User user, Post post) {
+        return PostLikes.builder()
+                .user(user)
+                .post(post)
+                .build();
+    }
 }

@@ -39,7 +39,7 @@ public class Post extends BaseEntity {
 
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String body; // TODO: 게시글 text 제한 20000자
     private int viewCnt; // TODO: Integer vs int 고민해보기
     private int likeCnt;
@@ -76,4 +76,21 @@ public class Post extends BaseEntity {
     public int getCommentOrderNum() {
         return ++this.commentOrderNum;
     }
+
+    public void increaseBookmarkCnt() {
+        this.bookmarkCnt++;
+    }
+
+    public void decreaseBookmarkCnt() {
+        this.bookmarkCnt--;
+    }
+
+    public void increaseLikeCnt() {
+        this.likeCnt++;
+    }
+
+    public void decreaseLikeCnt() {
+        this.likeCnt--;
+    }
+
 }
