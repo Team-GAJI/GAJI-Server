@@ -12,6 +12,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/studyRooms")
@@ -28,12 +31,17 @@ public class RoomController {
     }
 
     @PostMapping("/schedule/{roomId}/{userId}")
-    @Operation(summary = "스터디룸 일정 등록 API",description = "스터디룸의 일정을 등록하는 API입니다. room의 id가 존재하는지,  user가 스터디의 reader인지 검증합니다.")
-    public BaseResponse<RoomResponseDto.EventDto> EventController(@PathVariable Long userId /*하드 코딩용, 추후 삭제*/, @PathVariable Long roomId, @RequestBody @Valid RoomRequestDto.EventDto requestDto){
-        //Long userId = getUserIdFromToken(token);
-        Event event = assignmentService.createEvent(roomId, userId, requestDto);
-        return BaseResponse.onSuccess(RoomConverter.toEventDto(event));
+    @Operation(summary = "스터디룸 일정 등록 API", description = "스터디룸의 일정을 등록하는 API입니다. room의 id가 존재하는지, user가 스터디에 속해 있는지 검증합니다.")
+    public BaseResponse<List<RoomResponseDto.EventDto>> EventController(
+            @PathVariable Long userId /*하드 코딩용, 추후 삭제*/,
+            @PathVariable Long roomId,
+            @RequestBody @Valid RoomRequestDto.EventDto requestDto) {
+
+        List<Event> events = assignmentService.createEvent(roomId, userId, requestDto);
+        List<RoomResponseDto.EventDto> eventDtos = events.stream()
+                .map(RoomConverter::toEventDto)
+                .collect(Collectors.toList());
+
+        return BaseResponse.onSuccess(eventDtos);
     }
-
-
 }

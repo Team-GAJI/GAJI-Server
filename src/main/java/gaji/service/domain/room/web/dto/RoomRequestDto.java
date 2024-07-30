@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,14 +42,16 @@ public class RoomRequestDto {
         @NotBlank(message = "일정 내용을 입력해주세요.")
         private String description;
 
-        private LocalDate startTime;
-        private LocalDate endTime;
+        private LocalDate scheduleDate;
+
+        private LocalTime startTime;
+        private LocalTime endTime;
 
         @Schema(description = "완료 여부")
         private boolean complete;
 
         @Schema(description = "반복 여부")
-        private boolean repeat;
+        private boolean isRepeat;
 
 
     }

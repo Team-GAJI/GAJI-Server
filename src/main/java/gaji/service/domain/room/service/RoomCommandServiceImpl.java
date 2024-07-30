@@ -8,6 +8,7 @@ import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.AssignmentRepository;
 import gaji.service.domain.room.repository.EventRepository;
+import gaji.service.domain.room.repository.MyRepeatRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.studyMate.Assignment;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,6 +32,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final UserRepository userRepository;
     private final StudyMateRepository studyMateRepository;
     private final EventRepository eventRepository;
+    private final MyRepeatRepository myRepeatRepository;
 
 
 
@@ -73,57 +76,58 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
 
-        StudyMate studyMate = studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
+        studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_IN_ROOM));
 
-        if (studyMate.getRole().equals(Role.READER)) {
-            List<Event> events = new ArrayList<>();
+        Event originalEvent = Event.builder()
+                .description(requestDto.getDescription())
+                .complete(requestDto.isComplete())
+                .isRepeat(requestDto.isRepeat())
+                .startTime(requestDto.getStartTime())
+                .endTime(requestDto.getEndTime())
+                .room(room)
+                .user(user)
+                .roomTitle(room.getName())
+                .build();
 
-            Event originalEvent = Event.builder()
-                    .description(requestDto.getDescription())
-                    .complete(requestDto.isComplete())
-                    .repeat(requestDto.isRepeat())
-                    .startTime(requestDto.getStartTime())
-                    .endTime(requestDto.getEndTime())
-                    .room(room)
+        eventRepository.save(originalEvent);
+
+        if (!requestDto.isRepeat()) {
+            return Collections.singletonList(originalEvent);
+        }
+
+        List<Event> events = new ArrayList<>();
+        events.add(originalEvent);
+
+        LocalDate startDate = requestDto.getStartTime();
+        LocalDate endDate = requestDto.getEndTime();
+
+        for (int i = 1; i < 4; i++) {
+            LocalDate newStartDate = startDate.plusWeeks(i);
+            LocalDate newEndDate = endDate.plusWeeks(i);
+
+            MyRepeat myRepeat = MyRepeat.builder()
+                    .event(originalEvent)
+                    .startTime(newStartDate)
+                    .endTime(newEndDate)
                     .build();
 
-            events.add(originalEvent);
-            eventRepository.save(originalEvent);
+            myRepeatRepository.save(myRepeat);
 
-            if (requestDto.isRepeat()) {
-                LocalDate startDate = requestDto.getStartTime();
-                LocalDate endDate = requestDto.getEndTime();
+            Event repeatedEvent = Event.builder()
+                    .description(requestDto.getDescription())
+                    .complete(requestDto.isComplete())
+                    .isRepeat(true)
+                    .startTime(newStartDate)
+                    .endTime(newEndDate)
+                    .room(room)
+                    .user(user)
+                    .build();
 
-                for (int i = 1; i < 4; i++) {
-                    LocalDate newStartDate = startDate.plusWeeks(i);
-                    LocalDate newEndDate = endDate.plusWeeks(i);
-
-                    Event repeatedEvent = Event.builder()
-                            .description(requestDto.getDescription())
-                            .complete(requestDto.isComplete())
-                            .repeat(true)
-                            .startTime(newStartDate)
-                            .endTime(newEndDate)
-                            .room(room)
-                            .build();
-
-                    events.add(repeatedEvent);
-                    eventRepository.save(repeatedEvent);
-
-                    MyRepeat myRepeat = MyRepeat.builder()
-                            .event(originalEvent)
-                            .startTime(newStartDate)
-                            .endTime(newEndDate)
-                            .build();
-
-                    // MyRepeat 저장 로직 추가 필요
-                }
-            }
-
-            return events;
-        } else {
-            throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
+            events.add(repeatedEvent);
+            eventRepository.save(repeatedEvent);
         }
+
+        return events;
     }
 }

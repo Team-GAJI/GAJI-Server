@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -28,10 +29,12 @@ public class RoomResponseDto {
     @AllArgsConstructor
     public static class EventDto{
         private String description;
-        private LocalDate startTime;
-        private LocalDate endTime;
-        private boolean repeat;
+        private LocalDate scheduleTime;
+        private LocalTime startTime;
+        private LocalTime endTime;
+        private boolean isRepeat;
         private boolean complete;
         private Long roomId;
+        private String roomTitle;
     }
 }

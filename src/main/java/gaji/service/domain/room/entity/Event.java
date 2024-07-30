@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,14 +34,17 @@ public class Event {
     private String description;
 
     @Column(nullable = false)
-    private LocalDate startTime;
+    private LocalDate ScheduleDate;
 
     @Column(nullable = false)
-    private LocalDate endTime;
+    private LocalTime startTime;
+
+    @Column(nullable = false)
+    private LocalTime endTime;
 
     private boolean complete;
-    private boolean repeat;
-
+    private boolean isRepeat;
+    private String roomTitle;
 
 
 
