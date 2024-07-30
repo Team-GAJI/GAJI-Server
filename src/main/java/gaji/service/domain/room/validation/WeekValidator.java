@@ -1,30 +1,35 @@
 package gaji.service.domain.room.validation;
 
+import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.validation.annotation.ValidWeek;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class WeekValidator implements ConstraintValidator<ValidWeek, Long> {
+public class WeekValidator implements ConstraintValidator<ValidWeek, Integer> {
+
 
     @Override
     public void initialize(ValidWeek constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
+        System.out.println("검증 시작");
     }
 
+
     @Override
-    public boolean isValid(Long week, ConstraintValidatorContext context) {
+    public boolean isValid(Integer week, ConstraintValidatorContext context) {
+        System.out.println("week:" + week);
         if (week == null) {
-            return true; // null 값은 다른 어노테이션(@NotNull 등)으로 처리할 수 있습니다.
+            return false; // null 값도 유효하지 않은 것으로 처리
         }
-        
-        boolean isValid = week >= 1;
-        if (!isValid) {
+
+        if (week < 1) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(PostErrorStatus._WEEK_NOT_VALID.getMessage())
-                   .addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(RoomErrorStatus._WEEK_NOT_VALID.getMessage())
+                    .addConstraintViolation();
+            return false;
         }
-        return isValid;
+        return true;
     }
 }
