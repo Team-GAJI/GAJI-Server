@@ -13,13 +13,11 @@ public class WeekValidator implements ConstraintValidator<ValidWeek, Integer> {
     @Override
     public void initialize(ValidWeek constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
-        System.out.println("검증 시작");
     }
 
 
     @Override
     public boolean isValid(Integer week, ConstraintValidatorContext context) {
-        System.out.println("week:" + week);
         if (week == null) {
             return false; // null 값도 유효하지 않은 것으로 처리
         }
