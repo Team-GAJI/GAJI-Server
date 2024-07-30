@@ -37,7 +37,6 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     @Transactional
     public Room createStudy(RoomRequestDTO.CreateStudyDTO request){
         String thumbnailPath = DEFAULT_THUMBNAIL_URL;
-        List<Material> materials = null;
         Curriculum curriculum = null;
         Way way = null;
 
@@ -51,11 +50,16 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                     .orElseThrow(() -> new RestApiException(RoomErrorStatus._WAY_NOT_FOUND)); // 진행방식이 없을 경우 null로 설정
         }
 
-        Room room = RoomConverter.toRoom(request, thumbnailPath, materials, curriculum, way);
+        if (request.getThumbnailPath() != null && !request.getThumbnailPath().isEmpty()) {
+            thumbnailPath = request.getThumbnailPath();
+        }
+
+        Room room = RoomConverter.toRoom(request, thumbnailPath, curriculum, way);
 
         roomRepository.save(room);
         return room;
     }
+
 
 
 }
