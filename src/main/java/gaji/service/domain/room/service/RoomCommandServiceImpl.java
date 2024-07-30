@@ -2,6 +2,7 @@ package gaji.service.domain.room.service;
 
 import gaji.service.domain.User;
 import gaji.service.domain.enums.Role;
+import gaji.service.domain.myRepeat.MyRepeat;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.entity.Room;
@@ -16,6 +17,10 @@ import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -61,11 +66,10 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public Event createEvent(Long roomId, Long userId, RoomRequestDto.EventDto requestDto) {
+    public List<Event> createEvent(Long roomId, Long userId, RoomRequestDto.EventDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_FOUND));
 
-        // 스터디룸 존재 여부 확인
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
 
@@ -73,18 +77,50 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_IN_ROOM));
 
         if (studyMate.getRole().equals(Role.READER)) {
-            Event event = Event.builder()
+            List<Event> events = new ArrayList<>();
+
+            Event originalEvent = Event.builder()
                     .description(requestDto.getDescription())
                     .complete(requestDto.isComplete())
                     .repeat(requestDto.isRepeat())
                     .startTime(requestDto.getStartTime())
                     .endTime(requestDto.getEndTime())
-                    .room(room)  // room 정보 추가
+                    .room(room)
                     .build();
 
-            eventRepository.save(event);
+            events.add(originalEvent);
+            eventRepository.save(originalEvent);
 
-            return event;
+            if (requestDto.isRepeat()) {
+                LocalDate startDate = requestDto.getStartTime();
+                LocalDate endDate = requestDto.getEndTime();
+
+                for (int i = 1; i < 4; i++) {
+                    LocalDate newStartDate = startDate.plusWeeks(i);
+                    LocalDate newEndDate = endDate.plusWeeks(i);
+
+                    Event repeatedEvent = Event.builder()
+                            .description(requestDto.getDescription())
+                            .complete(requestDto.isComplete())
+                            .repeat(true)
+                            .startTime(newStartDate)
+                            .endTime(newEndDate)
+                            .room(room)
+                            .build();
+
+                    events.add(repeatedEvent);
+                    eventRepository.save(repeatedEvent);
+
+                    MyRepeat myRepeat = new MyRepeat();
+                    myRepeat.setEvent(originalEvent);
+                    myRepeat.setStartTime(newStartDate);
+                    myRepeat.setEndTime(newEndDate);
+
+                    // MyRepeat 저장 로직 추가 필요
+                }
+            }
+
+            return events;
         } else {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
         }
