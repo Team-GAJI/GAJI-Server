@@ -28,7 +28,18 @@ public class PostRequestDTO {
         @ExistPostType
         private final PostTypeEnum type;
 
+        // TODO: List의 요소 중 ""," ", null이 포함되지 않도록 검증
         @Schema(description = "해시태그 리스트")
         private final List<String> hashtagList = new ArrayList<>();
     }
+
+    @Schema(description = "커뮤니티 게시글 댓글 작성 DTO")
+    @Getter
+    @RequiredArgsConstructor
+    public static class WriteCommentDTO {
+        @Schema(description = "댓글 본문")
+        @NotBlank(message = "댓글 본문을 입력해주세요.")
+        private String body;
+    }
+
 }
