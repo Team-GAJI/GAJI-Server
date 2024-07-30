@@ -4,9 +4,7 @@ import gaji.service.domain.User;
 import gaji.service.domain.myRepeat.MyRepeat;
 import gaji.service.domain.myRepeat.RepeatException;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,6 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,12 +45,6 @@ public class Event {
 
     private boolean meeting;
     private boolean allday;
-
-
-
-
-
-
 
 
 

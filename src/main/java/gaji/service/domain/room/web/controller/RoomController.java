@@ -1,5 +1,6 @@
 package gaji.service.domain.room.web.controller;
 
+import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.service.RoomAssignmentServiceImpl;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
@@ -23,5 +24,14 @@ public class RoomController {
         RoomResponseDto responseDto = assignmentService.createAssignment(roomId, userId, requestDto);
         return BaseResponse.onSuccess(responseDto);
     }
+
+    @PostMapping("/schedule/{roomId}/{userId}")
+    @Operation(summary = "스터디룸 일정 등록 API",description = "스터디룸의 일정을 등록하는 API입니다. room의 id가 존재하는지,  user가 스터디의 reader인지 검증합니다.")
+    public BaseResponse<RoomResponseDto> ScheduleController(@PathVariable Long userId /*하드 코딩용, 추후 삭제*/, @PathVariable Long roomId, @RequestBody @Valid RoomRequestDto.ScheduleDto requestDto){
+        //Long userId = getUserIdFromToken(token);
+        Event event = assignmentService.createSchedule(roomId, userId, requestDto);
+
+    }
+
 
 }

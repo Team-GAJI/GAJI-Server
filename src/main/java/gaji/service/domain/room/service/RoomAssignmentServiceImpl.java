@@ -2,12 +2,14 @@ package gaji.service.domain.room.service;
 
 import gaji.service.domain.User;
 import gaji.service.domain.room.code.RoomErrorStatus;
+import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.AssignmentRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.Assignment;
+import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
@@ -55,5 +57,6 @@ public class RoomAssignmentServiceImpl implements RoomAssignmentService {
         Assignment savedAssignment = assignmentRepository.save(assignment);
         return new RoomResponseDto(savedAssignment);
     }
+
 
 }
