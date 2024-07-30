@@ -11,7 +11,11 @@ import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.post.converter.PostConverter;
 import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.post.entity.PostBookmark;
+import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.repository.CommentRepository;
+import gaji.service.domain.post.repository.PostBookmarkRepository;
+import gaji.service.domain.post.repository.PostLikesRepository;
 import gaji.service.domain.post.repository.PostRepository;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.domain.user.repository.UserRepository;
@@ -33,6 +37,8 @@ public class PostCommandServiceImpl implements PostCommandService {
     private final HashtagRepository hashtagRepository;
     private final SelectHashtagRepository selectHashtagRepository;
     private final CommentRepository commentRepository;
+    private final PostBookmarkRepository postBookmarkRepository;
+    private final PostLikesRepository postLikesRepository;
 
     @Override
     public Post uploadPost(Long userId, PostRequestDTO.UploadPostDTO request) {
@@ -72,6 +78,44 @@ public class PostCommandServiceImpl implements PostCommandService {
         Post findPost = findPostByPostId(postId);
         selectHashtagRepository.deleteAllByEntityIdAndType(findPost.getId(), findPost.getType());
         postRepository.delete(findPost);
+    }
+
+    @Override
+    public PostBookmark bookmarkCommunityPost(Long userId, Long postId) {
+        User findUser = findUserByUserId(userId);
+        Post findPost = findPostByPostId(postId);
+        // TODO: 이미 북마크한 post인지 검증
+        PostBookmark newPostBookmark = postBookmarkRepository.save(PostConverter.toPostBookmark(findUser, findPost));
+        findPost.increaseBookmarkCnt();
+
+        return newPostBookmark;
+    }
+
+    @Override
+    public void cancelbookmarkCommunityPost(Long userId, Long postId) {
+        User findUser = findUserByUserId(userId);
+        Post findPost = findPostByPostId(postId);
+        postBookmarkRepository.deleteByUserAndPost(findUser, findPost);
+        findPost.decreaseBookmarkCnt();
+    }
+
+    @Override
+    public PostLikes likeCommunityPost(Long userId, Long postId) {
+        User findUser = findUserByUserId(userId);
+        Post findPost = findPostByPostId(postId);
+        // TODO: 이미 좋아요한 post인지 검증
+        PostLikes newPostLikes = postLikesRepository.save(PostConverter.toPostLikes(findUser, findPost));
+        findPost.increaseLikeCnt();
+
+        return newPostLikes;
+    }
+
+    @Override
+    public void cancelLikeCommunityPost(Long userId, Long postId) {
+        User findUser = findUserByUserId(userId);
+        Post findPost = findPostByPostId(postId);
+        postLikesRepository.deleteByUserAndPost(findUser, findPost);
+        findPost.decreaseLikeCnt();
     }
 
     private Comment createCommentByCheckParentCommentIdIsNull(Long parentCommentId, PostRequestDTO.WriteCommentDTO request, User findUser, Post findPost) {
