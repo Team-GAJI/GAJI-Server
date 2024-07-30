@@ -30,7 +30,8 @@ public class RoomResponseDto {
         private String description;
         private LocalDate startTime;
         private LocalDate endTime;
-        private boolean allday;
+        private boolean repeat;
+        private boolean complete;
         private Long roomId;
     }
 }

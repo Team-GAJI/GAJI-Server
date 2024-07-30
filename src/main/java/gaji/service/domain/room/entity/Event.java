@@ -43,8 +43,9 @@ public class Event {
     @Column(nullable = false)
     private LocalDate endTime;
 
-    private boolean meeting;
-    private boolean allday;
+    private boolean complete;
+    private boolean repeat;
+
 
 
 

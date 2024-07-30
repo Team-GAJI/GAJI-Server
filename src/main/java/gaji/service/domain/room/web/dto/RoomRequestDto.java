@@ -32,7 +32,7 @@ public class RoomRequestDto {
 
     }
 
-    @Schema(description = "일정 등록 DTP")
+    @Schema(description = "일정 등록 DTO")
     @Getter
     @AllArgsConstructor
     public static class EventDto{
@@ -44,8 +44,12 @@ public class RoomRequestDto {
         private LocalDate startTime;
         private LocalDate endTime;
 
-        @Schema(description = "반복여부")
-        private boolean allday;
+        @Schema(description = "완료 여부")
+        private boolean complete;
+
+        @Schema(description = "반복 여부")
+        private boolean repeat;
+
 
     }
 

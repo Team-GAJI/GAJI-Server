@@ -75,7 +75,8 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         if (studyMate.getRole().equals(Role.READER)) {
             Event event = Event.builder()
                     .description(requestDto.getDescription())
-                    .allday(requestDto.isAllday())
+                    .complete(requestDto.isComplete())
+                    .repeat(requestDto.isRepeat())
                     .startTime(requestDto.getStartTime())
                     .endTime(requestDto.getEndTime())
                     .room(room)  // room 정보 추가

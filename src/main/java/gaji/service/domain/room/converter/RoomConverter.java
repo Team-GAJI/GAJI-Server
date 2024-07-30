@@ -17,7 +17,8 @@ public class RoomConverter {
     public static RoomResponseDto.EventDto toEventDto(Event event) {
         return RoomResponseDto.EventDto.builder()
                 .description(event.getDescription())
-                .allday(event.isAllday())
+                .complete(event.isComplete())
+                .repeat(event.isRepeat())
                 .startTime(event.getStartTime())
                 .endTime(event.getEndTime())
                 .roomId(event.getRoom().getId())  // room 정보 추가
