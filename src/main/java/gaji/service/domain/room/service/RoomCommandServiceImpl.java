@@ -9,7 +9,6 @@ import gaji.service.domain.room.repository.AssignmentRepository;
 import gaji.service.domain.room.repository.EventRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class RoomAssignmentServiceImpl implements RoomAssignmentService {
+public class RoomCommandServiceImpl implements RoomCommandService {
     private final RoomRepository roomRepository;
     private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;

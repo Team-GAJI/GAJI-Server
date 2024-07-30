@@ -31,6 +31,6 @@ public class RoomResponseDto {
         private LocalDate startTime;
         private LocalDate endTime;
         private boolean allday;
-        private Room room;
+        private Long roomId;
     }
 }

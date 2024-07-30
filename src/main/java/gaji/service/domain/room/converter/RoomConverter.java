@@ -1,4 +1,4 @@
-package gaji.service.domain.room.converter.converter;
+package gaji.service.domain.room.converter;
 
 import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
@@ -20,7 +20,7 @@ public class RoomConverter {
                 .allday(event.isAllday())
                 .startTime(event.getStartTime())
                 .endTime(event.getEndTime())
-                .room(event.getRoom())  // room 정보 추가
+                .roomId(event.getRoom().getId())  // room 정보 추가
                 .build();
     }
 }
