@@ -38,8 +38,8 @@ public class RoomRequestDTO {
         private String description;
 
         @Schema(description = "스터디 인원")
-        @Min(-1)
-        @Max(10)
+        @Min(value = 1, message = "최소 인원은 1명입니다.")
+        @Max(value = 10, message = "최대 인원은 10명입니다.")
         private int headCount;
 
         @Schema(description = "썸네일 경로")
@@ -49,7 +49,7 @@ public class RoomRequestDTO {
         private List<String> materialList;
 
         @Schema(description = "스터디 공개 여부")
-        @NotNull
+        @NotNull(message = "스터디 공개 여부를 선택해주세요.")
         private boolean isPrivate;
 
         @Schema(description = "스터디 모집 기한")
