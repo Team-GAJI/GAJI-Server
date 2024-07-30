@@ -1,6 +1,7 @@
 package gaji.service.domain.post.entity;
 
 import gaji.service.domain.User;
+import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import jakarta.persistence.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
+public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,16 +37,22 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
+    @Column(nullable = false)
     private String title;
-    private String body;
-    private int views;
-    private int likes;
-    private int bookmarks;
+    @Column(nullable = false)
+    private String body; // TODO: 게시글 text 제한 20000자
+    private int viewCnt; // TODO: Integer vs int 고민해보기
+    private int likeCnt;
+    private int bookmarkCnt;
+    @Getter(AccessLevel.NONE)
+    private int commentOrderNum;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PostTypeEnum type;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PostStatusEnum status;
 
     @Builder
@@ -60,8 +67,13 @@ public class Post {
     // 엔티티 생성 시 초기값 설정
     @PrePersist
     public void prePersist() {
-        this.views = 0;
-        this.likes = 0;
-        this.bookmarks = 0;
+        this.viewCnt = 0;
+        this.likeCnt = 0;
+        this.bookmarkCnt = 0;
+        this.commentOrderNum = 0;
+    }
+
+    public int getCommentOrderNum() {
+        return ++this.commentOrderNum;
     }
 }
