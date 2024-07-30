@@ -2,7 +2,6 @@ package gaji.service.domain.room.entity;
 
 import gaji.service.domain.User;
 import gaji.service.domain.myRepeat.MyRepeat;
-import gaji.service.domain.myRepeat.RepeatException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,9 +26,6 @@ public class Event {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
-
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<RepeatException> repeatExceptionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<MyRepeat> myRepeatList = new ArrayList<>();
