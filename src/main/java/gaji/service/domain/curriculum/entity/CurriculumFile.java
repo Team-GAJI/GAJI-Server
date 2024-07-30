@@ -1,4 +1,4 @@
-package gaji.service.domain.curriculum;
+package gaji.service.domain.curriculum.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
