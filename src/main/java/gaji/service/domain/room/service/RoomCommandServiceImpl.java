@@ -1,12 +1,16 @@
 package gaji.service.domain.room.service;
 
+import gaji.service.aws.s3.AmazonS3Manager;
+import gaji.service.config.AmazonConfig;
 import gaji.service.domain.curriculum.entity.Curriculum;
 import gaji.service.domain.curriculum.repository.CurriculumRepository;
+import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.converter.RoomConverter;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.Way;
+import gaji.service.domain.room.repository.MaterialRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.repository.WayRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDTO;
@@ -14,7 +18,9 @@ import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -24,12 +30,13 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final RoomRepository roomRepository;
     private final CurriculumRepository curriculumRepository;
     private final WayRepository wayRepository;
+
     private static final String DEFAULT_THUMBNAIL_URL = "https://gaji-bucket.s3.ap-northeast-2.amazonaws.com/study/gaji.png";
 
     @Override
     @Transactional
     public Room createStudy(RoomRequestDTO.CreateStudyDTO request){
-        String thumbnailPath = null;
+        String thumbnailPath = DEFAULT_THUMBNAIL_URL;
         List<Material> materials = null;
         Curriculum curriculum = null;
         Way way = null;
