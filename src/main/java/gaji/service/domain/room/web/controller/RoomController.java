@@ -16,10 +16,12 @@ public class RoomController {
 
     private final RoomAssignmentServiceImpl assignmentService;
 
-    @PostMapping("/assignments/{userId}/{roomId}")
+    @PostMapping("/assignments/{roomId}")
     @Operation(summary = "스터디룸 과제 등록 API",description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 스터디에 참혀하고 있는 user인지 검증합니다.")
-    public BaseResponse<AssignmentResponseDto> AssignmentController(@PathVariable Long userId/*하드 코딩용, 추후 수정*/,@RequestBody @Valid AssignmentRequestDto.AssignmentDto requestDto, @PathVariable Long roomId){
+    public BaseResponse<AssignmentResponseDto> AssignmentController(@PathVariable Long userId/*하드 코딩용, 추후 삭제*/,@RequestBody @Valid AssignmentRequestDto.AssignmentDto requestDto, @PathVariable Long roomId){
+        //Long userId = getUserIdFromToken(token);
         AssignmentResponseDto responseDto = assignmentService.createAssignment(roomId, userId, requestDto);
         return BaseResponse.onSuccess(responseDto);
     }
+
 }
