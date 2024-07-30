@@ -30,6 +30,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final RoomRepository roomRepository;
     private final CurriculumRepository curriculumRepository;
     private final WayRepository wayRepository;
+    private final MaterialRepository materialRepository;
 
     private static final String DEFAULT_THUMBNAIL_URL = "https://gaji-bucket.s3.ap-northeast-2.amazonaws.com/study/gaji.png";
 
@@ -56,10 +57,20 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
         Room room = RoomConverter.toRoom(request, thumbnailPath, curriculum, way);
 
+        if (request.getMaterialList() != null && !request.getMaterialList().isEmpty()){
+            toMaterialList(request.getMaterialList(), room);
+        }
+
         roomRepository.save(room);
         return room;
     }
 
-
-
+    private void toMaterialList(List<String> materialUrlList, Room room) {
+        Material material;
+        for (String MaterialUrl : materialUrlList) {
+            material = RoomConverter.toMaterial(MaterialUrl, room);
+            room.addMaterial(material);
+            materialRepository.save(material);
+        }
+    }
 }
