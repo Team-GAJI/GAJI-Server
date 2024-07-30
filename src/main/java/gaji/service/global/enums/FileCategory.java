@@ -1,4 +1,4 @@
-package gaji.service.global.common.enums;
+package gaji.service.global.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

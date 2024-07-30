@@ -1,7 +1,7 @@
-package gaji.service.global.common.exception.code.status;
+package gaji.service.global.exception.code.status;
 
-import gaji.service.global.common.exception.code.BaseCodeDto;
-import gaji.service.global.common.exception.code.BaseSuccessCodeInterface;
+import gaji.service.global.exception.code.BaseCodeDto;
+import gaji.service.global.exception.code.BaseSuccessCodeInterface;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
