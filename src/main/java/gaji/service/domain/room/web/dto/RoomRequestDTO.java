@@ -30,12 +30,16 @@ public class RoomRequestDTO {
         private Long wayId;  // 진행방식 아이디
 
         @Schema(description = "스터디 명")
+        @NotBlank(message = "스터디 명을 입력해주세요.")
         private String name;
 
         @Schema(description = "스터디 설명")
+        @NotBlank(message = "스터디 설명을 입력해주세요.")
         private String description;
 
         @Schema(description = "스터디 인원")
+        @Min(-1)
+        @Max(10)
         private int headCount;
 
         @Schema(description = "썸네일 경로")
@@ -45,18 +49,27 @@ public class RoomRequestDTO {
         private List<Material> materialList;
 
         @Schema(description = "스터디 공개 여부")
+        @NotNull
         private boolean isPrivate;
 
         @Schema(description = "스터디 모집 기한")
+        @NotNull(message = "스터디 모집 기한을 입력해주세요.")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate recruitStartDay;
 
         @Schema(description = "스터디 모집 기한")
+        @NotNull(message = "스터디 모집 기한을 입력해주세요.")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate recruitEndDay;
 
         @Schema(description = "스터디 진행 기한")
+        @NotNull(message = "스터디 진행 기한을 입력해주세요.")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate studyStartDay;
 
         @Schema(description = "스터디 진행 기한")
+        @NotNull(message = "스터디 진행 기한을 입력해주세요.")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate studyEndDay;
 
     }
