@@ -25,7 +25,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
 
     @Override
-    public RoomResponseDto createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto){
+    public Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto){
 //        // 현재 로그인한 사용자의 정보를 가져옵니다. 추후 주석 해제
 //        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 //        User currentUser = userRepository.findByUsername(username)
@@ -53,7 +53,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                 .build();
 
         Assignment savedAssignment = assignmentRepository.save(assignment);
-        return new RoomResponseDto(savedAssignment);
+        return savedAssignment;
     }
 
 }
