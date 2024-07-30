@@ -6,5 +6,5 @@ import jakarta.transaction.Transactional;
 
 public interface RoomAssignmentService {
     @Transactional
-    AssignmentResponseDto createAssignment(Long roomId, AssignmentRequestDto.AssignmentDto requestDto);
+    AssignmentResponseDto createAssignment(Long roomId, Long userId, AssignmentRequestDto.AssignmentDto requestDto);
 }

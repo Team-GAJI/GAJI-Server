@@ -1,6 +1,5 @@
 package gaji.service.domain.room.validation;
 
-import gaji.service.domain.room.code.PostErrorStatus;
 import gaji.service.domain.room.validation.annotation.ValidWeek;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
