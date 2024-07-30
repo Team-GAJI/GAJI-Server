@@ -1,23 +1,36 @@
 package gaji.service.domain.room.web.dto;
 
+import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.Assignment;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class RoomResponseDto {
-    private Long id;
-    private Integer weeks;
-    private String body;
 
-    public RoomResponseDto(Assignment assignment) {
-        this.id = assignment.getId();
-        this.weeks = assignment.getWeeks();
-        this.body = assignment.getBody();
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AssignmentDto{
+        Long id;
+        Integer weeks;
+        String body;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EventDto{
+        private String description;
+        private LocalDate startTime;
+        private LocalDate endTime;
+        private boolean allday;
+        private Room room;
     }
 }

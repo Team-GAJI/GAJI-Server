@@ -1,10 +1,12 @@
 package gaji.service.domain.room.service;
 
 import gaji.service.domain.User;
+import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.AssignmentRepository;
+import gaji.service.domain.room.repository.EventRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
@@ -23,11 +25,12 @@ public class RoomAssignmentServiceImpl implements RoomAssignmentService {
     private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;
     private final StudyMateRepository studyMateRepository;
+    private final EventRepository eventRepository;
 
 
 
     @Override
-    public RoomResponseDto createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto){
+    public Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto){
 //        // 현재 로그인한 사용자의 정보를 가져옵니다. 추후 주석 해제
 //        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 //        User currentUser = userRepository.findByUsername(username)
@@ -55,8 +58,35 @@ public class RoomAssignmentServiceImpl implements RoomAssignmentService {
                 .build();
 
         Assignment savedAssignment = assignmentRepository.save(assignment);
-        return new RoomResponseDto(savedAssignment);
+        return savedAssignment;
     }
 
+    @Override
+    public Event createEvent(Long roomId, Long userId, RoomRequestDto.EventDto requestDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_FOUND));
 
+        // 스터디룸 존재 여부 확인
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
+
+        StudyMate studyMate = studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_IN_ROOM));
+
+        if (studyMate.getRole().equals(Role.READER)) {
+            Event event = Event.builder()
+                    .description(requestDto.getDescription())
+                    .allday(requestDto.isAllday())
+                    .startTime(requestDto.getStartTime())
+                    .endTime(requestDto.getEndTime())
+                    .room(room)  // room 정보 추가
+                    .build();
+
+            eventRepository.save(event);
+
+            return event;
+        } else {
+            throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
+        }
+    }
 }

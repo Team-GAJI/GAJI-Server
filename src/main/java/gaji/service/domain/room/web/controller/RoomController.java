@@ -1,9 +1,11 @@
 package gaji.service.domain.room.web.controller;
 
+import gaji.service.domain.room.converter.converter.RoomConverter;
 import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.service.RoomAssignmentServiceImpl;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.domain.studyMate.Assignment;
 import gaji.service.global.base.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -19,18 +21,18 @@ public class RoomController {
 
     @PostMapping("/assignments/{roomId}")
     @Operation(summary = "스터디룸 과제 등록 API",description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 스터디에 참혀하고 있는 user인지 검증합니다.")
-    public BaseResponse<RoomResponseDto> AssignmentController(@PathVariable Long userId/*하드 코딩용, 추후 삭제*/, @RequestBody @Valid RoomRequestDto.AssignmentDto requestDto, @PathVariable Long roomId){
+    public BaseResponse<RoomResponseDto.AssignmentDto> AssignmentController(@PathVariable Long userId/*하드 코딩용, 추후 삭제*/, @RequestBody @Valid RoomRequestDto.AssignmentDto requestDto, @PathVariable Long roomId){
         //Long userId = getUserIdFromToken(token);
-        RoomResponseDto responseDto = assignmentService.createAssignment(roomId, userId, requestDto);
-        return BaseResponse.onSuccess(responseDto);
+        Assignment assignment = assignmentService.createAssignment(roomId, userId, requestDto);
+        return BaseResponse.onSuccess(RoomConverter.toAssignmentDto(assignment));
     }
 
     @PostMapping("/schedule/{roomId}/{userId}")
     @Operation(summary = "스터디룸 일정 등록 API",description = "스터디룸의 일정을 등록하는 API입니다. room의 id가 존재하는지,  user가 스터디의 reader인지 검증합니다.")
-    public BaseResponse<RoomResponseDto> ScheduleController(@PathVariable Long userId /*하드 코딩용, 추후 삭제*/, @PathVariable Long roomId, @RequestBody @Valid RoomRequestDto.ScheduleDto requestDto){
+    public BaseResponse<RoomResponseDto.EventDto> EventController(@PathVariable Long userId /*하드 코딩용, 추후 삭제*/, @PathVariable Long roomId, @RequestBody @Valid RoomRequestDto.EventDto requestDto){
         //Long userId = getUserIdFromToken(token);
-        Event event = assignmentService.createSchedule(roomId, userId, requestDto);
-
+        Event event = assignmentService.createEvent(roomId, userId, requestDto);
+        return BaseResponse.onSuccess(RoomConverter.toEventDto(event));
     }
 
 

@@ -18,7 +18,9 @@ public enum RoomErrorStatus implements BaseErrorCodeInterface {
 
     // 스터디룸 멤버 관련 오류
     _USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "ROOM_4002","사용자를 찾을 수 없습니다."),
-    _USER_NOT_IN_ROOM(HttpStatus.BAD_REQUEST, "ROOM_4002","사용자가 해당 스터디룸에 참여하고 있지 않습니다.");
+    _USER_NOT_IN_ROOM(HttpStatus.BAD_REQUEST, "ROOM_4002","사용자가 해당 스터디룸에 참여하고 있지 않습니다."),
+
+    _USER_NOT_READER_IN_ROOM(HttpStatus.BAD_REQUEST, "ROOM_4002","사용자가 해당 스터디룸에 참여하고 있지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final boolean isSuccess = false;
