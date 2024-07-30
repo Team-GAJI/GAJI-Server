@@ -22,11 +22,11 @@ public class AssignmentRequestDto {
         @Schema(description = "주차")
         @NotNull(message = "주차를 입력해주세요.")
         @ValidWeek
-        private final Integer week;
+        private Integer week;
 
         @Schema(description = "과제 입력")
         @NotEmpty(message = "1개 이상의 과제를 입력해주세요.")
-        private final List<String> bodyList = new ArrayList<>();
+        private List<String> bodyList = new ArrayList<>();
 
     }
 }
