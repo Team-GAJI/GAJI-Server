@@ -2,6 +2,7 @@ package gaji.service.domain.room.web.dto;
 
 import gaji.service.domain.room.validation.annotation.ValidWeek;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -23,7 +24,7 @@ public class RoomRequestDto {
 
         @Schema(description = "주차")
         @NotNull(message = "주차를 입력해주세요.")
-        @ValidWeek
+        @Min(value = 1, message = "유효하지 않은 형식의 주차입니다.")
         private Integer week;
 
         @Schema(description = "과제 입력")
