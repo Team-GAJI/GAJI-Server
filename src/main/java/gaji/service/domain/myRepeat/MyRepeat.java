@@ -2,15 +2,15 @@ package gaji.service.domain.myRepeat;
 
 import gaji.service.domain.room.entity.Event;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class MyRepeat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class MyRepeat {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    private LocalDate StartTime;
-    private LocalDate EndTime;
+    private LocalDate startTime;
+    private LocalDate endTime;
 
 }

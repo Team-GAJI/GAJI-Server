@@ -111,10 +111,11 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                     events.add(repeatedEvent);
                     eventRepository.save(repeatedEvent);
 
-                    MyRepeat myRepeat = new MyRepeat();
-                    myRepeat.setEvent(originalEvent);
-                    myRepeat.setStartTime(newStartDate);
-                    myRepeat.setEndTime(newEndDate);
+                    MyRepeat myRepeat = MyRepeat.builder()
+                            .event(originalEvent)
+                            .startTime(newStartDate)
+                            .endTime(newEndDate)
+                            .build();
 
                     // MyRepeat 저장 로직 추가 필요
                 }
