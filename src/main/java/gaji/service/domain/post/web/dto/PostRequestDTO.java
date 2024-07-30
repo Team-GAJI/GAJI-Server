@@ -1,5 +1,6 @@
 package gaji.service.domain.post.web.dto;
 
+import gaji.service.domain.common.annotation.CheckHashtagListElement;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.annotation.ExistPostType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,6 +31,7 @@ public class PostRequestDTO {
 
         // TODO: List의 요소 중 ""," ", null이 포함되지 않도록 검증
         @Schema(description = "해시태그 리스트")
+        @CheckHashtagListElement
         private final List<String> hashtagList = new ArrayList<>();
     }
 
