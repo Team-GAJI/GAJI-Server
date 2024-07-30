@@ -3,6 +3,7 @@ package gaji.service.domain.file.service;
 import gaji.service.aws.s3.AmazonS3Manager;
 import gaji.service.domain.file.domain.Files;
 import gaji.service.domain.file.dto.response.FileCreateResponse;
+import gaji.service.domain.file.dto.response.FileDeleteResponse;
 import gaji.service.domain.file.mapper.FileMapper;
 import gaji.service.domain.file.repository.FileRepository;
 import gaji.service.global.common.enums.FileCategory;
@@ -37,12 +38,16 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public void deleteFile(String fileUrl) {
+    public FileDeleteResponse deleteFile(String fileUrl) {
         Files files = filesRepository.findByPath(fileUrl);
+
         if (files == null) {
-            throw new RestApiException(FilesErrorStatus._NOT_FOUND_FILE_URL);
+            throw new RestApiException(FilesErrorStatus._NOT_FOUND_FILE_URL); // 파일이 존재하지 않을 경우 예외 처리
         }
+
         filesRepository.delete(files);
         amazonS3Manager.deleteFile(fileUrl);
+
+        return new FileDeleteResponse(fileUrl);
     }
 }

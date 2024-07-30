@@ -1,6 +1,7 @@
 package gaji.service.domain.file.controller;
 
 import gaji.service.domain.file.dto.response.FileCreateResponse;
+import gaji.service.domain.file.dto.response.FileDeleteResponse;
 import gaji.service.domain.file.service.FileService;
 import gaji.service.global.common.base.BaseResponse;
 import gaji.service.global.common.enums.FileCategory;
@@ -27,8 +28,7 @@ public class FileController {
 
     @DeleteMapping
     @Operation(summary = "파일 삭제 API")
-    public BaseResponse<String> deleteFile(@RequestParam("fileUrl") String fileUrl) {
-        fileService.deleteFile(fileUrl);
-        return BaseResponse.onSuccess("삭제 성공");
+    public BaseResponse<FileDeleteResponse> deleteFile(@RequestParam("fileUrl") String fileUrl) {
+        return BaseResponse.onSuccess(fileService.deleteFile(fileUrl));
     }
 }
