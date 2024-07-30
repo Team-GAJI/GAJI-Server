@@ -19,7 +19,6 @@ public class RoomConverter {
                 .name(request.getName())
                 .description(request.getDescription())
                 .thumbnailPath(ThumbnailPath)
-                .headCount(request.getHeadCount())
                 .isPrivate(request.isPrivate())
                 .recruitStartDay(request.getRecruitStartDay())
                 .recruitEndDay(request.getRecruitEndDay())

@@ -78,11 +78,10 @@ public class Room {
     private LocalDate studyEndDay;
 
     @Builder
-    public Room(String name, String description, String thumbnailPath, int headCount, boolean isPrivate, LocalDate recruitStartDay, LocalDate recruitEndDay, LocalDate studyStartDay, LocalDate studyEndDay, Curriculum curriculum, Way way) {
+    public Room(String name, String description, String thumbnailPath, boolean isPrivate, LocalDate recruitStartDay, LocalDate recruitEndDay, LocalDate studyStartDay, LocalDate studyEndDay, Curriculum curriculum, Way way) {
         this.name = name;
         this.description = description;
         this.thumbnailPath = thumbnailPath;
-        this.headCount = headCount;
         this.isPrivate = isPrivate;
         this.recruitStartDay = recruitStartDay;
         this.recruitEndDay = recruitEndDay;
