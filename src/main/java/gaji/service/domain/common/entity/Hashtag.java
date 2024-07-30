@@ -19,7 +19,7 @@ public class Hashtag extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 30)
+    @Column(nullable = false, length = 30)
     private String name;
 
     @Builder
