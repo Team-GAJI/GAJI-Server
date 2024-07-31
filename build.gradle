@@ -35,6 +35,8 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2' //Swagger 의존성 추가
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // AWS 서비스 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-validation' // validation
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0' // SQL 쿼리 파라미터 값 로그로 보여주는 라이브러리
+
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
