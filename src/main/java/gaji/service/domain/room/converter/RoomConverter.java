@@ -21,7 +21,8 @@ public class RoomConverter {
                 .isRepeat(event.isRepeat())
                 .startTime(event.getStartTime())
                 .endTime(event.getEndTime())
-                .roomId(event.getRoom().getId())  // room 정보 추가
+                .roomTitle(event.getRoomTitle())
+                .scheduleDate(event.getScheduleDate())
                 .build();
     }
 }

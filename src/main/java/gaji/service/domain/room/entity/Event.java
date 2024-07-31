@@ -6,8 +6,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -27,14 +25,11 @@ public class Event {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<MyRepeat> myRepeatList = new ArrayList<>();
-
     @Column(nullable = false, length = 200)
     private String description;
 
     @Column(nullable = false)
-    private LocalDate ScheduleDate;
+    private LocalDate scheduleDate;
 
     @Column(nullable = false)
     private LocalTime startTime;

@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface StudyMateRepository extends JpaRepository<StudyMate, Long> {
     Optional<StudyMate> findByUserIdAndRoomId(Long userId, Long roomId);
+
+    boolean existsByUserIdAndRoomId(Long userId, Long roomId);
 }

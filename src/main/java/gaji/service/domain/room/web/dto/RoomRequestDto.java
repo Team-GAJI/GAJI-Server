@@ -1,5 +1,7 @@
 package gaji.service.domain.room.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -36,24 +38,25 @@ public class RoomRequestDto {
     @Schema(description = "일정 등록 DTO")
     @Getter
     @AllArgsConstructor
-    public static class EventDto{
-
+    public static class EventDto {
         @Schema(description = "일정 내용 입력")
         @NotBlank(message = "일정 내용을 입력해주세요.")
         private String description;
 
+        @Schema(description = "일정 날짜 (yyyy-MM-dd)")
         private LocalDate scheduleDate;
 
+        @Schema(description = "시작 시간 (HH:mm:ss)")
+        @JsonFormat(pattern = "HH:mm:ss")
         private LocalTime startTime;
+
+        @Schema(description = "종료 시간 (HH:mm:ss)")
+        @JsonFormat(pattern = "HH:mm:ss")
         private LocalTime endTime;
 
-        @Schema(description = "완료 여부")
-        private boolean complete;
-
         @Schema(description = "반복 여부")
-        private boolean isRepeat;
-
-
+        @JsonProperty("repeat")
+        private boolean repeat;
     }
 
 }

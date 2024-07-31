@@ -1,16 +1,11 @@
 package gaji.service.domain.room.web.dto;
 
-import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.studyMate.Assignment;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
+
 public class RoomResponseDto {
 
     @Builder
@@ -23,18 +18,19 @@ public class RoomResponseDto {
         String body;
     }
 
-    @Builder
     @Getter
+    @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class EventDto{
+    @Builder
+    public static class EventDto {
+
         private String description;
-        private LocalDate scheduleTime;
+        private LocalDate scheduleDate;
         private LocalTime startTime;
         private LocalTime endTime;
         private boolean isRepeat;
         private boolean complete;
-        private Long roomId;
         private String roomTitle;
     }
 }
