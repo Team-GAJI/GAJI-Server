@@ -1,13 +1,13 @@
 package gaji.service.domain.room.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class RoomNotice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
