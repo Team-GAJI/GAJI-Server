@@ -4,8 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,5 +28,18 @@ public class RoomRequestDto {
 
     }
 
+    @Schema(description = "과제 등록 DTO")
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class RoomNotice {
+        @Schema(description = "제목")
+        @NotNull(message = "제목을 입력해주세요.")
+        private String title;
 
+        @Schema(description = "내용")
+        @NotNull(message = "내용을 입력해주세요.")
+        private String body;
+    }
 }
