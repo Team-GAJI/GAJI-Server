@@ -20,8 +20,8 @@ public class RoomResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RoomNoticeDto{
-        Long id;
-        Integer weeks;
+        String title;
         String body;
+        Long roomId;
     }
 }
