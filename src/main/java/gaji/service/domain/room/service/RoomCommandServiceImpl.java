@@ -6,6 +6,7 @@ import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.repository.AssignmentRepository;
+import gaji.service.domain.room.repository.RoomNoticeRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
@@ -24,6 +25,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;
     private final StudyMateRepository studyMateRepository;
+    private final RoomNoticeRepository roomNoticeRepository;
 
 
 
@@ -76,8 +78,10 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                     .body(requestDto.getBody())
                     .room(room)
                     .build();
+            roomNoticeRepository.save(notice);
+            return notice;
         }
 
-
+        return null;
     }
 }
