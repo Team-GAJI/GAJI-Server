@@ -15,4 +15,13 @@ public class RoomResponseDto {
         String body;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class NoticeDto{
+        Long id;
+        Integer weeks;
+        String body;
+    }
 }
