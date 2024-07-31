@@ -1,4 +1,4 @@
-package gaji.service.domain.room;
+package gaji.service.domain.room.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

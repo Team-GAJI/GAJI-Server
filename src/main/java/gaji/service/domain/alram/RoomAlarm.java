@@ -1,7 +1,7 @@
 package gaji.service.domain.alram;
 
 
-import gaji.service.domain.room.Room;
+import gaji.service.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
