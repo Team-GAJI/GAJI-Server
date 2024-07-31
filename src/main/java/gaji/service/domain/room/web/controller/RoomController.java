@@ -29,7 +29,7 @@ public class RoomController {
 
     @PostMapping("/notices")
     @Operation(summary = "스터디룸 공지 등록 API",description = "스터디룸의 공지를 등록하는 API입니다. room의 id가 존재하는지, 작성자가 Reader인지 검증합니다.")
-    public BaseResponse<RoomResponseDto.NoticeDto> NoticeController(@PathVariable Long userId/*하드 코딩용, 추후 삭제*/, @RequestBody @Valid RoomRequestDto.AssignmentDto requestDto, @PathVariable Long roomId){
+    public BaseResponse<RoomResponseDto.RoomNoticeDto> NoticeController(@PathVariable Long userId/*하드 코딩용, 추후 삭제*/, @RequestBody @Valid RoomRequestDto.RoomNoticeDto requestDto, @PathVariable Long roomId){
         RoomNotice roomNotice = assignmentService.createNotice(roomId, userId, requestDto);
-
+        return BaseResponse.onSuccess(RoomConverter.toRoomNoticeDto(roomNotice));
 }
