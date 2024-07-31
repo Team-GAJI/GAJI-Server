@@ -3,6 +3,7 @@ package gaji.service.domain.post.entity;
 import gaji.service.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,10 @@ public class PostBookmark {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @Builder
+    public PostBookmark(User user, Post post) {
+        this.user = user;
+        this.post = post;
+    }
 }
