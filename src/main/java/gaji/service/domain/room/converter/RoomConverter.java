@@ -15,5 +15,10 @@ public class RoomConverter {
     }
 
     public static RoomResponseDto.RoomNoticeDto toRoomNoticeDto(RoomNotice roomNotice) {
+        return RoomResponseDto.RoomNoticeDto.builder()
+                .title(roomNotice.getTitle())
+                .body(roomNotice.getBody())
+                .roomId(roomNotice.getRoom().getId())
+                .build();
     }
 }
