@@ -1,4 +1,4 @@
-package gaji.service.domain.room;
+package gaji.service.domain.room.entity;
 
 import gaji.service.domain.curriculum.Curriculum;
 import gaji.service.domain.recruite.RecruitPost;
@@ -66,6 +66,5 @@ public class Room {
     private int headCount;
     private LocalDate startDay;
     private LocalDate endDay;
-
 
 }
