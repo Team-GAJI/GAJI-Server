@@ -17,5 +17,7 @@ public class RoomNotice {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    private String title;
+
     private String body;
 }
