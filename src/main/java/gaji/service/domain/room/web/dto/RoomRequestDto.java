@@ -33,7 +33,7 @@ public class RoomRequestDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class RoomNotice {
+    public static class RoomNoticeDto {
         @Schema(description = "제목")
         @NotNull(message = "제목을 입력해주세요.")
         private String title;

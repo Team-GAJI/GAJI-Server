@@ -59,7 +59,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return savedAssignment;
     }
 
-    public RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNotice requestDto) {
+    public RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_FOUND));
         // 스터디룸 존재 여부 확인
@@ -72,7 +72,12 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
         if(studyMate.getRole().equals(Role.READER)){
             RoomNotice notice = RoomNotice.builder()
-                    .title(requestDto.)
+                    .title(requestDto.getTitle())
+                    .body(requestDto.getBody())
+                    .room(room)
+                    .build();
         }
+
+
     }
 }
