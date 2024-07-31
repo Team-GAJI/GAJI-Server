@@ -15,6 +15,7 @@ import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -61,27 +62,26 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return savedAssignment;
     }
 
+    @Override
     public RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_FOUND));
-        // 스터디룸 존재 여부 확인
+
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
 
-        // 사용자가 해당 스터디룸에 참여하고 있는지 확인
         StudyMate studyMate = studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_IN_ROOM));
 
-        if(studyMate.getRole().equals(Role.READER)){
+        if (studyMate.getRole().equals(Role.READER)) {
             RoomNotice notice = RoomNotice.builder()
                     .title(requestDto.getTitle())
                     .body(requestDto.getBody())
                     .room(room)
                     .build();
-            roomNoticeRepository.save(notice);
-            return notice;
+            return roomNoticeRepository.save(notice);
+        } else {
+            throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
         }
-
-        return null;
     }
 }
