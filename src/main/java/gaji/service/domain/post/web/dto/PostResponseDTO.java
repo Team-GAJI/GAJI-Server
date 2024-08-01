@@ -15,4 +15,18 @@ public class PostResponseDTO {
     public static class CreatePostDTO {
         Long postId;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostPreviewListDTO {
+        private int likeCnt;
+        private String thumbnailUrl;
+        private String title;
+        private String body;
+        private String username;
+        private String uploadTime;
+        private int viewCnt;
+    }
 }
