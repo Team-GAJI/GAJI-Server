@@ -26,13 +26,7 @@ public class RoomPostRequestDto {
         @NotBlank(message = "게시글 본문을 입력해주세요.")
         private final String body;
 
-        @Schema(description = "Enum 종류(프로젝트 모집, 질문, 블로그)")
-        @ExistPostType
-        private final PostTypeEnum type;
 
-        @Schema(description = "태그 리스트")
-        @CheckHashtagListElement
-        private final List<String> hashtagList = new ArrayList<>();
     }
 
 

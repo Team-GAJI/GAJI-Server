@@ -4,6 +4,8 @@ import gaji.service.domain.User;
 import gaji.service.domain.roomPost.entity.RoomPost;
 import gaji.service.domain.roomPost.web.dto.RoomPostRequestDto;
 
+import java.time.LocalDateTime;
+
 import static gaji.service.domain.post.converter.PostConverter.getInitialPostStatus;
 
 public class RoomPostConverter {
@@ -13,9 +15,9 @@ public class RoomPostConverter {
                  .user(user)
                  .title(requestDto.getTitle())
                  .body(requestDto.getBody())
-                 .type(requestDto.getType())
-                 .status(getInitialPostStatus(requestDto.getType()))
+                 .postTime(LocalDateTime.now())
                  .build();
+         return roomPost;
     }
 
 

@@ -5,6 +5,7 @@ import gaji.service.domain.enums.PostStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +50,9 @@ public class RoomPost {
     private int likes;
     private int bookmarks;
 
+    private LocalDateTime postTime;
     //첨부파일
     private String file;
-
-    @Enumerated(EnumType.STRING)
-    private PostStatusEnum postStatusEnum;
 
     private int weeks;
 }

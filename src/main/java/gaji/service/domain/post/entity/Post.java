@@ -52,6 +52,7 @@ public class Post extends BaseEntity {
     private PostTypeEnum type;
 
     @Enumerated(EnumType.STRING)
+
     @Column(nullable = false)
     private PostStatusEnum status;
 

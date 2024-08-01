@@ -1,12 +1,16 @@
 package gaji.service.domain.roomPost.service;
 
 import gaji.service.domain.User;
+import gaji.service.domain.common.converter.HashtagConverter;
+import gaji.service.domain.common.entity.Hashtag;
+import gaji.service.domain.common.entity.SelectHashtag;
 import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.roomPost.entity.RoomPost;
 import gaji.service.domain.roomPost.converter.RoomPostConverter;
+import gaji.service.domain.roomPost.repository.RoomPostRepository;
 import gaji.service.domain.roomPost.web.dto.RoomPostRequestDto;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.repository.UserRepository;
@@ -14,12 +18,15 @@ import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
     private final StudyMateRepository studyMateRepository;
+    private final RoomPostRepository roomPostRepository;
 
 
     @Override
@@ -35,7 +42,10 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_IN_ROOM));
 
-        RoomPost = RoomPostConverter.toPost(requestDto,user);
+        RoomPost roomPost = RoomPostConverter.toPost(requestDto,user);
+        roomPostRepository.save(roomPost);
+
+        return roomPost;
 
     }
 
