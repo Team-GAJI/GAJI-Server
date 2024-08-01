@@ -1,10 +1,15 @@
 package gaji.service.domain.recruit.converter;
 
 import gaji.service.domain.User;
+import gaji.service.domain.enums.RecruitPostCategoryEnum;
 import gaji.service.domain.recruit.entity.RecruitPost;
+import gaji.service.domain.recruit.entity.SelectCategory;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Room;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecruitConverter {
 
@@ -28,4 +33,39 @@ public class RecruitConverter {
                 .recruitId(recruitPost.getId())
                 .build();
     }
+
+    public static List<RecruitPostCategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
+        List<RecruitPostCategoryEnum> categoryList = new ArrayList<>();
+        for (SelectCategory selectCategory : selectCategoryList) {
+            RecruitPostCategoryEnum category = selectCategory.getCategory();
+            categoryList.add(category);
+        }
+
+        return categoryList;
+    }
+
+    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, RecruitPost post, Room room, List<RecruitPostCategoryEnum> categoryList) {
+        return RecruitResponseDTO.studyDetailDTO.builder()
+                .userNickName(user.getNickname())
+                .userClass(null)
+                .userActive(user.getStatus())
+                .inactiveTime(user.getInactiveTime())
+
+                .views(post.getViews())
+                .likes(post.getLikes())
+                .bookmarks(post.getBookmarks())
+                .recruitPostTypeEnum(post.getRecruitPostTypeEnum())
+                .postCategoryList(categoryList)
+                .recruitStartTime(post.getStartTime())
+                .recruitEndTime(post.getEndTime())
+
+                .studyName(room.getName())
+                .studyDescription(null/*room.getDescription()*/)
+                .studyImageUrl(null/*room.getThumbnailUrl()*/)
+                .studyStartTime(room.getStartDay())
+                .studyEndTime(room.getEndDay())
+                .materialList(room.getMaterialList())
+                .build();
+    }
+
 }
