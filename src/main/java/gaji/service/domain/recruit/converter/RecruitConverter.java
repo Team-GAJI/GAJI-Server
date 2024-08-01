@@ -2,7 +2,6 @@ package gaji.service.domain.recruit.converter;
 
 import gaji.service.domain.User;
 import gaji.service.domain.enums.RecruitPostCategoryEnum;
-import gaji.service.domain.recruit.entity.RecruitPost;
 import gaji.service.domain.recruit.entity.SelectCategory;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
@@ -13,14 +12,12 @@ import java.util.List;
 
 public class RecruitConverter {
 
-    public static RecruitPost toRecruitPost(RecruitRequestDTO.CreateRecruitDTO request, User user, Room room, String inviteCode, int peopleMaximum) {
-        return RecruitPost.builder()
+    public static Room toRoom(RecruitRequestDTO.CreateRoomDTO request, User user, String inviteCode, int peopleMaximum) {
+        return Room.builder()
                 .user(user)
-                .room(room)
-                .title(request.getTitle())
                 .content(request.getContent())
-                .startTime(request.getStartTime())
-                .endTime(request.getEndTime())
+                .recruitStartDay(request.getStartTime())
+                .recruitEndDay(request.getEndTime())
                 .isPrivate(request.isPrivate())
                 .inviteCode(inviteCode)
                 .peopleLimited(request.isPeopleLimited())
@@ -28,9 +25,9 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.CreateRecruitDTO toResponseDTO(RecruitPost recruitPost) {
-        return RecruitResponseDTO.CreateRecruitDTO.builder()
-                .recruitId(recruitPost.getId())
+    public static RecruitResponseDTO.CreateRoomDTO toResponseDTO(Room room) {
+        return RecruitResponseDTO.CreateRoomDTO.builder()
+                .roomId(room.getId())
                 .build();
     }
 
@@ -44,26 +41,26 @@ public class RecruitConverter {
         return categoryList;
     }
 
-    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, RecruitPost post, Room room, List<RecruitPostCategoryEnum> categoryList) {
+    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<RecruitPostCategoryEnum> categoryList) {
         return RecruitResponseDTO.studyDetailDTO.builder()
                 .userNickName(user.getNickname())
                 .userClass(null)
                 .userActive(user.getStatus())
                 .inactiveTime(user.getInactiveTime())
 
-                .views(post.getViews())
-                .likes(post.getLikes())
-                .bookmarks(post.getBookmarks())
-                .recruitPostTypeEnum(post.getRecruitPostTypeEnum())
+                .views(room.getViews())
+                .likes(room.getLikes())
+                .bookmarks(room.getBookmarks())
+                .recruitPostTypeEnum(room.getRecruitPostTypeEnum())
                 .postCategoryList(categoryList)
-                .recruitStartTime(post.getStartTime())
-                .recruitEndTime(post.getEndTime())
+                .recruitStartTime(room.getRecruitStartDay())
+                .recruitEndTime(room.getRecruitEndDay())
 
                 .studyName(room.getName())
                 .studyDescription(null/*room.getDescription()*/)
                 .studyImageUrl(null/*room.getThumbnailUrl()*/)
-                .studyStartTime(room.getStartDay())
-                .studyEndTime(room.getEndDay())
+                .studyStartTime(room.getStudyStartDay())
+                .studyEndTime(room.getStudyEndDay())
                 .materialList(room.getMaterialList())
                 .build();
     }

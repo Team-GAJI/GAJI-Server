@@ -1,9 +1,9 @@
 package gaji.service.domain.recruit.service;
 
-import gaji.service.domain.recruit.entity.RecruitPost;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
+import gaji.service.domain.room.entity.Room;
 
 public interface RecruitCommandService {
 
-    RecruitPost createRecruitPost(RecruitRequestDTO.CreateRecruitDTO request, Long roomId, Long userId);
+    Room createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId);
 }

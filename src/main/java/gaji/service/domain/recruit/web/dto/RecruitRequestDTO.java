@@ -17,7 +17,7 @@ public class RecruitRequestDTO {
     @Schema(description = "모집 게시글 생성 DTO")
     @Getter
     @RequiredArgsConstructor
-    public static class CreateRecruitDTO {
+    public static class CreateRoomDTO {
 
         @Schema(description = "모집 게시글 제목")
         private String title;

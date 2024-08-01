@@ -19,8 +19,8 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateRecruitDTO {
-        Long recruitId;
+    public static class CreateRoomDTO {
+        Long roomId;
     }
 
     @Builder
