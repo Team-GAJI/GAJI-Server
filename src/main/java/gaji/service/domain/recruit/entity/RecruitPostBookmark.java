@@ -1,4 +1,4 @@
-package gaji.service.domain.recruite;
+package gaji.service.domain.recruit.entity;
 
 import gaji.service.domain.User;
 import jakarta.persistence.*;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
-public class RecruitPostLikes {
+public class RecruitPostBookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,5 +21,6 @@ public class RecruitPostLikes {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private RecruitPost recruitPost;
+
 
 }
