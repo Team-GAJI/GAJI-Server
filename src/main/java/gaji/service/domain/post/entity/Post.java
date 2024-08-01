@@ -93,4 +93,8 @@ public class Post extends BaseEntity {
         this.likeCnt--;
     }
 
+    public void increaseViewCnt() {
+        this.viewCnt++;
+    }
+
 }
