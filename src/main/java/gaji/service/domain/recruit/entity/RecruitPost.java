@@ -2,7 +2,7 @@ package gaji.service.domain.recruit.entity;
 
 import gaji.service.domain.User;
 import gaji.service.domain.common.entity.BaseEntity;
-import gaji.service.domain.enums.RecruitePostTypeEnum;
+import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -57,7 +57,7 @@ public class RecruitPost extends BaseEntity {
     //북마크수
     private int bookmarks;
 
-    private RecruitePostTypeEnum recruitePostTypeEnum;
+    private RecruitPostTypeEnum recruitPostTypeEnum;
 
     private LocalDate startTime;
     private LocalDate endTime;
@@ -98,6 +98,6 @@ public class RecruitPost extends BaseEntity {
         this.views = 0;
         this.likes = 0;
         this.bookmarks = 0;
-        this.recruitePostTypeEnum = RecruitePostTypeEnum.RECRUITING;
+        this.recruitPostTypeEnum = RecruitPostTypeEnum.RECRUITING;
     }
 }
