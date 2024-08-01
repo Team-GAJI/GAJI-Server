@@ -51,6 +51,10 @@ public class RecruitPost extends BaseEntity {
     //조회수
     private int views;
 
+    public void addView() {
+        this.views++;
+    }
+
     //좋아요수
     private int likes;
 
