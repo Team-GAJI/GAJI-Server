@@ -4,6 +4,7 @@ import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.entity.RecruitPost;
 import gaji.service.domain.recruit.service.RecruitCommandService;
 import gaji.service.domain.recruit.service.RecruitCommandServiceImpl;
+import gaji.service.domain.recruit.service.RecruitQueryService;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.converter.RoomConverter;
@@ -36,8 +37,8 @@ public class RecruitController {
     @GetMapping("/{postId}")
     @Operation(summary = "스터디 정보 상세 조회 API", description = "스터디 상세 정보를 조회하는 API입니다.")
     public BaseResponse<RecruitResponseDTO.studyDetailDTO> getStudyDetail(@PathVariable Long postId) {
-        recruitQueryService.getStudyDetail(postId);
-        return null;
+        RecruitResponseDTO.studyDetailDTO responseDTO = recruitQueryService.getStudyDetail(postId);
+        return BaseResponse.onSuccess(responseDTO);
     }
 }
 
