@@ -16,15 +16,5 @@ public class RoomResponseDto {
         String body;
     }
 
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class BoardDto{
-        String title;
-        String body;
-        PostTypeEnum postTypeEnum;
-    }
-
 
 }

@@ -1,11 +1,9 @@
-package gaji.service.domain.roomPost;
+package gaji.service.domain.roomPost.entity;
 
 import gaji.service.domain.User;
 import gaji.service.domain.enums.PostStatusEnum;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +11,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class RoomPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
