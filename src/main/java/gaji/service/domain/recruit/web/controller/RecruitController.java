@@ -24,12 +24,20 @@ import org.springframework.web.bind.annotation.*;
 public class RecruitController {
 
     private final RecruitCommandService recruitCommandService;
+    private final RecruitQueryService recruitQueryService;
 
     @PostMapping("/{roomId}")
     @Operation(summary = "스터디 모집 게시글 생성 API", description = "스터디 모집 게시글을 생성하는 API입니다.")
     public BaseResponse<RecruitResponseDTO.CreateRecruitDTO> createRecruitPost(@RequestBody @Valid RecruitRequestDTO.CreateRecruitDTO request, @PathVariable Long roomId, @RequestParam("user") Long userId) {
         RecruitPost newRecruitPost = recruitCommandService.createRecruitPost(request, roomId, userId);
         return BaseResponse.onSuccess(RecruitConverter.toResponseDTO(newRecruitPost));
+    }
+
+    @GetMapping("/{postId}")
+    @Operation(summary = "스터디 정보 상세 조회 API", description = "스터디 상세 정보를 조회하는 API입니다.")
+    public BaseResponse<RecruitResponseDTO.studyDetailDTO> getStudyDetail(@PathVariable Long postId) {
+        recruitQueryService.getStudyDetail(postId);
+        return null;
     }
 }
 
