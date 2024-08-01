@@ -49,7 +49,7 @@ public class RecruitRequestDTO {
         private int peopleMaximum;
 
         @Schema(description = "카테고리 목록")
-        // @ExistCategory
+        @ExistCategory
         private List<RecruitPostCategoryEnum> categoryList;
     }
 }
