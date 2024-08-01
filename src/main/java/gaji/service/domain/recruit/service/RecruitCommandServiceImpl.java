@@ -4,12 +4,9 @@ import gaji.service.domain.User;
 import gaji.service.domain.enums.RecruitPostCategoryEnum;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
-import gaji.service.domain.recruit.entity.RecruitPost;
 import gaji.service.domain.recruit.entity.SelectCategory;
-import gaji.service.domain.recruit.repository.RecruitRepository;
 import gaji.service.domain.recruit.repository.SelectCategoryRepository;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
-import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.user.repository.UserRepository;
@@ -27,12 +24,11 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
-    private final RecruitRepository recruitRepository;
     private final SelectCategoryRepository selectCategoryRepository;
 
     @Override
     @Transactional
-    public RecruitPost createRecruitPost(RecruitRequestDTO.CreateRecruitDTO request, Long roomId, Long userId) {
+    public Room createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId) {
 
         String inviteCode = null;
         int peopleMaximum = 0;
@@ -49,22 +45,19 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(RecruitErrorStatus._USER_NOT_FOUND));
 
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
-
-        RecruitPost recruitPost = RecruitConverter.toRecruitPost(request, user, room, inviteCode, peopleMaximum);
+        Room room = RecruitConverter.toRoom(request, user, inviteCode, peopleMaximum);
 
         for (RecruitPostCategoryEnum category : request.getCategoryList()) {
             selectCategory = SelectCategory.builder()
                     .category(category)
-                    .recruitPost(recruitPost)
+                    .recruitPost(room)
                     .build();
-            recruitPost.addCategory(selectCategory);
+            room.addCategory(selectCategory);
             selectCategoryRepository.save(selectCategory);
         }
 
-        recruitRepository.save(recruitPost);
-        return recruitPost;
+        roomRepository.save(room);
+        return room;
     }
 
     private String generateInviteCode() {
