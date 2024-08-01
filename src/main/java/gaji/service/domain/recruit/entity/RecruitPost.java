@@ -6,6 +6,7 @@ import gaji.service.domain.enums.RecruitePostTypeEnum;
 import gaji.service.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -77,6 +78,7 @@ public class RecruitPost extends BaseEntity {
     //인원제한 여부 Ture : 제한있음 / False : 제한없음
     private boolean peopleLimited;
 
+    @Builder
     public RecruitPost(User user, Room room, String title, String content, LocalDate startTime, LocalDate endTime, boolean isPrivate, String inviteCode, int headCount, int peopleMaximum, boolean peopleLimited) {
         this.user = user;
         this.room = room;
