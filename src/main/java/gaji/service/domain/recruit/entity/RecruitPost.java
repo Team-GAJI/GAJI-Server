@@ -32,12 +32,16 @@ public class RecruitPost extends BaseEntity {
     @OneToMany(mappedBy = "recruitPost", cascade =  CascadeType.ALL)
     private List<RecruitPostBookmark> recruitPostBookmarkList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
-    private List<SelectCategory> selectCategoryList = new ArrayList<>();
 
     @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
     private List<RecruitPostLikes> recruitPostLikesList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
+    private List<SelectCategory> selectCategoryList = new ArrayList<>();
+
+    public void addCategory(SelectCategory selectCategory) {
+        selectCategoryList.add(selectCategory);
+    }
 
     @Column(length = 20)
     private String title;
@@ -52,17 +56,10 @@ public class RecruitPost extends BaseEntity {
     //북마크수
     private int bookmarks;
 
-    // 썸네일 경로
-    private String thumbnailPath;
-
     private RecruitePostTypeEnum recruitePostTypeEnum;
 
-    private LocalDate StartTime;
-    private LocalDate EndTime;
-
-    //True: 모집완료
-    private boolean isRecruited;
-
+    private LocalDate startTime;
+    private LocalDate endTime;
 
     // True:oepn // False : end
     private boolean isPrivate;
@@ -80,4 +77,25 @@ public class RecruitPost extends BaseEntity {
     //인원제한 여부 Ture : 제한있음 / False : 제한없음
     private boolean peopleLimited;
 
+    public RecruitPost(User user, Room room, String title, String content, LocalDate startTime, LocalDate endTime, boolean isPrivate, String inviteCode, int headCount, int peopleMaximum, boolean peopleLimited) {
+        this.user = user;
+        this.room = room;
+        this.title = title;
+        this.content = content;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.isPrivate = isPrivate;
+        this.inviteCode = inviteCode;
+        this.headCount = headCount;
+        this.peopleMaximum = peopleMaximum;
+        this.peopleLimited = peopleLimited;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.views = 0;
+        this.likes = 0;
+        this.bookmarks = 0;
+        this.recruitePostTypeEnum = RecruitePostTypeEnum.RECRUITING;
+    }
 }
