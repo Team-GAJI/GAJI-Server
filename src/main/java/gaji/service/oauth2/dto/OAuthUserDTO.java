@@ -1,5 +1,6 @@
 package gaji.service.oauth2.dto;
 
+import gaji.service.domain.enums.Role;
 import gaji.service.domain.enums.ServiceRole;
 import lombok.Getter;
 import lombok.Setter;

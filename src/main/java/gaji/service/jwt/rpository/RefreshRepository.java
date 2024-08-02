@@ -1,6 +1,5 @@
 package gaji.service.jwt.rpository;
 
-import gaji.service.domain.User;
 import gaji.service.jwt.entity.RefreshEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +16,4 @@ public interface RefreshRepository extends JpaRepository<RefreshEntity, Long> {
     RefreshEntity findByUsername(String usernameId);
 
     Boolean existsByUsername(String refresh);
-    User findByUsernameId(String username);
-
 }
