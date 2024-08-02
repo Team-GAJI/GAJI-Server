@@ -9,6 +9,7 @@ import gaji.service.domain.studyMate.Assignment;
 import gaji.service.global.base.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +46,7 @@ public class RoomController {
     @PostMapping("/event/{roomId}/{weeks}/{userId}/description")
     @Operation(summary = "스터디룸 설명 입력 API", description = "스터디룸에 대한 설명을 입력하는 API입니다.")
     public BaseResponse<Long> setStudyDescription(
-            @PathVariable Integer weeks,
+            @PathVariable @Min(value = 1, message = "Weeks must be at least 1") Integer weeks,
             @PathVariable Long userId,
             @PathVariable Long roomId,
             @RequestBody @Valid RoomRequestDto.StudyDescriptionDto requestDto
