@@ -125,7 +125,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Gender gender;
 
     private LocalDate birthday;
