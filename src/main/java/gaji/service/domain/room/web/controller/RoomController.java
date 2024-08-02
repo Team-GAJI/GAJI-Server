@@ -30,7 +30,7 @@ public class RoomController {
         return BaseResponse.onSuccess(RoomConverter.toAssignmentDto(assignment));
     }
 
-    @PostMapping("/event/{roomId}/period")
+    @PostMapping("/event/{roomId}/{userId}/period")
     @Operation(summary = "스터디룸 기간 설정 API", description = "스터디룸의 전체 기간을 설정하는 API입니다.")
     public BaseResponse<Long> setStudyPeriod(
             @PathVariable Long userId,
@@ -41,7 +41,7 @@ public class RoomController {
         return BaseResponse.onSuccess(event.getId());
     }
 
-    @PostMapping("/event/{roomId}/description")
+    @PostMapping("/event/{roomId}/{userId}/description")
     @Operation(summary = "스터디룸 설명 입력 API", description = "스터디룸에 대한 설명을 입력하는 API입니다.")
     public BaseResponse<Long> setStudyDescription(
             @PathVariable Long userId,
