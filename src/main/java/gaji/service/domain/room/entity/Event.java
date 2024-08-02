@@ -40,6 +40,8 @@ public class Event {
     @Column(length = 200)
     private String description;
 
+    private Integer weeks;
+
     private LocalDate startTime;
 
     private LocalDate endTime;
