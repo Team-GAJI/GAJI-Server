@@ -2,10 +2,8 @@ package gaji.service.domain.room.web.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -32,23 +30,26 @@ public class RoomRequestDto {
 
     }
 
-    @Schema(description = "과제 등록 DTO")
     @Getter
-    @RequiredArgsConstructor
-    public static class EventManagementDto {
+    @Builder
+    public static class StudyPeriodDto {
+        @NotNull
+        private LocalDate startDate;
 
-        @Schema(description = "제목")
-        @NotBlank(message = "제목을 입력해주세요.")
+        @NotNull
+        private LocalDate endDate;
+    }
+
+    @Getter
+    @Builder
+    public static class StudyDescriptionDto {
+        @NotBlank
+        @Size(max = 30)
         private String title;
 
-
-        @Schema(description = "제목")
-        @NotNull(message = "제목을 입력해주세요.")
+        @NotBlank
+        @Size(max = 200)
         private String description;
-
-        @Schema(description = "공개 비공개 여부")
-        private boolean isPublic;
-
     }
 
 
