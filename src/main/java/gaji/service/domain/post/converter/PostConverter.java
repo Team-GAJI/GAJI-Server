@@ -14,7 +14,7 @@ public class PostConverter {
     // 초기 PostStatus 지정
     public static PostStatusEnum getInitialPostStatus(PostTypeEnum type) {
         return (type == PostTypeEnum.QUESTION) ? PostStatusEnum.NEED_RESOLUTION :
-                (type == PostTypeEnum.PROJECT_RECRUITMENT) ? PostStatusEnum.RECRUITING : PostStatusEnum.POSTING;
+                (type == PostTypeEnum.PROJECT) ? PostStatusEnum.RECRUITING : PostStatusEnum.POSTING;
     }
 
     public static Post toPost(PostRequestDTO.UploadPostDTO request, User user) {
