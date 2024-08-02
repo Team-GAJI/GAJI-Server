@@ -30,25 +30,27 @@ public class RoomController {
         return BaseResponse.onSuccess(RoomConverter.toAssignmentDto(assignment));
     }
 
-    @PostMapping("/event/{roomId}/{userId}/period")
+    @PostMapping("/event/{roomId}/{weeks}/{userId}/period")
     @Operation(summary = "스터디룸 기간 설정 API", description = "스터디룸의 전체 기간을 설정하는 API입니다.")
     public BaseResponse<Long> setStudyPeriod(
+            @PathVariable Integer weeks,
             @PathVariable Long userId,
             @PathVariable Long roomId,
             @RequestBody @Valid RoomRequestDto.StudyPeriodDto requestDto
     ) {
-        Event event = roomCommandService.setStudyPeriod(roomId, userId, requestDto);
+        Event event = roomCommandService.setStudyPeriod(roomId,weeks, userId, requestDto);
         return BaseResponse.onSuccess(event.getId());
     }
 
-    @PostMapping("/event/{roomId}/{userId}/description")
+    @PostMapping("/event/{roomId}/{weeks}/{userId}/description")
     @Operation(summary = "스터디룸 설명 입력 API", description = "스터디룸에 대한 설명을 입력하는 API입니다.")
     public BaseResponse<Long> setStudyDescription(
+            @PathVariable Integer weeks,
             @PathVariable Long userId,
             @PathVariable Long roomId,
             @RequestBody @Valid RoomRequestDto.StudyDescriptionDto requestDto
     ) {
-        Event event = roomCommandService.setStudyDescription(roomId, userId, requestDto);
+        Event event = roomCommandService.setStudyDescription(roomId, weeks, userId, requestDto);
         return BaseResponse.onSuccess(event.getId());
     }
 

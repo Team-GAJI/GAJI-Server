@@ -9,8 +9,6 @@ import jakarta.transaction.Transactional;
 public interface RoomCommandService {
     @Transactional
     Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto);
-
-    Event setStudyPeriod(Long roomId, Long userId, RoomRequestDto.StudyPeriodDto requestDto);
-
-    Event setStudyDescription(Long roomId, Long userId, RoomRequestDto.StudyDescriptionDto requestDto);
+    Event setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto);
+    Event setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto);
 }

@@ -53,7 +53,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public Event setStudyPeriod(Long roomId, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
+    public Event setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
         User user = confirmUser(userId);
         Room room = confirmRoom(roomId);
         confirmStudyMate(roomId, user.getId());
@@ -63,6 +63,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
         Event updatedEvent = Event.builder()
                 .id(event.getId())
+                .weeks(weeks)
                 .room(room)
                 .user(user)
                 .startTime(requestDto.getStartDate())
@@ -76,7 +77,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public Event setStudyDescription(Long roomId, Long userId, RoomRequestDto.StudyDescriptionDto requestDto) {
+    public Event setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto) {
         User user = confirmUser(userId);
         Room room = confirmRoom(roomId);
         confirmStudyMate(roomId, user.getId());
@@ -86,6 +87,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
         Event updatedEvent = Event.builder()
                 .id(event.getId())
+                .weeks(weeks)
                 .room(room)
                 .user(user)
                 .startTime(event.getStartTime())
