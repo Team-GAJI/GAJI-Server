@@ -1,15 +1,9 @@
 package gaji.service.domain.roomPost.web.dto;
 
-import gaji.service.domain.common.annotation.CheckHashtagListElement;
-import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.post.annotation.ExistPostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class RoomPostRequestDto {
@@ -26,9 +20,6 @@ public class RoomPostRequestDto {
         @NotBlank(message = "게시글 본문을 입력해주세요.")
         private final String body;
 
-
     }
-
-
 
 }
