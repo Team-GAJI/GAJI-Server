@@ -10,5 +10,7 @@ public interface RoomCommandService {
     @Transactional
     Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto);
 
-    Event createEventManagement(Long roomId, Long userId, RoomRequestDto.EventManagementDto requestDto);
+    Event setStudyPeriod(Long roomId, Long userId, RoomRequestDto.StudyPeriodDto requestDto);
+
+    Event setStudyDescription(Long roomId, Long userId, RoomRequestDto.StudyDescriptionDto requestDto);
 }

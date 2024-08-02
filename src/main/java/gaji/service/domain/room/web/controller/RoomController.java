@@ -32,24 +32,24 @@ public class RoomController {
 
     @PostMapping("/event/{roomId}/period")
     @Operation(summary = "스터디룸 기간 설정 API", description = "스터디룸의 전체 기간을 설정하는 API입니다.")
-    public BaseResponse<RoomResponseDto.EventDto> setStudyPeriod(
+    public BaseResponse<Long> setStudyPeriod(
             @PathVariable Long userId,
             @PathVariable Long roomId,
             @RequestBody @Valid RoomRequestDto.StudyPeriodDto requestDto
     ) {
         Event event = roomCommandService.setStudyPeriod(roomId, userId, requestDto);
-        return new BaseResponse<>(new RoomResponseDto.EventDto(event));
+        return BaseResponse.onSuccess(event.getId());
     }
 
     @PostMapping("/event/{roomId}/description")
     @Operation(summary = "스터디룸 설명 입력 API", description = "스터디룸에 대한 설명을 입력하는 API입니다.")
-    public BaseResponse<RoomResponseDto.EventDto> setStudyDescription(
+    public BaseResponse<Long> setStudyDescription(
             @PathVariable Long userId,
             @PathVariable Long roomId,
             @RequestBody @Valid RoomRequestDto.StudyDescriptionDto requestDto
     ) {
         Event event = roomCommandService.setStudyDescription(roomId, userId, requestDto);
-        return new BaseResponse<>(new RoomResponseDto.EventDto(event));
+        return BaseResponse.onSuccess(event.getId());
     }
 
 
