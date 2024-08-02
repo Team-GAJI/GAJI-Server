@@ -17,7 +17,7 @@ public class PostTypeExistValidator implements ConstraintValidator<ExistPostType
 
     @Override
     public boolean isValid(PostTypeEnum value, ConstraintValidatorContext context) {
-        boolean isValid = value == PostTypeEnum.BLOG || value == PostTypeEnum.PROJECT_RECRUITMENT || value == PostTypeEnum.QUESTION;
+        boolean isValid = value == PostTypeEnum.BLOG || value == PostTypeEnum.PROJECT || value == PostTypeEnum.QUESTION;
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
