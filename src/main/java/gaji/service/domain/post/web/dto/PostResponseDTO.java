@@ -21,6 +21,7 @@ public class PostResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PostPreviewListDTO {
+        private Long postId;
         private int likeCnt;
         private String thumbnailUrl;
         private String title;
