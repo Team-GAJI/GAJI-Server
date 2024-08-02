@@ -73,15 +73,13 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         StudyMate studyMate = studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_IN_ROOM));
 
-        if (studyMate.getRole().equals(Role.READER)) {
-            RoomNotice notice = RoomNotice.builder()
-                    .title(requestDto.getTitle())
-                    .body(requestDto.getBody())
-                    .room(room)
-                    .build();
-            return roomNoticeRepository.save(notice);
-        } else {
-            throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
-        }
+
+        RoomNotice notice = RoomNotice.builder()
+                .title(requestDto.getTitle())
+                .body(requestDto.getBody())
+                .room(room)
+                .build();
+        return roomNoticeRepository.save(notice);
+
     }
 }
