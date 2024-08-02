@@ -1,6 +1,7 @@
 package gaji.service.domain.room.service;
 
 import gaji.service.domain.User;
+import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.entity.Room;
@@ -9,6 +10,7 @@ import gaji.service.domain.room.repository.EventRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.studyMate.Assignment;
+import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
@@ -56,7 +58,11 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     public Event setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
         User user = confirmUser(userId);
         Room room = confirmRoom(roomId);
-        confirmStudyMate(roomId, user.getId());
+        StudyMate studyMate = confirmStudyMate(roomId, user.getId());
+
+        if (!studyMate.getRole().equals(Role.READER)) {
+            throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
+        }
 
         Event event = eventRepository.findByRoomId(roomId)
                 .orElse(Event.builder().room(room).user(user).build());
@@ -80,7 +86,11 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     public Event setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto) {
         User user = confirmUser(userId);
         Room room = confirmRoom(roomId);
-        confirmStudyMate(roomId, user.getId());
+        StudyMate studyMate = confirmStudyMate(roomId, user.getId());
+
+        if (!studyMate.getRole().equals(Role.READER)) {
+            throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
+        }
 
         Event event = eventRepository.findByRoomId(roomId)
                 .orElse(Event.builder().room(room).user(user).build());
@@ -99,6 +109,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
         return eventRepository.save(updatedEvent);
     }
+
     public User confirmUser(Long userId){
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_FOUND));
@@ -110,8 +121,8 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
 
-    public void confirmStudyMate(Long roomId, Long userId){
-        studyMateRepository.findByUserIdAndRoomId(userId, roomId)
+    public StudyMate confirmStudyMate(Long roomId, Long userId){
+        return studyMateRepository.findByUserIdAndRoomId(userId, roomId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
     }
 }
