@@ -25,6 +25,10 @@ public class PostRequestDTO {
         @NotBlank(message = "게시글 본문을 입력해주세요.")
         private final String body;
 
+        @Schema(description = "게시글 썸네일 Url(없으면 첫번째 사진으로 설정)")
+        @NotBlank(message = "썸네일 이미지를 설정해주세요.")
+        private final String thumbnailUrl;
+
         @Schema(description = "게시글 유형(프로젝트 모집, 질문, 블로그)")
         @ExistPostType
         private final PostTypeEnum type;
