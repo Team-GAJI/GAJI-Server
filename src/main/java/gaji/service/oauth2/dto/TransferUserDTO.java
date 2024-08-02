@@ -1,9 +1,6 @@
 package gaji.service.oauth2.dto;
 
-import gaji.service.domain.enums.Gender;
-import gaji.service.domain.enums.Role;
-import gaji.service.domain.enums.SocialType;
-import gaji.service.domain.enums.UserActive;
+import gaji.service.domain.enums.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +10,7 @@ import java.time.LocalDate;
 @Setter
 public class TransferUserDTO {
 
-    private Role role;
+    private ServiceRole role;
     private String name;
     private Gender gender;
     // 서버에서 발급받는 아이디

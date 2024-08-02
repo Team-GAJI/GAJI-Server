@@ -2,10 +2,7 @@ package gaji.service.domain;
 
 import gaji.service.domain.alram.Alarm;
 import gaji.service.domain.common.entity.BaseEntity;
-import gaji.service.domain.enums.Gender;
-import gaji.service.domain.enums.Role;
-import gaji.service.domain.enums.SocialType;
-import gaji.service.domain.enums.UserActive;
+import gaji.service.domain.enums.*;
 import gaji.service.domain.message.Message;
 import gaji.service.domain.post.entity.*;
 import gaji.service.domain.recruite.*;
@@ -139,7 +136,7 @@ public class User extends BaseEntity {
     private LocalDateTime inactiveTime;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private ServiceRole role;
     private String profileImagePth;
     private String usernameId;
 
@@ -173,7 +170,7 @@ public class User extends BaseEntity {
         this.birthday = birthday;
     }
 
-    private void setRole(Role role) {
+    private void setRole(ServiceRole role) {
         this.role = role;
 
     }
