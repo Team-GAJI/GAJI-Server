@@ -1,6 +1,7 @@
 package gaji.service.jwt.filter;
 
 import gaji.service.domain.enums.Role;
+import gaji.service.domain.enums.ServiceRole;
 import gaji.service.oauth2.dto.CustomOAuth2User;
 import gaji.service.oauth2.dto.OAuthUserDTO;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -71,7 +72,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         OAuthUserDTO oAuthUserDTO = new OAuthUserDTO();
         oAuthUserDTO.setUsernameId(username);
-        oAuthUserDTO.setRole(Role.valueOf(role));
+        oAuthUserDTO.setRole(ServiceRole.valueOf(role));
         CustomOAuth2User customUserDetails = new CustomOAuth2User(oAuthUserDTO);
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
