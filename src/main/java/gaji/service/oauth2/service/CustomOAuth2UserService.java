@@ -75,18 +75,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 userRepository.save(user);
             }
             else if (registrationId.equals("google")) {
-
                 TransferUserDTO transferUserDTO =new TransferUserDTO();
+
                 transferUserDTO.setUsernameId(usernameId);
                 transferUserDTO.setEmail(oAuth2Response.getEmail());
                 transferUserDTO.setName(oAuth2Response.getName());
-//                transferUserDTO.setGender(toEnumGender(oAuth2Response.getGender()));
+                transferUserDTO.setGender(toEnumGender(oAuth2Response.getGender()));
 //                transferUserDTO.setBirthday(formatDate(oAuth2Response.getBirthyear(), oAuth2Response.getBirthday()));
                 transferUserDTO.setUserActive(UserActive.ACTIVE);
                 transferUserDTO.setSocialType(setSocialType(registrationId));
                 transferUserDTO.setRole(Role.MEMBER);
 
                 User user = User.createUser(transferUserDTO); // 정적 팩토리 메서드 사용
+                System.out.println(user.getGender());
                 userRepository.save(user);
             }
 
@@ -102,19 +103,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             OAuthUserDTO oAuthuserDTO = new OAuthUserDTO();
             oAuthuserDTO.setUsernameId(usernameId);
             oAuthuserDTO.setRole(Role.MEMBER);
+
             return new CustomOAuth2User(oAuthuserDTO);
         }
     }
 
-    public Gender toEnumGender(String gender){
-        if (gender.equals("W")){
-            return Gender.FEMALE;
-        } else if (gender.equals("M")) {
-            return Gender.MALE;
-        }else {
-            return null;
-        }
-    }
+
     public LocalDate formatDate(String birthyear, String birthday){
         if(birthday == null){
             return null;
@@ -136,6 +130,21 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     }
 
+
+    public Gender toEnumGender(String gender) {
+        if (gender == null) {
+            return Gender.UNKNOWN;
+        }
+        switch (gender.toUpperCase()) {
+            case "W":
+            case "F":
+                return Gender.FEMALE;
+            case "M":
+                return Gender.MALE;
+            default:
+                return Gender.UNKNOWN;
+        }
+    }
     public SocialType setSocialType(String social){
         if(social.equals("naver")){
             return SocialType.NAVER;
