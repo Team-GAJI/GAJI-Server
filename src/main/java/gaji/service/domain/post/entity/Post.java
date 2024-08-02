@@ -47,6 +47,7 @@ public class Post extends BaseEntity {
     @Getter(AccessLevel.NONE)
     private int commentOrderNum;
     private String thumbnailUrl;
+    private int popularityScore;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -97,6 +98,22 @@ public class Post extends BaseEntity {
 
     public void increaseViewCnt() {
         this.viewCnt++;
+    }
+
+    public void increasePopularityScoreByLike() {
+        this.popularityScore += 2;
+    }
+
+    public void decreasePopularityScoreByLike() {
+        this.popularityScore -= 2;
+    }
+
+    public void increasePopularityScoreByView() {
+        this.popularityScore++;
+    }
+
+    public void decreasePopularityScoreByView() {
+        this.popularityScore--;
     }
 
 }
