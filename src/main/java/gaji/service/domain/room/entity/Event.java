@@ -34,6 +34,9 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<MyRepeat> myRepeatList = new ArrayList<>();
 
+    @Column(nullable = false, length = 30)
+    private String title;
+
     @Column(nullable = false, length = 200)
     private String description;
 
@@ -43,8 +46,10 @@ public class Event {
     @Column(nullable = false)
     private LocalDate endTime;
 
-    private boolean meeting;
-    private boolean allday;
+    @Column(nullable = false)
+    private LocalDate endTime;
+    private boolean isPublic;
+
 
 
 
