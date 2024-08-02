@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public enum PostTypeEnum {
     BLOG("블로그"),
-    PROJECT_RECRUITMENT("프로젝트 모집"),
+    PROJECT("프로젝트"),
     QUESTION("질문");
 
     @JsonValue
