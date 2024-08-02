@@ -22,6 +22,7 @@ public class PostConverter {
                 .user(user)
                 .title(request.getTitle())
                 .body(request.getBody())
+                .thumbnailUrl(request.getThumbnailUrl())
                 .type(request.getType())
                 .status(getInitialPostStatus(request.getType()))
                 .build();
