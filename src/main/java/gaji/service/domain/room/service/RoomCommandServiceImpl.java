@@ -1,11 +1,11 @@
 package gaji.service.domain.room.service;
 
-import com.amazonaws.services.ec2.model.EbsBlockDevice;
 import gaji.service.domain.User;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.AssignmentRepository;
+import gaji.service.domain.room.repository.EventRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.studyMate.Assignment;
@@ -22,6 +22,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;
     private final StudyMateRepository studyMateRepository;
+    private final EventRepository eventRepository;
 
 
 
@@ -52,15 +53,50 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public Event createEventManagement(Long roomId, Long userId, RoomRequestDto.EventManagementDto requestDto) {
-
-        User user =confirmUser(userId);
+    public Event setStudyPeriod(Long roomId, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
+        User user = confirmUser(userId);
         Room room = confirmRoom(roomId);
         confirmStudyMate(roomId, user.getId());
 
-        return  new
+        Event event = eventRepository.findByRoomId(roomId)
+                .orElse(Event.builder().room(room).user(user).build());
+
+        Event updatedEvent = Event.builder()
+                .id(event.getId())
+                .room(room)
+                .user(user)
+                .startTime(requestDto.getStartDate())
+                .endTime(requestDto.getEndDate())
+                .title(event.getTitle())
+                .description(event.getDescription())
+                .isPublic(event.isPublic())
+                .build();
+
+        return eventRepository.save(updatedEvent);
     }
 
+    @Override
+    public Event setStudyDescription(Long roomId, Long userId, RoomRequestDto.StudyDescriptionDto requestDto) {
+        User user = confirmUser(userId);
+        Room room = confirmRoom(roomId);
+        confirmStudyMate(roomId, user.getId());
+
+        Event event = eventRepository.findByRoomId(roomId)
+                .orElse(Event.builder().room(room).user(user).build());
+
+        Event updatedEvent = Event.builder()
+                .id(event.getId())
+                .room(room)
+                .user(user)
+                .startTime(event.getStartTime())
+                .endTime(event.getEndTime())
+                .title(requestDto.getTitle())
+                .description(requestDto.getDescription())
+                .isPublic(event.isPublic())
+                .build();
+
+        return eventRepository.save(updatedEvent);
+    }
     public User confirmUser(Long userId){
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_FOUND));

@@ -4,9 +4,7 @@ import gaji.service.domain.User;
 import gaji.service.domain.myRepeat.MyRepeat;
 import gaji.service.domain.myRepeat.RepeatException;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,6 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,10 +29,10 @@ public class Event {
     private Room room;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<RepeatException> repeatExceptionList = new ArrayList<>();
+    private final List<RepeatException> repeatExceptionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<MyRepeat> myRepeatList = new ArrayList<>();
+    private final List<MyRepeat> myRepeatList = new ArrayList<>();
 
     @Column(nullable = false, length = 30)
     private String title;
