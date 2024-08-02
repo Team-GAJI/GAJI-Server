@@ -70,7 +70,7 @@ public class Room {
 
     @Column(length = 20)
     private String name;
-    private String content;
+    private String description;
 
     //조회수
     private int views;
@@ -87,6 +87,9 @@ public class Room {
     private LocalDate studyStartDay;
     private LocalDate studyEndDay;
 
+    // 썸네일 경로
+    private String thumbnailUrl;
+
     // True : 공개 // False : 비공개
     private boolean isPrivate;
 
@@ -97,11 +100,11 @@ public class Room {
     // 현재 스터디 참여 인원
     private int headCount;
 
-    // 인원제한
-    private  int peopleMaximum;
-
     // 인원제한 여부 Ture : 제한있음 / False : 제한없음
     private boolean peopleLimited;
+
+    // 최대 인원
+    private int peopleMaximum;
 
     // 조회수 추가
     public void addView() {
@@ -114,10 +117,10 @@ public class Room {
     }
 
     @Builder
-    public Room(User user, String name, String content, LocalDate recruitStartDay, LocalDate recruitEndDay, boolean isPrivate, String inviteCode, int headCount, int peopleMaximum, boolean peopleLimited) {
+    public Room(User user, String name, String description, LocalDate recruitStartDay, LocalDate recruitEndDay, boolean isPrivate, String inviteCode, int headCount, int peopleMaximum, boolean peopleLimited) {
         this.user = user;
         this.name = name;
-        this.content = content;
+        this.description = description;
         this.recruitStartDay = recruitStartDay;
         this.recruitEndDay = recruitEndDay;
         this.isPrivate = isPrivate;
