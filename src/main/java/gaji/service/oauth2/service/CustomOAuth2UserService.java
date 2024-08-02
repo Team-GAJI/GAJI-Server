@@ -1,10 +1,7 @@
 package gaji.service.oauth2.service;
 
 import gaji.service.domain.User;
-import gaji.service.domain.enums.Gender;
-import gaji.service.domain.enums.Role;
-import gaji.service.domain.enums.SocialType;
-import gaji.service.domain.enums.UserActive;
+import gaji.service.domain.enums.*;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.oauth2.dto.CustomOAuth2User;
 import gaji.service.oauth2.dto.OAuthUserDTO;
@@ -57,7 +54,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             OAuthUserDTO oAuthuserDTO = new OAuthUserDTO();
             oAuthuserDTO.setUsernameId(usernameId);
-            oAuthuserDTO.setRole(Role.MEMBER);
+            oAuthuserDTO.setRole(ServiceRole.ROLE_USER);
 
             if (registrationId.equals("naver")) {
 
@@ -69,7 +66,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 transferUserDTO.setBirthday(formatDate(oAuth2Response.getBirthyear(), oAuth2Response.getBirthday()));
                 transferUserDTO.setUserActive(UserActive.ACTIVE);
                 transferUserDTO.setSocialType(setSocialType(registrationId));
-                transferUserDTO.setRole(Role.MEMBER);
+                transferUserDTO.setRole(ServiceRole.ROLE_USER);
 
                 User user = User.createUser(transferUserDTO); // 정적 팩토리 메서드 사용
                 userRepository.save(user);
@@ -84,7 +81,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 //                transferUserDTO.setBirthday(formatDate(oAuth2Response.getBirthyear(), oAuth2Response.getBirthday()));
                 transferUserDTO.setUserActive(UserActive.ACTIVE);
                 transferUserDTO.setSocialType(setSocialType(registrationId));
-                transferUserDTO.setRole(Role.MEMBER);
+                transferUserDTO.setRole(ServiceRole.ROLE_USER);
 
                 User user = User.createUser(transferUserDTO); // 정적 팩토리 메서드 사용
                 System.out.println(user.getGender());
@@ -102,7 +99,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             OAuthUserDTO oAuthuserDTO = new OAuthUserDTO();
             oAuthuserDTO.setUsernameId(usernameId);
-            oAuthuserDTO.setRole(Role.MEMBER);
+            oAuthuserDTO.setRole(ServiceRole.ROLE_USER);
 
             return new CustomOAuth2User(oAuthuserDTO);
         }
