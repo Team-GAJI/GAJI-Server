@@ -46,6 +46,7 @@ public class Post extends BaseEntity {
     private int bookmarkCnt;
     @Getter(AccessLevel.NONE)
     private int commentOrderNum;
+    private String thumbnailUrl;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -56,10 +57,11 @@ public class Post extends BaseEntity {
     private PostStatusEnum status;
 
     @Builder
-    public Post(User user, String title, String body, PostTypeEnum type, PostStatusEnum status) {
+    public Post(User user, String title, String body, String thumbnailUrl, PostTypeEnum type, PostStatusEnum status) {
         this.user = user;
         this.title = title;
         this.body = body;
+        this.thumbnailUrl = thumbnailUrl;
         this.type = type;
         this.status = status;
     }
