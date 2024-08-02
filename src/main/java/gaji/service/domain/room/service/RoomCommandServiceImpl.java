@@ -1,12 +1,13 @@
 package gaji.service.domain.room.service;
 
+import com.amazonaws.services.ec2.model.EbsBlockDevice;
 import gaji.service.domain.User;
 import gaji.service.domain.room.code.RoomErrorStatus;
+import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.AssignmentRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.repository.UserRepository;
@@ -32,15 +33,9 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 //                .orElseThrow(() -> new RestApiException(PostErrorStatus._USER_NOT_FOUND));
 
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_FOUND));
-        // 스터디룸 존재 여부 확인
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
-
-        // 사용자가 해당 스터디룸에 참여하고 있는지 확인
-        studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_IN_ROOM));
+        User user =confirmUser(userId);
+        Room room = confirmRoom(roomId);
+        confirmStudyMate(roomId, user.getId());
 
         // List<String>을 단일 String으로 변환
         String bodyContent = String.join(", ", requestDto.getBodyList());
@@ -56,4 +51,29 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return savedAssignment;
     }
 
+    @Override
+    public Event createEventManagement(Long roomId, Long userId, RoomRequestDto.EventManagementDto requestDto) {
+
+        User user =confirmUser(userId);
+        Room room = confirmRoom(roomId);
+        confirmStudyMate(roomId, user.getId());
+
+        return  new
+    }
+
+    public User confirmUser(Long userId){
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_FOUND));
+    }
+
+    public Room confirmRoom(Long roomId){
+        return roomRepository.findById(roomId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
+    }
+
+
+    public void confirmStudyMate(Long roomId, Long userId){
+        studyMateRepository.findByUserIdAndRoomId(userId, roomId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
+    }
 }

@@ -46,8 +46,6 @@ public class Event {
     @Column(nullable = false)
     private LocalDate endTime;
 
-    @Column(nullable = false)
-    private LocalDate endTime;
     private boolean isPublic;
 
 
