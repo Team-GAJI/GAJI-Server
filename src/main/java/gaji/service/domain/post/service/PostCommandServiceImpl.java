@@ -106,6 +106,7 @@ public class PostCommandServiceImpl implements PostCommandService {
         // TODO: 이미 좋아요한 post인지 검증
         PostLikes newPostLikes = postLikesRepository.save(PostConverter.toPostLikes(findUser, findPost));
         findPost.increaseLikeCnt();
+        findPost.increasePopularityScoreByLike();
 
         return newPostLikes;
     }
@@ -116,6 +117,7 @@ public class PostCommandServiceImpl implements PostCommandService {
         Post findPost = findPostByPostId(postId);
         postLikesRepository.deleteByUserAndPost(findUser, findPost);
         findPost.decreaseLikeCnt();
+        findPost.decreasePopularityScoreByLike();
     }
 
     private Comment createCommentByCheckParentCommentIdIsNull(Long parentCommentId, PostRequestDTO.WriteCommentDTO request, User findUser, Post findPost) {
