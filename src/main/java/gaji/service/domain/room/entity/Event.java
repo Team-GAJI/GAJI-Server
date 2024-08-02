@@ -34,16 +34,14 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private final List<MyRepeat> myRepeatList = new ArrayList<>();
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 30)
     private String title;
 
-    @Column(nullable = false, length = 200)
+    @Column(length = 200)
     private String description;
 
-    @Column(nullable = false)
     private LocalDate startTime;
 
-    @Column(nullable = false)
     private LocalDate endTime;
 
     private boolean isPublic;
