@@ -27,25 +27,35 @@ public class RecruitResponseDTO {
     public static class studyDetailDTO {
         // 유저 관련
         String userNickName;
-        String userClass;
         UserActive userActive;
         LocalDateTime inactiveTime;
 
-        // 모집 게시글 관련
+        String name;
+        String imageUrl;
+        RecruitPostTypeEnum recruitPostTypeEnum;
+        List<RoomCategoryEnum> postCategoryList;
         int views;
         int likes;
         int bookmarks;
-        RecruitPostTypeEnum recruitPostTypeEnum;
-        List<RoomCategoryEnum> postCategoryList;
 
-        // 스터디 관련
-        String studyName;
-        String studyDescription;
-        String studyImageUrl;
         LocalDate recruitStartTime;
         LocalDate recruitEndTime;
         LocalDate studyStartTime;
         LocalDate studyEndTime;
-        List<Material> materialList;
+        List<String> materialList;
+        String description;
+        int commentCount;
+        List<CommentResponseDTO> commentList;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentResponseDTO {
+        String userImage;
+        String userNickName;
+        LocalDateTime commentCreatedAt;
+        String commentBody;
     }
 }
