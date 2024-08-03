@@ -5,6 +5,7 @@ import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.RoomRepository;
+import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomPost.code.RoomPostErrorStatus;
 import gaji.service.domain.roomPost.converter.RoomPostConverter;
 import gaji.service.domain.roomPost.entity.RoomBoard;
@@ -28,13 +29,14 @@ import org.springframework.stereotype.Service;
 public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final RoomPostRepository roomPostRepository;
     private final RoomBoardRepository roomBoardRepository;
-    private final RoomRepository roomRepository;
     private final StudyMateRepository studyMateRepository;
     private final UserQueryService userQueryService;
-
+    private final RoomQueryService roomQueryService;
     @Override
     public RoomPost createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
         User user = userQueryService.findUserById(userId);
+        Room room = roomQueryService.findRoomById(roomId);
+
 
 
 
