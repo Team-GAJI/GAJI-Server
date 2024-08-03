@@ -1,6 +1,7 @@
 package gaji.service.domain.event.domain;
 
 import gaji.service.domain.enums.Frequency;
+import gaji.service.domain.room.entity.Event;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

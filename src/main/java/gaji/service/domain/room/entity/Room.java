@@ -1,7 +1,6 @@
 package gaji.service.domain.room.entity;
 
 import gaji.service.domain.curriculum.Curriculum;
-import gaji.service.domain.event.domain.Event;
 import gaji.service.domain.recruite.RecruitPost;
 import gaji.service.domain.roomPost.RoomBoard;
 import gaji.service.domain.studyMate.Assignment;
