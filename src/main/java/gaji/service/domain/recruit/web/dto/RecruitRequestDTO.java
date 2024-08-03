@@ -30,7 +30,7 @@ public class RecruitRequestDTO {
         private String description;
 
         @Schema(description = "썸네일 경로")
-        private String thumbnailPath;
+        private String thumbnailUrl;
 
         @Schema(description = "스터디 자료들")
         private List<String> materialList;
@@ -38,22 +38,22 @@ public class RecruitRequestDTO {
         @Schema(description = "스터디 모집 시작일")
         @NotNull(message = "스터디 모집 기한을 입력해주세요.")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        private LocalDate recruitStartTime;
+        private LocalDate recruitStartDay;
 
         @Schema(description = "스터디 모집 종료일")
         @NotNull(message = "스터디 모집 기한을 입력해주세요.")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        private LocalDate recruitEndTime;
+        private LocalDate recruitEndDay;
 
         @Schema(description = "스터디 모집 시작일")
         @NotNull(message = "스터디 모집 기한을 입력해주세요.")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        private LocalDate studyStartTime;
+        private LocalDate studyStartDay;
 
         @Schema(description = "스터디 모집 종료일")
         @NotNull(message = "스터디 모집 기한을 입력해주세요.")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        private LocalDate studyEndTime;
+        private LocalDate studyEndDay;
 
         // true 시 초대코드 생성
         @Schema(description = "공개 여부")
