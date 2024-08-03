@@ -5,7 +5,6 @@ import gaji.service.domain.roomPost.web.dto.RoomPostRequestDto;
 import jakarta.transaction.Transactional;
 
 public interface RoomPostCommandService {
-    @Transactional
     RoomPost createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto);
 
 }

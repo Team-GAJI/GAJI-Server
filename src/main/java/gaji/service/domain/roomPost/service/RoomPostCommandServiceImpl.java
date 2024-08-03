@@ -15,6 +15,7 @@ import gaji.service.domain.roomPost.web.dto.RoomPostRequestDto;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final RoomRepository roomRepository;
     private final StudyMateRepository studyMateRepository;
 
+    @Transactional
     @Override
     public RoomPost createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
         User user = userRepository.findById(userId)
