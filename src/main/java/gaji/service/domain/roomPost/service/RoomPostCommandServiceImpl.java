@@ -14,6 +14,9 @@ import gaji.service.domain.roomPost.repository.RoomPostRepository;
 import gaji.service.domain.roomPost.web.dto.RoomPostRequestDto;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.domain.user.service.UserCommandService;
+import gaji.service.domain.user.service.UserQueryService;
+import gaji.service.domain.user.service.UserQueryServiceImpl;
 import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,22 +24,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RoomPostCommandServiceImpl implements RoomPostCommandService {
-    private final UserRepository userRepository;
     private final RoomPostRepository roomPostRepository;
     private final RoomBoardRepository roomBoardRepository;
     private final RoomRepository roomRepository;
     private final StudyMateRepository studyMateRepository;
+    private final UserQueryService userQueryService;
 
-    @Transactional
     @Override
     public RoomPost createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(PostErrorStatus._USER_NOT_FOUND));
+        User user = userQueryService.findUserById(userId);
 
-        // 스터디룸 확인
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
+
 
         // 사용자가 해당 스터디룸에 참여하고 있는지 확인
         studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
