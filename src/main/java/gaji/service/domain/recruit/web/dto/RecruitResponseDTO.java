@@ -1,12 +1,9 @@
 package gaji.service.domain.recruit.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import gaji.service.domain.enums.RecruitPostCategoryEnum;
+import gaji.service.domain.enums.RoomCategoryEnum;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.enums.UserActive;
 import gaji.service.domain.room.entity.Material;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -39,7 +36,7 @@ public class RecruitResponseDTO {
         int likes;
         int bookmarks;
         RecruitPostTypeEnum recruitPostTypeEnum;
-        List<RecruitPostCategoryEnum> postCategoryList;
+        List<RoomCategoryEnum> postCategoryList;
 
         // 스터디 관련
         String studyName;

@@ -2,7 +2,7 @@ package gaji.service.domain.recruit.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gaji.service.domain.enums.RecruitPostCategoryEnum;
+import gaji.service.domain.enums.RoomCategoryEnum;
 import gaji.service.domain.recruit.annotation.ExistCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
@@ -23,7 +23,7 @@ public class RecruitRequestDTO {
 
         @Schema(description = "스터디 이름")
         @Size(max = 20, message = "스터디 명은 20자 이내로 입력해주세요.")
-        private String title;
+        private String name;
 
         @Schema(description = "스터디 상세 내용")
         @Size(max = 20000, message = "스터디 상세 내용은 20000자 이내로 입력해주세요.")
@@ -73,6 +73,6 @@ public class RecruitRequestDTO {
 
         @Schema(description = "카테고리 목록")
         @ExistCategory
-        private List<RecruitPostCategoryEnum> categoryList;
+        private List<RoomCategoryEnum> categoryList;
     }
 }
