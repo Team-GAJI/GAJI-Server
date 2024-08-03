@@ -53,7 +53,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
                 });
 
         // RoomPost 생성 및 저장
-        RoomPost roomPost = RoomPostConverter.toPost(requestDto, user, roomBoard);
+        RoomPost roomPost = RoomPostConverter.toRoomPost(requestDto, user, roomBoard);
         roomPost = roomPostRepository.save(roomPost);
 
         // RoomBoard에 새로운 RoomPost 추가

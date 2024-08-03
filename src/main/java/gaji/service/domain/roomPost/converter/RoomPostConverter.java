@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public class RoomPostConverter {
 
-    public static RoomPost toPost(RoomPostRequestDto.RoomPostDto requestDto, User user, RoomBoard roomBoard) {
+    public static RoomPost toRoomPost(RoomPostRequestDto.RoomPostDto requestDto, User user, RoomBoard roomBoard) {
          RoomPost roomPost = RoomPost.builder()
                  .user(user)
                  .title(requestDto.getTitle())
