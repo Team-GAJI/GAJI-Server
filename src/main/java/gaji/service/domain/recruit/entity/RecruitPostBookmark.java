@@ -1,6 +1,7 @@
 package gaji.service.domain.recruit.entity;
 
 import gaji.service.domain.User;
+import gaji.service.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,8 +20,8 @@ public class RecruitPostBookmark {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private RecruitPost recruitPost;
+    @JoinColumn(name = "room_id")
+    private Room room;
 
 
 }
