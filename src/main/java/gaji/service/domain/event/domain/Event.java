@@ -1,8 +1,7 @@
-package gaji.service.domain.room.entity;
+package gaji.service.domain.event.domain;
 
 import gaji.service.domain.User;
-import gaji.service.domain.myRepeat.MyRepeat;
-import gaji.service.domain.myRepeat.RepeatException;
+import gaji.service.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

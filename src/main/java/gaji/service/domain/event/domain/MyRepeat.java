@@ -1,6 +1,6 @@
-package gaji.service.domain.myRepeat;
+package gaji.service.domain.event.domain;
 
-import gaji.service.domain.room.entity.Event;
+import gaji.service.domain.enums.Frequency;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RepeatException {
+public class MyRepeat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,9 +20,11 @@ public class RepeatException {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @Column(nullable = false)
-    private LocalDate date;
+    private LocalDate StartTime;
+    private LocalDate EndTime;
 
-    private LocalDate isRemoved;
+    @Enumerated(EnumType.STRING)
+    private Frequency frequency;
+
 
 }

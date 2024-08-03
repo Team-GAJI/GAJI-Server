@@ -9,7 +9,7 @@ import gaji.service.domain.enums.UserActive;
 import gaji.service.domain.message.Message;
 import gaji.service.domain.post.entity.*;
 import gaji.service.domain.recruite.*;
-import gaji.service.domain.room.entity.Event;
+import gaji.service.domain.event.domain.Event;
 import gaji.service.domain.room.entity.VoiceChatUser;
 import gaji.service.domain.roomPost.*;
 import gaji.service.domain.studyMate.*;
