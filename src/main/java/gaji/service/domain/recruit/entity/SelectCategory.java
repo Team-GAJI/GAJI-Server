@@ -1,6 +1,6 @@
 package gaji.service.domain.recruit.entity;
 
-import gaji.service.domain.enums.RecruitPostCategoryEnum;
+import gaji.service.domain.enums.RoomCategoryEnum;
 import gaji.service.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -17,16 +17,16 @@ public class SelectCategory {
     private Long id;
 
     @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Room recruitPost;
+    @JoinColumn(name = "room_id")
+    private Room room;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "category")
-    private RecruitPostCategoryEnum category;
+    private RoomCategoryEnum category;
 
     @Builder
-    public SelectCategory(Room recruitPost, RecruitPostCategoryEnum category) {
-        this.recruitPost = recruitPost;
+    public SelectCategory(Room room, RoomCategoryEnum category) {
+        this.room = room;
         this.category = category;
     }
 }
