@@ -3,13 +3,16 @@ package gaji.service.domain.recruit.converter;
 import gaji.service.domain.User;
 import gaji.service.domain.enums.RoomCategoryEnum;
 import gaji.service.domain.recruit.entity.SelectCategory;
+import gaji.service.domain.recruit.entity.StudyComment;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.roomPost.RoomComment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RecruitConverter {
 
@@ -53,28 +56,44 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<RoomCategoryEnum> categoryList) {
+    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<RoomCategoryEnum> categoryList, int commentCount, List<RecruitResponseDTO.CommentResponseDTO> commentList) {
         return RecruitResponseDTO.studyDetailDTO.builder()
                 .userNickName(user.getNickname())
-                .userClass(null)
                 .userActive(user.getStatus())
                 .inactiveTime(user.getInactiveTime())
 
+                .name(room.getName())
+                .imageUrl(room.getThumbnailUrl())
+                .recruitPostTypeEnum(room.getRecruitPostTypeEnum())
+                .postCategoryList(categoryList)
                 .views(room.getViews())
                 .likes(room.getLikes())
                 .bookmarks(room.getBookmarks())
-                .recruitPostTypeEnum(room.getRecruitPostTypeEnum())
-                .postCategoryList(categoryList)
+
                 .recruitStartTime(room.getRecruitStartDay())
                 .recruitEndTime(room.getRecruitEndDay())
-
-                .studyName(room.getName())
-                .studyDescription(null/*room.getDescription()*/)
-                .studyImageUrl(null/*room.getThumbnailUrl()*/)
                 .studyStartTime(room.getStudyStartDay())
                 .studyEndTime(room.getStudyEndDay())
-                .materialList(room.getMaterialList())
+                .materialList(room.getMaterialList().stream().map(Material::getPath).collect(Collectors.toList()))
+                .description(room.getDescription())
+                .commentCount(commentCount)
+                .commentList(commentList)
                 .build();
+    }
+
+    private static RecruitResponseDTO.CommentResponseDTO toCommentResponseDTO(StudyComment comment) {
+        return RecruitResponseDTO.CommentResponseDTO.builder()
+                .userImage(comment.getUser().getProfileImagePth())
+                .userNickName(comment.getUser().getNickname())
+                .commentCreatedAt(comment.getCreatedAt())
+                .commentBody(comment.getBody())
+                .build();
+    }
+
+    public static List<RecruitResponseDTO.CommentResponseDTO> toCommentResponseDTOList(List<StudyComment> commentList) {
+        int toIndex = Math.min(4, commentList.size());
+        return commentList.subList(0, toIndex).stream().map(RecruitConverter::toCommentResponseDTO).collect(Collectors.toList());
+
     }
 
 }
