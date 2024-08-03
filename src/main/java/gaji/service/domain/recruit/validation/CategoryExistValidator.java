@@ -1,6 +1,7 @@
 package gaji.service.domain.recruit.validation;
 
-import gaji.service.domain.enums.RecruitPostCategoryEnum;
+import gaji.service.domain.enums.RoomCategoryEnum;
+import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.recruit.annotation.ExistCategory;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import jakarta.validation.ConstraintValidator;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class CategoryExistValidator implements ConstraintValidator<ExistCategory, List<RecruitPostCategoryEnum>> {
+public class CategoryExistValidator implements ConstraintValidator<ExistCategory, List<RoomCategoryEnum>> {
 
     @Override
     public void initialize(ExistCategory constraintAnnotation) {
@@ -20,9 +21,9 @@ public class CategoryExistValidator implements ConstraintValidator<ExistCategory
     }
 
     @Override
-    public boolean isValid(List<RecruitPostCategoryEnum> values, ConstraintValidatorContext context) {
+    public boolean isValid(List<RoomCategoryEnum> values, ConstraintValidatorContext context) {
         if (values == null) {
-            return true; // null 값은 별도의 검증 어노테이션으로 처리
+            return true;
         }
 
         boolean isValid = values.stream()
@@ -30,14 +31,14 @@ public class CategoryExistValidator implements ConstraintValidator<ExistCategory
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(RecruitErrorStatus._RECRUIT_CATEGORY_NOT_FOUND.toString()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(RecruitErrorStatus._RECRUIT_CATEGORY_NOT_FOUND.getMessage()).addConstraintViolation();
         }
 
         return isValid;
     }
 
-    private boolean isEnumValueValid(RecruitPostCategoryEnum value) {
-        for (RecruitPostCategoryEnum category : RecruitPostCategoryEnum.values()) {
+    private boolean isEnumValueValid(RoomCategoryEnum value) {
+        for (RoomCategoryEnum category : RoomCategoryEnum.values()) {
             if (category == value) {
                 return true;
             }

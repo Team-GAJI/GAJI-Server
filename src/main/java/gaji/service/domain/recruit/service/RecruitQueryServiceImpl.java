@@ -1,7 +1,7 @@
 package gaji.service.domain.recruit.service;
 
 import gaji.service.domain.User;
-import gaji.service.domain.enums.RecruitPostCategoryEnum;
+import gaji.service.domain.enums.RoomCategoryEnum;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
@@ -35,7 +35,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
         System.out.println(room.getViews());
         roomRepository.save(room);
 
-        List<RecruitPostCategoryEnum> categoryList = RecruitConverter.toCategoryList(room.getSelectCategoryList());
+        List<RoomCategoryEnum> categoryList = RecruitConverter.toCategoryList(room.getSelectCategoryList());
 
         return RecruitConverter.toStudyDetailDTO(user, room, categoryList);
     }
