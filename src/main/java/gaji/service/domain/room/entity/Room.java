@@ -59,13 +59,13 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Material> materialList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recruitPost", cascade =  CascadeType.ALL)
+    @OneToMany(mappedBy = "room", cascade =  CascadeType.ALL)
     private List<RecruitPostBookmark> recruitPostBookmarkList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RecruitPostLikes> recruitPostLikesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<SelectCategory> selectCategoryList = new ArrayList<>();
 
     @Column(length = 20)
@@ -116,13 +116,21 @@ public class Room {
         selectCategoryList.add(selectCategory);
     }
 
+    // 스터디 자료 추가
+    public void addMaterial(Material material) {
+        materialList.add(material);
+    }
+
     @Builder
-    public Room(User user, String name, String description, LocalDate recruitStartDay, LocalDate recruitEndDay, boolean isPrivate, String inviteCode, int headCount, int peopleMaximum, boolean peopleLimited) {
+    public Room(User user, String name, String description, String thumbnailUrl, LocalDate recruitStartDay, LocalDate recruitEndDay, LocalDate studyStartDay, LocalDate studyEndDay, boolean isPrivate, String inviteCode, int headCount, int peopleMaximum, boolean peopleLimited) {
         this.user = user;
         this.name = name;
         this.description = description;
+        this.thumbnailUrl = thumbnailUrl;
         this.recruitStartDay = recruitStartDay;
         this.recruitEndDay = recruitEndDay;
+        this.studyStartDay = studyStartDay;
+        this.studyEndDay = studyEndDay;
         this.isPrivate = isPrivate;
         this.inviteCode = inviteCode;
         this.headCount = headCount;

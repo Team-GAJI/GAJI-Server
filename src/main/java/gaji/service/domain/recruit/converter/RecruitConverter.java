@@ -1,10 +1,11 @@
 package gaji.service.domain.recruit.converter;
 
 import gaji.service.domain.User;
-import gaji.service.domain.enums.RecruitPostCategoryEnum;
+import gaji.service.domain.enums.RoomCategoryEnum;
 import gaji.service.domain.recruit.entity.SelectCategory;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
+import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 
 import java.util.ArrayList;
@@ -12,12 +13,16 @@ import java.util.List;
 
 public class RecruitConverter {
 
-    public static Room toRoom(RecruitRequestDTO.CreateRoomDTO request, User user, String inviteCode, int peopleMaximum) {
+    public static Room toRoom(RecruitRequestDTO.CreateRoomDTO request, User user, String thumbnailUrl, String inviteCode, int peopleMaximum) {
         return Room.builder()
                 .user(user)
-                .content(request.getContent())
-                .recruitStartDay(request.getStartTime())
-                .recruitEndDay(request.getEndTime())
+                .name(request.getName())
+                .description(request.getDescription())
+                .thumbnailUrl(thumbnailUrl)
+                .recruitStartDay(request.getRecruitStartDay())
+                .recruitEndDay(request.getRecruitEndDay())
+                .studyStartDay(request.getStudyStartDay())
+                .studyEndDay((request.getStudyEndDay()))
                 .isPrivate(request.isPrivate())
                 .inviteCode(inviteCode)
                 .peopleLimited(request.isPeopleLimited())
@@ -31,17 +36,24 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static List<RecruitPostCategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
-        List<RecruitPostCategoryEnum> categoryList = new ArrayList<>();
+    public static List<RoomCategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
+        List<RoomCategoryEnum> categoryList = new ArrayList<>();
         for (SelectCategory selectCategory : selectCategoryList) {
-            RecruitPostCategoryEnum category = selectCategory.getCategory();
+            RoomCategoryEnum category = selectCategory.getCategory();
             categoryList.add(category);
         }
 
         return categoryList;
     }
 
-    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<RecruitPostCategoryEnum> categoryList) {
+    public static Material toMaterial(String materialPath, Room room) {
+        return Material.builder()
+                .room(room)
+                .path(materialPath)
+                .build();
+    }
+
+    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<RoomCategoryEnum> categoryList) {
         return RecruitResponseDTO.studyDetailDTO.builder()
                 .userNickName(user.getNickname())
                 .userClass(null)
