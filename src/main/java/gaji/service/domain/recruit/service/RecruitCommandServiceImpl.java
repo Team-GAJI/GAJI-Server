@@ -12,6 +12,7 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.MaterialRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ import java.util.Random;
 public class RecruitCommandServiceImpl implements RecruitCommandService {
 
     private final RoomRepository roomRepository;
-    private final UserRepository userRepository;
+    private final UserQueryService userQueryService;
     private final SelectCategoryRepository selectCategoryRepository;
     private final MaterialRepository materialRepository;
 
@@ -51,8 +52,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
             peopleMaximum = request.getPeopleMaximum();
         }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(RecruitErrorStatus._USER_NOT_FOUND));
+        User user = userQueryService.findUserById(userId);
 
         Room room = RecruitConverter.toRoom(request, user, thumbnailUrl, inviteCode, peopleMaximum);
 
