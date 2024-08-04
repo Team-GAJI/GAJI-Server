@@ -35,11 +35,6 @@ public class Room {
     @JoinColumn(name = "way_id")
     private Way way;
 
-
-    //과제 매핑
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    private List<Assignment> assignmentList = new ArrayList<>();
-
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RecruitPost> recruitPostList = new ArrayList<>();
 
