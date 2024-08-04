@@ -1,5 +1,6 @@
 package gaji.service.domain.room.service;
 
+import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.Assignment;
@@ -10,4 +11,5 @@ public interface RoomCommandService {
     Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto);
 
 
+    RoomEvent setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto);
 }
