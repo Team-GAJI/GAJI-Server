@@ -1,13 +1,16 @@
 package gaji.service.domain.room.web.dto;
 
+import gaji.service.domain.common.annotation.CheckHashtagListElement;
+import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.post.annotation.ExistPostType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.*;
-import lombok.Builder;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,28 +32,5 @@ public class RoomRequestDto {
         private List<String> bodyList = new ArrayList<>();
 
     }
-
-    @Getter
-    @Builder
-    public static class StudyPeriodDto {
-        @NotNull
-        private LocalDate startDate;
-
-        @NotNull
-        private LocalDate endDate;
-    }
-
-    @Getter
-    @Builder
-    public static class StudyDescriptionDto {
-        @NotBlank
-        @Size(max = 30)
-        private String title;
-
-        @NotBlank
-        @Size(max = 200)
-        private String description;
-    }
-
 
 }
