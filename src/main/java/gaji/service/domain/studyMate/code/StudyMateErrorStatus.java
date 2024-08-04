@@ -1,4 +1,4 @@
-package gaji.service.domain.user.code;
+package gaji.service.domain.studyMate.code;
 
 import gaji.service.global.exception.code.BaseCodeDto;
 import gaji.service.global.exception.code.BaseErrorCodeInterface;
@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum UserErrorStatus implements BaseErrorCodeInterface {
+public enum StudyMateErrorStatus implements BaseErrorCodeInterface {
     // 스터디룸 게시판
-    _USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER_4001", "존재하지 않는 회원입니다.");
+    _USER_NOT_IN_STUDYROOM(HttpStatus.BAD_REQUEST, "StudyMateError_4001", "회원이 해당 스터디룸에 참여하고 있지 않습니다.");
 
 
 
