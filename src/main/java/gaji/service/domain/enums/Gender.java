@@ -1,5 +1,5 @@
 package gaji.service.domain.enums;
 
 public enum Gender {
-    MALE, FEMALE
+    MALE, FEMALE, UNKNOWN
 }
