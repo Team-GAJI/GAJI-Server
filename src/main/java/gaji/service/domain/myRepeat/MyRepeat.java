@@ -17,9 +17,7 @@ public class MyRepeat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private RoomEvent roomEvent;
+
 
     private LocalDate StartTime;
     private LocalDate EndTime;
