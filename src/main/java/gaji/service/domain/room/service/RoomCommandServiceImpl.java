@@ -3,7 +3,7 @@ package gaji.service.domain.room.service;
 import gaji.service.domain.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
-import gaji.service.domain.room.entity.Event;
+import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.AssignmentRepository;
 import gaji.service.domain.room.repository.EventRepository;
@@ -55,7 +55,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public Event setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
+    public RoomEvent setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
         User user = confirmUser(userId);
         Room room = confirmRoom(roomId);
         StudyMate studyMate = confirmStudyMate(roomId, user.getId());
@@ -64,26 +64,26 @@ public class RoomCommandServiceImpl implements RoomCommandService {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
         }
 
-        Event event = eventRepository.findByRoomId(roomId)
-                .orElse(Event.builder().room(room).user(user).build());
+        RoomEvent roomEvent = eventRepository.findByRoomId(roomId)
+                .orElse(RoomEvent.builder().room(room).user(user).build());
 
-        Event updatedEvent = Event.builder()
-                .id(event.getId())
+        RoomEvent updatedRoomEvent = RoomEvent.builder()
+                .id(roomEvent.getId())
                 .weeks(weeks)
                 .room(room)
                 .user(user)
                 .startTime(requestDto.getStartDate())
                 .endTime(requestDto.getEndDate())
-                .title(event.getTitle())
-                .description(event.getDescription())
-                .isPublic(event.isPublic())
+                .title(roomEvent.getTitle())
+                .description(roomEvent.getDescription())
+                .isPublic(roomEvent.isPublic())
                 .build();
 
-        return eventRepository.save(updatedEvent);
+        return eventRepository.save(updatedRoomEvent);
     }
 
     @Override
-    public Event setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto) {
+    public RoomEvent setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto) {
         User user = confirmUser(userId);
         Room room = confirmRoom(roomId);
         StudyMate studyMate = confirmStudyMate(roomId, user.getId());
@@ -92,22 +92,22 @@ public class RoomCommandServiceImpl implements RoomCommandService {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
         }
 
-        Event event = eventRepository.findByRoomId(roomId)
-                .orElse(Event.builder().room(room).user(user).build());
+        RoomEvent roomEvent = eventRepository.findByRoomId(roomId)
+                .orElse(RoomEvent.builder().room(room).user(user).build());
 
-        Event updatedEvent = Event.builder()
-                .id(event.getId())
+        RoomEvent updatedRoomEvent = RoomEvent.builder()
+                .id(roomEvent.getId())
                 .weeks(weeks)
                 .room(room)
                 .user(user)
-                .startTime(event.getStartTime())
-                .endTime(event.getEndTime())
+                .startTime(roomEvent.getStartTime())
+                .endTime(roomEvent.getEndTime())
                 .title(requestDto.getTitle())
                 .description(requestDto.getDescription())
-                .isPublic(event.isPublic())
+                .isPublic(roomEvent.isPublic())
                 .build();
 
-        return eventRepository.save(updatedEvent);
+        return eventRepository.save(updatedRoomEvent);
     }
 
     public User confirmUser(Long userId){

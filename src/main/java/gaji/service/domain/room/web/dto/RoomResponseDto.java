@@ -1,7 +1,5 @@
 package gaji.service.domain.room.web.dto;
 
-import gaji.service.domain.room.entity.Event;
-import gaji.service.domain.studyMate.Assignment;
 import lombok.*;
 
 public class RoomResponseDto {

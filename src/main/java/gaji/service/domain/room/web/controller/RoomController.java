@@ -1,7 +1,7 @@
 package gaji.service.domain.room.web.controller;
 
 import gaji.service.domain.room.converter.RoomConverter;
-import gaji.service.domain.room.entity.Event;
+import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.service.RoomCommandServiceImpl;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
@@ -39,8 +39,8 @@ public class RoomController {
             @PathVariable Long roomId,
             @RequestBody @Valid RoomRequestDto.StudyPeriodDto requestDto
     ) {
-        Event event = roomCommandService.setStudyPeriod(roomId,weeks, userId, requestDto);
-        return BaseResponse.onSuccess(event.getId());
+        RoomEvent roomEvent = roomCommandService.setStudyPeriod(roomId,weeks, userId, requestDto);
+        return BaseResponse.onSuccess(roomEvent.getId());
     }
 
     @PostMapping("/event/{roomId}/{weeks}/{userId}/description")
@@ -51,8 +51,8 @@ public class RoomController {
             @PathVariable Long roomId,
             @RequestBody @Valid RoomRequestDto.StudyDescriptionDto requestDto
     ) {
-        Event event = roomCommandService.setStudyDescription(roomId, weeks, userId, requestDto);
-        return BaseResponse.onSuccess(event.getId());
+        RoomEvent roomEvent = roomCommandService.setStudyDescription(roomId, weeks, userId, requestDto);
+        return BaseResponse.onSuccess(roomEvent.getId());
     }
 
 

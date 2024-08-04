@@ -25,7 +25,7 @@ public class Room {
     private Long id;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    private List<Event> eventList = new ArrayList<>();
+    private List<RoomEvent> roomEventList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="curriculum_id" )
