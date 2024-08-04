@@ -1,6 +1,5 @@
 package gaji.service.domain.roomPost.service;
 
-import gaji.service.domain.User;
 import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
@@ -16,6 +15,7 @@ import gaji.service.domain.roomPost.web.dto.RoomPostRequestDto;
 import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.domain.user.service.UserCommandService;
 import gaji.service.domain.user.service.UserQueryService;
