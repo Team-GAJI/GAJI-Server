@@ -1,6 +1,5 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.User;
 import gaji.service.domain.common.converter.HashtagConverter;
 import gaji.service.domain.common.entity.Hashtag;
 import gaji.service.domain.common.entity.SelectHashtag;
@@ -18,6 +17,7 @@ import gaji.service.domain.post.repository.PostBookmarkRepository;
 import gaji.service.domain.post.repository.PostLikesRepository;
 import gaji.service.domain.post.repository.PostRepository;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;

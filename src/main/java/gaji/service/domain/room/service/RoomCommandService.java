@@ -8,4 +8,6 @@ import jakarta.transaction.Transactional;
 public interface RoomCommandService {
     @Transactional
     Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto);
+
+
 }
