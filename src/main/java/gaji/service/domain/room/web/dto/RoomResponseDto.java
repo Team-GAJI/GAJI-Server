@@ -10,7 +10,6 @@ public class RoomResponseDto {
     @AllArgsConstructor
     public static class AssignmentDto{
         Long id;
-        Integer weeks;
         String body;
     }
 

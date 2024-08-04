@@ -14,7 +14,9 @@ import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.UserAssignment;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
+import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.domain.user.service.UserQueryServiceImpl;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,14 +26,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RoomCommandServiceImpl implements RoomCommandService {
-    private final RoomRepository roomRepository;
+
     private final AssignmentRepository assignmentRepository;
-    private final UserRepository userRepository;
+
     private final StudyMateRepository studyMateRepository;
     private final RoomEventRepository roomEventRepository;
     private final RoomQueryService roomQueryService;
     private final UserAssignmentRepository userAssignmentRepository;
-
+    private final UserQueryServiceImpl userQueryService;
+    private final StudyMateQueryService studyMateQueryService;
 
 
     @Override
@@ -52,13 +55,25 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return savedAssignment;
     }
 
+    @Override
+    public void createUserAssignmentsForStudyMembers(Room room, Assignment assignment) {
 
+        List<StudyMate> studyMates = studyMateRepository.findByRoom(room);
+        for (StudyMate studyMate : studyMates) {
+            UserAssignment userAssignment = UserAssignment.builder()
+                    .user(studyMate.getUser())
+                    .assignment(assignment)
+                    .isComplete(false)
+                    .build();
+            userAssignmentRepository.save(userAssignment);
+        }
+    }
 
     @Override
     public RoomEvent setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
-        User user = confirmUser(userId);
-        Room room = confirmRoom(roomId);
-        StudyMate studyMate = confirmStudyMate(roomId, user.getId());
+        User user = userQueryService.findUserById(userId);
+        Room room = roomQueryService.findRoomById(roomId);
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(roomId, user.getId());
 
         if (!studyMate.getRole().equals(Role.READER)) {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
@@ -84,9 +99,10 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
     @Override
     public RoomEvent setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto) {
-        User user = confirmUser(userId);
-        Room room = confirmRoom(roomId);
-        StudyMate studyMate = confirmStudyMate(roomId, user.getId());
+        User user = userQueryService.findUserById(userId);
+        Room room = roomQueryService.findRoomById(roomId);
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(roomId, user.getId());
+
 
         if (!studyMate.getRole().equals(Role.READER)) {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
@@ -110,17 +126,5 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return roomEventRepository.save(updatedRoomEvent);
     }
 
-    @Override
-    public void createUserAssignmentsForStudyMembers(Room room, Assignment assignment) {
 
-        List<StudyMate> studyMates = studyMateRepository.findByRoom(room);
-        for (StudyMate studyMate : studyMates) {
-            UserAssignment userAssignment = UserAssignment.builder()
-                    .user(studyMate.getUser())
-                    .assignment(assignment)
-                    .meeting(false)
-                    .build();
-            userAssignmentRepository.save(userAssignment);
-        }
-    }
 }
