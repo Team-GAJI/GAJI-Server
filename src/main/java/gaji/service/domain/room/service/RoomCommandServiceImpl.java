@@ -14,6 +14,7 @@ import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,9 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final UserRepository userRepository;
     private final StudyMateRepository studyMateRepository;
     private final RoomNoticeRepository roomNoticeRepository;
+    private final UserQueryService userQueryService;
+    private final RoomQueryService roomQueryService;
+    private final StudyMateQueryService studyMateQueryService;
 
 
 
@@ -64,15 +68,9 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
     @Override
     public RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_FOUND));
-
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
-
-        StudyMate studyMate = studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_IN_ROOM));
-
+        User user = userQueryService.findUserById(userId);
+        Room room = roomQueryService.findRoomById(roomId);
+        studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
 
         RoomNotice notice = RoomNotice.builder()
                 .title(requestDto.getTitle())
