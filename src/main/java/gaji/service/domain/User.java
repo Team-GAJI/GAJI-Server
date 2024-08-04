@@ -2,10 +2,7 @@ package gaji.service.domain;
 
 import gaji.service.domain.alram.Alarm;
 import gaji.service.domain.common.entity.BaseEntity;
-import gaji.service.domain.enums.Gender;
-import gaji.service.domain.enums.Role;
-import gaji.service.domain.enums.SocialType;
-import gaji.service.domain.enums.UserActive;
+import gaji.service.domain.enums.*;
 import gaji.service.domain.message.Message;
 import gaji.service.domain.post.entity.*;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
@@ -16,6 +13,7 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.VoiceChatUser;
 import gaji.service.domain.roomPost.*;
 import gaji.service.domain.studyMate.*;
+import gaji.service.oauth2.dto.TransferUserDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -127,7 +125,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Gender gender;
 
     private LocalDate birthday;
@@ -141,8 +139,61 @@ public class User extends BaseEntity {
     private LocalDateTime inactiveTime;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private ServiceRole role;
     private String profileImagePth;
+    private String usernameId;
+
+    public static User createUser(TransferUserDTO transferUserDTO) {
+        User user = new User();
+        user.setUsernameId(transferUserDTO.getUsernameId());
+        user.setEmail(transferUserDTO.getEmail());
+        user.setName(transferUserDTO.getName());
+        user.setRole(transferUserDTO.getRole());
+        user.setBirthday(transferUserDTO.getBirthday());
+        user.setSocialType(transferUserDTO.getSocialType());
+        user.setGender(transferUserDTO.getGender());
+        user.setStatus(transferUserDTO.getUserActive());
+        return user;
+    }
+
+    private void setStatus(UserActive userActive) {
+        this.status = userActive;
+    }
+
+    private void setGender(Gender gender) {
+        this.gender = gender;
+
+    }
+
+    private void setSocialType(SocialType socialType) {
+        this.socialType = socialType;
+    }
+
+    private void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    private void setRole(ServiceRole role) {
+        this.role = role;
+
+    }
+
+
+    public void setName(String name) {
+
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+    public void setUsernameId(String usernameId) {
+
+        this.usernameId = usernameId;
+    }
+
 
 
 
