@@ -1,6 +1,5 @@
 package gaji.service.domain.room.service;
 
-import gaji.service.domain.User;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.AssignmentRepository;
@@ -9,6 +8,7 @@ import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
