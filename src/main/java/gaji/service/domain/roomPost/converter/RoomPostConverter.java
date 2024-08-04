@@ -1,9 +1,9 @@
 package gaji.service.domain.roomPost.converter;
 
-import gaji.service.domain.User;
 import gaji.service.domain.roomPost.entity.RoomBoard;
 import gaji.service.domain.roomPost.entity.RoomPost;
 import gaji.service.domain.roomPost.web.dto.RoomPostRequestDto;
+import gaji.service.domain.user.entity.User;
 
 import java.time.LocalDateTime;
 

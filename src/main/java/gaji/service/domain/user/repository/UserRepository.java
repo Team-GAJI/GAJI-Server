@@ -1,9 +1,11 @@
 package gaji.service.domain.user.repository;
 
-import gaji.service.domain.User;
+import gaji.service.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsernameId(String username);
+import java.util.Optional;
 
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findById(Long id);
+    User findByUsernameId(String username);
 }
