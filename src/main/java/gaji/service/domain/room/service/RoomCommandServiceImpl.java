@@ -14,7 +14,6 @@ import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.UserAssignment;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
-import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.domain.user.service.UserQueryServiceImpl;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +35,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final StudyMateQueryService studyMateQueryService;
 
 
+    //과제생성1
     @Override
     public Assignment createAssignment(Long roomEventId, Long userId, RoomRequestDto.AssignmentDto requestDto){
 
@@ -51,13 +51,17 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                 .build();
 
         Assignment savedAssignment = assignmentRepository.save(assignment);
+
+        createUserAssignmentsForStudyMembers(savedAssignment);
         return savedAssignment;
     }
 
-    @Override
-    public void createUserAssignmentsForStudyMembers(Room room, Assignment assignment) {
 
-        List<StudyMate> studyMates = studyMateRepository.findByRoom(room);
+    // 과제 생성할 때 user에게 할당해주는 메서드
+    @Override
+    public void createUserAssignmentsForStudyMembers(Assignment assignment) {
+
+        List<StudyMate> studyMates = studyMateRepository.findByRoom(assignment.getRoomEvent().getRoom());
         for (StudyMate studyMate : studyMates) {
             UserAssignment userAssignment = UserAssignment.builder()
                     .user(studyMate.getUser())
@@ -125,17 +129,6 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return roomEventRepository.save(updatedRoomEvent);
     }
 
-    @Override
-    public void createUserAssignmentsForStudyMembers(Room room, Assignment assignment) {
 
-        List<StudyMate> studyMates = studyMateRepository.findByRoom(room);
-        for (StudyMate studyMate : studyMates) {
-            UserAssignment userAssignment = UserAssignment.builder()
-                    .user(studyMate.getUser())
-                    .assignment(assignment)
-                    .meeting(false)
-                    .build();
-            userAssignmentRepository.save(userAssignment);
-        }
-    }
+
 }
