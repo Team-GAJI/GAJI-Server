@@ -2,7 +2,7 @@ package gaji.service.domain.studyMate;
 
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.ApplicantStatus;
-import gaji.service.domain.room.Room;
+import gaji.service.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

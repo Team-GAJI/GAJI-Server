@@ -2,7 +2,7 @@ package gaji.service.domain.recruite;
 
 import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.enums.RecruitePostTypeEnum;
-import gaji.service.domain.room.Room;
+import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

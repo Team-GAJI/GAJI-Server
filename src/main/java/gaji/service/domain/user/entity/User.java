@@ -10,8 +10,8 @@ import gaji.service.domain.enums.UserActive;
 import gaji.service.domain.message.entity.Message;
 import gaji.service.domain.post.entity.*;
 import gaji.service.domain.recruite.*;
-import gaji.service.domain.room.Event;
-import gaji.service.domain.room.VoiceChatUser;
+import gaji.service.domain.room.entity.Event;
+import gaji.service.domain.room.entity.VoiceChatUser;
 import gaji.service.domain.roomPost.*;
 import gaji.service.domain.studyMate.*;
 import jakarta.persistence.*;
@@ -128,15 +128,17 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Gender gender;
 
-    @Column(nullable = false)
     private LocalDate birthday;
 
+    @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
     @Enumerated(EnumType.STRING)
     private UserActive status;
 
     private LocalDateTime inactiveTime;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
     private String profileImagePth;
 

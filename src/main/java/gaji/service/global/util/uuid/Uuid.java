@@ -1,4 +1,4 @@
-package gaji.service.util.uuid;
+package gaji.service.global.util.uuid;
 
 import jakarta.persistence.*;
 import lombok.*;
