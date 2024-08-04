@@ -1,7 +1,6 @@
-package gaji.service.domain.roomPost;
+package gaji.service.domain.roomPost.entity;
 
 import gaji.service.domain.User;
-import gaji.service.domain.enums.ReportPostTypeEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,21 +9,19 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomPostReport {
+public class RoomPostFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private RoomPost roomPost;
 
-    @Enumerated(EnumType.STRING)
-    private ReportPostTypeEnum reportPostTypeEnum;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    private String description;
+    private String path;
+
 }

@@ -1,6 +1,7 @@
-package gaji.service.domain.roomPost;
+package gaji.service.domain.roomPost.entity;
 
 import gaji.service.domain.User;
+import gaji.service.domain.enums.ReportPostTypeEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomPostLikes {
+public class RoomPostReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,4 +22,9 @@ public class RoomPostLikes {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private RoomPost roomPost;
+
+    @Enumerated(EnumType.STRING)
+    private ReportPostTypeEnum reportPostTypeEnum;
+
+    private String description;
 }

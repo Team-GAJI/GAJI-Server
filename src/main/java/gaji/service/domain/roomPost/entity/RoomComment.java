@@ -1,9 +1,7 @@
-package gaji.service.domain.roomPost;
+package gaji.service.domain.roomPost.entity;
 
 import gaji.service.domain.User;
-import gaji.service.domain.enums.RoomAlarmTypeEnum;
 import gaji.service.domain.enums.UserAlarmTypeEnum;
-import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
