@@ -6,16 +6,20 @@ import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.AssignmentRepository;
-import gaji.service.domain.room.repository.EventRepository;
+import gaji.service.domain.room.repository.RoomEventRepository;
 import gaji.service.domain.room.repository.RoomRepository;
+import gaji.service.domain.room.repository.UserAssignmentRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.StudyMate;
+import gaji.service.domain.studyMate.UserAssignment;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,35 +28,31 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;
     private final StudyMateRepository studyMateRepository;
-    private final EventRepository eventRepository;
+    private final RoomEventRepository roomEventRepository;
+    private final RoomQueryService roomQueryService;
+    private final UserAssignmentRepository userAssignmentRepository;
 
 
 
     @Override
-    public Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto){
-//        // 현재 로그인한 사용자의 정보를 가져옵니다. 추후 주석 해제
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//        User currentUser = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new RestApiException(PostErrorStatus._USER_NOT_FOUND));
+    public Assignment createAssignment(Long roomEventId, Long userId, RoomRequestDto.AssignmentDto requestDto){
 
-
-        User user =confirmUser(userId);
-        Room room = confirmRoom(roomId);
-        confirmStudyMate(roomId, user.getId());
+        RoomEvent roomEvent = roomQueryService.findRoomEventById(roomEventId);
 
         // List<String>을 단일 String으로 변환
         String bodyContent = String.join(", ", requestDto.getBodyList());
 
 
         Assignment assignment = Assignment.builder()
-                .room(room)
-                .weeks(requestDto.getWeek())
+                .roomEvent(roomEvent)
                 .body(bodyContent)
                 .build();
 
         Assignment savedAssignment = assignmentRepository.save(assignment);
         return savedAssignment;
     }
+
+
 
     @Override
     public RoomEvent setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
@@ -64,7 +64,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
         }
 
-        RoomEvent roomEvent = eventRepository.findByRoomId(roomId)
+        RoomEvent roomEvent = roomEventRepository.findRoomEventById(roomId)
                 .orElse(RoomEvent.builder().room(room).user(user).build());
 
         RoomEvent updatedRoomEvent = RoomEvent.builder()
@@ -79,7 +79,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                 .isPublic(roomEvent.isPublic())
                 .build();
 
-        return eventRepository.save(updatedRoomEvent);
+        return roomEventRepository.save(updatedRoomEvent);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
         }
 
-        RoomEvent roomEvent = eventRepository.findByRoomId(roomId)
+        RoomEvent roomEvent = roomEventRepository.findRoomEventById(roomId)
                 .orElse(RoomEvent.builder().room(room).user(user).build());
 
         RoomEvent updatedRoomEvent = RoomEvent.builder()
@@ -107,22 +107,20 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                 .isPublic(roomEvent.isPublic())
                 .build();
 
-        return eventRepository.save(updatedRoomEvent);
+        return roomEventRepository.save(updatedRoomEvent);
     }
 
-    public User confirmUser(Long userId){
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_FOUND));
-    }
+    @Override
+    public void createUserAssignmentsForStudyMembers(Room room, Assignment assignment) {
 
-    public Room confirmRoom(Long roomId){
-        return roomRepository.findById(roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
-    }
-
-
-    public StudyMate confirmStudyMate(Long roomId, Long userId){
-        return studyMateRepository.findByUserIdAndRoomId(userId, roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
+        List<StudyMate> studyMates = studyMateRepository.findByRoom(room);
+        for (StudyMate studyMate : studyMates) {
+            UserAssignment userAssignment = UserAssignment.builder()
+                    .user(studyMate.getUser())
+                    .assignment(assignment)
+                    .meeting(false)
+                    .build();
+            userAssignmentRepository.save(userAssignment);
+        }
     }
 }
