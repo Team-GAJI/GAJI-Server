@@ -13,7 +13,9 @@ import gaji.service.domain.roomPost.entity.RoomPost;
 import gaji.service.domain.roomPost.repository.RoomBoardRepository;
 import gaji.service.domain.roomPost.repository.RoomPostRepository;
 import gaji.service.domain.roomPost.web.dto.RoomPostRequestDto;
+import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
+import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.domain.user.service.UserCommandService;
 import gaji.service.domain.user.service.UserQueryService;
@@ -32,17 +34,13 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final StudyMateRepository studyMateRepository;
     private final UserQueryService userQueryService;
     private final RoomQueryService roomQueryService;
+    private final StudyMateQueryService studyMateQueryService;
+
     @Override
     public RoomPost createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
-
-
-
-
-        // 사용자가 해당 스터디룸에 참여하고 있는지 확인
-        studyMateRepository.findByUserIdAndRoomId(user.getId(), roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._USER_NOT_IN_ROOM));
+        studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
 
         // 스터디룸 게시판 확인 또는 생성
         RoomBoard roomBoard = roomBoardRepository.findByRoomId(roomId)
