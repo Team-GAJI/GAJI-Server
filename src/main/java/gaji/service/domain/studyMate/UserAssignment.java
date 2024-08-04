@@ -23,7 +23,7 @@ public class UserAssignment {
     private Assignment assignment;
 
     //완료여부
-    private boolean isComplete;
+    private boolean meeting;
 
 
 
