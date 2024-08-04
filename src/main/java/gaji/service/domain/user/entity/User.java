@@ -138,7 +138,7 @@ public class User extends BaseEntity {
     private LocalDateTime inactiveTime;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private ServiceRole role;
     private String profileImagePth;
 
     private String usernameId;
@@ -175,7 +175,6 @@ public class User extends BaseEntity {
 
     private void setRole(ServiceRole role) {
         this.role = role;
-
     }
 
     public void setName(String name) {
