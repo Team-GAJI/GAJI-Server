@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface EventRepository extends JpaRepository<RoomEvent,Long> {
-    Optional<RoomEvent> findByRoomId(Long roomId);
+public interface RoomEventRepository extends JpaRepository<RoomEvent,Long> {
+    Optional<RoomEvent> findRoomEventById(Long roomId);
 }

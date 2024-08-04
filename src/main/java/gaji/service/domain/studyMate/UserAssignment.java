@@ -2,13 +2,13 @@ package gaji.service.domain.studyMate;
 
 import gaji.service.domain.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class UserAssignment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

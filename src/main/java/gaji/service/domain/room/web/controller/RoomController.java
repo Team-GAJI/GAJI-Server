@@ -20,25 +20,25 @@ public class RoomController {
 
     private final RoomCommandServiceImpl roomCommandService;
 
-    @PostMapping("/assignments/{roomId}/{userId}")
+    @PostMapping("/assignments/{roomEventId}")
     @Operation(summary = "스터디룸 과제 등록 API",description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 스터디에 참혀하고 있는 user인지 검증합니다.")
     public BaseResponse<RoomResponseDto.AssignmentDto> AssignmentController(
-            @PathVariable Long userId/*하드 코딩용, 추후 삭제*/,
             @RequestBody @Valid RoomRequestDto.AssignmentDto requestDto,
-            @PathVariable Long roomId){
-        //Long userId = getUserIdFromToken(token);
-        Assignment assignment = roomCommandService.createAssignment(roomId, userId, requestDto);
+            @PathVariable Long roomEventId){
+        Long userId = getUserIdFromToken(token);
+
+        Assignment assignment = roomCommandService.createAssignment(roomEventId, userId, requestDto);
         return BaseResponse.onSuccess(RoomConverter.toAssignmentDto(assignment));
     }
 
-    @PostMapping("/event/{roomId}/{weeks}/{userId}/period")
+    @PostMapping("/event/{roomId}/{weeks}/period")
     @Operation(summary = "스터디룸 기간 설정 API", description = "스터디룸의 전체 기간을 설정하는 API입니다.")
     public BaseResponse<Long> setStudyPeriod(
             @PathVariable Integer weeks,
-            @PathVariable Long userId,
             @PathVariable Long roomId,
             @RequestBody @Valid RoomRequestDto.StudyPeriodDto requestDto
     ) {
+        Long userId = getUserIdFromToken(token);
         RoomEvent roomEvent = roomCommandService.setStudyPeriod(roomId,weeks, userId, requestDto);
         return BaseResponse.onSuccess(roomEvent.getId());
     }
