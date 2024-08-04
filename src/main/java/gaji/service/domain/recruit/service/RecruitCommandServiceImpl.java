@@ -6,6 +6,7 @@ import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.entity.SelectCategory;
 import gaji.service.domain.recruit.repository.SelectCategoryRepository;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
+import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.MaterialRepository;
@@ -34,7 +35,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
     @Override
     @Transactional
-    public Room createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId) {
+    public RecruitResponseDTO.CreateRoomDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId) {
         String thumbnailUrl = DEFAULT_THUMBNAIL_URL;
         String inviteCode = null;
         int peopleMaximum = 0;
@@ -78,7 +79,8 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         }
 
         roomRepository.save(room);
-        return room;
+
+        return RecruitConverter.toResponseDTO(room);
     }
 
     private String generateInviteCode() {
