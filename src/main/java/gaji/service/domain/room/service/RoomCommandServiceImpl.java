@@ -5,7 +5,6 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.AssignmentRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.entity.User;
@@ -55,5 +54,6 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         Assignment savedAssignment = assignmentRepository.save(assignment);
         return savedAssignment;
     }
+
 
 }
