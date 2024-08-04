@@ -9,7 +9,9 @@ import gaji.service.domain.recruit.repository.StudyCommentRepository;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.RoomRepository;
+import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,19 +24,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecruitQueryServiceImpl implements RecruitQueryService {
 
-    private final UserRepository userRepository;
+    private final UserQueryService userQueryService;
+    private final RoomQueryService roomQueryService;
     private final RoomRepository roomRepository;
     private final StudyCommentRepository studyCommentRepository;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public RecruitResponseDTO.studyDetailDTO getStudyDetail(Long roomId) {
 
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RestApiException(RecruitErrorStatus._RECRUIT_POST_NOT_FOUND));
-
-        User user = userRepository.findById(room.getUser().getId())
-                .orElseThrow(() -> new RestApiException(RecruitErrorStatus._USER_NOT_FOUND));
+        Room room = roomQueryService.findRoomById(roomId);
+        User user = userQueryService.findUserById(room.getUser().getId());
 
         List<StudyComment> commentList = studyCommentRepository.findByRoomAndDepth(room, 0);
         List<RecruitResponseDTO.CommentResponseDTO> CommentResponseDTO;
@@ -45,7 +45,6 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
             commentList.sort(Comparator.comparing(StudyComment::getCreatedAt).reversed());
             CommentResponseDTO = RecruitConverter.toCommentResponseDTOList(commentList);
         }
-
 
         room.addView();
         roomRepository.save(room);
