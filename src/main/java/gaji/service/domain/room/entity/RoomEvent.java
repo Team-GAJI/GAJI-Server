@@ -31,6 +31,9 @@ public class RoomEvent {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private final List<RepeatException> repeatExceptionList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "roomEvent", cascade = CascadeType.ALL)
+    private final List<RoomEvent> roomEventList = new ArrayList<>();
+
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private final List<MyRepeat> myRepeatList = new ArrayList<>();
 

@@ -1,6 +1,7 @@
 package gaji.service.domain.studyMate;
 
 import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.room.entity.RoomEvent;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,9 +20,7 @@ public class Assignment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
-    private Room room;
-
-    private Integer weeks;
+    private RoomEvent roomEvent;
 
     @Column(length = 30)
     private String body;
