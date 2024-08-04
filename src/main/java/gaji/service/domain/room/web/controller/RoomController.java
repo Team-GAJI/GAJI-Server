@@ -1,13 +1,16 @@
 package gaji.service.domain.room.web.controller;
 
 import gaji.service.domain.room.converter.RoomConverter;
+import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.service.RoomCommandServiceImpl;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.global.base.BaseResponse;
+import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,4 +29,27 @@ public class RoomController {
         return BaseResponse.onSuccess(RoomConverter.toAssignmentDto(assignment));
     }
 
+    @PostMapping("/event/{roomId}/{weeks}/{userId}/period")
+    @Operation(summary = "스터디룸 기간 설정 API", description = "스터디룸의 전체 기간을 설정하는 API입니다.")
+    public BaseResponse<Long> setStudyPeriod(
+            @PathVariable Integer weeks,
+            @PathVariable Long userId,
+            @PathVariable Long roomId,
+            @RequestBody @Valid RoomRequestDto.StudyPeriodDto requestDto
+    ) {
+        RoomEvent event = roomCommandService.setStudyPeriod(roomId,weeks, userId, requestDto);
+        return BaseResponse.onSuccess(event.getId());
+    }
+
+    @PostMapping("/event/{roomId}/{weeks}/{userId}/description")
+    @Operation(summary = "스터디룸 설명 입력 API", description = "스터디룸에 대한 설명을 입력하는 API입니다.")
+    public BaseResponse<Long> setStudyDescription(
+            @PathVariable @Min(value = 1, message = "Weeks must be at least 1") Integer weeks,
+            @PathVariable Long userId,
+            @PathVariable Long roomId,
+            @RequestBody @Valid RoomRequestDto.StudyDescriptionDto requestDto
+    ) {
+        RoomEvent event = roomCommandService.setStudyDescription(roomId, weeks, userId, requestDto);
+        return BaseResponse.onSuccess(event.getId());
+    }
 }
