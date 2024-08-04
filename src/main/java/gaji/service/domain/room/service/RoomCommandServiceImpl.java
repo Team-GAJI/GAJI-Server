@@ -1,6 +1,5 @@
 package gaji.service.domain.room.service;
 
-import gaji.service.domain.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.RoomEvent;
@@ -14,7 +13,9 @@ import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.UserAssignment;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.domain.user.service.UserQueryServiceImpl;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RoomCommandServiceImpl implements RoomCommandService {
-    private final RoomRepository roomRepository;
+
     private final AssignmentRepository assignmentRepository;
-    private final UserRepository userRepository;
     private final StudyMateRepository studyMateRepository;
     private final RoomEventRepository roomEventRepository;
     private final RoomQueryService roomQueryService;
+    private final UserQueryServiceImpl userQueryService;
     private final UserAssignmentRepository userAssignmentRepository;
 
 
@@ -56,7 +57,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
     @Override
     public RoomEvent setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
-        User user = confirmUser(userId);
+        User user = userQueryService.findUserById(userId);
         Room room = confirmRoom(roomId);
         StudyMate studyMate = confirmStudyMate(roomId, user.getId());
 
