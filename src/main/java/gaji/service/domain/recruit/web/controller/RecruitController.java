@@ -27,8 +27,8 @@ public class RecruitController {
     @Operation(summary = "스터디 모집 게시글 생성 API", description = "스터디 모집 게시글을 생성하는 API입니다.")
     public BaseResponse<RecruitResponseDTO.CreateRoomDTO> createRoom(@RequestBody @Valid RecruitRequestDTO.CreateRoomDTO request, @RequestHeader("Authorization") String authorizationHeader) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        Room newRoom = recruitCommandService.createRoom(request, userId);
-        return BaseResponse.onSuccess(RecruitConverter.toResponseDTO(newRoom));
+        RecruitResponseDTO.CreateRoomDTO responseDTO = recruitCommandService.createRoom(request, userId);
+        return BaseResponse.onSuccess(responseDTO);
     }
 
     @GetMapping("/{roomId}")
