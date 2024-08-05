@@ -1,7 +1,8 @@
 package gaji.service.oauth2.service;
 
-import gaji.service.domain.User;
+
 import gaji.service.domain.enums.*;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.oauth2.dto.CustomOAuth2User;
 import gaji.service.oauth2.dto.OAuthUserDTO;

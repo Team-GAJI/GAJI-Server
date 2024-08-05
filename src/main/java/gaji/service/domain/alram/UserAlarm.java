@@ -1,6 +1,5 @@
 package gaji.service.domain.alram;
 
-import gaji.service.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -1,6 +1,5 @@
 package gaji.service.domain.post.converter;
 
-import gaji.service.domain.User;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.entity.Comment;
@@ -8,6 +7,7 @@ import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
+import gaji.service.domain.user.entity.User;
 
 public class PostConverter {
 

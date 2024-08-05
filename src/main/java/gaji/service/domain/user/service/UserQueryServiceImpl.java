@@ -1,12 +1,14 @@
 package gaji.service.domain.user.service;
 
-import gaji.service.domain.User;
 import gaji.service.domain.user.code.UserErrorStatus;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

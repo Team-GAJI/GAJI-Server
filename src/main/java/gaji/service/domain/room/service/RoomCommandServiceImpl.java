@@ -1,15 +1,18 @@
 package gaji.service.domain.room.service;
 
-import gaji.service.domain.User;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.repository.AssignmentRepository;
+import gaji.service.domain.room.repository.RoomNoticeRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
+import gaji.service.domain.studyMate.service.StudyMateQueryService;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,10 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;
     private final StudyMateRepository studyMateRepository;
+    private final RoomNoticeRepository roomNoticeRepository;
+    private final UserQueryService userQueryService;
+    private final RoomQueryService roomQueryService;
+    private final StudyMateQueryService studyMateQueryService;
 
 
 
@@ -54,6 +61,21 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
         Assignment savedAssignment = assignmentRepository.save(assignment);
         return savedAssignment;
+    }
+
+    @Override
+    public RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto) {
+        User user = userQueryService.findUserById(userId);
+        Room room = roomQueryService.findRoomById(roomId);
+        studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
+
+        RoomNotice notice = RoomNotice.builder()
+                .title(requestDto.getTitle())
+                .body(requestDto.getBody())
+                .room(room)
+                .build();
+        return roomNoticeRepository.save(notice);
+
     }
 
 }

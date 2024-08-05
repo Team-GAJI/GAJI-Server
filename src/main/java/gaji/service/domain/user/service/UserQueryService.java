@@ -1,6 +1,6 @@
 package gaji.service.domain.user.service;
 
-import gaji.service.domain.User;
+import gaji.service.domain.user.entity.User;
 
 public interface UserQueryService {
 

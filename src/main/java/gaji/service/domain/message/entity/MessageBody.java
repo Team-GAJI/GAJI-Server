@@ -1,7 +1,9 @@
-package gaji.service.domain.message;
+package gaji.service.domain.message.entity;
 
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +23,8 @@ public class MessageBody {
 
     private String body;
 
+    @Builder
+    public MessageBody(String body) {
+        this.body = body;
+    }
 }
