@@ -8,5 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface RoomEventRepository extends JpaRepository<RoomEvent,Long> {
+
+    Optional<RoomEvent> findRoomEventByRoomIdAndWeeks(Long roomId, Integer weeks);
     Optional<RoomEvent> findRoomEventById(Long roomId);
+
 }

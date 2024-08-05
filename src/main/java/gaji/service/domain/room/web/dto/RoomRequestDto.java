@@ -22,7 +22,7 @@ public class RoomRequestDto {
         @Schema(description = "주차")
         @NotNull(message = "주차를 입력해주세요.")
         @Min(value = 1, message = "유효하지 않은 형식의 주차입니다.")
-        private Integer week;
+        private Integer weeks;
 
         @Schema(description = "과제 입력")
         @NotEmpty(message = "1개 이상의 과제를 입력해주세요.")

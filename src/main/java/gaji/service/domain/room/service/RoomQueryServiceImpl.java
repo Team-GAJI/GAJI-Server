@@ -16,17 +16,24 @@ public class RoomQueryServiceImpl implements RoomQueryService{
     private final RoomEventRepository roomEventRepository;
     private final RoomRepository roomRepository;
 
-    @Override
-    public RoomEvent findRoomEventById(Long roomId){
-        return roomEventRepository.findRoomEventById(roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
-
-    }
+//    @Override
+//    public RoomEvent findRoomEventById(Long roomId){
+//        return roomEventRepository.findRoomEventById(roomId)
+//                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
+//
+//    }
 
     @Override
     public Room findRoomById(Long roomId) {
         return roomRepository.findById(roomId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
+
+    }
+
+    @Override
+    public RoomEvent findRoomEventByRoomIdAndWeeks(Long roomId, Integer weeks) {
+        return roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId, weeks)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
 
     }
 
