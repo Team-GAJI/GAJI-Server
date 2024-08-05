@@ -8,4 +8,6 @@ import java.util.List;
 public interface RoomQueryService {
 
     Room findRoomById(Long roomId);
+
+    RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId);
 }
