@@ -22,6 +22,8 @@ public enum RoomErrorStatus implements BaseErrorCodeInterface {
 
     _USER_NOT_READER_IN_ROOM(HttpStatus.BAD_REQUEST, "ROOM_4005","사용자가 해당 스터디룸의 방장이 아닙니다.");
 
+
+
     private final HttpStatus httpStatus;
     private final boolean isSuccess = false;
     private final String code;
