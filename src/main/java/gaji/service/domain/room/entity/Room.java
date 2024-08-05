@@ -1,11 +1,11 @@
 package gaji.service.domain.room.entity;
 
-import gaji.service.domain.User;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
 import gaji.service.domain.recruit.entity.SelectCategory;
-import gaji.service.domain.roomPost.RoomBoard;
+import gaji.service.domain.roomPost.entity.RoomBoard;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.Chat;
 import gaji.service.domain.studyMate.StudyApplicant;
@@ -71,7 +71,6 @@ public class Room {
     @Column(length = 20)
     private String name;
     private String description;
-
     //조회수
     private int views;
     //좋아요수

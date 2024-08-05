@@ -1,6 +1,5 @@
 package gaji.service.domain.room.web.dto;
 
-import gaji.service.domain.studyMate.Assignment;
 import lombok.*;
 
 public class RoomResponseDto {
@@ -13,6 +12,16 @@ public class RoomResponseDto {
         Long id;
         Integer weeks;
         String body;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RoomNoticeDto{
+        String title;
+        String body;
+        Long roomId;
     }
 
 }

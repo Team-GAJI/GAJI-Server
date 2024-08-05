@@ -1,9 +1,11 @@
-package gaji.service.domain;
+package gaji.service.domain.user.entity;
 
+
+import gaji.service.domain.Report;
 import gaji.service.domain.alram.Alarm;
 import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.enums.*;
-import gaji.service.domain.message.Message;
+import gaji.service.domain.message.entity.Message;
 import gaji.service.domain.post.entity.*;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
@@ -11,7 +13,7 @@ import gaji.service.domain.recruit.entity.SearchKeyword;
 import gaji.service.domain.room.entity.Event;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.VoiceChatUser;
-import gaji.service.domain.roomPost.*;
+import gaji.service.domain.roomPost.entity.*;
 import gaji.service.domain.studyMate.*;
 import gaji.service.oauth2.dto.TransferUserDTO;
 import jakarta.persistence.*;
@@ -67,10 +69,10 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<RecruitPostBookmark> recruitPostBookmarkList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sender")
+    @OneToMany(mappedBy = "self")
     private List<Message> sentMessages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "receiver")
+    @OneToMany(mappedBy = "other")
     private List<Message> receivedMessages = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
@@ -125,7 +127,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Gender gender;
 
     private LocalDate birthday;
@@ -141,6 +143,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ServiceRole role;
     private String profileImagePth;
+
     private String usernameId;
 
     public static User createUser(TransferUserDTO transferUserDTO) {
@@ -175,9 +178,7 @@ public class User extends BaseEntity {
 
     private void setRole(ServiceRole role) {
         this.role = role;
-
     }
-
 
     public void setName(String name) {
 
@@ -193,8 +194,6 @@ public class User extends BaseEntity {
 
         this.usernameId = usernameId;
     }
-
-
 
 
 }
