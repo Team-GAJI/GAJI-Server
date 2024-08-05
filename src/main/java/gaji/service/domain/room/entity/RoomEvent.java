@@ -28,11 +28,11 @@ public class RoomEvent {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private final List<RepeatException> repeatExceptionList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "roomEvent", cascade = CascadeType.ALL)
-    private final List<RoomEvent> roomEventList = new ArrayList<>();
+//    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+//    private final List<RepeatException> repeatExceptionList = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "roomEvent", cascade = CascadeType.ALL)
+//    private final List<RoomEvent> roomEventList = new ArrayList<>();
 
 
     @Column(length = 30)

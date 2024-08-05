@@ -19,7 +19,7 @@ public class Assignment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "room_event_id")
     private RoomEvent roomEvent;
 
     @Column(length = 30)
