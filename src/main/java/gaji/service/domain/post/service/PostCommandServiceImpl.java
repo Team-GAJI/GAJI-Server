@@ -12,7 +12,6 @@ import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
-import gaji.service.domain.post.repository.CommentRepository;
 import gaji.service.domain.post.repository.PostBookmarkRepository;
 import gaji.service.domain.post.repository.PostLikesRepository;
 import gaji.service.domain.post.repository.PostRepository;
@@ -36,7 +35,7 @@ public class PostCommandServiceImpl implements PostCommandService {
     private final PostRepository postRepository;
     private final HashtagRepository hashtagRepository;
     private final SelectHashtagRepository selectHashtagRepository;
-    private final CommentRepository commentRepository;
+    private final CommentService commentService;
     private final PostBookmarkRepository postBookmarkRepository;
     private final PostLikesRepository postLikesRepository;
 
@@ -63,12 +62,12 @@ public class PostCommandServiceImpl implements PostCommandService {
         Post findPost = findPostByPostId(postId);
 
         Comment newComment = createCommentByCheckParentCommentIdIsNull(parentCommentId, request, findUser, findPost);
-        return commentRepository.save(newComment);
+        return commentService.saveNewComment(newComment);
     }
 
     @Override
     public void softDeleteComment(Long commentId) {
-        Comment findComment = findCommentByCommentId(commentId);
+        Comment findComment = commentService.findByCommentId(commentId);
         findComment.updateStatus(CommentStatus.DELETE);
     }
 
@@ -122,7 +121,7 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     private Comment createCommentByCheckParentCommentIdIsNull(Long parentCommentId, PostRequestDTO.WriteCommentDTO request, User findUser, Post findPost) {
         if (parentCommentId != null) {
-            Comment parentComment = findCommentByCommentId(parentCommentId);
+            Comment parentComment = commentService.findByCommentId(parentCommentId);
             return PostConverter.toComment(request, findUser, findPost, parentComment);
         } else {
             return PostConverter.toComment(request, findUser, findPost, null);
@@ -152,8 +151,4 @@ public class PostCommandServiceImpl implements PostCommandService {
                 .orElseThrow(() -> new RestApiException(PostErrorStatus._POST_NOT_FOUND));
     }
 
-    private Comment findCommentByCommentId(Long parentCommentId) {
-        return commentRepository.findById(parentCommentId)
-                .orElseThrow(() -> new RestApiException(PostErrorStatus._COMMENT_NOT_FOUND));
-    }
 }
