@@ -12,7 +12,8 @@ import java.util.List;
 public class RoomPostQueryRepository {
     @PersistenceContext
     private EntityManager em;
-    public List<RoomPostResponseDto.PostListDto> findTop3RecentPostsWithUserInfo() {
+
+    public List<RoomPostResponseDto.PostListDto> findTop3RecentPostsWithUserInfo(Long roomId) {
         String jpql = """
             SELECT NEW gaji.service.domain.roomPost.web.dto.RoomPostResponseDto.PostListDto(
                 rp.id,
@@ -23,11 +24,15 @@ public class RoomPostQueryRepository {
                 u.id,
                 u.profileImagePth
             )
-            FROM RoomPost rp
+            FROM Room r
+            JOIN r.roomBoardList rb
+            JOIN rb.roomPostList rp
             JOIN rp.user u
+            WHERE r.id = :roomId
             ORDER BY rp.postTime DESC
         """;
         return em.createQuery(jpql, RoomPostResponseDto.PostListDto.class)
+                .setParameter("roomId", roomId)
                 .setMaxResults(3)
                 .getResultList();
     }
