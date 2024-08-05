@@ -26,6 +26,8 @@ public enum RoomErrorStatus implements BaseErrorCodeInterface {
 
 
 
+
+
     private final HttpStatus httpStatus;
     private final boolean isSuccess = false;
     private final String code;

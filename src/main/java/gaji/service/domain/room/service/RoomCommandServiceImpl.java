@@ -5,9 +5,11 @@ import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.repository.AssignmentRepository;
 import gaji.service.domain.room.repository.RoomEventRepository;
 import gaji.service.domain.room.repository.UserAssignmentRepository;
+import gaji.service.domain.room.repository.RoomNoticeRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.StudyMate;
@@ -15,6 +17,7 @@ import gaji.service.domain.studyMate.UserAssignment;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.service.UserQueryServiceImpl;
+
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,11 +36,17 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final UserAssignmentRepository userAssignmentRepository;
     private final UserQueryServiceImpl userQueryService;
     private final StudyMateQueryService studyMateQueryService;
+    private final RoomNoticeRepository roomNoticeRepository;
 
 
     //과제생성1
     @Override
     public Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto){
+//        // 현재 로그인한 사용자의 정보를 가져옵니다. 추후 주석 해제
+//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//        User currentUser = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new RestApiException(PostErrorStatus._USER_NOT_FOUND));
+
 
         RoomEvent roomEvent = roomQueryService.findRoomEventByRoomIdAndWeeks(roomId, requestDto.getWeeks());
 
@@ -56,6 +65,20 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return savedAssignment;
     }
 
+    @Override
+    public RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto) {
+        User user = userQueryService.findUserById(userId);
+        Room room = roomQueryService.findRoomById(roomId);
+        studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
+
+        RoomNotice notice = RoomNotice.builder()
+                .title(requestDto.getTitle())
+                .body(requestDto.getBody())
+                .room(room)
+                .build();
+        return roomNoticeRepository.save(notice);
+
+    }
 
     // 과제 생성할 때 user에게 할당해주는 메서드
     @Override
