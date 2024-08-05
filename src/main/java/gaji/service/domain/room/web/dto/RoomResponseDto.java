@@ -38,6 +38,17 @@ public class RoomResponseDto {
         private LocalDate recruitmentEndDate;
         private long daysUntilDeadline;
         private long applicantCount;
-
     }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class MainStudyRoomDTO {
+        private String name;
+        private String hashtags;
+        private LocalDate endDay;
+        private Long daysLeft;
+        private Long applicantCount;
+    }
+
 }
