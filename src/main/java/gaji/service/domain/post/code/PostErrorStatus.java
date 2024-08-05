@@ -13,7 +13,7 @@ public enum PostErrorStatus implements BaseErrorCodeInterface {
 
     _POST_NOT_FOUND(HttpStatus.BAD_REQUEST, "POST_4001", "존재하지 않는 게시글입니다."),
     _POST_TYPE_NOT_FOUND(HttpStatus.BAD_REQUEST, "POST_4002", "존재하지 않는 게시글 유형입니다."),
-    _POST_STATUS_NOT_VALID(HttpStatus.BAD_REQUEST, "POST_4005", "유효하지 않은 게시글 상태값입니다."),
+    _INVALID_POST_STATUS(HttpStatus.BAD_REQUEST, "POST_4005", "유효하지 않은 게시글 상태값입니다."),
 
 
     _COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "POST_4004", "존재하지 않는 댓글입니다."),
