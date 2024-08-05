@@ -9,4 +9,6 @@ import java.util.List;
 public interface StudyCommentRepository extends JpaRepository<StudyComment, Long> {
 
     List<StudyComment> findByRoomAndDepth(Room room, int depth);
+
+    int countByRoom(Room room);
 }
