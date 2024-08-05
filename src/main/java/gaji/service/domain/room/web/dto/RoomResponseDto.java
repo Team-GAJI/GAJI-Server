@@ -3,6 +3,7 @@ package gaji.service.domain.room.web.dto;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class RoomResponseDto {
@@ -42,5 +43,4 @@ public class RoomResponseDto {
         private List<String> hashtags;
         private Long applicantCount;
     }
-
 }
