@@ -1,7 +1,5 @@
 package gaji.service.domain.room.service;
 
-import gaji.service.domain.User;
-import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomNotice;
@@ -9,14 +7,13 @@ import gaji.service.domain.room.repository.AssignmentRepository;
 import gaji.service.domain.room.repository.RoomNoticeRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.Assignment;
-import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
+import gaji.service.domain.studyMate.service.StudyMateQueryService;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.global.exception.RestApiException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -80,4 +77,5 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return roomNoticeRepository.save(notice);
 
     }
+
 }

@@ -1,12 +1,12 @@
 package gaji.service.domain;
 
 import gaji.service.domain.enums.IsRevoked;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
