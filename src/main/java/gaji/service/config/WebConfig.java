@@ -1,5 +1,6 @@
 package gaji.service.config;
 
+import gaji.service.domain.post.converter.PostStatusConverter;
 import gaji.service.domain.post.converter.PostTypeConverter;
 import gaji.service.domain.post.converter.SortTypeConverter;
 import org.springframework.context.annotation.Configuration;
@@ -13,5 +14,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new PostTypeConverter());
         registry.addConverter(new SortTypeConverter());
+        registry.addConverter(new PostStatusConverter());
     }
 }
