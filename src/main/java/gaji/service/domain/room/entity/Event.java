@@ -1,6 +1,6 @@
 package gaji.service.domain.room.entity;
 
-import gaji.service.domain.User;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.myRepeat.MyRepeat;
 import gaji.service.domain.myRepeat.RepeatException;
 import jakarta.persistence.*;
