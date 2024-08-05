@@ -27,6 +27,6 @@ public class Assignment {
     private String body;
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
-    private List<UserAssignment> userAssignmentList = new ArrayList<>();
+    private final List<UserAssignment> userAssignmentList = new ArrayList<>();
 
 }
