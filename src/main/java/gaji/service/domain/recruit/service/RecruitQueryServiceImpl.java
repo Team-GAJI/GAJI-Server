@@ -1,18 +1,14 @@
 package gaji.service.domain.recruit.service;
 
-import gaji.service.domain.User;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.RoomCategoryEnum;
-import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.entity.StudyComment;
-import gaji.service.domain.recruit.repository.StudyCommentRepository;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.service.RoomQueryService;
-import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.domain.user.service.UserQueryService;
-import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,6 +1,5 @@
 package gaji.service.domain.recruit.service;
 
-import gaji.service.domain.User;
 import gaji.service.domain.enums.RoomCategoryEnum;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.entity.SelectCategory;
@@ -13,6 +12,7 @@ import gaji.service.domain.room.repository.MaterialRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
