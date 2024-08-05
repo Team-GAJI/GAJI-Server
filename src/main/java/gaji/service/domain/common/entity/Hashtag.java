@@ -1,15 +1,11 @@
 package gaji.service.domain.common.entity;
 
-import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.recruite.SelectCategory;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
