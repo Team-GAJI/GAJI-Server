@@ -27,7 +27,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     private final UserQueryService userQueryService;
     private final RoomQueryService roomQueryService;
     private final RoomRepository roomRepository;
-    private final StudyCommentRepository studyCommentRepository;
+    private final StudyCommentQueryService studyCommentQueryService;
 
     @Override
     @Transactional
@@ -36,8 +36,10 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
         Room room = roomQueryService.findRoomById(roomId);
         User user = userQueryService.findUserById(room.getUser().getId());
 
-        List<StudyComment> commentList = studyCommentRepository.findByRoomAndDepth(room, 0);
+        List<StudyComment> commentList = studyCommentQueryService.findByRoomAndDepth(room, 0);
         List<RecruitResponseDTO.CommentResponseDTO> CommentResponseDTO;
+
+        int commentCount = studyCommentQueryService.getCommentCountByRoom(room);
 
         if (commentList.isEmpty()) {
             CommentResponseDTO = null;
@@ -51,7 +53,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
 
         List<RoomCategoryEnum> categoryList = RecruitConverter.toCategoryList(room.getSelectCategoryList());
 
-        return RecruitConverter.toStudyDetailDTO(user, room, categoryList, commentList.size(), CommentResponseDTO);
+        return RecruitConverter.toStudyDetailDTO(user, room, categoryList, commentCount, CommentResponseDTO);
     }
 
 
