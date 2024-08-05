@@ -1,9 +1,13 @@
 package gaji.service.domain.post.web.dto;
 
+import gaji.service.domain.common.web.dto.HashtagResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PostResponseDTO {
@@ -20,7 +24,7 @@ public class PostResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PostPreviewListDTO {
+    public static class PostPreviewDTO {
         private Long postId;
         private int likeCnt;
         private String thumbnailUrl;
@@ -29,5 +33,6 @@ public class PostResponseDTO {
         private String username;
         private String uploadTime;
         private int viewCnt;
+        private List<HashtagResponseDTO.BaseResponseDTO> hashtagList = new ArrayList<>();
     }
 }
