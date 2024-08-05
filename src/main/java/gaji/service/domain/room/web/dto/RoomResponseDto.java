@@ -38,5 +38,6 @@ public class RoomResponseDto {
         private LocalDate recruitmentEndDate;
         private long daysUntilDeadline;
         private long applicantCount;
+
     }
 }
