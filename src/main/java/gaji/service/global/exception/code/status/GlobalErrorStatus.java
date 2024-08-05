@@ -26,6 +26,12 @@ public enum GlobalErrorStatus implements BaseErrorCodeInterface {
     _S3_DELETE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S3_5002", "파일 삭제에 실패했습니다."),
     _FALIED_READ_FILE(HttpStatus.BAD_REQUEST, "FILE002","파일을 읽는 중 문제가 발생하였습니다."),
 
+    // HASHTAG 에러
+    _HASHTAG_ISBLANK(HttpStatus.BAD_REQUEST, "HASHTAG_4003", "공백은 해시태그로 등록할 수 없습니다."),
+
+    // 정렬 기준 Enum 에러
+    _SORT_TYPE_NOT_VALID(HttpStatus.BAD_REQUEST, "SORT_4001", "유효하지 않은 정렬 기준입니다."),
+
     // For test
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "예외처리 테스트입니다."),
     ;
