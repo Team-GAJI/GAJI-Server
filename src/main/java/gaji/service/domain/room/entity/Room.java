@@ -66,6 +66,8 @@ public class Room {
     private int headCount;
     private LocalDate startDay;
     private LocalDate endDay;
+    private LocalDate recruitStartDay;
+    private LocalDate recruitEndDay;
 
 
 }
