@@ -37,9 +37,9 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
     //과제생성1
     @Override
-    public Assignment createAssignment(Long roomEventId, Long userId, RoomRequestDto.AssignmentDto requestDto){
+    public Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto){
 
-        RoomEvent roomEvent = roomQueryService.findRoomEventById(roomEventId);
+        RoomEvent roomEvent = roomQueryService.findRoomEventByRoomIdAndWeeks(roomId, requestDto.getWeeks());
 
         // List<String>을 단일 String으로 변환
         String bodyContent = String.join(", ", requestDto.getBodyList());
