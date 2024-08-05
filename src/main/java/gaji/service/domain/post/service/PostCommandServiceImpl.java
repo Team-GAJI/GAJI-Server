@@ -16,6 +16,7 @@ import gaji.service.domain.post.repository.PostBookmarkRepository;
 import gaji.service.domain.post.repository.PostLikesRepository;
 import gaji.service.domain.post.repository.PostRepository;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
+import gaji.service.domain.user.code.UserErrorStatus;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
@@ -143,7 +144,7 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     private User findUserByUserId(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(PostErrorStatus._USER_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
     }
 
     private Post findPostByPostId(Long postId) {
