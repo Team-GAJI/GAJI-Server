@@ -1,7 +1,7 @@
 package gaji.service.domain.common.validation;
 
 import gaji.service.domain.common.annotation.CheckHashtagListElement;
-import gaji.service.domain.post.code.PostErrorStatus;
+import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class HashtagListElementValidator implements ConstraintValidator<CheckHas
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(PostErrorStatus._HASHTAG_ISBLANK.getMessage()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(GlobalErrorStatus._HASHTAG_ISBLANK.getMessage()).addConstraintViolation();
         }
 
         return isValid;
