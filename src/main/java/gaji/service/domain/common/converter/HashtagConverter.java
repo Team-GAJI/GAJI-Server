@@ -2,9 +2,8 @@ package gaji.service.domain.common.converter;
 
 import gaji.service.domain.common.entity.Hashtag;
 import gaji.service.domain.common.entity.SelectHashtag;
-import gaji.service.domain.common.service.HashtagQueryService;
+import gaji.service.domain.common.web.dto.HashtagResponseDTO;
 import gaji.service.domain.enums.PostTypeEnum;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,5 +36,18 @@ public class HashtagConverter {
                                 .type(type)
                                 .build()
                 ).collect(Collectors.toList());
+    }
+
+    public static HashtagResponseDTO.BaseResponseDTO toBaseResponseDTO(SelectHashtag selectHashtag) {
+        return HashtagResponseDTO.BaseResponseDTO.builder()
+                .hashtagId(selectHashtag.getHashtag().getId())
+                .hashtagName(selectHashtag.getHashtag().getName())
+                .build();
+    }
+
+    public static List<HashtagResponseDTO.BaseResponseDTO> toBaseResponseDTOList(List<SelectHashtag> selectHashtagList) {
+        return selectHashtagList.stream()
+                .map(HashtagConverter::toBaseResponseDTO)
+                .collect(Collectors.toList());
     }
 }
