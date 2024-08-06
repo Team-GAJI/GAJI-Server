@@ -8,10 +8,10 @@ import java.util.List;
 
 public class RoomResponseDto {
 
-//    @Builder
-//    @Getter
-//    @NoArgsConstructor
-//    @AllArgsConstructor
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class AssignmentDto{
         Long id;
         Integer weeks;
