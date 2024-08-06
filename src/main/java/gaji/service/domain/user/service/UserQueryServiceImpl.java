@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +21,7 @@ public class UserQueryServiceImpl implements UserQueryService {
         return userRepository.existsById(userId);
     }
 
+    @Override
     public User findUserById(Long userId){
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
