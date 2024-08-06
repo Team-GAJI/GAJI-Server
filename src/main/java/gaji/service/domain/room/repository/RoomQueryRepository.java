@@ -16,20 +16,20 @@ public class RoomQueryRepository {
 
     public RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId) {
         String jpql = """
-            SELECT NEW gaji.service.domain.room.web.dto.RoomResponseDto.RoomMainDto(
-                r.name,
-                r.startDay,
-                r.endDay,
-                r.recruitStartDay,
-                r.recruitEndDay,
-                FUNCTION('DATEDIFF', r.recruitEndDay, CURRENT_DATE),
-                COUNT(DISTINCT sa.id)
-            )
-            FROM Room r
-            LEFT JOIN r.studyApplicantList sa
-            WHERE r.id = :roomId
-            GROUP BY r.id, r.name, r.startDay, r.endDay, r.recruitStartDay, r.recruitEndDay
-        """;
+    SELECT NEW gaji.service.domain.room.web.dto.RoomResponseDto$RoomMainDto(
+        r.name,
+        r.startDay,
+        r.endDay,
+        r.recruitStartDay,
+        r.recruitEndDay,
+        CAST(FUNCTION('DATEDIFF', r.recruitEndDay, CURRENT_DATE) AS long),
+        COUNT(DISTINCT sa.id)
+    )
+    FROM Room r
+    LEFT JOIN r.studyApplicantList sa
+    WHERE r.id = :roomId
+    GROUP BY r.id, r.name, r.startDay, r.endDay, r.recruitStartDay, r.recruitEndDay
+""";
 
         RoomResponseDto.RoomMainDto result = entityManager.createQuery(jpql, RoomResponseDto.RoomMainDto.class)
                 .setParameter("roomId", roomId)
@@ -39,28 +39,28 @@ public class RoomQueryRepository {
     }
 
     public RoomResponseDto.MainRoomNoticeDto getRoomNotices(Long roomId) {
-// 최신 공지사항 조회
+        // 최신 공지사항 조회
         String latestNoticeJpql = """
-        SELECT NEW gaji.service.domain.room.web.dto.RoomResponseDto$MainRoomNoticeDto$NoticePreview(
-            rn.id,
-            rn.title,
-            CASE WHEN LENGTH(rn.body) > 30 THEN SUBSTRING(rn.body, 1, 30) || '...' ELSE rn.body END
-        )
-        FROM RoomNotice rn
-        WHERE rn.room.id = :roomId
-        ORDER BY rn.id DESC
-        """;
+    SELECT NEW gaji.service.domain.room.web.dto.RoomResponseDto$MainRoomNoticeDto$NoticePreview(
+        rn.id,
+        rn.title,
+        rn.title
+    )
+    FROM RoomNotice rn
+    WHERE rn.room.id = :roomId
+    ORDER BY rn.id DESC
+    """;
         List<RoomResponseDto.MainRoomNoticeDto.NoticePreview> latestNotices = entityManager.createQuery(latestNoticeJpql, RoomResponseDto.MainRoomNoticeDto.NoticePreview.class)
                 .setParameter("roomId", roomId)
                 .setMaxResults(1)
                 .getResultList();
 
         Long latestNoticeId = null;
-        String latestNoticeBody = null;
+        String latestNoticeTitle = null;
         if (!latestNotices.isEmpty()) {
             RoomResponseDto.MainRoomNoticeDto.NoticePreview latestNotice = latestNotices.get(0);
             latestNoticeId = latestNotice.getId();
-            latestNoticeBody = latestNotice.getBody();
+            latestNoticeTitle = latestNotice.getTitle();
         }
 
         // 최신 공지사항을 제외한 다음 4개 공지사항 제목과 내용 조회
@@ -82,7 +82,7 @@ public class RoomQueryRepository {
 
         return RoomResponseDto.MainRoomNoticeDto.builder()
                 .latestNoticeId(latestNoticeId)
-                .latestNoticeBody(latestNoticeBody)
+                .latestNoticeTitle(latestNoticeTitle)
                 .noticePreviews(noticePreviews)
                 .build();
     }
