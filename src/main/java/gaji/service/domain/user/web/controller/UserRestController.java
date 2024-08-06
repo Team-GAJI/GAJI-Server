@@ -9,6 +9,7 @@ import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.domain.user.web.dto.UserRequestDTO;
 import gaji.service.domain.user.web.dto.UserResponseDTO;
 import gaji.service.global.base.BaseResponse;
+import gaji.service.jwt.service.TokenProviderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,22 +22,23 @@ import java.util.List;
 public class UserRestController {
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
+    private final TokenProviderService tokenProviderService;
 
     @PutMapping("/")
-    public BaseResponse<UserResponseDTO.CancleResultDTO> cancle(Long userId/*하드 코딩용 추후 수정.*/) {
-        //Long myId = getUserIdFromToken(token);
+    public BaseResponse<UserResponseDTO.CancleResultDTO> cancle(@RequestHeader("Authorization") String authorizationHeader) {
 
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         User user = userCommandService.cancleUser(userId);
         return BaseResponse.onSuccess(UserConverter.toCancleResultDTO(user));
     }
 
 
     @PutMapping("/nicknames")
-    public BaseResponse<UserResponseDTO.UpdateNicknameResultDTO> updateNickname(Long userId/*하드 코딩용 추후 수정.*/,
+    public BaseResponse<UserResponseDTO.UpdateNicknameResultDTO> updateNickname(@RequestHeader("Authorization") String authorizationHeader,
                                                                                 @RequestBody @Valid UserRequestDTO.UpdateNicknameDTO request
                                                                                 ) {
-        //Long myId = getUserIdFromToken(token);
 
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         User user = userCommandService.updateUserNickname(userId, request);
         return BaseResponse.onSuccess(UserConverter.toUpdateNicknameResultDTO(user));
     }
