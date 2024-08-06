@@ -16,8 +16,4 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
         return roomPostQueryRepository.findTop3RecentPostsWithUserInfo(roomId);
     }
 
-    @Override
-    public List<RoomPostResponseDto.PostListDto> getTop3RecentPosts() {
-        return List.of();
-    }
 }

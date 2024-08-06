@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class RoomPostResponseDto {
     @Builder
@@ -29,4 +30,5 @@ public class RoomPostResponseDto {
         private Long userId;
         private String profileImageUrl;
     }
+
 }

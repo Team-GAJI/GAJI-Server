@@ -10,4 +10,6 @@ public interface RoomQueryService {
     Room findRoomById(Long roomId);
 
     RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId);
+
+    RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId);
 }

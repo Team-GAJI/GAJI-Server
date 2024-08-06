@@ -8,10 +8,10 @@ import java.util.List;
 
 public class RoomResponseDto {
 
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
+//    @Builder
+//    @Getter
+//    @NoArgsConstructor
+//    @AllArgsConstructor
     public static class AssignmentDto{
         Long id;
         Integer weeks;
@@ -42,5 +42,24 @@ public class RoomResponseDto {
         private Long daysLeftForRecruit;
         private List<String> hashtags;
         private Long applicantCount;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MainRoomNoticeDto {
+        private Long latestNoticeId;
+        private String latestNoticeBody;
+        private List<NoticePreview> noticePreviews;
+
+        @Getter
+        @AllArgsConstructor
+        @NoArgsConstructor
+        public static class NoticePreview {
+            private Long id;
+            private String title;
+            private String body;
+        }
     }
 }
