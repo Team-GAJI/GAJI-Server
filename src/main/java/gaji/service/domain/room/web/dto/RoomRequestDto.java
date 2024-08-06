@@ -22,6 +22,7 @@ public class RoomRequestDto {
     @Builder
     public static class AssignmentDto {
 
+        //변경
         @Schema(description = "주차")
         @NotNull(message = "주차를 입력해주세요.")
         @Min(value = 1, message = "유효하지 않은 형식의 주차입니다.")
