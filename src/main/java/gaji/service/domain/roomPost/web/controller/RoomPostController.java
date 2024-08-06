@@ -22,7 +22,7 @@ public class RoomPostController {
 
 
     @GetMapping("/api/studyRooms/post/{roomId}")
-    @Operation(summary = "스터디룸 main 화면 스터디 정보 조회 API")
+    @Operation(summary = "스터디룸 main 화면 게시글 조회 API")
     public BaseResponse<List<RoomPostResponseDto.PostListDto>> MainRoomPostController(@PathVariable Long roomId){
         return BaseResponse.onSuccess(roomPostQueryService.getTop3RecentPosts(roomId));
 

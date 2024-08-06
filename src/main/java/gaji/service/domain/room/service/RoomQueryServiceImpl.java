@@ -7,15 +7,12 @@ import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.roomPost.repository.RoomPostRepository;
 import gaji.service.domain.roomPost.service.RoomPostQueryServiceImpl;
-import gaji.service.domain.roomPost.web.dto.RoomPostResponseDto;
 import gaji.service.global.exception.RestApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 @Service
@@ -41,7 +38,11 @@ public class RoomQueryServiceImpl implements RoomQueryService {
 
         RoomResponseDto.RoomMainDto mainStudyRoom = roomQueryRepository.getMainStudyRoom(roomId);
         return mainStudyRoom;
+    }
 
+    @Override
+    public RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId){
+        return roomQueryRepository.getRoomNotices(roomId);
     }
 }
 

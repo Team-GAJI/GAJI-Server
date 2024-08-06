@@ -15,7 +15,7 @@ public class RoomPostQueryRepository {
 
     public List<RoomPostResponseDto.PostListDto> findTop3RecentPostsWithUserInfo(Long roomId) {
         String jpql = """
-            SELECT NEW gaji.service.domain.roomPost.web.dto.RoomPostResponseDto.PostListDto(
+            SELECT NEW gaji.service.domain.roomPost.web.dto.RoomPostResponseDto$PostListDto(
                 rp.id,
                 rp.title,
                 rp.body,
