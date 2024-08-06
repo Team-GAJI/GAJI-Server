@@ -28,29 +28,26 @@ public class RoomResponseDto {
         Long roomId;
     }
 
-
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RoomMainDto {
         private String name;
-        private LocalDate startDate;
-        private LocalDate endDate;
-        private LocalDate recruitStartDate;
-        private LocalDate recruitEndDate;
+        private LocalDate startDay;
+        private LocalDate endDay;
+        private LocalDate recruitStartDay;
+        private LocalDate recruitEndDay;
         private Long daysLeftForRecruit;
-        private List<String> hashtags;
         private Long applicantCount;
     }
-
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MainRoomNoticeDto {
         private Long latestNoticeId;
-        private String latestNoticeBody;
+        private String latestNoticeTitle;
         private List<NoticePreview> noticePreviews;
 
         @Getter

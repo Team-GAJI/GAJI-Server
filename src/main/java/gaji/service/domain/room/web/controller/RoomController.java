@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class RoomController {
 
     private final RoomCommandServiceImpl roomCommandService;
-    private final RoomQueryServiceImpl queryService;
+    private final RoomQueryServiceImpl roomQueryService;
 
     @PostMapping("/assignments/{roomId}/{userId}")
     @Operation(summary = "스터디룸 과제 등록 API",description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 스터디에 참혀하고 있는 user인지 검증합니다.")
@@ -39,8 +39,13 @@ public class RoomController {
     @GetMapping("/home/{roomId}")
     @Operation(summary = "스터디룸 main 화면 스터디 정보 조회 API")
     public BaseResponse<RoomResponseDto.RoomMainDto> GetRoomMainController(@PathVariable Long roomId){
-        return BaseResponse.onSuccess(queryService.getMainStudyRoom(roomId));
+        return BaseResponse.onSuccess(roomQueryService.getMainStudyRoom(roomId));
     }
 
+    @GetMapping("/notice/{roomId}")
+    @Operation(summary = "스터디룸 main 화면 스터디 정보 조회 API")
+    public BaseResponse<RoomResponseDto.MainRoomNoticeDto> GetMainRoomNoticeController(@PathVariable Long roomId){
+        return BaseResponse.onSuccess(roomQueryService.getMainRoomNotice(roomId));
+    }
 
 }
