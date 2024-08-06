@@ -43,7 +43,7 @@ public class RoomController {
     }
 
     @GetMapping("/notice/{roomId}")
-    @Operation(summary = "스터디룸 main 화면 스터디 정보 조회 API")
+    @Operation(summary = "스터디룸 main 화면 공지사항 정보 조회 API")
     public BaseResponse<RoomResponseDto.MainRoomNoticeDto> GetMainRoomNoticeController(@PathVariable Long roomId){
         return BaseResponse.onSuccess(roomQueryService.getMainRoomNotice(roomId));
     }
