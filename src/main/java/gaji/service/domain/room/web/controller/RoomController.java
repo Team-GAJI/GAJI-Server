@@ -64,6 +64,7 @@ public class RoomController {
     }
 
     @GetMapping("/{roomId}/notices")
+    @Operation(summary = "스터디룸 공지 목록 조회 API")
     public ResponseEntity<List<RoomResponseDto.NoticeDto>> getNotices(
             @PathVariable Long roomId,
             @RequestParam(defaultValue = "1") int page,
@@ -73,6 +74,7 @@ public class RoomController {
     }
 
     @GetMapping("/{roomId}/notices/{noticeId}")
+    @Operation(summary = "특정 공지사항을 조회하는 API")
     public ResponseEntity<RoomResponseDto.NoticeDto> getNoticeDetail(
             @PathVariable Long roomId,
             @PathVariable Long noticeId) {
