@@ -19,4 +19,6 @@ public interface RoomCommandService {
     RoomEvent setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto);
 
     RoomEvent setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto);
+
+    void saveRoom(Room room);
 }
