@@ -7,9 +7,10 @@ import gaji.service.domain.post.entity.Post;
 
 import java.util.List;
 
-public interface PostCustomRepository {
+public interface PostQueryDslRepository {
 
     List<Post> findAllFetchJoinWithUser(PostTypeEnum postType, PostStatusEnum postStatus, SortType sortType);
+    Post findByIdFetchJoinWithUserAndPostBookMarkAndPostLikes(Long postId);
 
 }
 
