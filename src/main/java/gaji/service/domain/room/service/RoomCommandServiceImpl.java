@@ -1,15 +1,12 @@
 package gaji.service.domain.room.service;
 
+import gaji.service.domain.room.repository.*;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomNotice;
-import gaji.service.domain.room.repository.AssignmentRepository;
-import gaji.service.domain.room.repository.RoomEventRepository;
-import gaji.service.domain.room.repository.UserAssignmentRepository;
-import gaji.service.domain.room.repository.RoomNoticeRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.StudyMate;
@@ -37,6 +34,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final UserQueryServiceImpl userQueryService;
     private final StudyMateQueryService studyMateQueryService;
     private final RoomNoticeRepository roomNoticeRepository;
+    private final RoomRepository roomRepository;
 
 
     //과제생성1
@@ -48,7 +46,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 //                .orElseThrow(() -> new RestApiException(PostErrorStatus._USER_NOT_FOUND));
 
 
-        RoomEvent roomEvent = roomQueryService.findRoomEventByRoomIdAndWeeks(roomId, requestDto.getWeeks());
+        RoomEvent roomEvent = roomQueryService.findRoomEventByRoomIdAndWeeks(roomId, requestDto.getWeek());
 
         // List<String>을 단일 String으로 변환
         String bodyContent = String.join(", ", requestDto.getBodyList());
@@ -152,6 +150,10 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return roomEventRepository.save(updatedRoomEvent);
     }
 
+    @Override
+    public void saveRoom(Room room) {
+        roomRepository.save(room);
+    }
 
 
 }
