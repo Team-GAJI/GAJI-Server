@@ -1,7 +1,10 @@
 package gaji.service.domain.room.entity;
 
+import gaji.service.domain.studyMate.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -14,8 +17,9 @@ public class RoomNotice {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "room_id")
-    private Room room;
+    @JoinColumn(name = "study_mate_id")
+    private StudyMate studyMate;
+
 
     private String title;
 
@@ -24,11 +28,14 @@ public class RoomNotice {
     private Integer viewCount;
     private Integer confirmCount;
 
+    private LocalDateTime createdAt;
+
 
     //생성
     @PrePersist
     public void prePersist() {
         this.viewCount = 0;
         this.confirmCount = 0;
+        this.createdAt = LocalDateTime.now();
     }
 }
