@@ -1,4 +1,4 @@
-package gaji.service.domain.common.enums;
+package gaji.service.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
