@@ -1,6 +1,5 @@
 package gaji.service.domain.common.service;
 
-import gaji.service.domain.common.converter.HashtagConverter;
 import gaji.service.domain.common.entity.SelectHashtag;
 import gaji.service.domain.common.repository.HashtagRepository;
 import gaji.service.domain.common.repository.SelectHashtagRepository;
