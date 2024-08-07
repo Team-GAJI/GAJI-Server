@@ -1,15 +1,13 @@
 package gaji.service.domain.room.service;
 
+import gaji.service.domain.room.entity.NoticeConfirmation;
+import gaji.service.domain.room.repository.*;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomNotice;
-import gaji.service.domain.room.repository.AssignmentRepository;
-import gaji.service.domain.room.repository.RoomEventRepository;
-import gaji.service.domain.room.repository.UserAssignmentRepository;
-import gaji.service.domain.room.repository.RoomNoticeRepository;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.StudyMate;
@@ -37,6 +35,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final UserQueryServiceImpl userQueryService;
     private final StudyMateQueryService studyMateQueryService;
     private final RoomNoticeRepository roomNoticeRepository;
+    private final NoticeConfirmationRepository noticeConfirmationRepository;
 
 
     //과제생성1
@@ -152,6 +151,24 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return roomEventRepository.save(updatedRoomEvent);
     }
 
+    public void confirmNotice(Long noticeId, Long studyMateId) {
+        if (noticeConfirmationRepository.existsByRoomNoticeIdAndStudyMateId(noticeId, studyMateId)) {
+            throw new IllegalStateException("이미 확인한 공지사항입니다.");
+        }
 
+        RoomNotice roomNotice = roomNoticeRepository.findById(noticeId)
+                .orElseThrow(() -> new RestApiException("공지사항을 찾을 수 없습니다."));
+
+        StudyMate studyMate = studyMateRepository.findById(studyMateId)
+                .orElseThrow(() -> new NotFoundException("스터디 메이트를 찾을 수 없습니다."));
+
+        NoticeConfirmation confirmation = NoticeConfirmation.builder()
+                .roomNotice(roomNotice)
+                .studyMate(studyMate)
+                .build();
+
+        noticeConfirmationRepository.save(confirmation);
+        roomNoticeRepository.incrementConfirmCount(noticeId);
+    }
 
 }
