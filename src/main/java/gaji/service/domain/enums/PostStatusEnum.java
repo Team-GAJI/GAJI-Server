@@ -15,7 +15,7 @@ public enum PostStatusEnum {
     NEED_RESOLUTION("해결필요"),
     RESOLVED("해결완료"),
     DELETED("삭제됨"),
-    POSTING("게시중"),
+    BLOGING("블로그"),
     TEMPORARY("임시저장중");
 
     @JsonValue
