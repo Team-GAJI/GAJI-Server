@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public enum PostTypeEnum {
+    ROOM("스터디"),
     BLOG("블로그"),
     PROJECT("프로젝트"),
     QUESTION("질문");
