@@ -24,6 +24,8 @@ public class RoomNotice {
     private Integer viewCount;
     private Integer confirmCount;
 
+
+    //생성
     @PrePersist
     public void prePersist() {
         this.viewCount = 0;
