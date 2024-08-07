@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum UserErrorStatus implements BaseErrorCodeInterface {
     // 스터디룸 게시판
-    _USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER_4001", "존재하지 않는 회원입니다.");
+    _USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER_4001", "존재하지 않는 회원입니다."),
+    _POST_NOT_CREATED(HttpStatus.BAD_REQUEST, "USER_4002", "게시글이 없습니다."),
+    ;
 
 
 
