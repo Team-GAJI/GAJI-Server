@@ -1,9 +1,8 @@
 package gaji.service.domain.user.service;
 
-import gaji.service.domain.post.code.PostErrorStatus;
+import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.post.repository.PostRepository;
-import gaji.service.domain.post.service.PostCommandService;
 import gaji.service.domain.user.code.UserErrorStatus;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
@@ -33,10 +32,10 @@ public class UserQueryServiceImpl implements UserQueryService {
     }
 
     @Override
-    public Post getUserPost(Long userId){
+    public Post getUserPost(Long userId, PostTypeEnum type){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
-        Post post = postRepository.findFirstByUserOrderByCreatedAtDesc(user)
+        Post post = postRepository.findFirstByUserAndTypeOrderByCreatedAtDesc(user,type)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._POST_NOT_CREATED));
 
         return post;
