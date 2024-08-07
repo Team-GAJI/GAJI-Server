@@ -12,11 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 public enum PostStatusEnum {
     RECRUITING("모집중"),
     RECRUITMENT_COMPLETED("모집완료"),
-    NEED_RESOLUTION("해결필요"),
+    NEED_RESOLUTION("미완료질문"),
     RESOLVED("해결완료"),
     DELETED("삭제됨"),
     BLOGING("블로그"),
-    TEMPORARY("임시저장중");
+    TEMPORARY("임시저장");
 
     @JsonValue
     private final String value;

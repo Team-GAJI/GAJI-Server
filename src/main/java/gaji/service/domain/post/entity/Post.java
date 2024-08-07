@@ -41,7 +41,7 @@ public class Post extends BaseEntity {
     private String title;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body; // TODO: 게시글 text 제한 20000자
-    private int viewCnt; // TODO: Integer vs int 고민해보기
+    private int hit; // TODO: Integer vs int 고민해보기
     private int likeCnt;
     private int bookmarkCnt;
     private int commentCnt;
@@ -55,7 +55,6 @@ public class Post extends BaseEntity {
     private PostTypeEnum type;
 
     @Enumerated(EnumType.STRING)
-
     @Column(nullable = false)
     private PostStatusEnum status;
 
@@ -72,7 +71,7 @@ public class Post extends BaseEntity {
     // 엔티티 생성 시 초기값 설정
     @PrePersist
     public void prePersist() {
-        this.viewCnt = 0;
+        this.hit = 0;
         this.likeCnt = 0;
         this.bookmarkCnt = 0;
         this.commentCnt = 0;
@@ -99,8 +98,8 @@ public class Post extends BaseEntity {
         this.likeCnt--;
     }
 
-    public void increaseViewCnt() {
-        this.viewCnt++;
+    public void increaseHitCnt() {
+        this.hit++;
     }
 
     public void increasePopularityScoreByLike() {
@@ -111,7 +110,7 @@ public class Post extends BaseEntity {
         this.popularityScore -= 2;
     }
 
-    public void increasePopularityScoreByView() {
+    public void increasePopularityScoreByHit() {
         this.popularityScore++;
     }
 
