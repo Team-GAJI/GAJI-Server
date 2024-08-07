@@ -1,6 +1,9 @@
 package gaji.service.domain.room.web.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -36,13 +39,13 @@ public class RoomResponseDto {
         private String authorName;
         private String title;
         private String body;
-        private Integer confirmCount;
+        private Long confirmCount;
         private LocalDateTime createdAt;
         private Integer viewCount;
         private String timeSincePosted;
 
         // 이 생성자를 추가합니다
-        public NoticeDto(Long id, String authorName, String title, String body, Integer confirmCount, LocalDateTime createdAt, Integer viewCount) {
+        public NoticeDto(Long id, String authorName, String title, String body, Long confirmCount, LocalDateTime createdAt, Integer viewCount) {
             this.id = id;
             this.authorName = authorName;
             this.title = title;

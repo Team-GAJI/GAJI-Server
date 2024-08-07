@@ -1,14 +1,10 @@
 package gaji.service.domain.room.entity;
 
 import gaji.service.domain.user.entity.User;
-import gaji.service.domain.myRepeat.MyRepeat;
-import gaji.service.domain.myRepeat.RepeatException;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

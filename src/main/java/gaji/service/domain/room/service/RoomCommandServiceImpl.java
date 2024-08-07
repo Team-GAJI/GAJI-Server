@@ -1,22 +1,21 @@
 package gaji.service.domain.room.service;
 
-import gaji.service.domain.room.entity.NoticeConfirmation;
-import gaji.service.domain.room.repository.*;
-import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
-import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
-import gaji.service.domain.room.entity.RoomEvent;
+import gaji.service.domain.room.entity.NoticeConfirmation;
 import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.RoomNotice;
+import gaji.service.domain.room.repository.*;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.UserAssignment;
+import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryServiceImpl;
-
 import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +38,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final StudyMateQueryService studyMateQueryService;
     private final RoomNoticeRepository roomNoticeRepository;
     private final NoticeConfirmationRepository noticeConfirmationRepository;
+    private final RoomQueryRepository roomQueryRepository;
 
 
     //과제생성1
@@ -167,17 +167,19 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
         if (existingConfirmation != null) {
             noticeConfirmationRepository.delete(existingConfirmation);
-            roomNoticeRepository.decrementConfirmCount(noticeId);
-            return false; // Confirmation removed
         } else {
             NoticeConfirmation confirmation = NoticeConfirmation.builder()
                     .roomNotice(roomNotice)
                     .studyMate(studyMate)
                     .build();
             noticeConfirmationRepository.save(confirmation);
-            roomNoticeRepository.incrementConfirmCount(noticeId);
-            return true; // Confirmation added
         }
+
+        // 확인 수 업데이트
+        roomQueryRepository.updateConfirmCount(noticeId);
+
+        return existingConfirmation == null; // true if confirmation was added, false if removed
+
     }
 
 }
