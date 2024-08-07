@@ -18,17 +18,31 @@ import static gaji.service.domain.user.entity.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
-public class PostCustomRepositoryImpl implements PostCustomRepository {
+public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public List<Post> findAllFetchJoinWithUser(PostTypeEnum postType, PostStatusEnum postStatus, SortType sortType) {
         return jpaQueryFactory.
                 selectFrom(post)
-                .join(post.user, user).fetchJoin()
-                .where(postTypeEq(postType), postStatusEq(postStatus))
-                .orderBy(orderByCondition(sortType))
+                .leftJoin(post.user, user)
+                .fetchJoin()
+                .where(
+                        postTypeEq(postType),
+                        postStatusEq(postStatus)
+                )
+                .orderBy(orderBySortType(sortType))
                 .fetch();
+    }
+
+    @Override
+    public Post findByIdFetchJoinWithUserAndPostBookMarkAndPostLikes(Long postId) {
+        return jpaQueryFactory.selectFrom(post)
+                .leftJoin(post.user, user)
+                .where(
+                        post.id.eq(postId)
+                )
+                .fetchOne();
     }
 
     private BooleanExpression postTypeEq(PostTypeEnum postTypeCond) {
@@ -39,7 +53,12 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         return (postStatusCond != null) ? post.status.eq(postStatusCond) : null;
     }
 
-    private OrderSpecifier[] orderByCondition(SortType sortTypeCond) {
+    private BooleanExpression ltPopularityScore(int popularityScore) {
+//        return (popularityScore != null) ? post.popularityScore.lt(popularityScore) : null;
+        return null;
+    }
+
+    private OrderSpecifier[] orderBySortType(SortType sortTypeCond) {
         return (sortTypeCond == SortType.RECENT) ?
                 new OrderSpecifier[] { // RECENT일 경우에는 1순위 최신순, 2순위 인기순
                         post.createdAt.desc(),
