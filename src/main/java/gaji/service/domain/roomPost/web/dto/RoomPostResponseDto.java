@@ -25,7 +25,7 @@ public class RoomPostResponseDto {
         private Long postId;
         private String title;
         private String content;
-        private int viewCount;
+        private Integer viewCount;
         private LocalDateTime postTime;
         private Long userId;
         private String profileImageUrl;

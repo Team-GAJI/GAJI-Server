@@ -38,8 +38,8 @@ public class RoomResponseDto {
         private LocalDate endDay;
         private LocalDate recruitStartDay;
         private LocalDate recruitEndDay;
-        private Long daysLeftForRecruit;
-        private Long applicantCount;
+        private Integer daysLeftForRecruit;
+        private Integer applicantCount;
     }
     @Builder
     @Getter
