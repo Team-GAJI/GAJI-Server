@@ -14,4 +14,5 @@ public interface PostQueryService {
                            String category,
                            SortType sortType,
                            PostStatusEnum filter);
+    Post getPostDetail(Long postId);
 }
