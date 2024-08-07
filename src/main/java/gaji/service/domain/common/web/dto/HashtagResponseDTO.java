@@ -11,8 +11,8 @@ public class HashtagResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class BaseResponseDTO {
-        private Long hashtagId;
+    public static class HashtagNameAndIdDTO {
+        private Long selectHashtagId;
         private String hashtagName;
     }
 }
