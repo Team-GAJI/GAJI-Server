@@ -1,11 +1,11 @@
 package gaji.service.domain.room.entity;
 
+import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.curriculum.Curriculum;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
-import gaji.service.domain.recruit.entity.SelectCategory;
 import gaji.service.domain.roomPost.entity.RoomBoard;
 import gaji.service.domain.studyMate.Assignment;
 import gaji.service.domain.studyMate.Chat;
@@ -38,8 +38,9 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RoomEvent> roomEventList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    private List<Assignment> assignmentList = new ArrayList<>();
+//    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+//    private List<Assignment> assignmentList = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="curriculum_id" )
     private Curriculum curriculum;
@@ -72,9 +73,6 @@ public class Room {
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RecruitPostLikes> recruitPostLikesList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    private List<SelectCategory> selectCategoryList = new ArrayList<>();
 
     @Column(length = 20)
     private String name;
@@ -116,11 +114,6 @@ public class Room {
     // 조회수 추가
     public void addView() {
         this.views++;
-    }
-
-    // 모집 게시글 카테고리 추가
-    public void addCategory(SelectCategory selectCategory) {
-        selectCategoryList.add(selectCategory);
     }
 
     // 스터디 자료 추가

@@ -2,7 +2,7 @@ package gaji.service.domain.recruit.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gaji.service.domain.enums.RoomCategoryEnum;
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.recruit.annotation.ExistCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
@@ -73,6 +73,6 @@ public class RecruitRequestDTO {
 
         @Schema(description = "카테고리 목록")
         @ExistCategory
-        private List<RoomCategoryEnum> categoryList;
+        private List<CategoryEnum> categoryList;
     }
 }

@@ -1,7 +1,10 @@
 package gaji.service.domain.recruit.service;
 
+import gaji.service.domain.common.entity.SelectCategory;
+import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.recruit.repository.SelectCategoryRepository;
 import gaji.service.domain.user.entity.User;
-import gaji.service.domain.enums.RoomCategoryEnum;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.entity.StudyComment;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
@@ -24,6 +27,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     private final RoomQueryService roomQueryService;
     private final RoomRepository roomRepository;
     private final StudyCommentQueryService studyCommentQueryService;
+    private final SelectCategoryRepository selectCategoryRepository;
 
     @Override
     @Transactional
@@ -47,7 +51,11 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
         room.addView();
         roomRepository.save(room);
 
-        List<RoomCategoryEnum> categoryList = RecruitConverter.toCategoryList(room.getSelectCategoryList());
+        List<SelectCategory> selectCategoryList =
+                selectCategoryRepository.findAllByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
+
+
+        List<CategoryEnum> categoryList = RecruitConverter.toCategoryList(selectCategoryList);
 
         return RecruitConverter.toStudyDetailDTO(user, room, categoryList, commentCount, CommentResponseDTO);
     }

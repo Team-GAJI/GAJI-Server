@@ -1,7 +1,7 @@
-package gaji.service.domain.recruit.entity;
+package gaji.service.domain.common.entity;
 
-import gaji.service.domain.enums.RoomCategoryEnum;
-import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.enums.PostTypeEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,17 +16,19 @@ public class SelectCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "category")
-    private RoomCategoryEnum category;
+    private CategoryEnum category;
+
+    private Long entityId;
+
+    @Enumerated(EnumType.STRING)
+    private PostTypeEnum type;
 
     @Builder
-    public SelectCategory(Room room, RoomCategoryEnum category) {
-        this.room = room;
+    public SelectCategory(CategoryEnum category, Long entityId, PostTypeEnum type) {
         this.category = category;
+        this.entityId = entityId;
+        this.type = type;
     }
 }

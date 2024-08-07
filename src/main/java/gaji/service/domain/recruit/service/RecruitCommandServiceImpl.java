@@ -1,8 +1,9 @@
 package gaji.service.domain.recruit.service;
 
-import gaji.service.domain.enums.RoomCategoryEnum;
+import gaji.service.domain.common.entity.SelectCategory;
+import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.recruit.converter.RecruitConverter;
-import gaji.service.domain.recruit.entity.SelectCategory;
 import gaji.service.domain.recruit.repository.SelectCategoryRepository;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
@@ -60,15 +61,6 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         StudyMate studyMate = RecruitConverter.toStudyMate(user, room);
         studyMateRepository.save(studyMate);
 
-        for (RoomCategoryEnum category : request.getCategoryList()) {
-            selectCategory = SelectCategory.builder()
-                    .category(category)
-                    .room(room)
-                    .build();
-            room.addCategory(selectCategory);
-            selectCategoryRepository.save(selectCategory);
-        }
-
         if (request.getMaterialList() != null && !request.getMaterialList().isEmpty()){
             Material material;
             for (String MaterialUrl : request.getMaterialList()) {
@@ -79,6 +71,15 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         }
 
         roomRepository.save(room);
+
+        for (CategoryEnum category : request.getCategoryList()) {
+            selectCategory = SelectCategory.builder()
+                    .category(category)
+                    .entityId(room.getId())
+                    .type(PostTypeEnum.ROOM)
+                    .build();
+            selectCategoryRepository.save(selectCategory);
+        }
 
         return RecruitConverter.toResponseDTO(room);
     }
