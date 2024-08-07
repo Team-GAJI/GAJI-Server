@@ -34,7 +34,7 @@ public class QSelectHashtag extends EntityPathBase<SelectHashtag> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> LastModifiedDate = _super.LastModifiedDate;
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final EnumPath<gaji.service.domain.enums.PostTypeEnum> type = createEnum("type", gaji.service.domain.enums.PostTypeEnum.class);
 

@@ -34,7 +34,7 @@ public class QComment extends EntityPathBase<Comment> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> LastModifiedDate = _super.LastModifiedDate;
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final NumberPath<Integer> orderNum = createNumber("orderNum", Integer.class);
 
