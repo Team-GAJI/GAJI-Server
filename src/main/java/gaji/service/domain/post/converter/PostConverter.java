@@ -19,6 +19,7 @@ import gaji.service.global.converter.DateConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class PostConverter {
     // 초기 PostStatus 지정
     public static PostStatusEnum getInitialPostStatus(PostTypeEnum type) {
         return (type == PostTypeEnum.QUESTION) ? PostStatusEnum.NEED_RESOLUTION :
-                (type == PostTypeEnum.PROJECT) ? PostStatusEnum.RECRUITING : PostStatusEnum.POSTING;
+                (type == PostTypeEnum.PROJECT) ? PostStatusEnum.RECRUITING : PostStatusEnum.BLOGING;
     }
 
 
@@ -102,6 +103,11 @@ public class PostConverter {
         boolean isLiked = postLikesService.existsByUserAndPost(userId, post);
 
         return PostResponseDTO.PostDetailDTO.builder()
+                .userId(post.getUser().getId())
+                .type(post.getType())
+                .createdAt(LocalDate.from(post.getCreatedAt()))
+                .viewCnt(post.getViewCnt())
+                .commentCnt(post.getCommentCnt())
                 .username(post.getUser().getName())
                 .title(post.getTitle())
                 .hashtagList(hashtagNameAndIdDTOList)
