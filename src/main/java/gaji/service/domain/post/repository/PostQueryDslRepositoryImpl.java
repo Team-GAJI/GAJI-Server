@@ -36,13 +36,17 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
     }
 
     @Override
-    public Post findByIdFetchJoinWithUserAndPostBookMarkAndPostLikes(Long postId) {
+    public Post findByIdFetchJoinWithUser(Long postId) {
         return jpaQueryFactory.selectFrom(post)
                 .leftJoin(post.user, user)
                 .where(
-                        post.id.eq(postId)
+                        postIdEq(postId)
                 )
                 .fetchOne();
+    }
+
+    private BooleanExpression postIdEq(Long postId) {
+        return post.id.eq(postId);
     }
 
     private BooleanExpression postTypeEq(PostTypeEnum postTypeCond) {
