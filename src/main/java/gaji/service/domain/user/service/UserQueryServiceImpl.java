@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserQueryServiceImpl implements UserQueryService {
 
     private final UserRepository userRepository;
-    private final PostRepository postRepository; // Service 의존 ? Repo의존?
+    private final PostRepository postRepository; // Service 의존 ? Repo의존? Read작업이라 일단 Repo 사용
 
     @Override
     public boolean existUserById(Long userId) {
