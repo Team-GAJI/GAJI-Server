@@ -18,7 +18,7 @@ public class RoomBoard {
     private Long id;
 
     @OneToMany(mappedBy = "roomBoard", cascade = CascadeType.ALL)
-    private List<RoomPost> roomPostList = new ArrayList<>();
+    private final List<RoomPost> roomPostList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")

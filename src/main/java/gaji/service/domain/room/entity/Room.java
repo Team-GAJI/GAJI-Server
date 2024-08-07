@@ -1,5 +1,6 @@
 package gaji.service.domain.room.entity;
 
+import gaji.service.domain.curriculum.Curriculum;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
@@ -35,10 +36,17 @@ public class Room {
     
     // 스터디룸 관련 매핑
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    private List<Event> eventList = new ArrayList<>();
+    private List<RoomEvent> roomEventList = new ArrayList<>();
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Assignment> assignmentList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="curriculum_id" )
+    private Curriculum curriculum;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "way_id")
+    private Way way;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<VoiceChat> voiceChatList = new ArrayList<>();
