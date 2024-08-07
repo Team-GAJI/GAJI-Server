@@ -1,9 +1,9 @@
 package gaji.service.domain.recruit.converter;
 
+import gaji.service.domain.common.entity.SelectCategory;
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
-import gaji.service.domain.enums.RoomCategoryEnum;
-import gaji.service.domain.recruit.entity.SelectCategory;
 import gaji.service.domain.recruit.entity.StudyComment;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
@@ -40,10 +40,10 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static List<RoomCategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
-        List<RoomCategoryEnum> categoryList = new ArrayList<>();
+    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
+        List<CategoryEnum> categoryList = new ArrayList<>();
         for (SelectCategory selectCategory : selectCategoryList) {
-            RoomCategoryEnum category = selectCategory.getCategory();
+            CategoryEnum category = selectCategory.getCategory();
             categoryList.add(category);
         }
 
@@ -65,7 +65,7 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<RoomCategoryEnum> categoryList, int commentCount, List<RecruitResponseDTO.CommentResponseDTO> commentList) {
+    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<CategoryEnum> categoryList, int commentCount, List<RecruitResponseDTO.CommentResponseDTO> commentList) {
         return RecruitResponseDTO.studyDetailDTO.builder()
                 .userNickName(user.getNickname())
                 .userActive(user.getStatus())

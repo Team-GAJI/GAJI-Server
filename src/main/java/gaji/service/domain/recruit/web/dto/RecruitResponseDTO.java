@@ -1,9 +1,8 @@
 package gaji.service.domain.recruit.web.dto;
 
-import gaji.service.domain.enums.RoomCategoryEnum;
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.enums.UserActive;
-import gaji.service.domain.room.entity.Material;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -33,7 +32,7 @@ public class RecruitResponseDTO {
         String name;
         String imageUrl;
         RecruitPostTypeEnum recruitPostTypeEnum;
-        List<RoomCategoryEnum> postCategoryList;
+        List<CategoryEnum> postCategoryList;
         int views;
         int likes;
         int bookmarks;
