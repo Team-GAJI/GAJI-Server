@@ -3,7 +3,7 @@ package gaji.service.domain.post.repository;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import gaji.service.domain.common.enums.SortType;
+import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.entity.Post;
