@@ -62,15 +62,15 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
         return null;
     }
 
-    private OrderSpecifier[] orderBySortType(SortType sortTypeCond) {
-        return (sortTypeCond == SortType.RECENT) ?
-                new OrderSpecifier[] { // RECENT일 경우에는 1순위 최신순, 2순위 인기순
-                        post.createdAt.desc(),
-                        post.popularityScore.desc()
-                }
-                : new OrderSpecifier[] { // null(기본) or HOT일 경우에는 1순위 인기순, 2순위 최신순
-                        post.popularityScore.desc(),
-                        post.createdAt.desc()
-                };
+    private OrderSpecifier orderBySortType(SortType sortTypeCond) {
+        return (sortTypeCond == SortType.HOT) ?
+                post.popularityScore.desc() // HOT: 인기점수(popularityScore)순
+                :
+                (sortTypeCond == SortType.LIKE) ?
+                post.createdAt.desc() // LIKE: 좋아요순
+                :
+                (sortTypeCond == SortType.HIT) ?
+                post.hit.desc() // HIT: 조회수순
+                : post.createdAt.desc(); // null or RECENT: 최신순
     }
 }
