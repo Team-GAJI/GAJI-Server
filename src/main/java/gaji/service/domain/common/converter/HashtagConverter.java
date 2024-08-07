@@ -38,16 +38,22 @@ public class HashtagConverter {
                 ).collect(Collectors.toList());
     }
 
-    public static HashtagResponseDTO.BaseResponseDTO toBaseResponseDTO(SelectHashtag selectHashtag) {
-        return HashtagResponseDTO.BaseResponseDTO.builder()
-                .hashtagId(selectHashtag.getHashtag().getId())
+    public static HashtagResponseDTO.HashtagNameAndIdDTO toHastagNameAndIdDTO(SelectHashtag selectHashtag) {
+        return HashtagResponseDTO.HashtagNameAndIdDTO.builder()
+                .selectHashtagId(selectHashtag.getId())
                 .hashtagName(selectHashtag.getHashtag().getName())
                 .build();
     }
 
-    public static List<HashtagResponseDTO.BaseResponseDTO> toBaseResponseDTOList(List<SelectHashtag> selectHashtagList) {
+    public static List<String> toHashtagNameList(List<SelectHashtag> selectHashtagList) {
         return selectHashtagList.stream()
-                .map(HashtagConverter::toBaseResponseDTO)
+                .map(selectHashtag -> selectHashtag.getHashtag().getName())
+                .collect(Collectors.toList());
+    }
+
+    public static List<HashtagResponseDTO.HashtagNameAndIdDTO> toHashtagNameAndIdDTOList(List<SelectHashtag> selectHashtagList) {
+        return selectHashtagList.stream()
+                .map(HashtagConverter::toHastagNameAndIdDTO)
                 .collect(Collectors.toList());
     }
 }
