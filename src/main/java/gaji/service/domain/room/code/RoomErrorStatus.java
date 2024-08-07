@@ -22,7 +22,9 @@ public enum RoomErrorStatus implements BaseErrorCodeInterface {
 
     _USER_NOT_READER_IN_ROOM(HttpStatus.BAD_REQUEST, "ROOM_4005","사용자가 해당 스터디룸의 방장이 아닙니다."),
 
-    _ROOM_EVENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "ROOM_4005","스터디룸의 일정을 찾을 수 없습니다.");
+    _ROOM_EVENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "ROOM_4005","스터디룸의 일정을 찾을 수 없습니다."),
+
+    _NOTICE_NOT_FOUND(HttpStatus.BAD_REQUEST, "ROOM_4005"," 공지사항ㅇ ㄹ 찾을 수 없습니다.");
 
 
 

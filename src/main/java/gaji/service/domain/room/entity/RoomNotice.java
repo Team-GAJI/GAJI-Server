@@ -46,4 +46,10 @@ public class RoomNotice {
     public void incrementConfirmCount() {
         this.confirmCount++;
     }
+
+    public void decrementConfirmCount() {
+        if (this.confirmCount > 0) {
+            this.confirmCount--;
+        }
+    }
 }
