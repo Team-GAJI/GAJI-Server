@@ -10,7 +10,8 @@ import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.MaterialRepository;
-import gaji.service.domain.room.repository.RoomRepository;
+import gaji.service.domain.room.service.MaterialCommandService;
+import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.studyMate.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.entity.User;
@@ -26,11 +27,11 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class RecruitCommandServiceImpl implements RecruitCommandService {
 
-    private final RoomRepository roomRepository;
+    private final RoomCommandService roomCommandService;
     private final UserQueryService userQueryService;
     private final SelectCategoryRepository selectCategoryRepository;
-    private final MaterialRepository materialRepository;
     private final StudyMateRepository studyMateRepository;
+    private final MaterialCommandService materialCommandService;
 
     private static final String DEFAULT_THUMBNAIL_URL = "https://gaji-bucket.s3.ap-northeast-2.amazonaws.com/study/gaji.png";
 
@@ -66,11 +67,11 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
             for (String MaterialUrl : request.getMaterialList()) {
                 material = RecruitConverter.toMaterial(MaterialUrl, room);
                 room.addMaterial(material);
-                materialRepository.save(material);
+                materialCommandService.saveMaterial(material);
             }
         }
 
-        roomRepository.save(room);
+        roomCommandService.saveRoom(room);
 
         for (CategoryEnum category : request.getCategoryList()) {
             selectCategory = SelectCategory.builder()
