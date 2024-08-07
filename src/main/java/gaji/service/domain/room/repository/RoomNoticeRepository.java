@@ -11,4 +11,8 @@ public interface RoomNoticeRepository extends JpaRepository<RoomNotice, Long> {
     @Modifying
     @Query("UPDATE RoomNotice rn SET rn.confirmCount = rn.confirmCount + 1 WHERE rn.id = :noticeId")
     void incrementConfirmCount(Long noticeId);
+
+    @Modifying
+    @Query("UPDATE RoomNotice rn SET rn.confirmCount = rn.confirmCount - 1 WHERE rn.id = :noticeId AND rn.confirmCount > 0")
+    void decrementConfirmCount(Long noticeId);
 }

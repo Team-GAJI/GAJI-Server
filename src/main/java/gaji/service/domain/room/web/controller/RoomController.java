@@ -3,7 +3,7 @@ package gaji.service.domain.room.web.controller;
 import gaji.service.domain.room.converter.RoomConverter;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.RoomNotice;
-import gaji.service.domain.room.service.RoomCommandServiceImpl;
+import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/api/studyRooms")
 public class RoomController {
 
-    private final RoomCommandServiceImpl roomCommandService;
+    private final RoomCommandService roomCommandService;
     private final RoomQueryService roomQueryService;
     @PostMapping("/assignments/{roomId}/{userId}")
     @Operation(summary = "스터디룸 과제 등록 API",description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 스터디에 참혀하고 있는 user인지 검증합니다.")
@@ -83,4 +83,10 @@ public class RoomController {
     }
 
 
+    @PostMapping("/{noticeId}/confirm/{userId}")
+    @Operation(summary = "스터디룸 공지 확인 버튼 누르기 API", description = "공지사항 확인 상태를 토글합니다.")
+    public ResponseEntity<Boolean> toggleNoticeConfirmation(@PathVariable Long noticeId, @PathVariable Long userId) {
+        boolean isConfirmed = roomCommandService.toggleNoticeConfirmation(noticeId,userId);
+        return ResponseEntity.ok(isConfirmed);
+    }
 }
