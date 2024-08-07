@@ -33,6 +33,20 @@ public class PostResponseDTO {
         private String username;
         private String uploadTime;
         private int viewCnt;
-        private List<HashtagResponseDTO.BaseResponseDTO> hashtagList = new ArrayList<>();
+        private int popularityScore;
+        private List<String> hashtagList = new ArrayList<>();
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostDetailDTO {
+        private String username;
+        private String title;
+        private boolean isBookMarked;
+        private boolean isLiked;
+        private String body;
+        private List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagList = new ArrayList<>();
     }
 }
