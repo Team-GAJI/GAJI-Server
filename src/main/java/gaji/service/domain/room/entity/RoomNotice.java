@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,6 +21,9 @@ public class RoomNotice {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "study_mate_id")
     private StudyMate studyMate;
+
+    @OneToMany(mappedBy = "roomNotice", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NoticeConfirmation> confirmations = new ArrayList<>();
 
 
     private String title;
@@ -37,5 +42,8 @@ public class RoomNotice {
         this.viewCount = 0;
         this.confirmCount = 0;
         this.createdAt = LocalDateTime.now();
+    }
+    public void incrementConfirmCount() {
+        this.confirmCount++;
     }
 }
