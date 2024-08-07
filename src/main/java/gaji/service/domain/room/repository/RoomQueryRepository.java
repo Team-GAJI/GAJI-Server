@@ -22,21 +22,20 @@ public class RoomQueryRepository {
         r.endDay,
         r.recruitStartDay,
         r.recruitEndDay,
-        CAST(FUNCTION('DATEDIFF', r.recruitEndDay, CURRENT_DATE) AS long),
-        COUNT(DISTINCT sa.id)
+        CAST(FUNCTION('DATEDIFF', r.recruitEndDay, CURRENT_DATE) AS int),
+        CAST(COUNT(DISTINCT sa.id) AS int)
     )
     FROM Room r
     LEFT JOIN r.studyApplicantList sa
     WHERE r.id = :roomId
     GROUP BY r.id, r.name, r.startDay, r.endDay, r.recruitStartDay, r.recruitEndDay
 """;
-
         RoomResponseDto.RoomMainDto result = entityManager.createQuery(jpql, RoomResponseDto.RoomMainDto.class)
                 .setParameter("roomId", roomId)
                 .getSingleResult();
-
         return result;
     }
+
 
     public RoomResponseDto.MainRoomNoticeDto getRoomNotices(Long roomId) {
         // 최신 공지사항 조회
