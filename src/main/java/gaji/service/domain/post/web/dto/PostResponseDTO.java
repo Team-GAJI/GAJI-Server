@@ -1,11 +1,13 @@
 package gaji.service.domain.post.web.dto;
 
 import gaji.service.domain.common.web.dto.HashtagResponseDTO;
+import gaji.service.domain.enums.PostTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,11 @@ public class PostResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PostDetailDTO {
+        private Long userId;
+        private PostTypeEnum type;
+        private LocalDate createdAt;
+        private int viewCnt;
+        private int commentCnt;
         private String username;
         private String title;
         private boolean isBookMarked;
