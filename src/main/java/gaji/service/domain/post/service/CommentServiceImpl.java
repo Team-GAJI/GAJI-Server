@@ -10,17 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
     @Override
+    @Transactional
     public Comment saveNewComment(Comment newComment) {
         return commentRepository.save(newComment);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Comment findByCommentId(Long commentId) {
         return commentRepository.findById(commentId)
