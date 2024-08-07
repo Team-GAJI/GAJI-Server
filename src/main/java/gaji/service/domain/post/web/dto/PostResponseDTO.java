@@ -32,6 +32,7 @@ public class PostResponseDTO {
         private String thumbnailUrl;
         private String title;
         private String body;
+        private Long userId;
         private String username;
         private String uploadTime;
         private int viewCnt;
