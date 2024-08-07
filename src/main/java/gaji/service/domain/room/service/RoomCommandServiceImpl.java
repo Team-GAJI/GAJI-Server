@@ -2,6 +2,7 @@ package gaji.service.domain.room.service;
 
 import gaji.service.domain.room.entity.NoticeConfirmation;
 import gaji.service.domain.room.repository.*;
+import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
@@ -17,6 +18,7 @@ import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.service.UserQueryServiceImpl;
 
 import gaji.service.global.exception.RestApiException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RoomCommandServiceImpl implements RoomCommandService {
 
     private final AssignmentRepository assignmentRepository;
@@ -151,24 +154,30 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return roomEventRepository.save(updatedRoomEvent);
     }
 
-    public void confirmNotice(Long noticeId, Long studyMateId) {
-        if (noticeConfirmationRepository.existsByRoomNoticeIdAndStudyMateId(noticeId, studyMateId)) {
-            throw new IllegalStateException("이미 확인한 공지사항입니다.");
-        }
-
+    @Override
+    public boolean toggleNoticeConfirmation(Long noticeId, Long userId) {
         RoomNotice roomNotice = roomNoticeRepository.findById(noticeId)
-                .orElseThrow(() -> new RestApiException("공지사항을 찾을 수 없습니다."));
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._NOTICE_NOT_FOUND));
 
-        StudyMate studyMate = studyMateRepository.findById(studyMateId)
-                .orElseThrow(() -> new NotFoundException("스터디 메이트를 찾을 수 없습니다."));
+        StudyMate studyMate = studyMateRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(StudyMateErrorStatus._USER_NOT_IN_STUDYROOM));
 
-        NoticeConfirmation confirmation = NoticeConfirmation.builder()
-                .roomNotice(roomNotice)
-                .studyMate(studyMate)
-                .build();
+        NoticeConfirmation existingConfirmation = noticeConfirmationRepository
+                .findByRoomNoticeIdAndStudyMateId(noticeId, roomNotice.getStudyMate().getId());
 
-        noticeConfirmationRepository.save(confirmation);
-        roomNoticeRepository.incrementConfirmCount(noticeId);
+        if (existingConfirmation != null) {
+            noticeConfirmationRepository.delete(existingConfirmation);
+            roomNoticeRepository.decrementConfirmCount(noticeId);
+            return false; // Confirmation removed
+        } else {
+            NoticeConfirmation confirmation = NoticeConfirmation.builder()
+                    .roomNotice(roomNotice)
+                    .studyMate(studyMate)
+                    .build();
+            noticeConfirmationRepository.save(confirmation);
+            roomNoticeRepository.incrementConfirmCount(noticeId);
+            return true; // Confirmation added
+        }
     }
 
 }
