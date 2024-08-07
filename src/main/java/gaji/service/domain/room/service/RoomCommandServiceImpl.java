@@ -1,5 +1,7 @@
 package gaji.service.domain.room.service;
 
+import gaji.service.domain.room.repository.*;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.NoticeConfirmation;
@@ -39,6 +41,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final RoomNoticeRepository roomNoticeRepository;
     private final NoticeConfirmationRepository noticeConfirmationRepository;
     private final RoomQueryRepository roomQueryRepository;
+    private final RoomRepository roomRepository;
 
 
     //과제생성1
@@ -162,6 +165,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         StudyMate studyMate = studyMateRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(StudyMateErrorStatus._USER_NOT_IN_STUDYROOM));
 
+
         NoticeConfirmation existingConfirmation = noticeConfirmationRepository
                 .findByRoomNoticeIdAndStudyMateId(noticeId, roomNotice.getStudyMate().getId());
 
@@ -180,6 +184,11 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
         return existingConfirmation == null; // true if confirmation was added, false if removed
 
+    }
+
+    @Override
+    public void saveRoom(Room room) {
+        roomRepository.save(room);
     }
 
 }

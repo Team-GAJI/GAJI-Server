@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Slf4j
 public enum PostTypeEnum {
+    ROOM("스터디"),
     BLOG("블로그"),
     PROJECT_RECRUITMENT("프로젝트 모집"),
     QUESTION("질문");
