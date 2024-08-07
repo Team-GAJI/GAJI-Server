@@ -9,6 +9,7 @@ import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
+import gaji.service.domain.post.service.CommentService;
 import gaji.service.domain.post.service.PostCommandService;
 import gaji.service.domain.post.service.PostQueryService;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
@@ -32,6 +33,7 @@ public class PostRestController {
 
     private final PostCommandService postCommandService;
     private final PostQueryService postQueryService;
+    private final CommentService commentService;
     private final HashtagQueryService hashtagQueryService;
     private final TokenProviderService tokenProviderService;
     private final PostConverter postConverter;
@@ -141,6 +143,13 @@ public class PostRestController {
     }
 
     @GetMapping("/preivew")
+    @Operation(summary = "커뮤니티 게시글 미리보기 목록 조회 API", description = "아직은 무한스크롤로 구현되어있지 않고, 모든 목록을 조회합니다.")
+    @Parameters({
+            @Parameter(name = "postType", description = "게시글의 유형(블로그, 프로젝트, 질문)"),
+            @Parameter(name = "category", description = "카테고리(AI, BE, FE)"),
+            @Parameter(name = "sortType", description = "정렬 유형(hot, recent)"),
+            @Parameter(name = "filter", description = "게시글의 상태(모집중, 모집완료, ...)"),
+    })
     public BaseResponse<List<PostResponseDTO.PostPreviewDTO>> getPostPreivewList(@RequestParam(required = false) PostTypeEnum postType,
                                                                                  @RequestParam(required = false) String category,
                                                                                  @RequestParam(required = false) SortType sortType,
@@ -150,5 +159,14 @@ public class PostRestController {
         return BaseResponse.onSuccess(postConverter.toPostPreviewDTOList(postList));
     }
 
-
+    @GetMapping("/{postId}")
+    @Operation(summary = "커뮤니티 게시글 상세 조회 API", description = "댓글을 제외한 게시글의 상세 정보를 조회합니다.")
+    @Parameters({
+            @Parameter(name = "postId", description = "게시글 id"),
+    })
+    public BaseResponse<PostResponseDTO.PostDetailDTO> getPostDetail(@PathVariable Long postId,
+                                                                     @RequestParam(required = false) Long userId) {
+        Post post = postQueryService.getPostDetail(postId);
+        return BaseResponse.onSuccess(postConverter.toPostDetailDTO(post, userId));
+    }
 }
