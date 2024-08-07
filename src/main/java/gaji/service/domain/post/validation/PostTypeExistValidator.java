@@ -21,7 +21,7 @@ public class PostTypeExistValidator implements ConstraintValidator<ExistPostType
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(PostErrorStatus._POST_TYPE_NOT_FOUND.getMessage()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(PostErrorStatus._INVALID_POST_TYPE.getMessage()).addConstraintViolation();
         }
 
         return isValid;
