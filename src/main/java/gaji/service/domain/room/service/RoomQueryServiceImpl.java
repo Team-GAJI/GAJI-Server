@@ -65,4 +65,6 @@ public class RoomQueryServiceImpl implements RoomQueryService{
         return notice;
     }
 
+
+
 }
