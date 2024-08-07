@@ -1,6 +1,7 @@
 package gaji.service.domain.user.web.controller;
 
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.post.annotation.ExistPostType;
 import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.user.converter.UserConverter;
 import gaji.service.domain.user.entity.User;
@@ -21,10 +22,18 @@ public class UserRestController {
     private final UserQueryService userQueryService;
     private final TokenProviderService tokenProviderService;
 
-    @GetMapping("/")
-    public BaseResponse<UserResponseDTO.GetPostDTO> getMyPost(@RequestHeader("Authorization") String authorizationHeader) {
+    @GetMapping("/posts")
+    public BaseResponse<UserResponseDTO.GetPostDTO> getMyPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                              @RequestParam("type") @ExistPostType PostTypeEnum type) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        Post userPost = userQueryService.getUserPost(userId);
+        Post userPost = userQueryService.getUserPost(userId,type);
+        return BaseResponse.onSuccess(UserConverter.toGetPostDTO(userPost));
+    }
+
+    @GetMapping("/posts/{userId}")
+    public BaseResponse<UserResponseDTO.GetPostDTO> getUserPost(@PathVariable Long userId,
+                                                                @RequestParam("type") @ExistPostType PostTypeEnum type) {
+        Post userPost = userQueryService.getUserPost(userId,type);
         return BaseResponse.onSuccess(UserConverter.toGetPostDTO(userPost));
     }
 }
