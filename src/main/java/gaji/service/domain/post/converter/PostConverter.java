@@ -10,6 +10,8 @@ import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
+import gaji.service.domain.post.service.PostBookMarkService;
+import gaji.service.domain.post.service.PostLikesService;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.domain.post.web.dto.PostResponseDTO;
 import gaji.service.domain.user.entity.User;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 @Component
 public class PostConverter {
     private final HashtagQueryService hashtagQueryService;
+    private final PostBookMarkService postBookMarkService;
+    private final PostLikesService postLikesService;
 
     // 초기 PostStatus 지정
     public static PostStatusEnum getInitialPostStatus(PostTypeEnum type) {
@@ -68,9 +72,7 @@ public class PostConverter {
 
     public PostResponseDTO.PostPreviewDTO toPostPreviewDTO(Post post) {
         List<SelectHashtag> selectHashtagList = hashtagQueryService.findAllFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType());
-        List<HashtagResponseDTO.BaseResponseDTO> hashtagList = selectHashtagList.stream()
-                .map(HashtagConverter::toBaseResponseDTO)
-                .collect(Collectors.toList());
+        List<String> hashtagList = HashtagConverter.toHashtagNameList(selectHashtagList);
 
         return PostResponseDTO.PostPreviewDTO.builder()
                 .postId(post.getId())
@@ -81,14 +83,31 @@ public class PostConverter {
                 .username(post.getUser().getName())
                 .uploadTime(DateConverter.convertToRelativeTimeFormat(post.getCreatedAt()))
                 .viewCnt(post.getViewCnt())
+                .popularityScore(post.getPopularityScore())
                 .hashtagList(hashtagList)
                 .build();
     }
 
     public List<PostResponseDTO.PostPreviewDTO> toPostPreviewDTOList(List<Post> postList) {
-        PostConverter postConverter = new PostConverter(hashtagQueryService);
+        PostConverter postConverter = new PostConverter(hashtagQueryService, postBookMarkService, postLikesService);
         return postList.stream()
-                .map(post -> postConverter.toPostPreviewDTO(post))
+                .map(postConverter::toPostPreviewDTO)
                 .collect(Collectors.toList());
+    }
+
+    public PostResponseDTO.PostDetailDTO toPostDetailDTO(Post post, Long userId) {
+        List<SelectHashtag> selectHashtagList = hashtagQueryService.findAllFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType());
+        List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagNameAndIdDTOList = HashtagConverter.toHashtagNameAndIdDTOList(selectHashtagList);
+        boolean isBookmarked = postBookMarkService.existsByUserAndPost(userId, post);
+        boolean isLiked = postLikesService.existsByUserAndPost(userId, post);
+
+        return PostResponseDTO.PostDetailDTO.builder()
+                .username(post.getUser().getName())
+                .title(post.getTitle())
+                .hashtagList(hashtagNameAndIdDTOList)
+                .isBookMarked(isBookmarked)
+                .isLiked(isLiked)
+                .body(post.getBody())
+                .build();
     }
 }
