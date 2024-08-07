@@ -69,12 +69,12 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     public RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
-        studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(user.getId(), room.getId());
 
         RoomNotice notice = RoomNotice.builder()
                 .title(requestDto.getTitle())
                 .body(requestDto.getBody())
-                .room(room)
+                .studyMate(studyMate)
                 .build();
         return roomNoticeRepository.save(notice);
 

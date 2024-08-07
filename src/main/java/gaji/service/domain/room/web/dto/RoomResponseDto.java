@@ -24,4 +24,16 @@ public class RoomResponseDto {
         Long roomId;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class NoticeDto {
+        private Long id;
+        private String authorName;
+        private String title;
+        private String body;
+        private Integer confirmCount;
+        private String timeSincePosted;
+    }
 }
