@@ -7,8 +7,11 @@ import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.enums.*;
 import gaji.service.domain.message.entity.Message;
 import gaji.service.domain.post.entity.*;
-import gaji.service.domain.recruite.*;
-import gaji.service.domain.room.entity.Event;
+import gaji.service.domain.recruit.entity.RecruitPostBookmark;
+import gaji.service.domain.recruit.entity.RecruitPostLikes;
+import gaji.service.domain.recruit.entity.SearchKeyword;
+import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.VoiceChatUser;
 import gaji.service.domain.roomPost.entity.*;
 import gaji.service.domain.studyMate.*;
@@ -44,7 +47,7 @@ public class User extends BaseEntity {
     private List<SearchKeyword> searchKeywordList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Event> eventList = new ArrayList<>();
+    private List<RoomEvent> roomEventList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<StudyMate> studyMateList;
@@ -55,13 +58,13 @@ public class User extends BaseEntity {
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<RoomPost> roomPostList = new ArrayList<>();
+    private final List<RoomPost> roomPostList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<RoomPostBookmark> roomPostBookmarkList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
-    private List<RecruitPost> recruitPostList = new ArrayList<>();
+    private List<Room> recruitPostList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<RecruitPostBookmark> recruitPostBookmarkList = new ArrayList<>();
