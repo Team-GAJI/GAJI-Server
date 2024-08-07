@@ -20,4 +20,13 @@ public class RoomNotice {
     private String title;
 
     private String body;
+
+    private Integer viewCount;
+    private Integer confirmCount;
+
+    @PrePersist
+    public void prePersist() {
+        this.viewCount = 0;
+        this.confirmCount = 0;
+    }
 }
