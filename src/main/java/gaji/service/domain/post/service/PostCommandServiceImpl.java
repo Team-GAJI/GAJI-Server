@@ -14,7 +14,7 @@ import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.repository.PostBookmarkRepository;
 import gaji.service.domain.post.repository.PostLikesRepository;
-import gaji.service.domain.post.repository.PostRepository;
+import gaji.service.domain.post.repository.PostJpaRepository;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.domain.user.code.UserErrorStatus;
 import gaji.service.domain.user.entity.User;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class PostCommandServiceImpl implements PostCommandService {
 
     private final UserRepository userRepository;
-    private final PostRepository postRepository;
+    private final PostJpaRepository postRepository;
     private final HashtagRepository hashtagRepository;
     private final SelectHashtagRepository selectHashtagRepository;
     private final CommentService commentService;
