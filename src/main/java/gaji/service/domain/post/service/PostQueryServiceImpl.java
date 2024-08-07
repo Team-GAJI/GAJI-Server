@@ -1,6 +1,6 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.common.enums.SortType;
+import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.code.PostErrorStatus;
@@ -26,10 +26,12 @@ public class PostQueryServiceImpl implements PostQueryService {
 
     @Override
     public Post getPostDetail(Long postId) {
-        Post findPost = postRepository.findByIdFetchJoinWithUserAndPostBookMarkAndPostLikes(postId);
+        Post findPost = postRepository.findByIdFetchJoinWithUser(postId);
         if (findPost == null) {
             throw new RestApiException(PostErrorStatus._POST_NOT_FOUND);
         }
+        findPost.increaseHitCnt();
+        findPost.increasePopularityScoreByHit();
         return findPost;
     }
 
