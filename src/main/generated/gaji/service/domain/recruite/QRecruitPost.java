@@ -44,7 +44,7 @@ public class QRecruitPost extends EntityPathBase<RecruitPost> {
     public final BooleanPath isRecruited = createBoolean("isRecruited");
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> LastModifiedDate = _super.LastModifiedDate;
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final NumberPath<Integer> likes = createNumber("likes", Integer.class);
 

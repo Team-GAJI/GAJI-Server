@@ -37,10 +37,12 @@ public class QPost extends EntityPathBase<Post> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
+    public final NumberPath<Integer> hit = createNumber("hit", Integer.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> LastModifiedDate = _super.LastModifiedDate;
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final NumberPath<Integer> likeCnt = createNumber("likeCnt", Integer.class);
 
@@ -61,8 +63,6 @@ public class QPost extends EntityPathBase<Post> {
     public final EnumPath<gaji.service.domain.enums.PostTypeEnum> type = createEnum("type", gaji.service.domain.enums.PostTypeEnum.class);
 
     public final gaji.service.domain.user.entity.QUser user;
-
-    public final NumberPath<Integer> viewCnt = createNumber("viewCnt", Integer.class);
 
     public QPost(String variable) {
         this(Post.class, forVariable(variable), INITS);
