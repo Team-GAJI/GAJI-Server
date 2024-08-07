@@ -5,6 +5,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Repository
@@ -21,20 +23,8 @@ public class RoomQueryRepository {
                 rn.title,
                 rn.body,
                 rn.confirmCount,
-                CASE
-                    WHEN FUNCTION('TIMESTAMPDIFF', 'MINUTE', rn.createdAt, CURRENT_TIMESTAMP) < 60 THEN 
-                        CONCAT(FUNCTION('TIMESTAMPDIFF', 'MINUTE', rn.createdAt, CURRENT_TIMESTAMP), '분 전')
-                    WHEN FUNCTION('TIMESTAMPDIFF', 'HOUR', rn.createdAt, CURRENT_TIMESTAMP) < 24 THEN 
-                        CONCAT(FUNCTION('TIMESTAMPDIFF', 'HOUR', rn.createdAt, CURRENT_TIMESTAMP), '시간 전')
-                    WHEN FUNCTION('TIMESTAMPDIFF', 'DAY', rn.createdAt, CURRENT_TIMESTAMP) < 7 THEN 
-                        CONCAT(FUNCTION('TIMESTAMPDIFF', 'DAY', rn.createdAt, CURRENT_TIMESTAMP), '일 전')
-                    WHEN FUNCTION('TIMESTAMPDIFF', 'WEEK', rn.createdAt, CURRENT_TIMESTAMP) < 4 THEN 
-                        CONCAT(FUNCTION('TIMESTAMPDIFF', 'WEEK', rn.createdAt, CURRENT_TIMESTAMP), '주 전')
-                    WHEN FUNCTION('TIMESTAMPDIFF', 'MONTH', rn.createdAt, CURRENT_TIMESTAMP) < 12 THEN 
-                        CONCAT(FUNCTION('TIMESTAMPDIFF', 'MONTH', rn.createdAt, CURRENT_TIMESTAMP), '개월 전')
-                    ELSE 
-                        CONCAT(FUNCTION('TIMESTAMPDIFF', 'YEAR', rn.createdAt, CURRENT_TIMESTAMP), '년 전')
-                END
+                rn.createdAt,
+                rn.viewCount
             )
             FROM RoomNotice rn
             JOIN rn.studyMate sm
@@ -42,10 +32,40 @@ public class RoomQueryRepository {
             ORDER BY rn.createdAt DESC
         """;
 
-        return entityManager.createQuery(jpql, RoomResponseDto.NoticeDto.class)
+        List<RoomResponseDto.NoticeDto> notices = entityManager.createQuery(jpql, RoomResponseDto.NoticeDto.class)
                 .setParameter("roomId", roomId)
                 .setFirstResult((page - 1) * size)
                 .setMaxResults(size)
                 .getResultList();
+
+        LocalDateTime now = LocalDateTime.now();
+        for (RoomResponseDto.NoticeDto notice : notices) {
+            notice.setTimeSincePosted(calculateTimeDifference(notice.getCreatedAt(), now));
+        }
+
+        return notices;
+    }
+
+
+    private String calculateTimeDifference(LocalDateTime createdAt, LocalDateTime now) {
+        long minutes = ChronoUnit.MINUTES.between(createdAt, now);
+        if (minutes < 60) return minutes + "분 전";
+        long hours = ChronoUnit.HOURS.between(createdAt, now);
+        if (hours < 24) return hours + "시간 전";
+        long days = ChronoUnit.DAYS.between(createdAt, now);
+        if (days < 7) return days + "일 전";
+        long weeks = ChronoUnit.WEEKS.between(createdAt, now);
+        if (weeks < 4) return weeks + "주 전";
+        long months = ChronoUnit.MONTHS.between(createdAt, now);
+        if (months < 12) return months + "개월 전";
+        long years = ChronoUnit.YEARS.between(createdAt, now);
+        return years + "년 전";
+    }
+
+    public void incrementViewCount(Long noticeId) {
+        String jpql = "UPDATE RoomNotice rn SET rn.viewCount = rn.viewCount + 1 WHERE rn.id = :noticeId";
+        entityManager.createQuery(jpql)
+                .setParameter("noticeId", noticeId)
+                .executeUpdate();
     }
 }

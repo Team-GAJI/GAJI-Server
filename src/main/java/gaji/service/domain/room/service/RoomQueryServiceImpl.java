@@ -1,7 +1,6 @@
 package gaji.service.domain.room.service;
 
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
@@ -12,6 +11,8 @@ import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 import java.util.List;
 
@@ -42,15 +43,26 @@ public class RoomQueryServiceImpl implements RoomQueryService{
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
     }
 
+    @Override
     public List<RoomResponseDto.NoticeDto> getNotices(Long roomId, int page, int size) {
         return roomQueryRepository.getNotices(roomId, page, size);
     }
 
+    @Override
+    @Transactional(readOnly = false) // readOnly = false로 설정
     public RoomResponseDto.NoticeDto getNoticeDetail(Long roomId, Long noticeId) {
-        return roomQueryRepository.getNotices(roomId, 1, Integer.MAX_VALUE).stream()
-                .filter(notice -> notice.getId().equals(noticeId))
+        RoomResponseDto.NoticeDto notice = roomQueryRepository.getNotices(roomId, 1, Integer.MAX_VALUE).stream()
+                .filter(n -> n.getId().equals(noticeId))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Notice not found"));
+
+        // viewCount 증가
+        roomQueryRepository.incrementViewCount (noticeId);
+
+        // 증가된 viewCount를 반영하기 위해 notice 객체 업데이트
+        notice.setViewCount(notice.getViewCount() + 1);
+
+        return notice;
     }
 
 }
