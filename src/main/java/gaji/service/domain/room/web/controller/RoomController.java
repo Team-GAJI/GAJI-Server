@@ -73,7 +73,7 @@ public class RoomController {
         return ResponseEntity.ok(notices);
     }
 
-    @GetMapping("/{roomId}/notices/{noticeId}")
+    @GetMapping("git")
     @Operation(summary = "특정 공지사항을 조회하는 API")
     public ResponseEntity<RoomResponseDto.NoticeDto> getNoticeDetail(
             @PathVariable Long roomId,
@@ -83,7 +83,7 @@ public class RoomController {
     }
 
 
-    @PostMapping("/{noticeId}/confirm/{userId}")
+    @PostMapping("/notice/{noticeId}/confirm/{userId}")
     @Operation(summary = "스터디룸 공지 확인 버튼 누르기 API", description = "공지사항 확인 상태를 토글합니다.")
     public ResponseEntity<Boolean> toggleNoticeConfirmation(@PathVariable Long noticeId, @PathVariable Long userId) {
         boolean isConfirmed = roomCommandService.toggleNoticeConfirmation(noticeId,userId);
