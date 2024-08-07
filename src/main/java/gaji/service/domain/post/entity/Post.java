@@ -44,6 +44,7 @@ public class Post extends BaseEntity {
     private int viewCnt; // TODO: Integer vs int 고민해보기
     private int likeCnt;
     private int bookmarkCnt;
+    private int commentCnt;
     @Getter(AccessLevel.NONE)
     private int commentOrderNum;
     private String thumbnailUrl;
@@ -74,6 +75,7 @@ public class Post extends BaseEntity {
         this.viewCnt = 0;
         this.likeCnt = 0;
         this.bookmarkCnt = 0;
+        this.commentCnt = 0;
         this.commentOrderNum = 0;
     }
 
@@ -113,8 +115,11 @@ public class Post extends BaseEntity {
         this.popularityScore++;
     }
 
-    public void decreasePopularityScoreByView() {
-        this.popularityScore--;
+    public void increaseCommentCnt() {
+        this.commentCnt++;
     }
 
+    public void decreaseCommentCnt() {
+        this.commentCnt--;
+    }
 }

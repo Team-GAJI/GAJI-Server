@@ -63,6 +63,7 @@ public class PostCommandServiceImpl implements PostCommandService {
         Post findPost = findPostByPostId(postId);
 
         Comment newComment = createCommentByCheckParentCommentIdIsNull(parentCommentId, request, findUser, findPost);
+        findPost.increaseCommentCnt();
         return commentService.saveNewComment(newComment);
     }
 
@@ -70,6 +71,7 @@ public class PostCommandServiceImpl implements PostCommandService {
     public void softDeleteComment(Long commentId) {
         Comment findComment = commentService.findByCommentId(commentId);
         findComment.updateStatus(CommentStatus.DELETE);
+        findComment.getPost().decreaseCommentCnt(); // TODO: 지연 로딩으로 쿼리 1개 더 날라감;
     }
 
     // TODO: 게시글 파일도 함께 삭제
