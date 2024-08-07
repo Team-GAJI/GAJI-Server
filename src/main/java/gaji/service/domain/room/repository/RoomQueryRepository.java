@@ -22,7 +22,7 @@ public class RoomQueryRepository {
                 sm.user.name,
                 rn.title,
                 rn.body,
-                rn.confirmCount,
+                (SELECT COUNT(nc) FROM NoticeConfirmation nc WHERE nc.roomNotice.id = rn.id),
                 rn.createdAt,
                 rn.viewCount
             )
@@ -46,7 +46,6 @@ public class RoomQueryRepository {
         return notices;
     }
 
-
     private String calculateTimeDifference(LocalDateTime createdAt, LocalDateTime now) {
         long minutes = ChronoUnit.MINUTES.between(createdAt, now);
         if (minutes < 60) return minutes + "분 전";
@@ -64,6 +63,22 @@ public class RoomQueryRepository {
 
     public void incrementViewCount(Long noticeId) {
         String jpql = "UPDATE RoomNotice rn SET rn.viewCount = rn.viewCount + 1 WHERE rn.id = :noticeId";
+        entityManager.createQuery(jpql)
+                .setParameter("noticeId", noticeId)
+                .executeUpdate();
+    }
+
+    public void updateConfirmCount(Long noticeId) {
+        String jpql = """
+            UPDATE RoomNotice rn 
+            SET rn.confirmCount = (
+                SELECT COUNT(nc) 
+                FROM NoticeConfirmation nc 
+                WHERE nc.roomNotice.id = :noticeId
+            ) 
+            WHERE rn.id = :noticeId
+        """;
+
         entityManager.createQuery(jpql)
                 .setParameter("noticeId", noticeId)
                 .executeUpdate();
