@@ -17,7 +17,7 @@ public class RoomConverter {
         return RoomResponseDto.RoomNoticeDto.builder()
                 .title(roomNotice.getTitle())
                 .body(roomNotice.getBody())
-                .roomId(roomNotice.getRoom().getId())
+                .roomId(roomNotice.getStudyMate().getId())
                 .build();
     }
 }
