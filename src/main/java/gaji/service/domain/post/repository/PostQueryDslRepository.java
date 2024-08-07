@@ -10,7 +10,7 @@ import java.util.List;
 public interface PostQueryDslRepository {
 
     List<Post> findAllFetchJoinWithUser(PostTypeEnum postType, PostStatusEnum postStatus, SortType sortType);
-    Post findByIdFetchJoinWithUserAndPostBookMarkAndPostLikes(Long postId);
+    Post findByIdFetchJoinWithUser(Long postId);
 
 }
 
