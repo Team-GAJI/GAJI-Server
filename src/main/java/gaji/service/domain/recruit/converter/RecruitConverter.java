@@ -65,7 +65,7 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<CategoryEnum> categoryList, int commentCount, List<RecruitResponseDTO.CommentResponseDTO> commentList) {
+    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<CategoryEnum> categoryList) {
         return RecruitResponseDTO.studyDetailDTO.builder()
                 .userNickName(user.getNickname())
                 .userActive(user.getStatus())
@@ -85,8 +85,6 @@ public class RecruitConverter {
                 .studyEndTime(room.getStudyEndDay())
                 .materialList(room.getMaterialList().stream().map(Material::getPath).collect(Collectors.toList()))
                 .description(room.getDescription())
-                .commentCount(commentCount)
-                .commentList(commentList)
                 .build();
     }
 
@@ -102,7 +100,13 @@ public class RecruitConverter {
     public static List<RecruitResponseDTO.CommentResponseDTO> toCommentResponseDTOList(List<StudyComment> commentList) {
         int toIndex = Math.min(4, commentList.size());
         return commentList.subList(0, toIndex).stream().map(RecruitConverter::toCommentResponseDTO).collect(Collectors.toList());
+    }
 
+    public static RecruitResponseDTO.CommentListDTO toCommentListDTO(int commentCount, List<RecruitResponseDTO.CommentResponseDTO> CommentResponseDTO) {
+        return RecruitResponseDTO.CommentListDTO.builder()
+                .commentCount(commentCount)
+                .commentList(CommentResponseDTO)
+                .build();
     }
 
 }

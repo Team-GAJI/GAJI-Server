@@ -43,8 +43,6 @@ public class RecruitResponseDTO {
         LocalDate studyEndTime;
         List<String> materialList;
         String description;
-        int commentCount;
-        List<CommentResponseDTO> commentList;
     }
 
     @Getter
@@ -56,5 +54,14 @@ public class RecruitResponseDTO {
         String userNickName;
         LocalDateTime commentCreatedAt;
         String commentBody;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentListDTO {
+        int commentCount;
+        List<CommentResponseDTO> commentList;
     }
 }

@@ -36,18 +36,6 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
         Room room = roomQueryService.findRoomById(roomId);
         User user = userQueryService.findUserById(room.getUser().getId());
 
-        List<StudyComment> commentList = studyCommentQueryService.findByRoomAndDepth(room, 0);
-        List<RecruitResponseDTO.CommentResponseDTO> CommentResponseDTO;
-
-        int commentCount = studyCommentQueryService.getCommentCountByRoom(room);
-
-        if (commentList.isEmpty()) {
-            CommentResponseDTO = null;
-        } else {
-            commentList.sort(Comparator.comparing(StudyComment::getCreatedAt).reversed());
-            CommentResponseDTO = RecruitConverter.toCommentResponseDTOList(commentList);
-        }
-
         room.addView();
         roomRepository.save(room);
 
@@ -57,7 +45,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
 
         List<CategoryEnum> categoryList = RecruitConverter.toCategoryList(selectCategoryList);
 
-        return RecruitConverter.toStudyDetailDTO(user, room, categoryList, commentCount, CommentResponseDTO);
+        return RecruitConverter.toStudyDetailDTO(user, room, categoryList);
     }
 
 
