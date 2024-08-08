@@ -6,6 +6,8 @@ import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.post.repository.CommentJpaRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +27,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> findAllByPost(Long postId) {
+    public Slice<Comment> getCommentListByPost(Long postId, Integer lastGroupNum, int size) {
+        PageRequest pageRequest = PageRequest.of(0, size);
         Post findPost = postQueryService.findPostByPostId(postId);
-        return commentRepository.findAllByPostFetchJoinWithUser(findPost);
+        return commentRepository.findBySliceAndPostFetchJoinWithUser(lastGroupNum, findPost, pageRequest);
     }
 
     @Override
