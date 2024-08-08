@@ -14,7 +14,7 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.VoiceChatUser;
 import gaji.service.domain.roomPost.entity.*;
-import gaji.service.domain.studyMate.*;
+import gaji.service.domain.studyMate.entity.*;
 import gaji.service.oauth2.dto.TransferUserDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
