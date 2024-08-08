@@ -3,8 +3,6 @@ package gaji.service.domain.user.service;
 
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.user.entity.User;
-import org.springframework.data.domain.Page;
-
 
 import java.util.List;
 
