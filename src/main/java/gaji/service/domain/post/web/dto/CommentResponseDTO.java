@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +19,9 @@ public class CommentResponseDTO {
         private Long userId;
         private String username;
         private String body;
-        private int orderNum;
+        private Integer groupNum;
         private int depth;
-        private LocalDate createdAt;
+        private String createdAt;
     }
 
     @Builder

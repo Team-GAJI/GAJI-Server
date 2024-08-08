@@ -46,7 +46,7 @@ public class Post extends BaseEntity {
     private int bookmarkCnt;
     private int commentCnt;
     @Getter(AccessLevel.NONE)
-    private int commentOrderNum;
+    private int commentGroupNum;
     private String thumbnailUrl;
     private int popularityScore;
 
@@ -75,11 +75,11 @@ public class Post extends BaseEntity {
         this.likeCnt = 0;
         this.bookmarkCnt = 0;
         this.commentCnt = 0;
-        this.commentOrderNum = 0;
+        this.commentGroupNum = 0;
     }
 
-    public int getCommentOrderNum() {
-        return ++this.commentOrderNum;
+    public int getCommentGroupNum() {
+        return this.commentGroupNum++;
     }
 
     public void increaseBookmarkCnt() {
