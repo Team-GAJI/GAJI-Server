@@ -53,7 +53,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
     }
 
     private BooleanExpression categoryEq(CategoryEnum category) {
-        return category != null ? selectCategory.category.eq(category) : null;
+        return category != null ? selectCategory.category.category.eq(category) : null;
     }
 
     private BooleanExpression checkFilter(PreviewFilter filter) {
