@@ -124,6 +124,10 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<RoomComment> roomCommentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<WeeklyUserProgress> weeklyUserProgressList = new ArrayList<>();
+
+
     private String nickname;
 
     @Enumerated(EnumType.STRING)

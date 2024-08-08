@@ -73,7 +73,7 @@ public class RoomController {
         return ResponseEntity.ok(notices);
     }
 
-    @GetMapping("git")
+    @GetMapping("/notice/{noticeId}")
     @Operation(summary = "특정 공지사항을 조회하는 API")
     public ResponseEntity<RoomResponseDto.NoticeDto> getNoticeDetail(
             @PathVariable Long roomId,
@@ -88,5 +88,11 @@ public class RoomController {
     public ResponseEntity<Boolean> toggleNoticeConfirmation(@PathVariable Long noticeId, @PathVariable Long userId) {
         boolean isConfirmed = roomCommandService.toggleNoticeConfirmation(noticeId,userId);
         return ResponseEntity.ok(isConfirmed);
+    }
+
+    @PostMapping("/notice/{roomEventId}/{userId}")
+    @Operation(summary = "주차별 과제 진행도 계산", description = "과제 체크 박스를 클릭하면 진행율 올라가는 방식입니다.")
+    public void calculateAndSaveProgress(@PathVariable Long roomEventId, @PathVariable Long userId) {
+        roomCommandService.calculateAndSaveProgress(roomEventId,userId);
     }
 }

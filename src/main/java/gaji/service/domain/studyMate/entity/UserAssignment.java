@@ -4,6 +4,9 @@ import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,9 +27,5 @@ public class UserAssignment {
 
     //완료여부
     private boolean isComplete;
-
-
-
-
 
 }

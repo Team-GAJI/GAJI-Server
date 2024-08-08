@@ -1,6 +1,7 @@
 package gaji.service.domain.room.service;
 
 import gaji.service.domain.room.repository.*;
+import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
@@ -40,7 +41,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final NoticeConfirmationRepository noticeConfirmationRepository;
     private final RoomQueryRepository roomQueryRepository;
     private final RoomRepository roomRepository;
-
+    private final WeeklyUserProgressRepository weeklyUserProgressRepository;
 
     //과제생성1
     @Override
@@ -187,6 +188,41 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     @Override
     public void saveRoom(Room room) {
         roomRepository.save(room);
+    }
+
+
+    @Override
+    public void calculateAndSaveProgress(Long roomEventId, Long userId) {
+        RoomEvent roomEvent = roomEventRepository.findById(roomEventId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
+        User user = userQueryService.findUserById(userId);
+
+        int totalAssignments = roomEvent.getAssignmentList().size();
+
+        int completedAssignments = (int) roomEvent.getAssignmentList().stream()
+                .flatMap(assignment -> assignment.getUserAssignmentList().stream())
+                .filter(userAssignment -> userAssignment.getUser().equals(user) && userAssignment.isComplete())
+                .count();
+
+        double progressPercentage = totalAssignments > 0
+                ? ((double) completedAssignments / totalAssignments) * 100
+                : 0.0;
+
+        WeeklyUserProgress progress = weeklyUserProgressRepository
+                .findByRoomEventAndUser(roomEvent, user)
+                .orElseGet(() -> {
+                    WeeklyUserProgress newProgress = WeeklyUserProgress.createEmpty();
+                    newProgress.setUser(user);
+                    newProgress.setRoomEvent(roomEvent);
+                    return newProgress;
+
+                });
+
+        progress.setTotalAssignments(totalAssignments);
+        progress.setCompletedAssignments(completedAssignments);
+        progress.setProgressPercentage(progressPercentage);
+
+        weeklyUserProgressRepository.save(progress);
     }
 
 }
