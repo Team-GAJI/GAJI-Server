@@ -7,7 +7,7 @@ import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
-import gaji.service.domain.studyMate.Assignment;
+import gaji.service.domain.studyMate.entity.Assignment;
 import gaji.service.global.base.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

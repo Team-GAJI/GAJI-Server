@@ -4,8 +4,7 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
-import gaji.service.domain.studyMate.Assignment;
+import gaji.service.domain.studyMate.entity.Assignment;
 import jakarta.transaction.Transactional;
 
 public interface RoomCommandService {
