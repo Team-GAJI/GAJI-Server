@@ -27,7 +27,10 @@ public enum GlobalErrorStatus implements BaseErrorCodeInterface {
     _FALIED_READ_FILE(HttpStatus.BAD_REQUEST, "FILE002","파일을 읽는 중 문제가 발생하였습니다."),
 
     // HASHTAG 에러
-    _HASHTAG_ISBLANK(HttpStatus.BAD_REQUEST, "HASHTAG_4003", "공백은 해시태그로 등록할 수 없습니다."),
+    _HASHTAG_ISBLANK(HttpStatus.BAD_REQUEST, "HASHTAG_4001", "공백은 해시태그로 등록할 수 없습니다."),
+
+    // CATEGORY 에러
+    _CATEGORY_NOT_VALID(HttpStatus.BAD_REQUEST, "CATEGORY_4001", "유효하지 않은 카테고리입니다."),
 
     // 정렬 기준 Enum 에러
     _SORT_TYPE_NOT_VALID(HttpStatus.BAD_REQUEST, "SORT_4001", "유효하지 않은 정렬 기준입니다."),
