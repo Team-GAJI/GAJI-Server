@@ -30,12 +30,12 @@ public class SecurityConfig {
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
-
-
     private static final String[] AUTH_WHITELIST = {
-            "/oauth2/**", "/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
+            "/oauth2/", "/swagger-ui/**", "/swagger-ui-custom.html",
             "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html", "/reissue", "/", "/my"
+            ,"/api/community-posts/**"
     };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
