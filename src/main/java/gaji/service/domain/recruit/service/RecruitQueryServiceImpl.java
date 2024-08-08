@@ -62,15 +62,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     @Override
     @Transactional(readOnly = true)
     public RecruitResponseDTO.PreviewListDTO getPreviewList(
-            CategoryEnum category, PreviewFilter filter, SortType sort, Long value) {
-
-        int pageSize;
-
-        if (category == null) {
-            pageSize = 20;
-        } else {
-            pageSize = 5;
-        }
+            CategoryEnum category, PreviewFilter filter, SortType sort, Long value, int pageSize) {
 
         Pageable pageable = PageRequest.of(0, pageSize);
 
