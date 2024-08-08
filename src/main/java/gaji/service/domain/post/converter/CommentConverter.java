@@ -21,9 +21,14 @@ public class CommentConverter {
                 .build();
     }
 
-    public static List<CommentResponseDTO.PostCommentDTO> toPostCommentDTOList(List<Comment> commentList) {
-        return commentList.stream()
+    public static CommentResponseDTO.PostCommentListDTO toPostCommentListDTO(List<Comment> commentList, boolean hasNext) {
+        List<CommentResponseDTO.PostCommentDTO> postCommentDTOList = commentList.stream()
                 .map(CommentConverter::toPostCommentDTO)
                 .collect(Collectors.toList());
+
+        return CommentResponseDTO.PostCommentListDTO.builder()
+                .commentList(postCommentDTOList)
+                .hasNext(hasNext)
+                .build();
     }
 }
