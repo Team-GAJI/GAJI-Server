@@ -30,8 +30,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
                 .select(selectCategory.entityId)
                 .from(selectCategory)
                 .where(selectCategory.type.eq(PostTypeEnum.ROOM)
-                        .and(categoryEq(category))
-                        .and(checkFilter(filter)))
+                        .and(categoryEq(category)))
                 .fetch();
 
         OrderSpecifier<?> orderSpecifier = getOrderSpecifier(sortType);
@@ -39,7 +38,8 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
         List<Room> results = queryFactory
                 .selectFrom(room)
                 .where(room.id.in(roomIds)
-                        .and(lastStudyValue(sortType ,value)))
+                        .and(lastStudyValue(sortType ,value))
+                        .and(checkFilter(filter)))
                 .orderBy(orderSpecifier)
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -57,6 +57,9 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
     }
 
     private BooleanExpression checkFilter(PreviewFilter filter) {
+        if (filter == null) {
+            return null;
+        }
         return switch (filter) {
             case RECRUITING -> room.recruitPostTypeEnum.eq(RecruitPostTypeEnum.RECRUITING);
             case RECRUITMENT_COMPLETED -> room.recruitPostTypeEnum.eq(RecruitPostTypeEnum.RECRUITMENT_COMPLETED);
