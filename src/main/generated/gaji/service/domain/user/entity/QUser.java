@@ -37,8 +37,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath email = createString("email");
 
-    public final ListPath<gaji.service.domain.room.entity.Event, gaji.service.domain.room.entity.QEvent> eventList = this.<gaji.service.domain.room.entity.Event, gaji.service.domain.room.entity.QEvent>createList("eventList", gaji.service.domain.room.entity.Event.class, gaji.service.domain.room.entity.QEvent.class, PathInits.DIRECT2);
-
     public final EnumPath<gaji.service.domain.enums.Gender> gender = createEnum("gender", gaji.service.domain.enums.Gender.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
@@ -64,11 +62,11 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<gaji.service.domain.message.entity.Message, gaji.service.domain.message.entity.QMessage> receivedMessages = this.<gaji.service.domain.message.entity.Message, gaji.service.domain.message.entity.QMessage>createList("receivedMessages", gaji.service.domain.message.entity.Message.class, gaji.service.domain.message.entity.QMessage.class, PathInits.DIRECT2);
 
-    public final ListPath<gaji.service.domain.recruite.RecruitPostBookmark, gaji.service.domain.recruite.QRecruitPostBookmark> recruitPostBookmarkList = this.<gaji.service.domain.recruite.RecruitPostBookmark, gaji.service.domain.recruite.QRecruitPostBookmark>createList("recruitPostBookmarkList", gaji.service.domain.recruite.RecruitPostBookmark.class, gaji.service.domain.recruite.QRecruitPostBookmark.class, PathInits.DIRECT2);
+    public final ListPath<gaji.service.domain.recruit.entity.RecruitPostBookmark, gaji.service.domain.recruit.entity.QRecruitPostBookmark> recruitPostBookmarkList = this.<gaji.service.domain.recruit.entity.RecruitPostBookmark, gaji.service.domain.recruit.entity.QRecruitPostBookmark>createList("recruitPostBookmarkList", gaji.service.domain.recruit.entity.RecruitPostBookmark.class, gaji.service.domain.recruit.entity.QRecruitPostBookmark.class, PathInits.DIRECT2);
 
-    public final ListPath<gaji.service.domain.recruite.RecruitPostLikes, gaji.service.domain.recruite.QRecruitPostLikes> recruitPostLikesList = this.<gaji.service.domain.recruite.RecruitPostLikes, gaji.service.domain.recruite.QRecruitPostLikes>createList("recruitPostLikesList", gaji.service.domain.recruite.RecruitPostLikes.class, gaji.service.domain.recruite.QRecruitPostLikes.class, PathInits.DIRECT2);
+    public final ListPath<gaji.service.domain.recruit.entity.RecruitPostLikes, gaji.service.domain.recruit.entity.QRecruitPostLikes> recruitPostLikesList = this.<gaji.service.domain.recruit.entity.RecruitPostLikes, gaji.service.domain.recruit.entity.QRecruitPostLikes>createList("recruitPostLikesList", gaji.service.domain.recruit.entity.RecruitPostLikes.class, gaji.service.domain.recruit.entity.QRecruitPostLikes.class, PathInits.DIRECT2);
 
-    public final ListPath<gaji.service.domain.recruite.RecruitPost, gaji.service.domain.recruite.QRecruitPost> recruitPostList = this.<gaji.service.domain.recruite.RecruitPost, gaji.service.domain.recruite.QRecruitPost>createList("recruitPostList", gaji.service.domain.recruite.RecruitPost.class, gaji.service.domain.recruite.QRecruitPost.class, PathInits.DIRECT2);
+    public final ListPath<gaji.service.domain.room.entity.Room, gaji.service.domain.room.entity.QRoom> recruitPostList = this.<gaji.service.domain.room.entity.Room, gaji.service.domain.room.entity.QRoom>createList("recruitPostList", gaji.service.domain.room.entity.Room.class, gaji.service.domain.room.entity.QRoom.class, PathInits.DIRECT2);
 
     public final ListPath<gaji.service.domain.Report, gaji.service.domain.QReport> reportList = this.<gaji.service.domain.Report, gaji.service.domain.QReport>createList("reportList", gaji.service.domain.Report.class, gaji.service.domain.QReport.class, PathInits.DIRECT2);
 
@@ -78,6 +76,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<gaji.service.domain.roomPost.entity.RoomComment, gaji.service.domain.roomPost.entity.QRoomComment> roomCommentList = this.<gaji.service.domain.roomPost.entity.RoomComment, gaji.service.domain.roomPost.entity.QRoomComment>createList("roomCommentList", gaji.service.domain.roomPost.entity.RoomComment.class, gaji.service.domain.roomPost.entity.QRoomComment.class, PathInits.DIRECT2);
 
+    public final ListPath<gaji.service.domain.room.entity.RoomEvent, gaji.service.domain.room.entity.QRoomEvent> roomEventList = this.<gaji.service.domain.room.entity.RoomEvent, gaji.service.domain.room.entity.QRoomEvent>createList("roomEventList", gaji.service.domain.room.entity.RoomEvent.class, gaji.service.domain.room.entity.QRoomEvent.class, PathInits.DIRECT2);
+
     public final ListPath<gaji.service.domain.roomPost.entity.RoomPostBookmark, gaji.service.domain.roomPost.entity.QRoomPostBookmark> roomPostBookmarkList = this.<gaji.service.domain.roomPost.entity.RoomPostBookmark, gaji.service.domain.roomPost.entity.QRoomPostBookmark>createList("roomPostBookmarkList", gaji.service.domain.roomPost.entity.RoomPostBookmark.class, gaji.service.domain.roomPost.entity.QRoomPostBookmark.class, PathInits.DIRECT2);
 
     public final ListPath<gaji.service.domain.roomPost.entity.RoomPostFile, gaji.service.domain.roomPost.entity.QRoomPostFile> roomPostFileList = this.<gaji.service.domain.roomPost.entity.RoomPostFile, gaji.service.domain.roomPost.entity.QRoomPostFile>createList("roomPostFileList", gaji.service.domain.roomPost.entity.RoomPostFile.class, gaji.service.domain.roomPost.entity.QRoomPostFile.class, PathInits.DIRECT2);
@@ -86,7 +86,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<gaji.service.domain.roomPost.entity.RoomPost, gaji.service.domain.roomPost.entity.QRoomPost> roomPostList = this.<gaji.service.domain.roomPost.entity.RoomPost, gaji.service.domain.roomPost.entity.QRoomPost>createList("roomPostList", gaji.service.domain.roomPost.entity.RoomPost.class, gaji.service.domain.roomPost.entity.QRoomPost.class, PathInits.DIRECT2);
 
-    public final ListPath<gaji.service.domain.recruite.SearchKeyword, gaji.service.domain.recruite.QSearchKeyword> searchKeywordList = this.<gaji.service.domain.recruite.SearchKeyword, gaji.service.domain.recruite.QSearchKeyword>createList("searchKeywordList", gaji.service.domain.recruite.SearchKeyword.class, gaji.service.domain.recruite.QSearchKeyword.class, PathInits.DIRECT2);
+    public final ListPath<gaji.service.domain.recruit.entity.SearchKeyword, gaji.service.domain.recruit.entity.QSearchKeyword> searchKeywordList = this.<gaji.service.domain.recruit.entity.SearchKeyword, gaji.service.domain.recruit.entity.QSearchKeyword>createList("searchKeywordList", gaji.service.domain.recruit.entity.SearchKeyword.class, gaji.service.domain.recruit.entity.QSearchKeyword.class, PathInits.DIRECT2);
 
     public final ListPath<gaji.service.domain.message.entity.Message, gaji.service.domain.message.entity.QMessage> sentMessages = this.<gaji.service.domain.message.entity.Message, gaji.service.domain.message.entity.QMessage>createList("sentMessages", gaji.service.domain.message.entity.Message.class, gaji.service.domain.message.entity.QMessage.class, PathInits.DIRECT2);
 
