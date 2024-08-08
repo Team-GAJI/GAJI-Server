@@ -75,7 +75,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
         for (CategoryEnum category : request.getCategoryList()) {
             selectCategory = SelectCategory.builder()
-                    .category(category)
+//                    .category(category)
                     .entityId(room.getId())
                     .type(PostTypeEnum.ROOM)
                     .build();

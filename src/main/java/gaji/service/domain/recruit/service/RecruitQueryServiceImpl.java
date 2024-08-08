@@ -43,9 +43,10 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
                 selectCategoryRepository.findAllByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
 
 
-        List<CategoryEnum> categoryList = RecruitConverter.toCategoryList(selectCategoryList);
+//        List<CategoryEnum> categoryList = RecruitConverter.toCategoryList(selectCategoryList);
 
-        return RecruitConverter.toStudyDetailDTO(user, room, categoryList);
+//        return RecruitConverter.toStudyDetailDTO(user, room, categoryList);
+        return null;
     }
 
 
