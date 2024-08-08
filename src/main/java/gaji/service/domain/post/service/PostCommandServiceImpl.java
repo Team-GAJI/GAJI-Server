@@ -52,6 +52,7 @@ public class PostCommandServiceImpl implements PostCommandService {
         Post newPost = postRepository.save(post);
 
         // 해시태그 저장
+        // TODO: 해시태그 벌크성 insert 적용
         if (request.getHashtagList() != null) {
             List<String> hashtagStringList = request.getHashtagList();
             List<Hashtag> hashtagEntityList = hashtagService.createHashtagEntityList(hashtagStringList);
@@ -61,6 +62,7 @@ public class PostCommandServiceImpl implements PostCommandService {
         }
 
         // 카테고리 저장
+        // TODO: 카테고리 벌크성 insert 적용
         if (request.getCategoryList() != null) {
             List<CategoryEnum> categoryEnumList = request.getCategoryList();
             List<Category> categoryEntityList = categoryService.createCategoryEntityList(categoryEnumList);
