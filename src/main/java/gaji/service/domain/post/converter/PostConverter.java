@@ -106,7 +106,7 @@ public class PostConverter {
         return PostResponseDTO.PostDetailDTO.builder()
                 .userId(post.getUser().getId())
                 .type(post.getType())
-                .createdAt(LocalDate.from(post.getCreatedAt()))
+                .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(post.getCreatedAt()), ""))
                 .viewCnt(post.getHit())
                 .commentCnt(post.getCommentCnt())
                 .username(post.getUser().getName())
