@@ -1,5 +1,6 @@
 package gaji.service.domain.room.entity;
 
+import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.curriculum.Curriculum;
 import gaji.service.domain.user.entity.User;
@@ -24,7 +25,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Room {
+public class Room extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
