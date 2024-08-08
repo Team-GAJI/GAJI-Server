@@ -13,7 +13,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) { // Converter 등록
         registry.addConverter(new CategoryConverter());
-        registry.addConverter(new PostTypeConverter());
         registry.addConverter(new FilterConverter());
         registry.addConverter(new SortTypeConverter());
     }
