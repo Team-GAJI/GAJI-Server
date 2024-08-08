@@ -2,6 +2,7 @@ package gaji.service.domain.post.converter;
 
 import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.web.dto.CommentResponseDTO;
+import gaji.service.global.converter.DateConverter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,9 +16,9 @@ public class CommentConverter {
                 .userId(comment.getUser().getId())
                 .username(comment.getUser().getName())
                 .body(comment.getBody())
-                .orderNum(comment.getOrderNum())
+                .groupNum(comment.getGroupNum())
                 .depth(comment.getDepth())
-                .createdAt(LocalDate.from(comment.getCreatedAt()))
+                .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(comment.getCreatedAt()), "작성"))
                 .build();
     }
 
