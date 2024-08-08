@@ -23,7 +23,7 @@ public class HashtagQueryServiceImpl implements HashtagQueryService {
 
     @Override
     public List<SelectHashtag> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
-        return selectHashtagRepository.findAllFetchJoinWithCategoryByEntityIdAndPostType(entityId, postType);
+        return selectHashtagRepository.findAllFetchJoinWithHashtagByEntityIdAndPostType(entityId, postType);
     }
 
     // TODO: postId에 해당하는 hashtagList 반환해주는 메서드 만들고 HashtagConverter에 DTO로 변환하는 메서드 만들기
