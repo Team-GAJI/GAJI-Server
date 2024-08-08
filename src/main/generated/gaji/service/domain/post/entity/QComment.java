@@ -31,12 +31,12 @@ public class QComment extends EntityPathBase<Comment> {
 
     public final NumberPath<Integer> depth = createNumber("depth", Integer.class);
 
+    public final NumberPath<Integer> groupNum = createNumber("groupNum", Integer.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
-
-    public final NumberPath<Integer> orderNum = createNumber("orderNum", Integer.class);
 
     public final QComment parent;
 

@@ -30,9 +30,9 @@ public class QPost extends EntityPathBase<Post> {
 
     public final NumberPath<Integer> commentCnt = createNumber("commentCnt", Integer.class);
 
-    public final ListPath<Comment, QComment> commentList = this.<Comment, QComment>createList("commentList", Comment.class, QComment.class, PathInits.DIRECT2);
+    public final NumberPath<Integer> commentGroupNum = createNumber("commentGroupNum", Integer.class);
 
-    public final NumberPath<Integer> commentOrderNum = createNumber("commentOrderNum", Integer.class);
+    public final ListPath<Comment, QComment> commentList = this.<Comment, QComment>createList("commentList", Comment.class, QComment.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
