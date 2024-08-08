@@ -9,5 +9,5 @@ public interface RecruitQueryService {
     RecruitResponseDTO.studyDetailDTO getStudyDetail(Long roomId);
 
     RecruitResponseDTO.PreviewListDTO getPreviewList(
-            CategoryEnum category, PreviewFilter filter, SortType sort, Long value);
+            CategoryEnum category, PreviewFilter filter, SortType sort, Long value, int pageSize);
 }

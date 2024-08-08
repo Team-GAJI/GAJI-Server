@@ -15,6 +15,7 @@ import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,10 +58,11 @@ public class RecruitController {
     public BaseResponse<RecruitResponseDTO.PreviewListDTO> getPreviewList(
             @RequestParam(required = false) CategoryEnum category,
             @RequestParam(required = false) PreviewFilter filter,
-            @RequestParam(defaultValue = "RECENT") SortType sort,
-            @RequestParam(required = false) Long lastValue ){
+            @RequestParam(defaultValue = "최신순") SortType sort,
+            @RequestParam(required = false) Long lastValue,
+            @RequestParam("page") int pageSize){
 
-        RecruitResponseDTO.PreviewListDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, lastValue);
+        RecruitResponseDTO.PreviewListDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, lastValue, pageSize);
 
         return BaseResponse.onSuccess(responseDTO);
     }
