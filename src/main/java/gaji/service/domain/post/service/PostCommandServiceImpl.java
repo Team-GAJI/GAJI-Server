@@ -6,9 +6,9 @@ import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.Hashtag;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.entity.SelectHashtag;
-import gaji.service.domain.common.repository.HashtagRepository;
 import gaji.service.domain.common.repository.SelectHashtagRepository;
 import gaji.service.domain.common.service.CategoryService;
+import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.CommentStatus;
 import gaji.service.domain.post.code.PostErrorStatus;
@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +38,9 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     private final UserRepository userRepository;
     private final PostJpaRepository postRepository;
+    private final PostQueryService postQueryService;
     private final CommentService commentService;
-    private final HashtagRepository hashtagRepository;
-    private final SelectHashtagRepository selectHashtagRepository;
+    private final HashtagService hashtagService;
     private final CategoryService categoryService;
     private final PostBookmarkRepository postBookmarkRepository;
     private final PostLikesRepository postLikesRepository;
@@ -52,14 +51,13 @@ public class PostCommandServiceImpl implements PostCommandService {
         Post post = PostConverter.toPost(request, findUser);
         Post newPost = postRepository.save(post);
 
-        // 카테고리 저장
+        // 해시태그 저장
         if (request.getHashtagList() != null) {
             List<String> hashtagStringList = request.getHashtagList();
-            // TODO: convertHashtagStringListToHashtagList를 HashtagService로 옮기기
-            List<Hashtag> hashtagEntityList = convertHashtagStringListToHashtagList(hashtagStringList);
+            List<Hashtag> hashtagEntityList = hashtagService.createHashtagEntityList(hashtagStringList);
 
             List<SelectHashtag> selectHashtagList = HashtagConverter.toSelectHashtagList(hashtagEntityList, post.getId(), request.getType());
-            selectHashtagRepository.saveAll(selectHashtagList);
+            hashtagService.saveAllSelectHashtag(selectHashtagList);
         }
 
         // 카테고리 저장
@@ -77,7 +75,7 @@ public class PostCommandServiceImpl implements PostCommandService {
     @Override
     public Comment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, PostRequestDTO.WriteCommentDTO request) {
         User findUser = findUserByUserId(userId);
-        Post findPost = findPostByPostId(postId);
+        Post findPost = postQueryService.findPostByPostId(postId);
 
         Comment newComment = createCommentByCheckParentCommentIdIsNull(parentCommentId, request, findUser, findPost);
         findPost.increaseCommentCnt();
@@ -94,15 +92,15 @@ public class PostCommandServiceImpl implements PostCommandService {
     // TODO: 게시글 파일도 함께 삭제
     @Override
     public void hardDeleteCommunityPost(Long postId) {
-        Post findPost = findPostByPostId(postId);
-        selectHashtagRepository.deleteAllByEntityIdAndType(findPost.getId(), findPost.getType());
+        Post findPost = postQueryService.findPostByPostId(postId);
+        hashtagService.deleteAllByEntityIdAndType(findPost.getId(), findPost.getType());
         postRepository.delete(findPost);
     }
 
     @Override
     public PostBookmark bookmarkCommunityPost(Long userId, Long postId) {
         User findUser = findUserByUserId(userId);
-        Post findPost = findPostByPostId(postId);
+        Post findPost = postQueryService.findPostByPostId(postId);
         // TODO: 이미 북마크한 post인지 검증
         PostBookmark newPostBookmark = postBookmarkRepository.save(PostConverter.toPostBookmark(findUser, findPost));
         findPost.increaseBookmarkCnt();
@@ -113,7 +111,7 @@ public class PostCommandServiceImpl implements PostCommandService {
     @Override
     public void cancelbookmarkCommunityPost(Long userId, Long postId) {
         User findUser = findUserByUserId(userId);
-        Post findPost = findPostByPostId(postId);
+        Post findPost = postQueryService.findPostByPostId(postId);
         postBookmarkRepository.deleteByUserAndPost(findUser, findPost);
         findPost.decreaseBookmarkCnt();
     }
@@ -121,7 +119,7 @@ public class PostCommandServiceImpl implements PostCommandService {
     @Override
     public PostLikes likeCommunityPost(Long userId, Long postId) {
         User findUser = findUserByUserId(userId);
-        Post findPost = findPostByPostId(postId);
+        Post findPost = postQueryService.findPostByPostId(postId);
         // TODO: 이미 좋아요한 post인지 검증
         PostLikes newPostLikes = postLikesRepository.save(PostConverter.toPostLikes(findUser, findPost));
         findPost.increaseLikeCnt();
@@ -133,7 +131,7 @@ public class PostCommandServiceImpl implements PostCommandService {
     @Override
     public void cancelLikeCommunityPost(Long userId, Long postId) {
         User findUser = findUserByUserId(userId);
-        Post findPost = findPostByPostId(postId);
+        Post findPost = postQueryService.findPostByPostId(postId);
         postLikesRepository.deleteByUserAndPost(findUser, findPost);
         findPost.decreaseLikeCnt();
         findPost.decreasePopularityScoreByLike();
@@ -148,29 +146,9 @@ public class PostCommandServiceImpl implements PostCommandService {
         }
     }
 
-    // 이미 존재하는 해시태그는 조회, 존재하지 않는 해시태그는 생성해서 List로 반환하는 메서드
-    // TODO: HashtagService로 옮기기
-    private List<Hashtag> convertHashtagStringListToHashtagList(List<String> hashtagStringList) {
-        return hashtagStringList.stream()
-                .map(hashtag -> {
-                    if (hashtagRepository.existsByName(hashtag)) {
-                        return hashtagRepository.findByName(hashtag);
-                    } else {
-                        return hashtagRepository.save(HashtagConverter.toHashtag(hashtag));
-                    }
-                })
-                .collect(Collectors.toList());
-    }
-
-
     private User findUserByUserId(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
-    }
-
-    private Post findPostByPostId(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(PostErrorStatus._POST_NOT_FOUND));
     }
 
 }
