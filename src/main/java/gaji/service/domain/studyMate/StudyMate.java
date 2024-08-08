@@ -1,11 +1,11 @@
 package gaji.service.domain.studyMate;
 
-
-import gaji.service.domain.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +30,10 @@ public class StudyMate {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Builder
+    public StudyMate(User user, Room room, Role role) {
+        this.user = user;
+        this.room = room;
+        this.role = role;
+    }
 }

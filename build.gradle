@@ -44,6 +44,18 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	//OAuth2 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// 스프링 시큐리티 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//jwt 의존성 추가
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
 	implementation 'mysql:mysql-connector-java:8.0.33'
 }
 

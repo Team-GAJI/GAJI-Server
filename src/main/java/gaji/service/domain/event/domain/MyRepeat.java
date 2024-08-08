@@ -1,7 +1,5 @@
 package gaji.service.domain.event.domain;
-
 import gaji.service.domain.enums.Frequency;
-import gaji.service.domain.room.entity.Event;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,9 +15,7 @@ public class MyRepeat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private Event event;
+
 
     private LocalDate StartTime;
     private LocalDate EndTime;

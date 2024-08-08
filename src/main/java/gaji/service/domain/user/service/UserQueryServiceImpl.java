@@ -1,9 +1,13 @@
 package gaji.service.domain.user.service;
 
+import gaji.service.domain.user.code.UserErrorStatus;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -15,5 +19,11 @@ public class UserQueryServiceImpl implements UserQueryService {
     @Override
     public boolean existUserById(Long userId) {
         return userRepository.existsById(userId);
+    }
+
+    @Override
+    public User findUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
     }
 }

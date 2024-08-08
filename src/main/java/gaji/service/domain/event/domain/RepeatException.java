@@ -1,6 +1,6 @@
 package gaji.service.domain.event.domain;
 
-import gaji.service.domain.room.entity.Event;
+import gaji.service.domain.room.entity.RoomEvent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,9 +16,9 @@ public class RepeatException {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private Event event;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "event_id")
+//    private RoomEvent roomEvent;
 
     @Column(nullable = false)
     private LocalDate date;
