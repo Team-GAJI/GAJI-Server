@@ -30,7 +30,7 @@ public class UserQueryServiceImpl implements UserQueryService {
     }
 
     @Override
-    public User findUserById(Long userId){
+    public User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
     }
