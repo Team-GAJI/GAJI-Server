@@ -2,7 +2,7 @@ package gaji.service.domain.post.converter;
 
 import gaji.service.domain.common.converter.HashtagConverter;
 import gaji.service.domain.common.entity.SelectHashtag;
-import gaji.service.domain.common.service.HashtagQueryService;
+import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.common.web.dto.HashtagResponseDTO;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 public class PostConverter {
-    private final HashtagQueryService hashtagQueryService;
+    private final HashtagService hashtagService;
     private final PostBookMarkService postBookMarkService;
     private final PostLikesService postLikesService;
 
@@ -72,7 +72,7 @@ public class PostConverter {
     }
 
     public PostResponseDTO.PostPreviewDTO toPostPreviewDTO(Post post) {
-        List<SelectHashtag> selectHashtagList = hashtagQueryService.findAllFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType());
+        List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType());
         List<String> hashtagList = HashtagConverter.toHashtagNameList(selectHashtagList);
 
         return PostResponseDTO.PostPreviewDTO.builder()
@@ -91,14 +91,14 @@ public class PostConverter {
     }
 
     public List<PostResponseDTO.PostPreviewDTO> toPostPreviewDTOList(List<Post> postList) {
-        PostConverter postConverter = new PostConverter(hashtagQueryService, postBookMarkService, postLikesService);
+        PostConverter postConverter = new PostConverter(hashtagService, postBookMarkService, postLikesService);
         return postList.stream()
                 .map(postConverter::toPostPreviewDTO)
                 .collect(Collectors.toList());
     }
 
     public PostResponseDTO.PostDetailDTO toPostDetailDTO(Post post, Long userId) {
-        List<SelectHashtag> selectHashtagList = hashtagQueryService.findAllFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType());
+        List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType());
         List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagNameAndIdDTOList = HashtagConverter.toHashtagNameAndIdDTOList(selectHashtagList);
         boolean isBookmarked = postBookMarkService.existsByUserAndPost(userId, post);
         boolean isLiked = postLikesService.existsByUserAndPost(userId, post);

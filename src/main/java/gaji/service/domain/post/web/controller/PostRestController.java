@@ -1,7 +1,7 @@
 package gaji.service.domain.post.web.controller;
 
 import gaji.service.domain.enums.SortType;
-import gaji.service.domain.common.service.HashtagQueryService;
+import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.converter.CommentConverter;
@@ -38,7 +38,7 @@ public class PostRestController {
     private final PostCommandService postCommandService;
     private final PostQueryService postQueryService;
     private final CommentService commentService;
-    private final HashtagQueryService hashtagQueryService;
+    private final HashtagService hashtagQueryService;
     private final TokenProviderService tokenProviderService;
     private final PostConverter postConverter;
 
