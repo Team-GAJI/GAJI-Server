@@ -26,7 +26,7 @@ public class QUserAssignment extends EntityPathBase<UserAssignment> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final BooleanPath meeting = createBoolean("meeting");
+    public final BooleanPath isComplete = createBoolean("isComplete");
 
     public final gaji.service.domain.user.entity.QUser user;
 

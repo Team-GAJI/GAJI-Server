@@ -1,4 +1,4 @@
-package gaji.service.domain.recruite;
+package gaji.service.domain.recruit.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QRecruitPostBookmark extends EntityPathBase<RecruitPostBookmark> {
 
-    private static final long serialVersionUID = 1591390217L;
+    private static final long serialVersionUID = 786549941L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
@@ -24,7 +24,7 @@ public class QRecruitPostBookmark extends EntityPathBase<RecruitPostBookmark> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final QRecruitPost recruitPost;
+    public final gaji.service.domain.room.entity.QRoom room;
 
     public final gaji.service.domain.user.entity.QUser user;
 
@@ -46,7 +46,7 @@ public class QRecruitPostBookmark extends EntityPathBase<RecruitPostBookmark> {
 
     public QRecruitPostBookmark(Class<? extends RecruitPostBookmark> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.recruitPost = inits.isInitialized("recruitPost") ? new QRecruitPost(forProperty("recruitPost"), inits.get("recruitPost")) : null;
+        this.room = inits.isInitialized("room") ? new gaji.service.domain.room.entity.QRoom(forProperty("room"), inits.get("room")) : null;
         this.user = inits.isInitialized("user") ? new gaji.service.domain.user.entity.QUser(forProperty("user")) : null;
     }
 

@@ -28,6 +28,8 @@ public class QRoomNotice extends EntityPathBase<RoomNotice> {
 
     public final QRoom room;
 
+    public final StringPath title = createString("title");
+
     public QRoomNotice(String variable) {
         this(RoomNotice.class, forVariable(variable), INITS);
     }

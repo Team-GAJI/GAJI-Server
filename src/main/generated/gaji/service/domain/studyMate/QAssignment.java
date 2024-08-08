@@ -26,11 +26,9 @@ public class QAssignment extends EntityPathBase<Assignment> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final gaji.service.domain.room.entity.QRoom room;
+    public final gaji.service.domain.room.entity.QRoomEvent roomEvent;
 
     public final ListPath<UserAssignment, QUserAssignment> userAssignmentList = this.<UserAssignment, QUserAssignment>createList("userAssignmentList", UserAssignment.class, QUserAssignment.class, PathInits.DIRECT2);
-
-    public final NumberPath<Integer> weeks = createNumber("weeks", Integer.class);
 
     public QAssignment(String variable) {
         this(Assignment.class, forVariable(variable), INITS);
@@ -50,7 +48,7 @@ public class QAssignment extends EntityPathBase<Assignment> {
 
     public QAssignment(Class<? extends Assignment> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.room = inits.isInitialized("room") ? new gaji.service.domain.room.entity.QRoom(forProperty("room"), inits.get("room")) : null;
+        this.roomEvent = inits.isInitialized("roomEvent") ? new gaji.service.domain.room.entity.QRoomEvent(forProperty("roomEvent"), inits.get("roomEvent")) : null;
     }
 
 }
