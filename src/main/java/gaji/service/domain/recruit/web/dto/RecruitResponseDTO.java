@@ -64,4 +64,28 @@ public class RecruitResponseDTO {
         int commentCount;
         List<CommentResponseDTO> commentList;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PreviewDTO {
+        String imageUrl;
+        RecruitPostTypeEnum recruitStatus;
+        int applicant;
+        String name;
+        Long deadLine;
+        String description;
+        Long createdAt;
+        int recruitCount;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PreviewListDTO {
+        List<PreviewDTO> previewList;
+        Long lastValue;
+    }
 }
