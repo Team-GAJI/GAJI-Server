@@ -10,7 +10,11 @@ import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.StudyMate;
+import org.springframework.data.domain.Page;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -109,4 +113,24 @@ public class RecruitConverter {
                 .build();
     }
 
+    public static RecruitResponseDTO.PreviewDTO toPreviewDTO(Room room) {
+        Long createdAt = Duration.between(LocalDate.now(), room.getCreatedAt()).toHours();
+        if (createdAt > 24) {
+            createdAt %= 24;
+        }
+        return RecruitResponseDTO.PreviewDTO.builder()
+                .imageUrl(room.getThumbnailUrl())
+                .recruitStatus(room.getRecruitPostTypeEnum())
+                .applicant(room.getStudyApplicantList().size())
+                .name(room.getName())
+                .deadLine(ChronoUnit.DAYS.between(LocalDate.now() ,room.getRecruitEndDay()))
+                .description(room.getDescription())
+                .createdAt(createdAt)
+                .recruitCount(room.getPeopleMaximum())
+                .build();
+    }
+
+    public static List<RecruitResponseDTO.PreviewDTO> toPreviewDTOLIST(List<Room> roomList) {
+        return roomList.stream().map(RecruitConverter::toPreviewDTO).collect(Collectors.toList());
+    }
 }
