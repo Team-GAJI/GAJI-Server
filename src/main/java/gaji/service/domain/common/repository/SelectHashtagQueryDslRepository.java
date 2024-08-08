@@ -5,7 +5,7 @@ import gaji.service.domain.enums.PostTypeEnum;
 
 import java.util.List;
 
-public interface SelectHashtagCustomRepository {
+public interface SelectHashtagQueryDslRepository {
 
-    List<SelectHashtag> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType);
+    List<SelectHashtag> findAllFetchJoinWithHashtagByEntityIdAndPostType(Long entityId, PostTypeEnum postType);
 }

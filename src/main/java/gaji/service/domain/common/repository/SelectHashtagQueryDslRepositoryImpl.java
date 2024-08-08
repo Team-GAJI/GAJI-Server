@@ -14,15 +14,18 @@ import static gaji.service.domain.common.entity.QHashtag.hashtag;
 
 @Repository
 @RequiredArgsConstructor
-public class SelectHashtagCustomRepositoryImpl implements SelectHashtagCustomRepository {
+public class SelectHashtagQueryDslRepositoryImpl implements SelectHashtagQueryDslRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<SelectHashtag> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
+    public List<SelectHashtag> findAllFetchJoinWithHashtagByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
         return jpaQueryFactory.selectFrom(selectHashtag)
                 .join(selectHashtag.hashtag, hashtag).fetchJoin()
-                .where(selectHashtag.entityId.eq(entityId), selectHashtag.type.eq(postType))
-                .orderBy(selectHashtag.createdAt.asc())
+                .where(
+                        selectHashtag.entityId.eq(entityId),
+                        selectHashtag.type.eq(postType)
+                )
+                .orderBy(selectHashtag.id.asc())
                 .fetch();
     }
 }
