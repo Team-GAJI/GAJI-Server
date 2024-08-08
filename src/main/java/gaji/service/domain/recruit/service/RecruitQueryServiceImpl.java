@@ -3,6 +3,9 @@ package gaji.service.domain.recruit.service;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.enums.PreviewFilter;
+import gaji.service.domain.enums.SortType;
+import gaji.service.domain.recruit.repository.RecruitRepository;
 import gaji.service.domain.recruit.repository.SelectCategoryRepository;
 import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.user.entity.User;
@@ -14,9 +17,16 @@ import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.user.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.Lint;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -28,6 +38,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     private final RoomQueryService roomQueryService;
     private final RoomCommandService roomCommandService;
     private final SelectCategoryRepository selectCategoryRepository;
+    private final RecruitRepository recruitRepository;
 
     @Override
     @Transactional
@@ -48,5 +59,24 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
         return RecruitConverter.toStudyDetailDTO(user, room, categoryList);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public RecruitResponseDTO.PreviewListDTO getPreviewList(
+            CategoryEnum category, PreviewFilter filter, SortType sort, Long value) {
 
+        int pageSize;
+
+        if (category == null) {
+            pageSize = 20;
+        } else {
+            pageSize = 5;
+        }
+
+        Pageable pageable = PageRequest.of(0, pageSize);
+
+        RecruitResponseDTO.PreviewListDTO previewList =
+                recruitRepository.findByCategoryOrderBySortType(category, filter, sort, value, pageable);
+
+        return previewList;
+    }
 }
