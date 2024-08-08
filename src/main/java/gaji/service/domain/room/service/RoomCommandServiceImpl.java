@@ -48,7 +48,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 //                .orElseThrow(() -> new RestApiException(PostErrorStatus._USER_NOT_FOUND));
 
 
-        RoomEvent roomEvent = roomQueryService.findRoomEventByRoomIdAndWeeks(roomId, requestDto.getWeeks());
+        RoomEvent roomEvent = roomQueryService.findRoomEventByRoomIdAndWeeks(roomId, requestDto.getWeek());
 
         // List<String>을 단일 String으로 변환
         String bodyContent = String.join(", ", requestDto.getBodyList());
