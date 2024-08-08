@@ -1,10 +1,14 @@
 package gaji.service.domain.room.entity;
 
+import gaji.service.domain.studyMate.entity.Assignment;
+import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,11 +28,11 @@ public class RoomEvent {
     @JoinColumn(name = "room_id")
     private Room room;
 
-//    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-//    private final List<RepeatException> repeatExceptionList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "roomEvent", cascade = CascadeType.ALL)
-//    private final List<RoomEvent> roomEventList = new ArrayList<>();
+    @OneToMany(mappedBy = "roomEvent", cascade = CascadeType.ALL)
+    private final List<WeeklyUserProgress> weeklyUserProgressList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "roomEvent", cascade = CascadeType.ALL)
+    private final List<Assignment> assignmentList = new ArrayList<>();
 
 
     @Column(length = 30)

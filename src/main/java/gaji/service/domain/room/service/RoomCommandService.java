@@ -22,4 +22,6 @@ public interface RoomCommandService {
     boolean toggleNoticeConfirmation(Long noticeId, Long userId);
 
     void saveRoom(Room room);
+
+    void calculateAndSaveProgress(Long roomEventId, Long userId);
 }
