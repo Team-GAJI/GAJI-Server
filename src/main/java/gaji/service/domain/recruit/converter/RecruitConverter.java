@@ -10,10 +10,12 @@ import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.StudyMate;
+import gaji.service.global.converter.DateConverter;
 import org.springframework.data.domain.Page;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +116,7 @@ public class RecruitConverter {
     }
 
     public static RecruitResponseDTO.PreviewDTO toPreviewDTO(Room room) {
-        Long createdAt = Duration.between(LocalDate.now(), room.getCreatedAt()).toHours();
+        Long createdAt = Duration.between(LocalDateTime.now(), room.getCreatedAt()).toHours();
         if (createdAt > 24) {
             createdAt %= 24;
         }
@@ -123,7 +125,7 @@ public class RecruitConverter {
                 .recruitStatus(room.getRecruitPostTypeEnum())
                 .applicant(room.getStudyApplicantList().size())
                 .name(room.getName())
-                .deadLine(ChronoUnit.DAYS.between(LocalDate.now() ,room.getRecruitEndDay()))
+                .deadLine(ChronoUnit.DAYS.between(room.getRecruitEndDay(), LocalDate.now()))
                 .description(room.getDescription())
                 .createdAt(createdAt)
                 .recruitCount(room.getPeopleMaximum())
