@@ -44,10 +44,9 @@ public class PostRestController {
 
     @PostMapping
     @Operation(summary = "커뮤니티 게시글 업로드 API", description = "커뮤니티의 게시글을 업로드하는 API입니다. 게시글 유형과 제목, 본문 내용을 검증합니다.")
-    public BaseResponse<Long> uploadPost(/*@RequestHeader("Authorization") String authorizationHeader,*/
-            @Min(value = 1, message = "userId는 1 이상 이어야 합니다.") @RequestParam Long userId,
+    public BaseResponse<Long> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
                                          @RequestBody @Valid PostRequestDTO.UploadPostDTO request) {
-//        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         Post newPost = postCommandService.uploadPost(userId, request);
         return BaseResponse.onSuccess(newPost.getId());
     }
@@ -57,10 +56,9 @@ public class PostRestController {
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
     })
-    public BaseResponse hardDeleteCommunityPost(/*@RequestHeader("Authorization") String authorizationHeader,*/
-            @Min(value = 1, message = "userId는 1 이상 이어야 합니다.") @RequestParam Long userId,
+    public BaseResponse hardDeleteCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
             @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
-//        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         postCommandService.hardDeleteCommunityPost(postId);
         return BaseResponse.onSuccess(null);
     }
@@ -99,12 +97,11 @@ public class PostRestController {
             @Parameter(name = "postId", description = "게시글 id"),
             @Parameter(name = "parentCommentId", description = "부모 댓글의 id, 대댓글 작성할 때 필요한 부모 댓글의 id입니다."),
     })
-    public BaseResponse<Long> writeCommentOnCommunityPost(/*@RequestHeader("Authorization") String authorizationHeader,*/
-            @Min(value = 1, message = "userId는 1 이상 이어야 합니다.") @RequestParam Long userId,
+    public BaseResponse<Long> writeCommentOnCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
             @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
             @Min(value = 1, message = "parentCommentId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long parentCommentId,
             @RequestBody @Valid PostRequestDTO.WriteCommentDTO request) {
-//        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         Comment newComment = postCommandService.writeCommentOnCommunityPost(userId, postId, parentCommentId, request);
         return BaseResponse.onSuccess(newComment.getId());
     }
@@ -114,10 +111,9 @@ public class PostRestController {
     @Parameters({
             @Parameter(name = "commentId", description = "댓글 id"),
     })
-    public BaseResponse softDeleteComment(/*@RequestHeader("Authorization") String authorizationHeader,*/
-            @Min(value = 1, message = "userId는 1 이상 이어야 합니다.") @RequestParam Long userId,
+    public BaseResponse softDeleteComment(@RequestHeader("Authorization") String authorizationHeader,
             @Min(value = 1, message = "commentId는 1 이상 이어야 합니다.") @PathVariable Long commentId) {
-//        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         postCommandService.softDeleteComment(commentId);
         return BaseResponse.onSuccess(null);
     }
@@ -138,10 +134,9 @@ public class PostRestController {
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
     })
-    public BaseResponse<Long> bookmarkCommunityPost(/*@RequestHeader("Authorization") String authorizationHeader,*/
-            @Min(value = 1, message = "userId는 1 이상 이어야 합니다.") @RequestParam Long userId,
+    public BaseResponse<Long> bookmarkCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
             @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
-//        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         PostBookmark newPostBookmark = postCommandService.bookmarkCommunityPost(userId, postId);
         return BaseResponse.onSuccess(newPostBookmark.getId());
     }
@@ -151,10 +146,9 @@ public class PostRestController {
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
     })
-    public BaseResponse cancelBookmarkCommunityPost(/*@RequestHeader("Authorization") String authorizationHeader,*/
-            @Min(value = 1, message = "userId는 1 이상 이어야 합니다.") @RequestParam Long userId,
+    public BaseResponse cancelBookmarkCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
             @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
-//        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         postCommandService.cancelbookmarkCommunityPost(userId, postId);
         return BaseResponse.onSuccess(null);
     }
@@ -164,10 +158,9 @@ public class PostRestController {
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
     })
-    public BaseResponse<Long> likeCommunityPost(/*@RequestHeader("Authorization") String authorizationHeader,*/
-            @Min(value = 1, message = "userId는 1 이상 이어야 합니다.") @RequestParam Long userId,
+    public BaseResponse<Long> likeCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
             @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
-//        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         PostLikes newPostLikes = postCommandService.likeCommunityPost(userId, postId);
         return BaseResponse.onSuccess(newPostLikes.getId());
     }
@@ -177,10 +170,9 @@ public class PostRestController {
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
     })
-    public BaseResponse cancelLikeCommunityPost(/*@RequestHeader("Authorization") String authorizationHeader,*/
-            @Min(value = 1, message = "userId는 1 이상 이어야 합니다.") @RequestParam Long userId,
+    public BaseResponse cancelLikeCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
             @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
-//        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         postCommandService.cancelLikeCommunityPost(userId, postId);
         return BaseResponse.onSuccess(null);
     }
