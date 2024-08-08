@@ -2,6 +2,8 @@ package gaji.service.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gaji.service.global.exception.RestApiException;
+import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +35,6 @@ public enum CategoryEnum {
             }
         }
         log.error("CategoryEnum.from() exception occur param: {}", param);
-        return null;
+        throw new RestApiException(GlobalErrorStatus._CATEGORY_NOT_VALID);
     }
 }
