@@ -13,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventResponse {
+    private List<EventInfo> eventInfoList;
 
     @Getter
     @Builder
@@ -20,12 +21,9 @@ public class EventResponse {
     @NoArgsConstructor
     public static class EventInfo {
         private UUID eventId;
-        private String title;
         private String description;
         private String startDate;
         private String endDate;
-        private String createdAt;
-        private String updatedAt;
-        private List<UUID> tags;
+        private boolean commitmentStatus;
     }
 }
