@@ -1,10 +1,15 @@
 package gaji.service.domain.post.service;
 
+import gaji.service.domain.common.converter.CategoryConverter;
 import gaji.service.domain.common.converter.HashtagConverter;
+import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.Hashtag;
+import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.entity.SelectHashtag;
 import gaji.service.domain.common.repository.HashtagRepository;
 import gaji.service.domain.common.repository.SelectHashtagRepository;
+import gaji.service.domain.common.service.CategoryService;
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.CommentStatus;
 import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.post.converter.PostConverter;
@@ -34,9 +39,10 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     private final UserRepository userRepository;
     private final PostJpaRepository postRepository;
+    private final CommentService commentService;
     private final HashtagRepository hashtagRepository;
     private final SelectHashtagRepository selectHashtagRepository;
-    private final CommentService commentService;
+    private final CategoryService categoryService;
     private final PostBookmarkRepository postBookmarkRepository;
     private final PostLikesRepository postLikesRepository;
 
@@ -46,16 +52,27 @@ public class PostCommandServiceImpl implements PostCommandService {
         Post post = PostConverter.toPost(request, findUser);
         Post newPost = postRepository.save(post);
 
+        // 카테고리 저장
         if (request.getHashtagList() != null) {
             List<String> hashtagStringList = request.getHashtagList();
+            // TODO: convertHashtagStringListToHashtagList를 HashtagService로 옮기기
             List<Hashtag> hashtagEntityList = convertHashtagStringListToHashtagList(hashtagStringList);
 
             List<SelectHashtag> selectHashtagList = HashtagConverter.toSelectHashtagList(hashtagEntityList, post.getId(), request.getType());
             selectHashtagRepository.saveAll(selectHashtagList);
         }
+
+        // 카테고리 저장
+        if (request.getCategoryList() != null) {
+            List<CategoryEnum> categoryEnumList = request.getCategoryList();
+            List<Category> categoryEntityList = categoryService.createCategoryEntityList(categoryEnumList);
+
+            List<SelectCategory> selectCategoryList = CategoryConverter.toSelectCategoryList(categoryEntityList, post.getId(), request.getType());
+            categoryService.saveAllSelectCategory(selectCategoryList);
+        }
+
         return newPost;
     }
-
 
     @Override
     public Comment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, PostRequestDTO.WriteCommentDTO request) {
@@ -132,6 +149,7 @@ public class PostCommandServiceImpl implements PostCommandService {
     }
 
     // 이미 존재하는 해시태그는 조회, 존재하지 않는 해시태그는 생성해서 List로 반환하는 메서드
+    // TODO: HashtagService로 옮기기
     private List<Hashtag> convertHashtagStringListToHashtagList(List<String> hashtagStringList) {
         return hashtagStringList.stream()
                 .map(hashtag -> {
@@ -143,6 +161,7 @@ public class PostCommandServiceImpl implements PostCommandService {
                 })
                 .collect(Collectors.toList());
     }
+
 
     private User findUserByUserId(Long userId) {
         return userRepository.findById(userId)
