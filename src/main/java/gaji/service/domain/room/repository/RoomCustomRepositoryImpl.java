@@ -6,9 +6,10 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.QStudyMate;
 import gaji.service.domain.user.entity.User;
 import lombok.AllArgsConstructor;
-import org.joda.time.LocalDate;
+
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -27,7 +28,7 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
                 .join(studyMate).on(room.id.eq(studyMate.room.id))
                 .where(studyMate.user.eq(user)
                         .and(room.studyEndDay.after(now)))
-                .orderBy(room.studyEndDay.desc())
+                .orderBy(room.studyStartDay.desc())
                 .limit(limit)
                 .fetch();
 
@@ -35,7 +36,7 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
                 .join(studyMate).on(room.id.eq(studyMate.room.id))
                 .where(studyMate.user.eq(user)
                         .and(room.studyEndDay.before(now)))
-                .orderBy(room.studyEnd.desc())
+                .orderBy(room.studyStartDay.desc())
                 .limit(limit)
                 .fetch();
 
