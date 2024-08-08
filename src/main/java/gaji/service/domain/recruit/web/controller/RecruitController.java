@@ -1,5 +1,8 @@
 package gaji.service.domain.recruit.web.controller;
 
+import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.enums.PreviewFilter;
+import gaji.service.domain.enums.SortType;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.service.RecruitCommandService;
 import gaji.service.domain.recruit.service.RecruitQueryService;
@@ -13,6 +16,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -44,6 +49,19 @@ public class RecruitController {
     @Operation(summary = "스터디 댓글 조회 API", description = "스터디 댓글을 조회하는 API입니다.")
     public BaseResponse<RecruitResponseDTO.CommentListDTO> getCommentList(@PathVariable Long roomId) {
         RecruitResponseDTO.CommentListDTO responseDTO = studyCommentQueryService.getCommentList(roomId);
+        return BaseResponse.onSuccess(responseDTO);
+    }
+
+    @GetMapping("/preview")
+    @Operation(summary = "스터디 모집 게시글 미리보기 목록 조회 API", description = "모집 게시글 목록을 조회하는 API 입니다.")
+    public BaseResponse<RecruitResponseDTO.PreviewListDTO> getPreviewList(
+            @RequestParam(required = false) CategoryEnum category,
+            @RequestParam(required = false) PreviewFilter filter,
+            @RequestParam(defaultValue = "RECENT") SortType sort,
+            @RequestParam(required = false) Long lastValue ){
+
+        RecruitResponseDTO.PreviewListDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, lastValue);
+
         return BaseResponse.onSuccess(responseDTO);
     }
 }
