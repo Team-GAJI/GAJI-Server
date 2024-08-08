@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class PostResponseDTO {
     public static class PostDetailDTO {
         private Long userId;
         private PostTypeEnum type;
-        private LocalDate createdAt;
+        private String createdAt;
         private int viewCnt;
         private int commentCnt;
         private String username;
