@@ -2,9 +2,10 @@ package gaji.service.domain.post.repository;
 
 import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
-import java.util.List;
 
 public interface CommentQueryDslRepository {
-    List<Comment> findAllByPostFetchJoinWithUser(Post post);
+    Slice<Comment> findBySliceAndPostFetchJoinWithUser(Integer lastGroupNum, Post post, Pageable pageable);
 }
