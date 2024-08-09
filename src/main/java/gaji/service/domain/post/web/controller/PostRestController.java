@@ -65,7 +65,8 @@ public class PostRestController {
             @Parameter(name = "postId", description = "게시글 id"),
     })
     public BaseResponse<PostResponseDTO.PostDetailDTO> getPostDetail(@Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
-                                                                     @RequestParam(required = false) Long userId) {
+                                                                     @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+        Long userId = (authorizationHeader == null) ? null : tokenProviderService.getUserIdFromToken(authorizationHeader);
         Post post = postQueryService.getPostDetail(postId);
         return BaseResponse.onSuccess(postConverter.toPostDetailDTO(post, userId));
     }

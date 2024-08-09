@@ -125,8 +125,8 @@ public class PostConverter {
     public PostResponseDTO.PostDetailDTO toPostDetailDTO(Post post, Long userId) {
         List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(post.getId(), post.getType());
         List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagNameAndIdDTOList = HashtagConverter.toHashtagNameAndIdDTOList(selectHashtagList);
-        boolean isBookmarked = postBookMarkService.existsByUserAndPost(userId, post);
-        boolean isLiked = postLikesService.existsByUserAndPost(userId, post);
+        boolean isBookmarked = (userId == null) ? false : postBookMarkService.existsByUserAndPost(userId, post);
+        boolean isLiked = (userId == null) ? false : postLikesService.existsByUserAndPost(userId, post);
 
         return PostResponseDTO.PostDetailDTO.builder()
                 .userId(post.getUser().getId())
