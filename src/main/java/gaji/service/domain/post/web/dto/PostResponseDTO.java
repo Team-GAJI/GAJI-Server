@@ -43,6 +43,15 @@ public class PostResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class PostPreviewListDTO {
+        private List<PostPreviewDTO> postList = new ArrayList<>();
+        private boolean hasNext;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PostDetailDTO {
         private Long userId;
         private PostTypeEnum type;
