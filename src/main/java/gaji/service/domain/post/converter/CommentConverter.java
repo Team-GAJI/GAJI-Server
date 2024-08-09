@@ -24,7 +24,7 @@ public class CommentConverter {
                 .body(comment.getBody())
                 .groupNum(comment.getGroupNum())
                 .depth(comment.getDepth())
-                .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(comment.getCreatedAt()), "작성"))
+                .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(comment.getCreatedAt()), " 작성"))
                 .build();
     }
 
