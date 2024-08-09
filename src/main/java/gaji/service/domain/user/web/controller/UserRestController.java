@@ -2,6 +2,7 @@ package gaji.service.domain.user.web.controller;
 
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.user.code.UserErrorStatus;
 import gaji.service.domain.user.converter.UserConverter;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserCommandService;
@@ -9,6 +10,7 @@ import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.domain.user.web.dto.UserRequestDTO;
 import gaji.service.domain.user.web.dto.UserResponseDTO;
 import gaji.service.global.base.BaseResponse;
+import gaji.service.global.exception.RestApiException;
 import gaji.service.jwt.service.TokenProviderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +35,14 @@ public class UserRestController {
     }
 
 
-    @PutMapping("/nicknames")
+    @PutMapping("/nicknames/{userId}")
     public BaseResponse<UserResponseDTO.UpdateNicknameResultDTO> updateNickname(@RequestHeader("Authorization") String authorizationHeader,
-                                                                                @RequestBody @Valid UserRequestDTO.UpdateNicknameDTO request
-                                                                                ) {
+                                                                                @PathVariable("userId") Long userIdFromPathVariable,
+                                                                                @RequestBody @Valid UserRequestDTO.UpdateNicknameDTO request) {
 
-        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        User user = userCommandService.updateUserNickname(userId, request);
+
+        Long userIdFromToken = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        User user = userCommandService.updateUserNickname(userIdFromToken, userIdFromPathVariable, request);
         return BaseResponse.onSuccess(UserConverter.toUpdateNicknameResultDTO(user));
     }
 }
