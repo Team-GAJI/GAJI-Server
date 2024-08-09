@@ -58,7 +58,7 @@ public class CommentQueryDslRepositoryImpl implements CommentQueryDslRepository 
     private Slice<Comment> checkLastPage(Pageable pageable, List<Comment> commentList) {
         boolean hasNext = false;
 
-        // (조회한 결과 개수 > 요청한 페이지 사이즈) 이면 뒤에 더 존재함
+        // (조회한 결과 개수 > 요청한 페이지 사이즈) 이면 뒤에 데이터가 더 존재함
         if (commentList.size() > pageable.getPageSize()) {
             hasNext = true;
             commentList.remove(pageable.getPageSize()); // limit(pageable.getPageSize() + 1) 로 1개 더 가져온 데이터를 삭제해줌.
