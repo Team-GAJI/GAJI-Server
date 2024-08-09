@@ -1,5 +1,6 @@
 package gaji.service.domain.post.service;
 
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
@@ -8,6 +9,8 @@ import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.post.repository.PostJpaRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +23,24 @@ public class PostQueryServiceImpl implements PostQueryService {
     private final PostJpaRepository postRepository;
 
     @Override
-    public List<Post> getPostList(PostTypeEnum postType, String category, SortType sortType, PostStatusEnum postStatus) {
-        return postRepository.findAllFetchJoinWithUser(postType, postStatus, sortType);
+    public Slice<Post> getPostList(Integer lastPopularityScore,
+                                   Long lastPostId,
+                                   Integer lastLikeCnt,
+                                   Integer lastHit,
+                                   PostTypeEnum postType,
+                                   CategoryEnum category,
+                                   SortType sortType,
+                                   PostStatusEnum postStatus,
+                                   int size) {
+        PageRequest pageRequest = PageRequest.of(0, size);
+        return postRepository.findAllFetchJoinWithUser(lastPopularityScore,
+                lastPostId,
+                lastLikeCnt,
+                lastHit,
+                postType,
+                postStatus,
+                sortType,
+                pageRequest);
     }
 
     @Override
