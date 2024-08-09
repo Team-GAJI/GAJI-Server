@@ -32,13 +32,8 @@ public class RoomQueryServiceImpl implements RoomQueryService {
 
     @PersistenceContext
     private EntityManager em;
-
-public class RoomQueryServiceImpl implements RoomQueryService{
     private final RoomEventRepository roomEventRepository;
     private final RoomRepository roomRepository;
-    private final RoomQueryRepository roomQueryRepository;
-    private final RoomPostRepository roomPostRepository;
-    private final RoomPostQueryServiceImpl roomPostQueryService;
     private final RoomQueryRepository roomQueryRepository;
     private final WeeklyUserProgressRepository weeklyUserProgressRepository;
 
@@ -48,30 +43,17 @@ public class RoomQueryServiceImpl implements RoomQueryService{
 //                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
 //
 //    }
+@Override
+public Room findRoomById(Long roomId) {
+    return roomRepository.findById(roomId)
+            .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
 
-    @Override
-    public Room findRoomById(Long roomId) {
-        return roomRepository.findById(roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
-
-    }
+}
 
     @Override
     public RoomEvent findRoomEventByRoomIdAndWeeks(Long roomId, Integer weeks) {
         return roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId, weeks)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
-    }
-
-    @Override
-    public RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId) {
-
-        RoomResponseDto.RoomMainDto mainStudyRoom = roomQueryRepository.getMainStudyRoom(roomId);
-        return mainStudyRoom;
-    }
-
-    @Override
-    public RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId){
-        return roomQueryRepository.getRoomNotices(roomId);
     }
 
     @Override

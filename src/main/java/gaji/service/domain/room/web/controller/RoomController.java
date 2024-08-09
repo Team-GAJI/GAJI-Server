@@ -25,7 +25,6 @@ public class RoomController {
 
     private final RoomCommandService roomCommandService;
     private final RoomQueryService roomQueryService;
-
     @PostMapping("/assignments/{roomId}/{userId}")
     @Operation(summary = "스터디룸 과제 등록 API",description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 스터디에 참혀하고 있는 user인지 검증합니다.")
     public BaseResponse<Long> AssignmentController(@PathVariable Long userId/*하드 코딩용, 추후 삭제*/, @RequestBody @Valid RoomRequestDto.AssignmentDto requestDto, @PathVariable Long roomId){
@@ -63,19 +62,6 @@ public class RoomController {
         RoomNotice roomNotice = roomCommandService.createNotice(roomId, userId, requestDto);
         return BaseResponse.onSuccess(RoomConverter.toRoomNoticeDto(roomNotice));
     }
-
-    @GetMapping("/home/{roomId}")
-    @Operation(summary = "스터디룸 main 화면 스터디 정보 조회 API")
-    public BaseResponse<RoomResponseDto.RoomMainDto> GetRoomMainController(@PathVariable Long roomId){
-        return BaseResponse.onSuccess(roomQueryService.getMainStudyRoom(roomId));
-    }
-
-    @GetMapping("/notice/{roomId}")
-    @Operation(summary = "스터디룸 main 화면 공지사항 정보 조회 API")
-    public BaseResponse<RoomResponseDto.MainRoomNoticeDto> GetMainRoomNoticeController(@PathVariable Long roomId){
-        return BaseResponse.onSuccess(roomQueryService.getMainRoomNotice(roomId));
-    }
-
 
     @GetMapping("/{roomId}/notices")
     @Operation(summary = "스터디룸 공지 목록 조회 API")
