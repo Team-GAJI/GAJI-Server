@@ -20,7 +20,7 @@ public class PostTypeExistValidator implements ConstraintValidator<ExistPostType
     // TODO: 검증 메시지 적용 안되는 문제 해결하기
     @Override
     public boolean isValid(PostTypeEnum value, ConstraintValidatorContext context) {
-//        boolean isValid = (value == PostTypeEnum.ROOM) || (value == PostTypeEnum.BLOG) || (value == PostTypeEnum.PROJECT) || (value == PostTypeEnum.QUESTION);
+        boolean isValid = (value == PostTypeEnum.ROOM) || (value == PostTypeEnum.BLOG) || (value == PostTypeEnum.PROJECT) || (value == PostTypeEnum.QUESTION);
 //        boolean isValid = false;
 //
 //        for (PostTypeEnum postTypeEnum : PostTypeEnum.values()) {
@@ -29,8 +29,8 @@ public class PostTypeExistValidator implements ConstraintValidator<ExistPostType
 //            }
 //        }
 
-        boolean isValid = Arrays.stream(PostTypeEnum.values())
-                .allMatch(postTypeEnum -> postTypeEnum.equals(value));
+//        boolean isValid = Arrays.stream(PostTypeEnum.values())
+//                .allMatch(postTypeEnum -> postTypeEnum.equals(value));
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
