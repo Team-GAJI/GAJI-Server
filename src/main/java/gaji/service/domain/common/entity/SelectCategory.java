@@ -1,6 +1,5 @@
 package gaji.service.domain.common.entity;
 
-import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
