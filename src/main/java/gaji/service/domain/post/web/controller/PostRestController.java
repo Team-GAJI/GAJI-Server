@@ -1,5 +1,6 @@
 package gaji.service.domain.post.web.controller;
 
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.enums.PostStatusEnum;
@@ -26,8 +27,6 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -82,13 +81,18 @@ public class PostRestController {
             @Parameter(name = "sortType", description = "정렬 유형(hot, recent)"),
             @Parameter(name = "filter", description = "게시글의 상태(모집중, 모집완료, ...)"),
     })
-    public BaseResponse<List<PostResponseDTO.PostPreviewDTO>> getPostPreivewList(@RequestParam(required = false) PostTypeEnum postType,
-                                                                                 @RequestParam(required = false) String category,
-                                                                                 @RequestParam(required = false) SortType sortType,
-                                                                                 @RequestParam(required = false) PostStatusEnum filter) {
+    public BaseResponse<PostResponseDTO.PostPreviewListDTO> getPostPreivewList(@Min(value = 1, message = "lastPopularityScore는 1 이상 이어야 합니다.") @RequestParam(required = false) Integer lastPopularityScore,
+                                                                               @Min(value = 1, message = "lastPostId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long lastPostId,
+                                                                               @Min(value = 0, message = "lastLikeCnt는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastLikeCnt,
+                                                                               @Min(value = 0, message = "lastHit은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastHit,
+                                                                               @RequestParam(required = false) PostTypeEnum postType,
+                                                                               @RequestParam(required = false) CategoryEnum category,
+                                                                               @RequestParam(required = false) SortType sortType,
+                                                                               @RequestParam(required = false) PostStatusEnum filter,
+                                                                               @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
-        List<Post> postList = postQueryService.getPostList(postType, category, sortType, filter);
-        return BaseResponse.onSuccess(postConverter.toPostPreviewDTOList(postList));
+        Slice<Post> postSlice = postQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit,postType, category, sortType, filter, size);
+        return BaseResponse.onSuccess(postConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
     }
 
     @PostMapping("/{postId}/comments")
