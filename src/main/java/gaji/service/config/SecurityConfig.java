@@ -34,7 +34,8 @@ public class SecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
             "/oauth2/**", "/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
-            "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html", "/reissue", "/", "/my"
+            "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html", "/reissue", "/", "/my",
+            "/api/**"
     };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
