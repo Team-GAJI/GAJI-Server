@@ -1,6 +1,6 @@
-package gaji.service.domain.studyMate;
+package gaji.service.domain.studyMate.entity;
 
-import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.room.entity.RoomEvent;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,10 +18,8 @@ public class Assignment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
-
-    private Integer weeks;
+    @JoinColumn(name = "room_event_id")
+    private RoomEvent roomEvent;
 
     @Column(length = 30)
     private String body;

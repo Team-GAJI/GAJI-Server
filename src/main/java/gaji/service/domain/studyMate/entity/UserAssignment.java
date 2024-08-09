@@ -1,14 +1,17 @@
-package gaji.service.domain.studyMate;
+package gaji.service.domain.studyMate.entity;
 
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class UserAssignment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +26,9 @@ public class UserAssignment {
     private Assignment assignment;
 
     //완료여부
-    private boolean meeting;
+    private boolean isComplete;
 
-
-
-
-
+    public void setComplete(boolean isComplete) {
+        this.isComplete = true;
+    }
 }
