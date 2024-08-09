@@ -48,7 +48,7 @@ public class Post extends BaseEntity {
     @Getter(AccessLevel.NONE)
     private int commentGroupNum;
     private String thumbnailUrl;
-    private int popularityScore;
+    private Integer popularityScore;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -76,6 +76,11 @@ public class Post extends BaseEntity {
         this.bookmarkCnt = 0;
         this.commentCnt = 0;
         this.commentGroupNum = 0;
+        this.popularityScore = 0;
+    }
+
+    public String settingDefaultThumbnailUrl() {
+        return this.thumbnailUrl = "가지 로고 url";
     }
 
     public int getCommentGroupNum() {
