@@ -6,12 +6,10 @@ import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.Hashtag;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.entity.SelectHashtag;
-import gaji.service.domain.common.repository.SelectHashtagRepository;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.CommentStatus;
-import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.post.converter.PostConverter;
 import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
@@ -63,9 +61,9 @@ public class PostCommandServiceImpl implements PostCommandService {
 
         // 카테고리 저장
         // TODO: 카테고리 벌크성 insert 적용
-        if (request.getCategoryList() != null) {
-            List<CategoryEnum> categoryEnumList = request.getCategoryList();
-            List<Category> categoryEntityList = categoryService.createCategoryEntityList(categoryEnumList);
+        if (request.getCategoryIdList() != null) {
+            List<Long> categoryIdList = request.getCategoryIdList();
+            List<Category> categoryEntityList = categoryService.createCategoryEntityList(categoryIdList);
 
             List<SelectCategory> selectCategoryList = CategoryConverter.toSelectCategoryList(categoryEntityList, post.getId(), request.getType());
             categoryService.saveAllSelectCategory(selectCategoryList);
