@@ -78,7 +78,7 @@ public class PostConverter {
         return PostResponseDTO.PostPreviewDTO.builder()
                 .postId(post.getId())
                 .likeCnt(post.getLikeCnt())
-                .thumbnailUrl(post.getThumbnailUrl())
+                .thumbnailUrl((post.getThumbnailUrl() == null) ? (post.settingDefaultThumbnailUrl()) : post.getThumbnailUrl())
                 .title(post.getTitle())
                 .body(post.getBody())
                 .userId(post.getUser().getId())
@@ -90,11 +90,16 @@ public class PostConverter {
                 .build();
     }
 
-    public List<PostResponseDTO.PostPreviewDTO> toPostPreviewDTOList(List<Post> postList) {
+    public PostResponseDTO.PostPreviewListDTO toPostPreviewListDTO(List<Post> postList, boolean hasNext) {
         PostConverter postConverter = new PostConverter(hashtagService, postBookMarkService, postLikesService);
-        return postList.stream()
+        List<PostResponseDTO.PostPreviewDTO> postPreviewDTOList = postList.stream()
                 .map(postConverter::toPostPreviewDTO)
                 .collect(Collectors.toList());
+
+        return PostResponseDTO.PostPreviewListDTO.builder()
+                .postList(postPreviewDTOList)
+                .hasNext(hasNext)
+                .build();
     }
 
     public PostResponseDTO.PostDetailDTO toPostDetailDTO(Post post, Long userId) {
