@@ -37,7 +37,6 @@ public class PostRestController {
     private final PostCommandService postCommandService;
     private final PostQueryService postQueryService;
     private final CommentService commentService;
-    private final HashtagService hashtagQueryService;
     private final TokenProviderService tokenProviderService;
     private final PostConverter postConverter;
 
@@ -76,22 +75,26 @@ public class PostRestController {
     @GetMapping("/preivew")
     @Operation(summary = "커뮤니티 게시글 미리보기 목록 조회 API", description = "아직은 무한스크롤로 구현되어있지 않고, 모든 목록을 조회합니다.")
     @Parameters({
+            @Parameter(name = "lastPopularityScore", description = "마지막으로 조회한 게시글의 인기 점수"),
+            @Parameter(name = "lastPostId", description = "마지막으로 조회한 게시글의 id"),
+            @Parameter(name = "lastLikeCnt", description = "마지막으로 조회한 게시글의 좋아요 수"),
+            @Parameter(name = "lastHit", description = "마지막으로 조회한 게시글의 조회수"),
             @Parameter(name = "postType", description = "게시글의 유형(블로그, 프로젝트, 질문)"),
-            @Parameter(name = "category", description = "카테고리(AI, BE, FE)"),
-            @Parameter(name = "sortType", description = "정렬 유형(hot, recent)"),
-            @Parameter(name = "filter", description = "게시글의 상태(모집중, 모집완료, ...)"),
+            @Parameter(name = "categoryId", description = "카테고리(DEVELOP, AI, HW, ... 정책 공통 사항 참조)의 id"),
+            @Parameter(name = "sortType", description = "정렬 유형(hot, recent, like, hit)"),
+            @Parameter(name = "filter", description = "게시글의 상태(모집중, 모집완료, 미완료질문, 해결완료)"),
     })
     public BaseResponse<PostResponseDTO.PostPreviewListDTO> getPostPreivewList(@Min(value = 1, message = "lastPopularityScore는 1 이상 이어야 합니다.") @RequestParam(required = false) Integer lastPopularityScore,
                                                                                @Min(value = 1, message = "lastPostId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long lastPostId,
                                                                                @Min(value = 0, message = "lastLikeCnt는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastLikeCnt,
                                                                                @Min(value = 0, message = "lastHit은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastHit,
                                                                                @RequestParam(required = false) PostTypeEnum postType,
-                                                                               @RequestParam(required = false) CategoryEnum category,
+                                                                               @RequestParam(required = false) Long categoryId,
                                                                                @RequestParam(required = false) SortType sortType,
                                                                                @RequestParam(required = false) PostStatusEnum filter,
                                                                                @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
-        Slice<Post> postSlice = postQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit,postType, category, sortType, filter, size);
+        Slice<Post> postSlice = postQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, categoryId, sortType, filter, size);
         return BaseResponse.onSuccess(postConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
     }
 
