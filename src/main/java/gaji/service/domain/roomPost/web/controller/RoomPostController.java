@@ -1,10 +1,7 @@
 package gaji.service.domain.roomPost.web.controller;
 
-import gaji.service.domain.room.service.RoomQueryService;
-import gaji.service.domain.roomPost.entity.RoomPost;
-import gaji.service.domain.roomPost.service.RoomPostCommandServiceImpl;
+
 import gaji.service.domain.roomPost.service.RoomPostQueryService;
-import gaji.service.domain.roomPost.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomPost.web.dto.RoomPostResponseDto;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;

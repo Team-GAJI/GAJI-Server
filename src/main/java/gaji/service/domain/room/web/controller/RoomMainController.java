@@ -8,6 +8,7 @@ import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.entity.Assignment;
+import gaji.service.domain.studyMate.web.dto.ResponseDto;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,21 +28,23 @@ public class RoomMainController {
     private final RoomCommandService roomCommandService;
     private final RoomQueryService roomQueryService;
     private final TokenProviderService tokenProviderService;
+
     @PostMapping("/assignments/{roomId}/{userId}")
     @Operation(summary = "스터디룸 과제 등록 API",description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 스터디에 참혀하고 있는 user인지 검증합니다.")
-    public BaseResponse<Long> AssignmentController(
+    public BaseResponse<RoomResponseDto.AssignmentResponseDto> AssignmentController(
             @RequestBody @Valid RoomRequestDto.AssignmentDto requestDto,
             @PathVariable Long roomId,
             @RequestHeader("Authorization") String authorizationHeader){
 
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         Assignment assignment = roomCommandService.createAssignment(roomId, userId, requestDto);
-        return BaseResponse.onSuccess(assignment.getId());
+        RoomResponseDto.AssignmentResponseDto responseDto = RoomResponseDto.AssignmentResponseDto.of(assignment.getId());
+        return BaseResponse.onSuccess(responseDto);
     }
 
     @PostMapping("/event/{roomId}/{weeks}/period")
     @Operation(summary = "스터디룸 기간 설정 API", description = "스터디룸의 전체 기간을 설정하는 API입니다.")
-    public BaseResponse<Long> setStudyPeriod(
+    public BaseResponse<RoomResponseDto.EventResponseDto> setStudyPeriod(
             @PathVariable Integer weeks,
             @PathVariable Long roomId,
             @RequestHeader("Authorization") String authorizationHeader,
@@ -49,20 +52,22 @@ public class RoomMainController {
 
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         RoomEvent event = roomCommandService.setStudyPeriod(roomId,weeks, userId, requestDto);
-        return BaseResponse.onSuccess(event.getId());
+        RoomResponseDto.EventResponseDto responseDto = RoomResponseDto.EventResponseDto.of(event.getId());
+        return BaseResponse.onSuccess(responseDto);
     }
 
     @PostMapping("/event/{roomId}/{weeks}/description")
     @Operation(summary = "스터디룸 설명 입력 API", description = "스터디룸에 대한 설명을 입력하는 API입니다.")
-    public BaseResponse<Long> setStudyDescription(
+    public BaseResponse<RoomResponseDto.EventResponseDto> setStudyDescription(
             @PathVariable @Min(value = 1, message = "Weeks must be at least 1") Integer weeks,
             @PathVariable Long roomId,
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody @Valid RoomRequestDto.StudyDescriptionDto requestDto) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         RoomEvent event = roomCommandService.setStudyDescription(roomId, weeks, userId, requestDto);
+        RoomResponseDto.EventResponseDto responseDto = RoomResponseDto.EventResponseDto.of(event.getId());
 
-        return BaseResponse.onSuccess(event.getId());
+        return BaseResponse.onSuccess(responseDto);
     }
 
     @PostMapping("/notice/{userAssignmentId}")

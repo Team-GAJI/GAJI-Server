@@ -11,6 +11,30 @@ import java.util.List;
 
 public class RoomResponseDto {
 
+    @Getter
+    @Builder
+    public static class AssignmentResponseDto {
+        private Long assignmentId;
+
+        public static AssignmentResponseDto of(Long assignmentId) {
+            return AssignmentResponseDto.builder()
+                    .assignmentId(assignmentId)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class EventResponseDto {
+        private Long eventId;
+
+        public static EventResponseDto of(Long eventId) {
+            return EventResponseDto.builder()
+                    .eventId(eventId)
+                    .build();
+        }
+    }
+
     @Builder
     @Getter
     @NoArgsConstructor
@@ -194,4 +218,7 @@ public class RoomResponseDto {
             this.viewCount = viewCount;
         }
     }
+
+
+
 }
