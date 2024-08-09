@@ -6,13 +6,9 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.repository.RoomQueryRepository;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.repository.RoomEventRepository;
-import gaji.service.domain.room.repository.RoomQueryRepository;
 import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
-import gaji.service.domain.roomPost.repository.RoomPostRepository;
-import gaji.service.domain.roomPost.service.RoomPostQueryServiceImpl;
 import gaji.service.domain.room.repository.WeeklyUserProgressRepository;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.global.exception.RestApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -105,5 +101,16 @@ public Room findRoomById(Long roomId) {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId) {
+
+        RoomResponseDto.RoomMainDto mainStudyRoom = roomQueryRepository.getMainStudyRoom(roomId);
+        return mainStudyRoom;
+    }
+
+    @Override
+    public RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId){
+        return roomQueryRepository.getRoomNotices(roomId);
+    }
 }
 

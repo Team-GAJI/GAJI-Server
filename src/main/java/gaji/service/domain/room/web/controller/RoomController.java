@@ -113,4 +113,17 @@ public class RoomController {
         RoomResponseDto.WeeklyStudyInfoDTO weeklyInfo = roomQueryService.getWeeklyStudyInfo(roomEventId);
         return ResponseEntity.ok(weeklyInfo);
     }
+
+    @GetMapping("/home/{roomId}")
+    @Operation(summary = "스터디룸 main 화면 스터디 정보 조회 API")
+    public BaseResponse<RoomResponseDto.RoomMainDto> GetRoomMainController(@PathVariable Long roomId){
+        return BaseResponse.onSuccess(roomQueryService.getMainStudyRoom(roomId));
+    }
+
+    @GetMapping("/notice/{roomId}")
+    @Operation(summary = "스터디룸 main 화면 공지사항 정보 조회 API")
+    public BaseResponse<RoomResponseDto.MainRoomNoticeDto> GetMainRoomNoticeController(@PathVariable Long roomId){
+        return BaseResponse.onSuccess(roomQueryService.getMainRoomNotice(roomId));
+    }
+
 }

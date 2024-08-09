@@ -25,4 +25,8 @@ public interface RoomQueryService {
 
     @Transactional(readOnly = true)
     List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomEventId);
+
+    RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId);
+
+    RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId);
 }
