@@ -167,4 +167,31 @@ public class RoomResponseDto {
         private LocalDate endDate;
     }
 
+
+    // 스터디룸 메인 게시판 글 불러오기
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RoomMainNoticeDto {
+        private Long id;
+        private String authorName;
+        private String title;
+        private String body;
+        private Long confirmCount;
+        private LocalDateTime createdAt;
+        private Integer viewCount;
+        private String timeSincePosted;
+
+        // 이 생성자를 추가합니다
+        public RoomMainNoticeDto(Long id, String authorName, String title, String body, Long confirmCount, LocalDateTime createdAt, Integer viewCount) {
+            this.id = id;
+            this.authorName = authorName;
+            this.title = title;
+            this.body = body;
+            this.confirmCount = confirmCount;
+            this.createdAt = createdAt;
+            this.viewCount = viewCount;
+        }
+    }
 }
