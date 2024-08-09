@@ -12,6 +12,7 @@ public interface CategoryService {
     Category saveCategory(Category category);
     Category findByCategory(CategoryEnum category);
     Category findByCategoryId(Long categoryId);
+    List<Long> findEntityIdListByCategoryIdAndPostType(Long categoryId, PostTypeEnum postType);
     boolean existsByCategory(CategoryEnum category);
     boolean existsByCategoryId(Long categoryId);
     List<SelectCategory> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType);
