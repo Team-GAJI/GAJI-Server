@@ -35,6 +35,6 @@ public enum CategoryEnum {
             }
         }
         log.error("CategoryEnum.from() exception occur param: {}", param);
-        throw new RestApiException(GlobalErrorStatus._CATEGORY_NOT_VALID);
+        throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
     }
 }
