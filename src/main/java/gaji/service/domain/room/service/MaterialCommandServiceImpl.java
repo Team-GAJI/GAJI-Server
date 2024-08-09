@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MaterialCommandServiceImpl implements MaterialCommandService {
 
-    private MaterialRepository materialRepository;
+    private final MaterialRepository materialRepository;
 
     @Override
     public void saveMaterial(Material material) {
