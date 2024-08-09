@@ -1,6 +1,8 @@
 package gaji.service.domain.common.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.enums.PostTypeEnum;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +31,25 @@ public class SelectCategoryQueryDslRepositoryImpl implements SelectCategoryQuery
                 )
                 .orderBy(selectCategory.id.asc())
                 .fetch();
+    }
+
+    @Override
+    public List<Long> findEntityIdListByCategoryAndPostType(Category category, PostTypeEnum postType) {
+        return jpaQueryFactory
+                .select(selectCategory.entityId)
+                .from(selectCategory)
+                .where(
+                        categoryEq(category),  // Category 조건
+                        postTypeEq(postType)       // PostTypeEnum 조건
+                )
+                .fetch(); // 결과를 List<Long>으로 반환
+    }
+
+    private BooleanExpression postTypeEq(PostTypeEnum postTypeCond) {
+        return (postTypeCond != null) ? selectCategory.type.eq(postTypeCond) : null;
+    }
+
+    private BooleanExpression categoryEq(Category categoryCond) {
+        return (categoryCond != null) ? selectCategory.category.eq(categoryCond) : null;
     }
 }
