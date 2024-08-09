@@ -6,13 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventResponse {
+public class EventInfoListResponse {
     private List<EventInfo> eventInfoList;
 
     @Getter
@@ -20,7 +19,7 @@ public class EventResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class EventInfo {
-        private UUID eventId;
+        private Long eventId;
         private String description;
         private String startDate;
         private String endDate;
