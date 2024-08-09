@@ -54,7 +54,8 @@ public class Event extends BaseEntity {
 
     public void updateEvent(EventInfoRequest request) {
         this.content = request.getContent();
-        this.startDateTime = request.getStartDateTime();
-        this.endDateTime = request.getEndDateTime();
+        this.startDateTime = request.getStartTime();
+        this.endDateTime = request.getEndTime();
+        this.isRecurring = request.isRecurring();
     }
 }
