@@ -89,10 +89,28 @@ public class RoomController {
         boolean isConfirmed = roomCommandService.toggleNoticeConfirmation(noticeId,userId);
         return ResponseEntity.ok(isConfirmed);
     }
+    @PostMapping("/notice/{userAssignmentId}/{userId}")
+    @Operation(summary = "주차별 과제 체크 박스 체크", description = "과제 체크 박스를 클릭하면 과제 완료 .")
+    public ResponseEntity<RoomResponseDto.AssignmentProgressResponse> toggleAssignmentCompletion(
+            @PathVariable Long userId,
+            @PathVariable Long userAssignmentId) {
+        RoomResponseDto.AssignmentProgressResponse response = roomCommandService.toggleAssignmentCompletion(userId, userAssignmentId);
+        return ResponseEntity.ok(response);
+    }
 
-    @PostMapping("/notice/{roomEventId}/{userId}")
-    @Operation(summary = "주차별 과제 진행도 계산", description = "과제 체크 박스를 클릭하면 진행율 올라가는 방식입니다.")
-    public void calculateAndSaveProgress(@PathVariable Long roomEventId, @PathVariable Long userId) {
-        roomCommandService.calculateAndSaveProgress(roomEventId,userId);
+    // 수정 필요
+    //특정 스터디룸의 모든 사용자의 진행 상황을 조회합니다
+    @GetMapping("/{roomEventId}/progress")
+    @Operation(summary = "주차별 과제 진행율", description = "특정 스터디룸의 모든 사용자의 진행 상황을 조회합니다.")
+    public ResponseEntity<List<RoomResponseDto.UserProgressDTO>> getStudyMateProgress(@PathVariable Long roomEventId) {
+        List<RoomResponseDto.UserProgressDTO> progressList = roomQueryService.getUserProgressByRoomEventId(roomEventId);
+        return ResponseEntity.ok(progressList);
+    }
+
+    @GetMapping("/events/{roomEventId}/weekly-info")
+    @Operation(summary = "주차별 스터디 정보", description = "특정 주차의 스터디 정보를 조회합니다.")
+    public ResponseEntity<RoomResponseDto.WeeklyStudyInfoDTO> getWeeklyStudyInfo(@PathVariable Long roomEventId) {
+        RoomResponseDto.WeeklyStudyInfoDTO weeklyInfo = roomQueryService.getWeeklyStudyInfo(roomEventId);
+        return ResponseEntity.ok(weeklyInfo);
     }
 }

@@ -7,6 +7,7 @@ import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.repository.RoomEventRepository;
 import gaji.service.domain.room.repository.RoomQueryRepository;
 import gaji.service.domain.room.repository.RoomRepository;
+import gaji.service.domain.room.repository.WeeklyUserProgressRepository;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class RoomQueryServiceImpl implements RoomQueryService{
     private final RoomEventRepository roomEventRepository;
     private final RoomRepository roomRepository;
     private final RoomQueryRepository roomQueryRepository;
+    private final WeeklyUserProgressRepository weeklyUserProgressRepository;
 
 //    @Override
 //    public RoomEvent findRoomEventById(Long roomId){
@@ -65,6 +68,31 @@ public class RoomQueryServiceImpl implements RoomQueryService{
         return notice;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomEventId) {
+        RoomEvent roomEvent = roomEventRepository.findById(roomEventId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
 
+        return RoomResponseDto.WeeklyStudyInfoDTO.builder()
+                .weekNumber(roomEvent.getWeeks())
+                .studyPeriod(new RoomResponseDto.StudyPeriodDTO(roomEvent.getStartTime(), roomEvent.getEndTime()))
+                .title(roomEvent.getTitle())
+                .content(roomEvent.getDescription())
+                .build();
+    }
+
+    @Override
+    public List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomEventId) {
+        List<WeeklyUserProgressRepository.UserProgressProjection> projections =
+                weeklyUserProgressRepository.findProgressByRoomEventId(roomEventId);
+
+        return projections.stream()
+                .map(projection -> RoomResponseDto.UserProgressDTO.builder()
+                        .name(projection.getName())
+                        .progressPercentage(projection.getProgressPercentage())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
 }

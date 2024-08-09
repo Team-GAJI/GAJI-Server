@@ -4,7 +4,10 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
+import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.entity.Assignment;
+import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
+import gaji.service.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 
 public interface RoomCommandService {
@@ -23,5 +26,7 @@ public interface RoomCommandService {
 
     void saveRoom(Room room);
 
-    void calculateAndSaveProgress(Long roomEventId, Long userId);
+    RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId);
+
+    WeeklyUserProgress calculateAndSaveProgress(RoomEvent roomEvent, User user);
 }
