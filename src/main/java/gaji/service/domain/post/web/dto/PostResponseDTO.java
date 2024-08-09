@@ -17,8 +17,24 @@ public class PostResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreatePostDTO {
+    public static class UploadPostDTO {
         Long postId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostBookmarkIdDTO {
+        Long postBookmarkId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostLikesIdDTO {
+        Long postLikesId;
     }
 
     @Builder

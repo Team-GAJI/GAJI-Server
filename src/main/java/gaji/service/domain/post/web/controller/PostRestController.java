@@ -1,8 +1,6 @@
 package gaji.service.domain.post.web.controller;
 
-import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.SortType;
-import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.converter.CommentConverter;
@@ -14,7 +12,7 @@ import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.service.CommentService;
 import gaji.service.domain.post.service.PostCommandService;
 import gaji.service.domain.post.service.PostQueryService;
-import gaji.service.domain.post.web.dto.CommentResponseDTO;
+import gaji.service.domain.post.web.dto.CommunityPostCommentResponseDTO;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.domain.post.web.dto.PostResponseDTO;
 import gaji.service.global.base.BaseResponse;
@@ -42,11 +40,11 @@ public class PostRestController {
 
     @PostMapping
     @Operation(summary = "커뮤니티 게시글 업로드 API", description = "커뮤니티의 게시글을 업로드하는 API입니다. 게시글 유형과 제목, 본문 내용을 검증합니다.")
-    public BaseResponse<Long> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
-                                         @RequestBody @Valid PostRequestDTO.UploadPostDTO request) {
+    public BaseResponse<PostResponseDTO.UploadPostDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                  @RequestBody @Valid PostRequestDTO.UploadPostDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         Post newPost = postCommandService.uploadPost(userId, request);
-        return BaseResponse.onSuccess(newPost.getId());
+        return BaseResponse.onSuccess(PostConverter.toUploadPostDTO(newPost));
     }
 
     @DeleteMapping("/{postId}")
@@ -104,13 +102,13 @@ public class PostRestController {
             @Parameter(name = "postId", description = "게시글 id"),
             @Parameter(name = "parentCommentId", description = "부모 댓글의 id, 대댓글 작성할 때 필요한 부모 댓글의 id입니다."),
     })
-    public BaseResponse<Long> writeCommentOnCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
-            @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
-            @Min(value = 1, message = "parentCommentId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long parentCommentId,
-            @RequestBody @Valid PostRequestDTO.WriteCommentDTO request) {
+    public BaseResponse<CommunityPostCommentResponseDTO.WriteCommentDTO> writeCommentOnCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                                                     @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
+                                                                                                     @Min(value = 1, message = "parentCommentId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long parentCommentId,
+                                                                                                     @RequestBody @Valid PostRequestDTO.WriteCommentDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         Comment newComment = postCommandService.writeCommentOnCommunityPost(userId, postId, parentCommentId, request);
-        return BaseResponse.onSuccess(newComment.getId());
+        return BaseResponse.onSuccess(CommentConverter.toWriteCommentDTO(newComment));
     }
 
     @DeleteMapping("/comments/{commentId}")
@@ -127,12 +125,12 @@ public class PostRestController {
 
     @GetMapping("/{postId}/comments")
     @Operation(summary = "커뮤니티 게시글 댓글 목록 조회 API", description = "lastGroupNum에 마지막으로 조회한 댓글의 grounNum과, size로 조회할 데이터의 개수를 보내주세요.")
-    public BaseResponse<CommentResponseDTO.PostCommentListDTO> getCommentList(@Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
-                                                                              @Min(value = 0, message = "lastGroupNum은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastGroupNum, // 마지막 댓글 ID
-                                                                              @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) // 페이지 크기 (기본값 10))
+    public BaseResponse<CommunityPostCommentResponseDTO.PostCommentListDTO> getCommentList(@Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
+                                                                                           @Min(value = 0, message = "lastGroupNum은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastGroupNum, // 마지막 댓글 ID
+                                                                                           @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) // 페이지 크기 (기본값 10))
     {
         Slice<Comment> commentSlice = commentService.getCommentListByPost(postId, lastGroupNum, size);
-        CommentResponseDTO.PostCommentListDTO postCommentDTOList = CommentConverter.toPostCommentListDTO(commentSlice.getContent(), commentSlice.hasNext());
+        CommunityPostCommentResponseDTO.PostCommentListDTO postCommentDTOList = CommentConverter.toPostCommentListDTO(commentSlice.getContent(), commentSlice.hasNext());
         return BaseResponse.onSuccess(postCommentDTOList);
     }
 
@@ -141,11 +139,12 @@ public class PostRestController {
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
     })
-    public BaseResponse<Long> bookmarkCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
-            @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
+    public BaseResponse<PostResponseDTO.PostBookmarkIdDTO> bookmarkCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                                 @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         PostBookmark newPostBookmark = postCommandService.bookmarkCommunityPost(userId, postId);
-        return BaseResponse.onSuccess(newPostBookmark.getId());
+
+        return BaseResponse.onSuccess(PostConverter.toPostBookmarkIdDTO(newPostBookmark));
     }
 
     @DeleteMapping("/{postId}/bookmarks")
@@ -165,11 +164,11 @@ public class PostRestController {
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
     })
-    public BaseResponse<Long> likeCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
-            @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
+    public BaseResponse<PostResponseDTO.PostLikesIdDTO> likeCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                          @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         PostLikes newPostLikes = postCommandService.likeCommunityPost(userId, postId);
-        return BaseResponse.onSuccess(newPostLikes.getId());
+        return BaseResponse.onSuccess(PostConverter.toPostLikesIdDTO(newPostLikes));
     }
 
     @DeleteMapping("/{postId}/likes")
