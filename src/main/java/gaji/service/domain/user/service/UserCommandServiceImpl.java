@@ -39,9 +39,14 @@ public class UserCommandServiceImpl implements UserCommandService{
 
     @Override
     @Transactional
-    public User updateUserNickname(Long userId, UserRequestDTO.UpdateNicknameDTO request) {
-        User user = userRepository.findById(userId)
+    public User updateUserNickname(Long userIdFromToken, Long userIdFromPathVariable, UserRequestDTO.UpdateNicknameDTO request) {
+        User user = userRepository.findById(userIdFromToken)
                 .orElseThrow(()-> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
+
+        if(!user.equals(userRepository.findById(userIdFromPathVariable)
+                .orElseThrow(()-> new RestApiException(UserErrorStatus._USER_NOT_FOUND)))){
+            throw new RestApiException(UserErrorStatus._USER_IS_NOT_SAME_);
+        }
 
         String newNickname = request.getNickname();
 
