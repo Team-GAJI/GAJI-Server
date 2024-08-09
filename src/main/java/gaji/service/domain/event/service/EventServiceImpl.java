@@ -1,8 +1,11 @@
 package gaji.service.domain.event.service;
 
+import gaji.service.domain.event.code.EventErrorStatus;
 import gaji.service.domain.event.domain.Event;
 import gaji.service.domain.event.dto.request.EventInfoRequest;
 import gaji.service.domain.event.dto.response.EventInfoListResponse;
+import gaji.service.domain.event.repository.EventRepository;
+import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class EventServiceImpl implements EventService{
 
     private final EventRepository eventRepository;
+
+    private final int MAX_EVENT_COUNT = 20;
 
     @Override
     @Transactional(readOnly = true)
@@ -98,7 +103,16 @@ public class EventServiceImpl implements EventService{
     // EventId에 맞는 Event 찾기
     private Event findEventById(Long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+                .orElseThrow(() -> new RestApiException(EventErrorStatus._EVENT_NOT_FOUND));
+    }
+
+    // Event가 내 것인지 확인하기
+    @Override
+    public void checkMyEvent(Long eventId, Long userId) {
+        Event event = findEventById(eventId);
+        if (!event.getWriter().getId().equals(userId)) {
+            throw new RestApiException(EventErrorStatus._EVENT_NOT_MY_EVENT);
+        }
     }
 
 }

@@ -4,6 +4,8 @@ import gaji.service.domain.event.dto.request.EventInfoRequest;
 import gaji.service.domain.event.dto.response.EventInfoListResponse;
 import gaji.service.domain.event.dto.response.EventIdResponse;
 import gaji.service.domain.event.service.EventService;
+import gaji.service.domain.user.entity.User;
+import gaji.service.global.auth.CurrentUser;
 import gaji.service.global.base.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,12 +36,12 @@ public class EventController {
     @Operation(summary = "날짜에 맞는 ToDo 생성 API",
             description = "해당 날짜에 맞는 ToDo를 생성합니다")
     public BaseResponse<EventIdResponse> putToDoList(
+            @CurrentUser User user,
             @PathVariable("date") DateTime date,
             @PathVariable("userId") Long userId,
             @RequestBody EventInfoRequest request
             )
     {
-
         return BaseResponse.onSuccess(
                 new EventIdResponse(eventService.putEvent(date, userId, request))
         );
@@ -48,10 +50,13 @@ public class EventController {
     @PatchMapping("/{eventId}")
     @Operation(summary = "ToDo 수정 API")
     public BaseResponse<EventIdResponse> patchToDoList(
+            @CurrentUser User user,
             @PathVariable("eventId")Long eventId,
             @RequestBody EventInfoRequest request
     )
     {
+        // 내 일정인지 확인
+        eventService.checkMyEvent(eventId, user.getId());
 
         return BaseResponse.onSuccess(
                 new EventIdResponse( eventService.patchEvent(eventId, request))
@@ -61,9 +66,12 @@ public class EventController {
     @DeleteMapping("/{eventId}")
     @Operation(summary = "ToDo 삭제 API")
     public BaseResponse<EventIdResponse> deleteToDoList(
+            @CurrentUser User user,
             @PathVariable("eventId")Long eventId
     )
     {
+        // 내 일정인지 확인
+        eventService.checkMyEvent(eventId, user.getId());
 
         return BaseResponse.onSuccess(
                 new EventIdResponse(eventService.deleteEvent(eventId))
@@ -73,9 +81,12 @@ public class EventController {
     @PutMapping("/{eventId}")
     @Operation(summary = "ToDo 완료 API")
     public BaseResponse<EventIdResponse> putToDoComplete(
+            @CurrentUser User user,
             @PathVariable("eventId") Long eventId
     )
     {
+        // 내 일정인지 확인
+        eventService.checkMyEvent(eventId, user.getId());
 
         return BaseResponse.onSuccess(
                 new EventIdResponse(eventService.putEventComplete(eventId))
@@ -85,9 +96,12 @@ public class EventController {
     @PatchMapping("/{eventId}")
     @Operation(summary = "ToDo 완료 취소 API")
     public BaseResponse<EventIdResponse> deleteToDoComplete(
+            @CurrentUser User user,
             @PathVariable("eventId") Long eventId
     )
     {
+        // 내 일정인지 확인
+        eventService.checkMyEvent(eventId, user.getId());
 
         return BaseResponse.onSuccess(
                 new EventIdResponse(eventService.deleteEventComplete(eventId))

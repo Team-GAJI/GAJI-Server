@@ -1,5 +1,6 @@
 package gaji.service.domain.event.service;
 
+import gaji.service.domain.event.domain.Event;
 import gaji.service.domain.event.dto.request.EventInfoRequest;
 import gaji.service.domain.event.dto.response.EventInfoListResponse;
 import org.joda.time.DateTime;
@@ -12,4 +13,6 @@ public interface EventService {
     public Long deleteEvent(Long eventId);
     public Long putEventComplete(Long eventId);
     public Long deleteEventComplete(Long eventId);
+
+    public void checkMyEvent(Long eventId, Long userId); // 내 일정인지 확인
 }
