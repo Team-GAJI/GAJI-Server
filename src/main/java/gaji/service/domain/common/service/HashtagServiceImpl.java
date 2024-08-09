@@ -44,7 +44,7 @@ public class HashtagServiceImpl implements HashtagService {
     }
 
     @Override
-    public List<SelectHashtag> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
+    public List<SelectHashtag> findAllFetchJoinWithHashtagByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
         return selectHashtagRepository.findAllFetchJoinWithHashtagByEntityIdAndPostType(entityId, postType);
     }
 

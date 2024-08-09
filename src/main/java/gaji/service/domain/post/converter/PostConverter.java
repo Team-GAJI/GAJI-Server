@@ -72,7 +72,7 @@ public class PostConverter {
     }
 
     public PostResponseDTO.PostPreviewDTO toPostPreviewDTO(Post post) {
-        List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType());
+        List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(post.getId(), post.getType());
         List<String> hashtagList = HashtagConverter.toHashtagNameList(selectHashtagList);
 
         return PostResponseDTO.PostPreviewDTO.builder()
@@ -103,7 +103,7 @@ public class PostConverter {
     }
 
     public PostResponseDTO.PostDetailDTO toPostDetailDTO(Post post, Long userId) {
-        List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType());
+        List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(post.getId(), post.getType());
         List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagNameAndIdDTOList = HashtagConverter.toHashtagNameAndIdDTOList(selectHashtagList);
         boolean isBookmarked = postBookMarkService.existsByUserAndPost(userId, post);
         boolean isLiked = postLikesService.existsByUserAndPost(userId, post);

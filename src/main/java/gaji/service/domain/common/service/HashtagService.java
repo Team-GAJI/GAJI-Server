@@ -10,7 +10,7 @@ import java.util.List;
 public interface HashtagService {
 
     boolean ExistHashtagByName(String name);
-    List<SelectHashtag> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType);
+    List<SelectHashtag> findAllFetchJoinWithHashtagByEntityIdAndPostType(Long entityId, PostTypeEnum postType);
     List<Hashtag> createHashtagEntityList(List<String> hashtagStringList);
     void saveAllSelectHashtag(List<SelectHashtag> selectHashtagList);
     void deleteAllByEntityIdAndType(Long entityId, PostTypeEnum postType);
