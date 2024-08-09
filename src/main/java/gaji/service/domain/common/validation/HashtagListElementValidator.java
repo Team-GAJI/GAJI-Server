@@ -18,7 +18,7 @@ public class HashtagListElementValidator implements ConstraintValidator<CheckHas
 
     @Override
     public boolean isValid(List<String> values, ConstraintValidatorContext context) {
-        // null인 경우 유효성 검사에서 제외
+        // 리스트 자체가 null인 경우 유효성 검사에서 제외
         if (values == null) {
             return true;
         }
