@@ -8,7 +8,15 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommentResponseDTO {
+public class CommunityPostCommentResponseDTO {
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class WriteCommentDTO {
+        private Long commentId;
+    }
 
     @Builder
     @Getter

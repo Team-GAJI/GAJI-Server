@@ -36,6 +36,26 @@ public class PostConverter {
                 (type == PostTypeEnum.PROJECT) ? PostStatusEnum.RECRUITING : PostStatusEnum.BLOGING;
     }
 
+    public static PostResponseDTO.UploadPostDTO toUploadPostDTO(Post post) {
+        return PostResponseDTO.UploadPostDTO
+                .builder()
+                .postId(post.getId())
+                .build();
+    }
+
+    public static PostResponseDTO.PostBookmarkIdDTO toPostBookmarkIdDTO(PostBookmark postBookmark) {
+        return PostResponseDTO.PostBookmarkIdDTO
+                .builder()
+                .postBookmarkId(postBookmark.getId())
+                .build();
+    }
+
+    public static PostResponseDTO.PostLikesIdDTO toPostLikesIdDTO(PostLikes postLikes) {
+        return PostResponseDTO.PostLikesIdDTO
+                .builder()
+                .postLikesId(postLikes.getId())
+                .build();
+    }
 
     public static Post toPost(PostRequestDTO.UploadPostDTO request, User user) {
         return Post.builder()
