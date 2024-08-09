@@ -1,26 +1,17 @@
 package gaji.service.domain.roomPost.service;
 
-import gaji.service.domain.post.code.PostErrorStatus;
-import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.room.repository.RoomRepository;
 import gaji.service.domain.room.service.RoomQueryService;
-import gaji.service.domain.roomPost.code.RoomPostErrorStatus;
 import gaji.service.domain.roomPost.converter.RoomPostConverter;
 import gaji.service.domain.roomPost.entity.RoomBoard;
 import gaji.service.domain.roomPost.entity.RoomPost;
 import gaji.service.domain.roomPost.repository.RoomBoardRepository;
 import gaji.service.domain.roomPost.repository.RoomPostRepository;
 import gaji.service.domain.roomPost.web.dto.RoomPostRequestDto;
-import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.entity.User;
-import gaji.service.domain.user.repository.UserRepository;
-import gaji.service.domain.user.service.UserCommandService;
 import gaji.service.domain.user.service.UserQueryService;
-import gaji.service.domain.user.service.UserQueryServiceImpl;
-import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

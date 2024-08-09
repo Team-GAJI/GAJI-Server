@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class RoomResponseDto {
@@ -63,4 +64,55 @@ public class RoomResponseDto {
             this.viewCount = viewCount;
         }
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AssignmentProgressResponse {
+        private Double progressPercentage;
+        private Integer completedAssignments;
+        private Integer totalAssignments;
+        private Boolean isCompleted;
+        private LocalDate deadline;
+
+        // Custom method to check if the deadline has passed
+        public boolean isDeadlinePassed() {
+            return LocalDate.now().isAfter(deadline);
+        }
+
+        // Custom method to get remaining days until deadline
+        public long getRemainingDays() {
+            return LocalDate.now().until(deadline).getDays();
+        }
+
+        // Custom method to get a formatted string of progress
+        public String getFormattedProgress() {
+            return String.format("%.1f%%", progressPercentage);
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class UserProgressDTO {
+        private String name;
+        private Double progressPercentage;
+    }
+
+    @Getter
+    @Builder
+    public static class WeeklyStudyInfoDTO {
+        private Integer weekNumber;
+        private StudyPeriodDTO studyPeriod;
+        private String title;
+        private String content;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class StudyPeriodDTO {
+        private LocalDate startDate;
+        private LocalDate endDate;
+    }
+
 }

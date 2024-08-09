@@ -1,6 +1,7 @@
 package gaji.service.domain.room.service;
 
 import gaji.service.domain.room.repository.*;
+import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
@@ -22,6 +23,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -191,12 +193,42 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
 
-    @Override
-    public void calculateAndSaveProgress(Long roomEventId, Long userId) {
-        RoomEvent roomEvent = roomEventRepository.findById(roomEventId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
-        User user = userQueryService.findUserById(userId);
 
+    @Transactional
+    @Override
+    public RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId) {
+        UserAssignment userAssignment = userAssignmentRepository.findById(userAssignmentId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ASSIGNMENT_NOT_FOUND));
+
+        User user = userQueryService.findUserById(userId);
+        RoomEvent roomEvent = userAssignment.getAssignment().getRoomEvent();
+
+        // Toggle completion status
+        if(!userAssignment.isComplete()) {
+            userAssignment.setComplete(true);
+            userAssignmentRepository.save(userAssignment);
+        }else{
+            userAssignment.setComplete(false);
+            userAssignmentRepository.save(userAssignment);
+        }
+        // Calculate and save progress
+        WeeklyUserProgress progress = calculateAndSaveProgress(roomEvent, user);
+
+        // Prepare response
+        boolean isCompleted = progress.getProgressPercentage() >= 100.0;
+        LocalDate deadline = roomEvent.getEndTime();
+
+        return RoomResponseDto.AssignmentProgressResponse.builder()
+                .progressPercentage(progress.getProgressPercentage())
+                .completedAssignments(progress.getCompletedAssignments())
+                .totalAssignments(progress.getTotalAssignments())
+                .isCompleted(isCompleted)
+                .deadline(deadline)
+                .build();
+    }
+
+    @Override
+    public WeeklyUserProgress calculateAndSaveProgress(RoomEvent roomEvent, User user) {
         int totalAssignments = roomEvent.getAssignmentList().size();
 
         int completedAssignments = (int) roomEvent.getAssignmentList().stream()
@@ -215,14 +247,13 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                     newProgress.setUser(user);
                     newProgress.setRoomEvent(roomEvent);
                     return newProgress;
-
                 });
 
         progress.setTotalAssignments(totalAssignments);
         progress.setCompletedAssignments(completedAssignments);
         progress.setProgressPercentage(progressPercentage);
 
-        weeklyUserProgressRepository.save(progress);
+        return weeklyUserProgressRepository.save(progress);
     }
 
 }

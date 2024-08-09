@@ -17,21 +17,22 @@ public class RoomQueryRepository {
 
     public List<RoomResponseDto.NoticeDto> getNotices(Long roomId, int page, int size) {
         String jpql = """
-            SELECT NEW gaji.service.domain.room.web.dto.RoomResponseDto$NoticeDto(
-                rn.id,
-                sm.user.name,
-                rn.title,
-                rn.body,
-                (SELECT COUNT(nc) FROM NoticeConfirmation nc WHERE nc.roomNotice.id = rn.id),
-                rn.createdAt,
-                rn.viewCount
-            )
-            FROM RoomNotice rn
-            JOIN rn.studyMate sm
-            WHERE sm.room.id = :roomId
-            ORDER BY rn.createdAt DESC
-        """;
-
+        SELECT NEW gaji.service.domain.room.web.dto.RoomResponseDto$NoticeDto(
+            rn.id,
+            sm.user.name,
+            rn.title,
+            rn.body,
+        CAST(COUNT(nc) AS Long),
+            rn.createdAt,
+            rn.viewCount
+        )
+        FROM RoomNotice rn
+        JOIN rn.studyMate sm
+        LEFT JOIN NoticeConfirmation nc ON nc.roomNotice.id = rn.id
+        WHERE sm.room.id = :roomId
+        GROUP BY rn.id, sm.user.name, rn.title, rn.body, rn.createdAt, rn.viewCount
+        ORDER BY rn.createdAt DESC
+    """;
         List<RoomResponseDto.NoticeDto> notices = entityManager.createQuery(jpql, RoomResponseDto.NoticeDto.class)
                 .setParameter("roomId", roomId)
                 .setFirstResult((page - 1) * size)

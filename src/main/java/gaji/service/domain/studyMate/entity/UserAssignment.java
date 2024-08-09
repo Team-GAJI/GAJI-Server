@@ -28,4 +28,7 @@ public class UserAssignment {
     //완료여부
     private boolean isComplete;
 
+    public void setComplete(boolean isComplete) {
+        this.isComplete = true;
+    }
 }

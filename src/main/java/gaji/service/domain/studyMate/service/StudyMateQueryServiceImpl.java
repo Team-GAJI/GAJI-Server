@@ -1,5 +1,6 @@
 package gaji.service.domain.studyMate.service;
 
+import gaji.service.domain.room.repository.WeeklyUserProgressRepository;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
