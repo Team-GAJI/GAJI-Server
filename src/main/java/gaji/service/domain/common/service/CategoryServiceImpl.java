@@ -38,6 +38,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<Long> findEntityIdListByCategoryIdAndPostType(Long categoryId, PostTypeEnum postType) {
+        return selectCategoryRepository.findEntityIdListByCategoryAndPostType(findByCategoryId(categoryId), postType);
+    }
+
+    @Override
     public boolean existsByCategory(CategoryEnum category) {
         return categoryRepository.existsByCategory(category);
     }
