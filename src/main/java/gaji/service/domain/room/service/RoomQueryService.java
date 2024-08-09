@@ -14,10 +14,6 @@ public interface RoomQueryService {
 
     Room findRoomById(Long roomId);
 
-    RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId);
-
-    RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId);
-
     RoomEvent findRoomEventByRoomIdAndWeeks(Long roomId, Integer weeks);
 
     List<RoomResponseDto.NoticeDto> getNotices(Long roomId, int page, int size);
