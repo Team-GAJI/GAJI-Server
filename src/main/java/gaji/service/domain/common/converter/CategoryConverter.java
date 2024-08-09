@@ -2,6 +2,7 @@ package gaji.service.domain.common.converter;
 
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
+import gaji.service.domain.common.web.dto.CategoryResponseDTO;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import org.springframework.core.convert.converter.Converter;
@@ -32,5 +33,18 @@ public class CategoryConverter implements Converter<String, CategoryEnum> {
                                 .type(type)
                                 .build()
                 ).collect(Collectors.toList());
+    }
+
+    public static CategoryResponseDTO.BaseDTO toBaseDTO(Category category) {
+        return CategoryResponseDTO.BaseDTO.builder()
+                .categoryId(category.getId())
+                .category(category.getCategory())
+                .build();
+    }
+
+    public static List<CategoryResponseDTO.BaseDTO> toBaseDTOList(List<Category> categoryList) {
+        return categoryList.stream()
+                .map(CategoryConverter::toBaseDTO)
+                .collect(Collectors.toList());
     }
 }
