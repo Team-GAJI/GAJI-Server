@@ -34,16 +34,36 @@ public class RoomResponseDto {
     @Builder
     @Getter
     @NoArgsConstructor
-    @AllArgsConstructor
     public static class RoomMainDto {
         private String name;
         private LocalDate startDay;
         private LocalDate endDay;
         private LocalDate recruitStartDay;
         private LocalDate recruitEndDay;
-        private Integer daysLeftForRecruit;
-        private Integer applicantCount;
+        private Long daysLeftForRecruit;
+        private Long applicantCount;
+
+        // 수정된 생성자
+        public RoomMainDto(String name, LocalDate startDay, LocalDate endDay,
+                           LocalDate recruitStartDay, LocalDate recruitEndDay,
+                           Long daysLeftForRecruit, Long applicantCount) {
+            this.name = name;
+            this.startDay = startDay;
+            this.endDay = endDay;
+            this.recruitStartDay = recruitStartDay;
+            this.recruitEndDay = recruitEndDay;
+            this.applicantCount = applicantCount;
+
+            if(daysLeftForRecruit < 0 ){
+                this.daysLeftForRecruit = 0L;
+            }else{
+                this.daysLeftForRecruit = daysLeftForRecruit;
+            }
+
+        }
     }
+
+
     @Builder
     @Getter
     @NoArgsConstructor
