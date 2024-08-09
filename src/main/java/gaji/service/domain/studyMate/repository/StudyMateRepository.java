@@ -1,7 +1,7 @@
 package gaji.service.domain.studyMate.repository;
 
 import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.studyMate.StudyMate;
+import gaji.service.domain.studyMate.entity.StudyMate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
