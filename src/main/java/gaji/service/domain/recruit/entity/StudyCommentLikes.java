@@ -1,8 +1,6 @@
-package gaji.service.domain.studyMate;
+package gaji.service.domain.recruit.entity;
 
 import gaji.service.domain.user.entity.User;
-import gaji.service.domain.enums.ApplicantStatus;
-import gaji.service.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,20 +9,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudyApplicant {
+public class StudyCommentLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "comment_id")
+    private StudyComment studyComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
-
-    //수락 대기 여부
-    @Enumerated(EnumType.STRING)
-    private ApplicantStatus status;
+    @JoinColumn(name = "user_id")
+    private User user;
 }

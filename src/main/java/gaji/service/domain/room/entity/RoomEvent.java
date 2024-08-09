@@ -1,12 +1,10 @@
 package gaji.service.domain.room.entity;
 
+import gaji.service.domain.studyMate.entity.Assignment;
+import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.user.entity.User;
-import gaji.service.domain.myRepeat.MyRepeat;
-import gaji.service.domain.myRepeat.RepeatException;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,7 +13,9 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Event {
+@AllArgsConstructor
+@Builder
+public class RoomEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,23 +28,27 @@ public class Event {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<RepeatException> repeatExceptionList = new ArrayList<>();
+    @OneToMany(mappedBy = "roomEvent", cascade = CascadeType.ALL)
+    private final List<WeeklyUserProgress> weeklyUserProgressList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<MyRepeat> myRepeatList = new ArrayList<>();
+    @OneToMany(mappedBy = "roomEvent", cascade = CascadeType.ALL)
+    private final List<Assignment> assignmentList = new ArrayList<>();
 
-    @Column(nullable = false, length = 200)
+
+    @Column(length = 30)
+    private String title;
+
+    @Column(length = 200)
     private String description;
 
-    @Column(nullable = false)
+    private Integer weeks;
+
     private LocalDate startTime;
 
-    @Column(nullable = false)
     private LocalDate endTime;
 
-    private boolean meeting;
-    private boolean allday;
+    private boolean isPublic;
+
 
 
 

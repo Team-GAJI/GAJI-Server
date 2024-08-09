@@ -2,6 +2,7 @@ package gaji.service.domain.room.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +19,10 @@ public class Material {
     private Room room;
 
     private String path;
+
+    @Builder
+    public Material(Room room, String path) {
+        this.room = room;
+        this.path = path;
+    }
 }
