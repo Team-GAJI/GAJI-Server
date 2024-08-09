@@ -8,6 +8,7 @@ import gaji.service.oauth2.dto.CustomOAuth2User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
@@ -56,6 +58,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpStatus.OK.value());
 
+        // 생성된 토큰 로그 찍어주기
+        log.info("accessToken = {}", access);
+        log.info("refreshToken = {}", refresh);
+
         String tokensJson = objectMapper.writeValueAsString(tokens);
 
         // 프론트엔드 URL에 토큰을 쿼리 파라미터로 추가
@@ -64,6 +70,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 
+    // TODO: 빌더 패턴으로 변경
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {
         Date date = new Date(System.currentTimeMillis() + expiredMs);
         RefreshEntity refreshEntity = new RefreshEntity();

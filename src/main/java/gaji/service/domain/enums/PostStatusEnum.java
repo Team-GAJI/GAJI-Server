@@ -2,6 +2,8 @@ package gaji.service.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gaji.service.domain.post.code.PostErrorStatus;
+import gaji.service.global.exception.RestApiException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,10 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 public enum PostStatusEnum {
     RECRUITING("모집중"),
     RECRUITMENT_COMPLETED("모집완료"),
-    NEED_RESOLUTION("해결필요"),
+    NEED_RESOLUTION("미완료질문"),
     RESOLVED("해결완료"),
     DELETED("삭제됨"),
-    POSTING("게시중");
+    BLOGING("블로그"),
+    TEMPORARY("임시저장");
 
     @JsonValue
     private final String value;
@@ -30,6 +33,6 @@ public enum PostStatusEnum {
             }
         }
         log.error("PostStatusEnum.from() exception occur param: {}", param);
-        return null;
+        throw new RestApiException(PostErrorStatus._INVALID_POST_STATUS);
     }
 }
