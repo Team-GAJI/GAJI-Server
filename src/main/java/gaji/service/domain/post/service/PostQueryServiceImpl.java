@@ -1,6 +1,7 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.common.entity.Category;
+import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
@@ -21,6 +22,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PostQueryServiceImpl implements PostQueryService {
     private final PostJpaRepository postRepository;
+    private final CategoryService categoryService;
 
     @Override
     public Slice<Post> getPostList(Integer lastPopularityScore,
@@ -28,7 +30,7 @@ public class PostQueryServiceImpl implements PostQueryService {
                                    Integer lastLikeCnt,
                                    Integer lastHit,
                                    PostTypeEnum postType,
-                                   CategoryEnum category,
+                                   Long categoryId,
                                    SortType sortType,
                                    PostStatusEnum postStatus,
                                    int size) {
@@ -39,6 +41,7 @@ public class PostQueryServiceImpl implements PostQueryService {
                 lastHit,
                 postType,
                 postStatus,
+                categoryId,
                 sortType,
                 pageRequest);
     }

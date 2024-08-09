@@ -3,6 +3,8 @@ package gaji.service.domain.post.repository;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import gaji.service.domain.common.entity.Category;
+import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
@@ -23,6 +25,7 @@ import static gaji.service.domain.user.entity.QUser.user;
 @RequiredArgsConstructor
 public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
     private final JPAQueryFactory jpaQueryFactory;
+    private final CategoryService categoryService;
 
     @Override
     public Slice<Post> findAllFetchJoinWithUser(Integer lastPopularityScore,
@@ -31,8 +34,11 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
                                                 Integer lastHit,
                                                 PostTypeEnum postType,
                                                 PostStatusEnum postStatus,
+                                                Long categoryId,
                                                 SortType sortType,
                                                 Pageable pageable) {
+        List<Long> entityIdList = getEntityIdListByCategoryIdAndPostType(categoryId, postType);
+
         List<Post> postList = jpaQueryFactory.
                 selectFrom(post)
                 .leftJoin(post.user, user)
@@ -43,12 +49,17 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
                         ltLikeCnt(lastLikeCnt),
                         ltHit(lastHit),
                         postTypeEq(postType),
-                        postStatusEq(postStatus)
+                        postStatusEq(postStatus),
+                        post.id.in(entityIdList)
                 )
                 .orderBy(orderBySortType(sortType))
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
         return checkLastPage(pageable, postList);
+    }
+
+    private List<Long> getEntityIdListByCategoryIdAndPostType(Long categoryId, PostTypeEnum postType) {
+        return categoryService.findEntityIdListByCategoryIdAndPostType(categoryId, postType);
     }
 
     @Override
@@ -70,6 +81,10 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
     }
 
     private BooleanExpression postStatusEq(PostStatusEnum postStatusCond) {
+        return (postStatusCond != null) ? post.status.eq(postStatusCond) : null;
+    }
+
+    private BooleanExpression categoryEq(PostStatusEnum postStatusCond) {
         return (postStatusCond != null) ? post.status.eq(postStatusCond) : null;
     }
 

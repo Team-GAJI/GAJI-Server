@@ -7,7 +7,6 @@ import gaji.service.domain.post.entity.Post;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
-import java.util.List;
 
 public interface PostQueryDslRepository {
 
@@ -17,6 +16,7 @@ public interface PostQueryDslRepository {
                                          Integer lastHit,
                                          PostTypeEnum postType,
                                          PostStatusEnum postStatus,
+                                         Long categoryId,
                                          SortType sortType,
                                          Pageable pageable);
     Post findByIdFetchJoinWithUser(Long postId);
