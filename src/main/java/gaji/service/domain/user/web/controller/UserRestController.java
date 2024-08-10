@@ -27,9 +27,9 @@ public class UserRestController {
                                                                       @RequestParam(value = "cursorDate",required = false) LocalDate cursorDate,
                                                                       @RequestParam(value = "cursorId",required = false) Long cursorId,
                                                                       @RequestParam("type") RoomTypeEnum type,
-                                                                      @RequestParam(defaultValue = "10") Integer limit) {
+                                                                      @RequestParam(defaultValue = "10") int size) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        Slice<Tuple> userRoomList = userQueryService.getUserRoomList(userId, cursorDate, cursorId, type, limit);
+        Slice<Tuple> userRoomList = userQueryService.getUserRoomList(userId, cursorDate, cursorId, type, size);
         return BaseResponse.onSuccess(UserConverter.toGetRoomListDTO(userRoomList));
     }
 
@@ -38,8 +38,8 @@ public class UserRestController {
                                                                         @RequestParam(value = "cursorDate",required = false) LocalDate cursorDate,
                                                                         @RequestParam(value = "cursorId",required = false) Long cursorId,
                                                                         @RequestParam("type") RoomTypeEnum type,
-                                                                        @RequestParam(defaultValue = "10") Integer limit) {
-        Slice<Tuple> userRoomList = userQueryService.getUserRoomList(userId, cursorDate, cursorId, type, limit);
+                                                                        @RequestParam(defaultValue = "10") int size) {
+        Slice<Tuple> userRoomList = userQueryService.getUserRoomList(userId, cursorDate, cursorId, type, size);
         return BaseResponse.onSuccess(UserConverter.toGetRoomListDTO(userRoomList));
     }
 
