@@ -8,12 +8,12 @@ import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -35,17 +35,22 @@ public class UserQueryServiceImpl implements UserQueryService {
     }
 
     @Override
-    public List<Tuple> getUserRoomList(Long userId, LocalDate cursorDate, Long cursorId, RoomTypeEnum type, Integer limit) {
+    public Slice<Tuple> getUserRoomList(Long userId, LocalDate cursorDate, Long cursorId, RoomTypeEnum type, int size) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
 
-        List<Tuple> roomList;
+        cursorDate = cursorDate == null ? LocalDate.now() : cursorDate;
+        cursorId = cursorId == null ? 0 : cursorId;
+
+        PageRequest pageRequest = PageRequest.of(0, size);
+
+        Slice<Tuple> roomList;
 
         if(type == RoomTypeEnum.ONGOING) {
-            roomList = roomCustomRepository.findAllOngoingRoomsByUser(user, cursorDate, cursorId, limit);
+            roomList = roomCustomRepository.findAllOngoingRoomsByUser(user, cursorDate, cursorId, pageRequest);
         }
         else{
-            roomList = roomCustomRepository.findAllEndedRoomsByUser(user, cursorDate, cursorId, limit);
+            roomList = roomCustomRepository.findAllEndedRoomsByUser(user, cursorDate, cursorId, pageRequest);
         }
 
         return roomList;
