@@ -4,11 +4,13 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gaji.service.domain.room.entity.QRoom;
-import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.QStudyMate;
 import gaji.service.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -19,7 +21,7 @@ import java.util.List;
 public class RoomCustomRepositoryImpl implements RoomCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<Tuple> findAllOngoingRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Integer limit) {
+    public Slice<Tuple> findAllOngoingRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Pageable pageable) {
         QRoom room = QRoom.room;
         QStudyMate studyMate = QStudyMate.studyMate;
 
@@ -27,21 +29,27 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
 
         BooleanExpression cursorCondition = (room.studyStartDay.eq(cursorDate).and(room.id.gt(cursorId)))
                 .or(room.studyStartDay.lt(cursorDate));
+
+        List<Long> userRoomIds = jpaQueryFactory
+                .select(studyMate.room.id)
+                .from(studyMate)
+                .where(studyMate.user.eq(user))
+                .fetch();
 
         List<Tuple> ongoingRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl, room.studyStartDay)
                 .from(room)
-                .join(studyMate).on(room.id.eq(studyMate.room.id))
-                .where(studyMate.user.eq(user).and(room.studyEndDay.after(now))
+                .where(room.id.in(userRoomIds)
+                        .and(room.studyEndDay.after(now))
                         .and(cursorCondition))
                 .orderBy(room.studyStartDay.desc(), room.id.asc())
-                .limit(limit)
+                .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인
                 .fetch();
 
-        return ongoingRooms;
+        return checkLastPage(pageable, ongoingRooms);
     }
 
-    @Override
-    public List<Tuple> findAllEndedRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Integer limit) {
+
+    public Slice<Tuple> findAllEndedRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Pageable pageable) {
         QRoom room = QRoom.room;
         QStudyMate studyMate = QStudyMate.studyMate;
 
@@ -50,15 +58,32 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
         BooleanExpression cursorCondition = (room.studyStartDay.eq(cursorDate).and(room.id.gt(cursorId)))
                 .or(room.studyStartDay.lt(cursorDate));
 
-        List<Tuple> endedRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl)
-                .from(room)
-                .join(studyMate).on(room.id.eq(studyMate.room.id))
-                .where(studyMate.user.eq(user)
-                        .and(room.studyEndDay.before(now)).and(cursorCondition))
-                .orderBy(room.studyStartDay.desc(), room.id.asc())
-                .limit(limit)
+        List<Long> userRoomIds = jpaQueryFactory
+                .select(studyMate.room.id)
+                .from(studyMate)
+                .where(studyMate.user.eq(user))
                 .fetch();
 
-        return endedRooms;
+        List<Tuple> ongoingRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl, room.studyStartDay)
+                .from(room)
+                .where(room.id.in(userRoomIds)
+                        .and(room.studyEndDay.before(now))
+                        .and(cursorCondition))
+                .orderBy(room.studyStartDay.desc(), room.id.asc())
+                .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인
+                .fetch();
+
+        return checkLastPage(pageable, ongoingRooms);
+    }
+
+
+    private Slice<Tuple> checkLastPage(Pageable pageable, List<Tuple> roomList) {
+        boolean hasNext = false;
+
+        if (roomList.size() > pageable.getPageSize()) {
+            hasNext = true;
+            roomList.remove(pageable.getPageSize()); // 더 가져왔을 시, 삭제
+        }
+        return new SliceImpl<Tuple>(roomList, pageable, hasNext);
     }
 }
