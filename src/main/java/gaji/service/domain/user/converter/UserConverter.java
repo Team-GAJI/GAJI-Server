@@ -1,31 +1,31 @@
 package gaji.service.domain.user.converter;
 
-import gaji.service.domain.room.entity.Room;
+import com.querydsl.core.Tuple;
+import gaji.service.domain.room.entity.QRoom;
 import gaji.service.domain.user.web.dto.UserResponseDTO;
-import org.springframework.data.domain.Page;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserConverter {
-    public static UserResponseDTO.GetRoomDTO toGetRoomDTO(Room room) {
+    public static UserResponseDTO.GetRoomDTO toGetRoomDTO(Tuple tuple) {
         return UserResponseDTO.GetRoomDTO.builder()
-                .roomId(room.getId())
-                .name(room.getName())
-                .description(room.getDescription())
-                .thumbnail_url(room.getThumbnailUrl())
-                .isOngoing(room.getStudyEndDay().isAfter(LocalDate.now())) //스터디 종료 날짜가 현재날짜보다 뒤라면 true
+                .roomId(tuple.get(QRoom.room.id))
+                .name(tuple.get(QRoom.room.name))
+                .description(tuple.get(QRoom.room.description))
+                .thumbnail_url(tuple.get(QRoom.room.thumbnailUrl))
+                .studyStartDay(tuple.get(QRoom.room.studyStartDay))
                 .build();
     }
 
-    public static UserResponseDTO.GetRoomListDTO toGetRoomListDTO(List<Room> roomList) {
-        List<UserResponseDTO.GetRoomDTO> GetRoomDTOList = roomList.stream()
-                .map(UserConverter::toGetRoomDTO).toList();
+    public static UserResponseDTO.GetRoomListDTO toGetRoomListDTO(List<Tuple> roomList) {
+        List<UserResponseDTO.GetRoomDTO> getRoomDTOList = roomList.stream()
+                .map(UserConverter::toGetRoomDTO)
+                .collect(Collectors.toList());
 
         return UserResponseDTO.GetRoomListDTO.builder()
-                .roomList(GetRoomDTOList)
-                .totalElements(GetRoomDTOList.size())
+                .roomList(getRoomDTOList)
+                .totalElements(getRoomDTOList.size())
                 .build();
     }
 }
