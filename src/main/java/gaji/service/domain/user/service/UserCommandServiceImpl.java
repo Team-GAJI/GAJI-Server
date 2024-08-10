@@ -46,7 +46,7 @@ public class UserCommandServiceImpl implements UserCommandService{
 
         String newNickname = request.getNickname();
 
-        if (user.getNickname().equals(newNickname)) {
+        if (user.getNickname()!=null && user.getNickname().equals(newNickname)) {
             throw new RestApiException(UserErrorStatus._NICKNAME_IS_SAME_);
         }
 
