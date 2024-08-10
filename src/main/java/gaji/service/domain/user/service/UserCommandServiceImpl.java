@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserCommandServiceImpl implements UserCommandService{
 
     private final UserRepository userRepository;
+    private final UserQueryService userQueryService;
 
     @Override
     @Transactional
@@ -29,9 +29,7 @@ public class UserCommandServiceImpl implements UserCommandService{
     }
 
     public User updateUserStatus(Long userId, UserActive status) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
-
+        User user = userQueryService.findUserById(userId);
         user.updateStatus(status);
 
         return user;
@@ -40,11 +38,9 @@ public class UserCommandServiceImpl implements UserCommandService{
     @Override
     @Transactional
     public User updateUserNickname(Long userIdFromToken, Long userIdFromPathVariable, UserRequestDTO.UpdateNicknameDTO request) {
-        User user = userRepository.findById(userIdFromToken)
-                .orElseThrow(()-> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
+        User user = userQueryService.findUserById(userIdFromToken);
 
-        if(!user.equals(userRepository.findById(userIdFromPathVariable)
-                .orElseThrow(()-> new RestApiException(UserErrorStatus._USER_NOT_FOUND)))){
+        if(!user.equals(userQueryService.findUserById(userIdFromPathVariable))){
             throw new RestApiException(UserErrorStatus._USER_IS_NOT_SAME_);
         }
 
@@ -53,6 +49,7 @@ public class UserCommandServiceImpl implements UserCommandService{
         if (user.getNickname().equals(newNickname)) {
             throw new RestApiException(UserErrorStatus._NICKNAME_IS_SAME_);
         }
+
         user.updateNickname(newNickname);
 
         return user;
