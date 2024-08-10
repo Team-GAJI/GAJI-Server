@@ -1,5 +1,6 @@
 package gaji.service.domain.recruit.converter;
 
+import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.user.entity.User;
@@ -43,8 +44,8 @@ public class RecruitConverter {
     public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
         List<CategoryEnum> categoryList = new ArrayList<>();
         for (SelectCategory selectCategory : selectCategoryList) {
-            CategoryEnum category = selectCategory.getCategory();
-            categoryList.add(category);
+            Category category = selectCategory.getCategory();
+            categoryList.add(category.getCategory());
         }
 
         return categoryList;
