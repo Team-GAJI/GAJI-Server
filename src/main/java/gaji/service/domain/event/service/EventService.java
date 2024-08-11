@@ -8,11 +8,9 @@ import org.joda.time.DateTime;
 public interface EventService {
 
     public EventInfoListResponse getEventList(DateTime date, Long userId);
-    public Long putEvent(DateTime date, Long userId, EventInfoRequest request);
-    public Long patchEvent(Long eventId, EventInfoRequest request);
-    public Long deleteEvent(Long eventId);
-    public Long putEventComplete(Long eventId);
-    public Long deleteEventComplete(Long eventId);
-
-    public void checkMyEvent(Long eventId, Long userId); // 내 일정인지 확인
+    public Long putEvent(DateTime date, Long userId, Long myId, EventInfoRequest request);
+    public Long patchEvent(Long eventId, Long myId, EventInfoRequest request);
+    public Long deleteEvent(Long eventId, Long myId);
+    public Long putEventComplete(Long eventId, Long myId);
+    public Long deleteEventComplete(Long eventId, Long myId);
 }
