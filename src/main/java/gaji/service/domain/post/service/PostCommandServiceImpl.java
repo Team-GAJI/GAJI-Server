@@ -8,7 +8,6 @@ import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.entity.SelectHashtag;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.common.service.HashtagService;
-import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.CommentStatus;
 import gaji.service.domain.post.converter.PostConverter;
 import gaji.service.domain.post.entity.Comment;
@@ -22,6 +21,7 @@ import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.domain.user.code.UserErrorStatus;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,8 +34,8 @@ import java.util.List;
 @Transactional
 public class PostCommandServiceImpl implements PostCommandService {
 
-    private final UserRepository userRepository;
     private final PostJpaRepository postRepository;
+    private final UserQueryService userQueryService;
     private final PostQueryService postQueryService;
     private final CommentService commentService;
     private final HashtagService hashtagService;
@@ -45,7 +45,7 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     @Override
     public Post uploadPost(Long userId, PostRequestDTO.UploadPostDTO request) {
-        User findUser = findUserByUserId(userId);
+        User findUser = userQueryService.findUserById(userId);
         Post post = PostConverter.toPost(request, findUser);
         Post newPost = postRepository.save(post);
 
@@ -63,9 +63,9 @@ public class PostCommandServiceImpl implements PostCommandService {
         // TODO: 카테고리 벌크성 insert 적용
         if (request.getCategoryIdList() != null) {
             List<Long> categoryIdList = request.getCategoryIdList();
-            List<Category> categoryEntityList = categoryService.createCategoryEntityList(categoryIdList);
+            List<Category> categoryEntityList = categoryService.findCategoryEntityList(categoryIdList);
 
-            List<SelectCategory> selectCategoryList = CategoryConverter.toSelectCategoryList(categoryEntityList, post.getId(), request.getType());
+            List<SelectCategory> selectCategoryList = CategoryConverter.toSelectCategoryList(categoryEntityList, newPost.getId(), newPost.getType());
             categoryService.saveAllSelectCategory(selectCategoryList);
         }
 
@@ -74,7 +74,7 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     @Override
     public Comment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, PostRequestDTO.WriteCommentDTO request) {
-        User findUser = findUserByUserId(userId);
+        User findUser = userQueryService.findUserById(userId);
         Post findPost = postQueryService.findPostByPostId(postId);
 
         Comment newComment = createCommentByCheckParentCommentIdIsNull(parentCommentId, request, findUser, findPost);
@@ -99,7 +99,7 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     @Override
     public PostBookmark bookmarkCommunityPost(Long userId, Long postId) {
-        User findUser = findUserByUserId(userId);
+        User findUser = userQueryService.findUserById(userId);
         Post findPost = postQueryService.findPostByPostId(postId);
         // TODO: 이미 북마크한 post인지 검증
         PostBookmark newPostBookmark = postBookmarkRepository.save(PostConverter.toPostBookmark(findUser, findPost));
@@ -110,7 +110,7 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     @Override
     public void cancelbookmarkCommunityPost(Long userId, Long postId) {
-        User findUser = findUserByUserId(userId);
+        User findUser = userQueryService.findUserById(userId);
         Post findPost = postQueryService.findPostByPostId(postId);
         postBookmarkRepository.deleteByUserAndPost(findUser, findPost);
         findPost.decreaseBookmarkCnt();
@@ -118,7 +118,7 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     @Override
     public PostLikes likeCommunityPost(Long userId, Long postId) {
-        User findUser = findUserByUserId(userId);
+        User findUser = userQueryService.findUserById(userId);
         Post findPost = postQueryService.findPostByPostId(postId);
         // TODO: 이미 좋아요한 post인지 검증
         PostLikes newPostLikes = postLikesRepository.save(PostConverter.toPostLikes(findUser, findPost));
@@ -130,7 +130,7 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     @Override
     public void cancelLikeCommunityPost(Long userId, Long postId) {
-        User findUser = findUserByUserId(userId);
+        User findUser = userQueryService.findUserById(userId);
         Post findPost = postQueryService.findPostByPostId(postId);
         postLikesRepository.deleteByUserAndPost(findUser, findPost);
         findPost.decreaseLikeCnt();
@@ -145,10 +145,4 @@ public class PostCommandServiceImpl implements PostCommandService {
             return PostConverter.toComment(request, findUser, findPost, null);
         }
     }
-
-    private User findUserByUserId(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
-    }
-
 }
