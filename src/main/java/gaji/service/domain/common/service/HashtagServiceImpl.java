@@ -8,12 +8,14 @@ import gaji.service.domain.common.repository.SelectHashtagRepository;
 import gaji.service.domain.enums.PostTypeEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class HashtagServiceImpl implements HashtagService {
 
     private final HashtagRepository hashtagRepository;
@@ -26,6 +28,7 @@ public class HashtagServiceImpl implements HashtagService {
 
     // 이미 존재하는 해시태그는 조회, 존재하지 않는 해시태그는 생성해서 List로 반환하는 메서드
     @Override
+    @Transactional
     public List<Hashtag> createHashtagEntityList(List<String> hashtagStringList) {
         return hashtagStringList.stream()
                 .map(hashtag -> {
@@ -39,6 +42,7 @@ public class HashtagServiceImpl implements HashtagService {
     }
 
     @Override
+    @Transactional
     public void saveAllSelectHashtag(List<SelectHashtag> selectHashtagList) {
         selectHashtagRepository.saveAll(selectHashtagList);
     }
@@ -49,6 +53,7 @@ public class HashtagServiceImpl implements HashtagService {
     }
 
     @Override
+    @Transactional
     public void deleteAllByEntityIdAndType(Long entityId, PostTypeEnum postType) {
         selectHashtagRepository.deleteAllByEntityIdAndType(entityId, postType);
     }
