@@ -16,7 +16,7 @@ public interface CategoryService {
     boolean existsByCategory(CategoryEnum category);
     boolean existsByCategoryId(Long categoryId);
     List<SelectCategory> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType);
-    List<Category> createCategoryEntityList(List<Long> categoryIdList);
+    List<Category> findCategoryEntityList(List<Long> categoryIdList);
     List<CategoryResponseDTO.BaseDTO> findAllCategory();
     void saveAllSelectCategory(List<SelectCategory> selectCategoryList);
 }
