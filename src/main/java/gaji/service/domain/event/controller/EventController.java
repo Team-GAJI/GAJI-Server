@@ -1,5 +1,6 @@
 package gaji.service.domain.event.controller;
 
+import gaji.service.domain.event.domain.Event;
 import gaji.service.domain.event.dto.request.EventInfoRequest;
 import gaji.service.domain.event.dto.response.EventInfoListResponse;
 import gaji.service.domain.event.dto.response.EventIdResponse;
@@ -43,7 +44,7 @@ public class EventController {
             )
     {
         return BaseResponse.onSuccess(
-                new EventIdResponse(eventService.putEvent(date, userId, request))
+                new EventIdResponse(eventService.putEvent(date, userId, user.getId() ,request))
         );
     }
 
@@ -55,11 +56,9 @@ public class EventController {
             @RequestBody EventInfoRequest request
     )
     {
-        // 내 일정인지 확인
-        eventService.checkMyEvent(eventId, user.getId());
 
         return BaseResponse.onSuccess(
-                new EventIdResponse( eventService.patchEvent(eventId, request))
+                new EventIdResponse( eventService.patchEvent(eventId, user.getId(), request))
         );
     }
 
@@ -70,11 +69,9 @@ public class EventController {
             @PathVariable("eventId")Long eventId
     )
     {
-        // 내 일정인지 확인
-        eventService.checkMyEvent(eventId, user.getId());
 
         return BaseResponse.onSuccess(
-                new EventIdResponse(eventService.deleteEvent(eventId))
+                new EventIdResponse(eventService.deleteEvent(eventId, user.getId()))
         );
     }
 
@@ -85,11 +82,9 @@ public class EventController {
             @PathVariable("eventId") Long eventId
     )
     {
-        // 내 일정인지 확인
-        eventService.checkMyEvent(eventId, user.getId());
 
         return BaseResponse.onSuccess(
-                new EventIdResponse(eventService.putEventComplete(eventId))
+                new EventIdResponse(eventService.putEventComplete(eventId, user.getId()))
         );
     }
 
@@ -100,11 +95,9 @@ public class EventController {
             @PathVariable("eventId") Long eventId
     )
     {
-        // 내 일정인지 확인
-        eventService.checkMyEvent(eventId, user.getId());
 
         return BaseResponse.onSuccess(
-                new EventIdResponse(eventService.deleteEventComplete(eventId))
+                new EventIdResponse(eventService.deleteEventComplete(eventId, user.getId()))
         );
     }
 }
