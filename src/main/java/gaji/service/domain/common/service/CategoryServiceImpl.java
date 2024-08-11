@@ -12,17 +12,20 @@ import gaji.service.global.exception.RestApiException;
 import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final SelectCategoryRepository selectCategoryRepository;
 
     @Override
+    @Transactional
     public Category saveCategory(Category category) {
         return categoryRepository.save(category);
     }
@@ -34,7 +37,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category findByCategoryId(Long categoryId) {
-        return null;
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._INVALID_CATEGORY));
     }
 
     @Override
@@ -59,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     // 카테고리가 존재하면 category에 찾아서 저장, 존재하지 않으면 예외 발생
     @Override
-    public List<Category> createCategoryEntityList(List<Long> categoryIdList) {
+    public List<Category> findCategoryEntityList(List<Long> categoryIdList) {
         return categoryIdList.stream()
                 .map(categoryId -> {
                     if (existsByCategoryId(categoryId)) {
@@ -72,11 +76,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public List<CategoryResponseDTO.BaseDTO> findAllCategory() {
         return CategoryConverter.toBaseDTOList(categoryRepository.findAll());
     }
 
     @Override
+    @Transactional
     public void saveAllSelectCategory(List<SelectCategory> selectCategoryList) {
         selectCategoryRepository.saveAll(selectCategoryList);
     }
