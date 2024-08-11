@@ -37,7 +37,7 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
                                                 Long categoryId,
                                                 SortType sortType,
                                                 Pageable pageable) {
-        List<Long> entityIdList = getEntityIdListByCategoryIdAndPostType(categoryId, postType);
+        List<Long> entityIdList = (categoryId != null) ? getEntityIdListByCategoryIdAndPostType(categoryId, postType) : null;
 
         List<Post> postList = jpaQueryFactory.
                 selectFrom(post)
@@ -50,7 +50,7 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
                         ltHit(lastHit),
                         postTypeEq(postType),
                         postStatusEq(postStatus),
-                        post.id.in(entityIdList)
+                        postIdIn(entityIdList)
                 )
                 .orderBy(orderBySortType(sortType))
                 .limit(pageable.getPageSize() + 1)
@@ -98,6 +98,10 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
 
     private BooleanExpression ltLikeCnt(Integer lastLikeCnt) {
         return (lastLikeCnt != null) ? post.likeCnt.lt(lastLikeCnt) : null;
+    }
+
+    private BooleanExpression postIdIn(List<Long> postIdList) {
+        return (postIdList != null) ? post.id.in(postIdList) : null;
     }
 
     private BooleanExpression ltHit(Integer lastHit) {
