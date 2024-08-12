@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/studyRooms")
+@RequestMapping("/api/study-rooms")
 public class RoomMainController {
 
     private final RoomCommandService roomCommandService;
@@ -70,7 +70,7 @@ public class RoomMainController {
         return BaseResponse.onSuccess(responseDto);
     }
 
-    @PostMapping("/notice/{userAssignmentId}")
+    @PostMapping("/notice/{user-assignmentId}")
     @Operation(summary = "주차별 과제 체크 박스 체크", description = "과제 체크 박스를 클릭하면 과제 완료 .")
     public ResponseEntity<RoomResponseDto.AssignmentProgressResponse> toggleAssignmentCompletion(
             @RequestHeader("Authorization") String authorizationHeader,
@@ -83,14 +83,14 @@ public class RoomMainController {
 
     // 수정 필요
     //특정 스터디룸의 모든 사용자의 진행 상황을 조회합니다
-    @GetMapping("/{roomEventId}/progress")
+    @GetMapping("/{room-eventId}/progress")
     @Operation(summary = "주차별 과제 진행율", description = "특정 스터디룸의 모든 사용자의 진행 상황을 조회합니다.")
     public ResponseEntity<List<RoomResponseDto.UserProgressDTO>> getStudyMateProgress(@PathVariable Long roomEventId) {
         List<RoomResponseDto.UserProgressDTO> progressList = roomQueryService.getUserProgressByRoomEventId(roomEventId);
         return ResponseEntity.ok(progressList);
     }
 
-    @GetMapping("/events/{roomEventId}/weekly-info")
+    @GetMapping("/events/{room-eventId}/weekly-info")
     @Operation(summary = "주차별 스터디 정보", description = "특정 주차의 스터디 정보를 조회합니다.")
     public ResponseEntity<RoomResponseDto.WeeklyStudyInfoDTO> getWeeklyStudyInfo(@PathVariable Long roomEventId) {
         RoomResponseDto.WeeklyStudyInfoDTO weeklyInfo = roomQueryService.getWeeklyStudyInfo(roomEventId);
@@ -103,7 +103,7 @@ public class RoomMainController {
         return BaseResponse.onSuccess(roomQueryService.getMainStudyRoom(roomId));
     }
 
-    @GetMapping("/roomPost/{roomId}")
+    @GetMapping("/room-post/{roomId}")
     @Operation(summary = "스터디룸 main 화면 공지사항 정보 조회 API")
     public BaseResponse<RoomResponseDto.MainRoomNoticeDto> GetMainRoomNoticeController(@PathVariable Long roomId){
         return BaseResponse.onSuccess(roomQueryService.getMainRoomNotice(roomId));
