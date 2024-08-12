@@ -1,8 +1,7 @@
 package gaji.service.domain.user.web.controller;
 
-import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.post.entity.Post;
-import gaji.service.domain.user.code.UserErrorStatus;
+import com.querydsl.core.Tuple;
+import gaji.service.domain.enums.RoomTypeEnum;
 import gaji.service.domain.user.converter.UserConverter;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserCommandService;
@@ -10,13 +9,13 @@ import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.domain.user.web.dto.UserRequestDTO;
 import gaji.service.domain.user.web.dto.UserResponseDTO;
 import gaji.service.global.base.BaseResponse;
-import gaji.service.global.exception.RestApiException;
 import gaji.service.jwt.service.TokenProviderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/users")
@@ -45,5 +44,27 @@ public class UserRestController {
         User user = userCommandService.updateUserNickname(userIdFromToken, userIdFromPathVariable, request);
         return BaseResponse.onSuccess(UserConverter.toUpdateNicknameResultDTO(user));
     }
+
+    @GetMapping("/rooms")
+    public BaseResponse<UserResponseDTO.GetRoomListDTO> getMyRoomList(@RequestHeader("Authorization") String authorizationHeader,
+                                                                      @RequestParam(value = "cursorDate",required = false) LocalDate cursorDate,
+                                                                      @RequestParam(value = "cursorId",required = false) Long cursorId,
+                                                                      @RequestParam("type") RoomTypeEnum type,
+                                                                      @RequestParam(defaultValue = "10") int size) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        Slice<Tuple> userRoomList = userQueryService.getUserRoomList(userId, cursorDate, cursorId, type, size);
+        return BaseResponse.onSuccess(UserConverter.toGetRoomListDTO(userRoomList));
+    }
+
+    @GetMapping("/rooms/{userId}")
+    public BaseResponse<UserResponseDTO.GetRoomListDTO> getUserRoomList(@PathVariable Long userId,
+                                                                        @RequestParam(value = "cursorDate",required = false) LocalDate cursorDate,
+                                                                        @RequestParam(value = "cursorId",required = false) Long cursorId,
+                                                                        @RequestParam("type") RoomTypeEnum type,
+                                                                        @RequestParam(defaultValue = "10") int size) {
+        Slice<Tuple> userRoomList = userQueryService.getUserRoomList(userId, cursorDate, cursorId, type, size);
+        return BaseResponse.onSuccess(UserConverter.toGetRoomListDTO(userRoomList));
+    }
+
 }
 
