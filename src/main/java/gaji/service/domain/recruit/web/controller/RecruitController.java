@@ -12,6 +12,7 @@ import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,8 +55,8 @@ public class RecruitController {
             @RequestParam(required = false) CategoryEnum category,
             @RequestParam(required = false) PreviewFilter filter,
             @RequestParam(defaultValue = "최신순") SortType sort,
-            @RequestParam(required = false) Long lastValue,
-            @RequestParam("page") int pageSize){
+            @RequestParam(required = false) @Min(value = 0, message = "lastValue는 0 이상 입니다.") Long lastValue,
+            @RequestParam(value = "page", defaultValue = "20") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize){
 
         RecruitResponseDTO.PreviewListDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, lastValue, pageSize);
 
@@ -65,9 +66,9 @@ public class RecruitController {
     @GetMapping("/preview-default")
     @Operation(summary = "스터디 미리보기 목록 조회 기본 페이지 API", description = "스터디 목록 조회 기본 페이지입니다.")
     public BaseResponse<RecruitResponseDTO.DefaultPreviewListDTO> getDefaultPreviewList(
-            @RequestParam(defaultValue = "0") Integer nextCategoryIndex,
+            @RequestParam(defaultValue = "0") @Min(value = 0, message = "index는 0 이상 이어야 합니다.") Integer nextCategoryIndex,
             @RequestParam(defaultValue = "true") boolean isFirst,
-            @RequestParam("page") int pageSize){
+            @RequestParam(value = "page", defaultValue = "5") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize){
 
         RecruitResponseDTO.DefaultPreviewListDTO responseDTO = recruitQueryService.getDefaultPreview(isFirst, nextCategoryIndex, pageSize);
 
