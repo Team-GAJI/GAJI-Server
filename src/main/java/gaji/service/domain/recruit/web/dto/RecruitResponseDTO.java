@@ -88,4 +88,22 @@ public class RecruitResponseDTO {
         List<PreviewDTO> previewList;
         Long lastValue;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DefaultPreviewDTO {
+        CategoryEnum category;
+        List<PreviewDTO> previewList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DefaultPreviewListDTO {
+        List<DefaultPreviewDTO> defaultPreviewList;
+        int nextIndex;
+    }
 }
