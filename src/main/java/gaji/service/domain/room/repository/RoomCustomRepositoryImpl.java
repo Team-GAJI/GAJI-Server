@@ -21,15 +21,10 @@ import java.util.List;
 public class RoomCustomRepositoryImpl implements RoomCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
+    private final QRoom room = QRoom.room;
+    private final QStudyMate studyMate = QStudyMate.studyMate;
+
     public Slice<Tuple> findAllOngoingRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Pageable pageable) {
-        QRoom room = QRoom.room;
-        QStudyMate studyMate = QStudyMate.studyMate;
-
-        LocalDate now = LocalDate.now();
-
-        BooleanExpression cursorCondition = (room.studyStartDay.eq(cursorDate).and(room.id.gt(cursorId)))
-                .or(room.studyStartDay.lt(cursorDate));
-
         List<Long> userRoomIds = jpaQueryFactory
                 .select(studyMate.room.id)
                 .from(studyMate)
@@ -39,8 +34,8 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
         List<Tuple> ongoingRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl, room.studyStartDay)
                 .from(room)
                 .where(room.id.in(userRoomIds)
-                        .and(room.studyEndDay.after(now))
-                        .and(cursorCondition))
+                        .and(room.studyEndDay.after(getCurrentDay()))
+                        .and(getCursorCondition(cursorDate, cursorId)))
                 .orderBy(room.studyStartDay.desc(), room.id.asc())
                 .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인
                 .fetch();
@@ -50,9 +45,6 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
 
 
     public Slice<Tuple> findAllEndedRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Pageable pageable) {
-        QRoom room = QRoom.room;
-        QStudyMate studyMate = QStudyMate.studyMate;
-
         LocalDate now = LocalDate.now();
 
         BooleanExpression cursorCondition = (room.studyStartDay.eq(cursorDate).and(room.id.gt(cursorId)))
@@ -67,8 +59,8 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
         List<Tuple> ongoingRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl, room.studyStartDay)
                 .from(room)
                 .where(room.id.in(userRoomIds)
-                        .and(room.studyEndDay.before(now))
-                        .and(cursorCondition))
+                        .and(room.studyEndDay.before(getCurrentDay()))
+                        .and(getCursorCondition(cursorDate, cursorId)))
                 .orderBy(room.studyStartDay.desc(), room.id.asc())
                 .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인
                 .fetch();
@@ -86,4 +78,14 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
         }
         return new SliceImpl<Tuple>(roomList, pageable, hasNext);
     }
+
+    private BooleanExpression getCursorCondition(LocalDate cursorDate, Long cursorId) {
+        return (room.studyStartDay.eq(cursorDate).and(room.id.gt(cursorId)))
+                .or(room.studyStartDay.lt(cursorDate));
+    }
+
+    private LocalDate getCurrentDay() {
+        return LocalDate.now();
+    }
+
 }
