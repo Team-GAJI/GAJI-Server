@@ -1,7 +1,7 @@
-package gaji.service.domain.roomPost.service;
+package gaji.service.domain.roomBoard.service;
 
-import gaji.service.domain.roomPost.repository.RoomPostQueryRepository;
-import gaji.service.domain.roomPost.web.dto.RoomPostResponseDto;
+import gaji.service.domain.roomBoard.repository.RoomPostQueryRepository;
+import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

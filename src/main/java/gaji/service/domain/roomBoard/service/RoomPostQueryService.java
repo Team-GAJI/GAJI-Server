@@ -1,6 +1,6 @@
-package gaji.service.domain.roomPost.service;
+package gaji.service.domain.roomBoard.service;
 
-import gaji.service.domain.roomPost.web.dto.RoomPostResponseDto;
+import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 
 import java.util.List;
 

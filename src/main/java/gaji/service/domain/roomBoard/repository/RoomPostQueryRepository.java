@@ -1,7 +1,6 @@
-package gaji.service.domain.roomPost.repository;
+package gaji.service.domain.roomBoard.repository;
 
-import gaji.service.domain.room.web.dto.RoomResponseDto;
-import gaji.service.domain.roomPost.web.dto.RoomPostResponseDto;
+import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -15,7 +14,7 @@ public class RoomPostQueryRepository {
 
     public List<RoomPostResponseDto.PostListDto> findTop3RecentPostsWithUserInfo(Long roomId) {
         String jpql = """
-            SELECT NEW gaji.service.domain.roomPost.web.dto.RoomPostResponseDto$PostListDto(
+            SELECT NEW gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto$PostListDto(
                 rp.id,
                 rp.title,
                 rp.body,

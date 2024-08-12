@@ -1,8 +1,8 @@
-package gaji.service.domain.roomPost.web.controller;
+package gaji.service.domain.roomBoard.web.controller;
 
 
-import gaji.service.domain.roomPost.service.RoomPostQueryService;
-import gaji.service.domain.roomPost.web.dto.RoomPostResponseDto;
+import gaji.service.domain.roomBoard.service.RoomPostQueryService;
+import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +28,7 @@ public class RoomPostController {
         return BaseResponse.onSuccess(roomPostQueryService.getTop3RecentPosts(roomId));
 
     }
+
 
 }
 
