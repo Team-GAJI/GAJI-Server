@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -70,5 +71,39 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
                 recruitRepository.findByCategoryOrderBySortType(category, filter, sort, value, pageable);
 
         return previewList;
+    }
+
+    @Override
+    public RecruitResponseDTO.DefaultPreviewListDTO getDefaultPreview(boolean isFirst, Integer nextCategoryIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(0, pageSize);
+        List<RecruitResponseDTO.DefaultPreviewDTO> defaultPreviewList = new ArrayList<>();
+
+        List<CategoryEnum> categoryList = new ArrayList<>(Arrays.asList(CategoryEnum.values()));
+        int count;
+
+        if (isFirst) {
+            nextCategoryIndex = 0;
+            count = 4;
+        } else {
+            count = nextCategoryIndex + 1;
+        }
+
+        for (int i = nextCategoryIndex; i < count; i++) {
+            CategoryEnum category = categoryList.get(i);
+
+            RecruitResponseDTO.DefaultPreviewDTO previewList =
+                    recruitRepository.findByCategory(category, pageable);
+
+            if (previewList.getPreviewList() == null || previewList.getPreviewList().isEmpty()) {
+                break;
+            }
+
+            defaultPreviewList.add(previewList);
+        }
+
+        return RecruitResponseDTO.DefaultPreviewListDTO.builder()
+                .defaultPreviewList(defaultPreviewList)
+                .nextIndex(count)
+                .build();
     }
 }
