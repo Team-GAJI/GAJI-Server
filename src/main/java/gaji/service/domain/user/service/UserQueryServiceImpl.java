@@ -26,4 +26,9 @@ public class UserQueryServiceImpl implements UserQueryService {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
     }
+
+    public User getUserDetail(Long userId) {
+        User user = findUserById(userId);
+        return user;
+    }
 }
