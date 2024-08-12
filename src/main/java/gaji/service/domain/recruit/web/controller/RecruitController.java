@@ -3,22 +3,17 @@ package gaji.service.domain.recruit.web.controller;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PreviewFilter;
 import gaji.service.domain.enums.SortType;
-import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.service.RecruitCommandService;
 import gaji.service.domain.recruit.service.RecruitQueryService;
 import gaji.service.domain.recruit.service.StudyCommentQueryService;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
-import gaji.service.domain.room.entity.Room;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -63,6 +58,18 @@ public class RecruitController {
             @RequestParam("page") int pageSize){
 
         RecruitResponseDTO.PreviewListDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, lastValue, pageSize);
+
+        return BaseResponse.onSuccess(responseDTO);
+    }
+
+    @GetMapping("/preview-default")
+    @Operation(summary = "스터디 미리보기 목록 조회 기본 페이지 API", description = "스터디 목록 조회 기본 페이지입니다.")
+    public BaseResponse<RecruitResponseDTO.DefaultPreviewListDTO> getDefaultPreviewList(
+            @RequestParam(defaultValue = "0") Integer nextCategoryIndex,
+            @RequestParam(defaultValue = "true") boolean isFirst,
+            @RequestParam("page") int pageSize){
+
+        RecruitResponseDTO.DefaultPreviewListDTO responseDTO = recruitQueryService.getDefaultPreview(isFirst, nextCategoryIndex, pageSize);
 
         return BaseResponse.onSuccess(responseDTO);
     }
