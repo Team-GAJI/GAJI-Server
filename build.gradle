@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.1'
 	id 'io.spring.dependency-management' version '1.1.5'
+	id "org.springdoc.openapi-gradle-plugin" version "1.8.0"
 }
 
 group = 'gaji'
@@ -37,6 +38,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation' // validation
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0' // SQL 쿼리 파라미터 값 로그로 보여주는 라이브러리
 
+	//querydsl dependencies 추가(스프링부트 3.0 이상)
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
@@ -63,6 +69,15 @@ dependencies {
 	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+}
+
+def querydslSrcDir = 'src/main/generated'
+
+clean {
+	delete file(querydslSrcDir)
+}
+tasks.withType(JavaCompile) {
+	options.generatedSourceOutputDirectory = file(querydslSrcDir)
 }
 
 tasks.named('test') {
