@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class UserResponseDTO {
@@ -36,6 +37,27 @@ public class UserResponseDTO {
     public static class UpdateNicknameResultDTO {
         Long userId;
         String nickname;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetRoomDTO {
+        Long roomId;
+        String name;
+        String description;
+        String thumbnail_url;
+        LocalDate studyStartDay;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetRoomListDTO {
+        List<GetRoomDTO> roomList;
+        boolean hasNext;
     }
 }
 

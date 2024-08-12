@@ -36,5 +36,4 @@ public class SwaggerConfig {
                 .description("GAJI API 명세서입니다.")
                 .version("1.0.0");
     }
-
 }
