@@ -52,6 +52,30 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
                 .build();
     }
 
+    @Override
+    public RecruitResponseDTO.DefaultPreviewDTO findByCategory(CategoryEnum category, Pageable pageable) {
+        List<Long> roomIds = queryFactory
+                .select(selectCategory.entityId)
+                .from(selectCategory)
+                .where(selectCategory.type.eq(PostTypeEnum.ROOM)
+                        .and(categoryEq(category)))
+                .fetch();
+
+        List<Room> results = queryFactory
+                .selectFrom(room)
+                .where(room.id.in(roomIds))
+                .orderBy(room.id.desc())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<RecruitResponseDTO.PreviewDTO> previewList = RecruitConverter.toPreviewDTOLIST(results);
+
+        return RecruitResponseDTO.DefaultPreviewDTO.builder()
+                .previewList(previewList)
+                .category(category)
+                .build();
+    }
+
     private BooleanExpression categoryEq(CategoryEnum category) {
         return category != null ? selectCategory.category.category.eq(category) : null;
     }
