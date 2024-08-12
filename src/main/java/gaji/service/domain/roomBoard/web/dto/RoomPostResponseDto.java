@@ -1,4 +1,4 @@
-package gaji.service.domain.roomPost.web.dto;
+package gaji.service.domain.roomBoard.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class RoomPostResponseDto {
     @Builder

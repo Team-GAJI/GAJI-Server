@@ -1,4 +1,4 @@
-package gaji.service.domain.roomPost.code;
+package gaji.service.domain.roomBoard.code;
 
 import gaji.service.global.exception.code.BaseCodeDto;
 import gaji.service.global.exception.code.BaseErrorCodeInterface;

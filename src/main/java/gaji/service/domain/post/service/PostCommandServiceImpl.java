@@ -65,7 +65,6 @@ public class PostCommandServiceImpl implements PostCommandService {
         Comment newComment = createCommentByCheckParentCommentIdIsNull(parentCommentId, request, findUser, findPost);
         return commentRepository.save(newComment);
     }
-
     @Override
     public void softDeleteComment(Long commentId) {
         Comment findComment = findCommentByCommentId(commentId);
