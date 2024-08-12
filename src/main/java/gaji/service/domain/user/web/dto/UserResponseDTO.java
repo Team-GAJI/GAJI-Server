@@ -8,6 +8,16 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 public class UserResponseDTO {
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GetUserDetailDTO {
+        Long userId;
+        String nickname;
+        String profileImagePth;
+    }
 }
 
 
