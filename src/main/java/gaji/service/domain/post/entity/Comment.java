@@ -37,7 +37,7 @@ public class Comment extends BaseEntity {
     private List<Comment> replies = new ArrayList<>();
 
     private String body;
-    private int orderNum;
+    private Integer groupNum;
     private int depth;
     @Enumerated(EnumType.STRING)
     private CommentStatus status;
@@ -50,7 +50,7 @@ public class Comment extends BaseEntity {
         this.body = body;
         this.status = CommentStatus.PUBLIC; // 댓글은 기본상태
         this.depth = (parent == null) ? 0 : parent.depth + 1; // 부모 댓글이 있으면 depth = (부모댓글의 depth + 1)
-        this.orderNum = (parent == null) ? post.getCommentOrderNum() : parent.getOrderNum(); // orderNum은 부모 댓글이 있으면 부모 댓글과 같은 값, 없으면 증가
+        this.groupNum = (parent == null) ? post.getCommentGroupNum() : parent.getGroupNum(); // groupNum은 부모 댓글이 있으면 부모 댓글과 같은 값, 없으면 증가
     }
 
     public void updateStatus(CommentStatus status) {
