@@ -22,4 +22,18 @@ public class RoomPostRequestDto {
 
     }
 
+    @Schema(description = "스터디 게시글 DTO")
+    @Getter
+    @RequiredArgsConstructor
+    public static class RoomTroubloePostDto {
+        @Schema(description = "게시글 제목")
+        @NotBlank(message = "제목을 입력해주세요.")
+        private final String title;
+
+        @Schema(description = "게시글 본문")
+        @NotBlank(message = "게시글 본문을 입력해주세요.")
+        private final String body;
+
+    }
+
 }
