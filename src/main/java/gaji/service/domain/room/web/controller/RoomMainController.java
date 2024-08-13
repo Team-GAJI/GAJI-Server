@@ -70,7 +70,7 @@ public class RoomMainController {
         return BaseResponse.onSuccess(responseDto);
     }
 
-    @PostMapping("/notice/{userAssignmentId}")
+    @PostMapping("/main/assignment/{userAssignmentId}")
     @Operation(summary = "주차별 과제 체크 박스 체크", description = "과제 체크 박스를 클릭하면 과제 완료 .")
     public ResponseEntity<RoomResponseDto.AssignmentProgressResponse> toggleAssignmentCompletion(
             @RequestHeader("Authorization") String authorizationHeader,
