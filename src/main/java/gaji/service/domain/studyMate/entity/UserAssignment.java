@@ -29,6 +29,6 @@ public class UserAssignment {
     private boolean isComplete;
 
     public void setComplete(boolean isComplete) {
-        this.isComplete = true;
+        this.isComplete = isComplete;
     }
 }

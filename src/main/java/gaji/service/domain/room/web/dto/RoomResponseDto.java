@@ -7,8 +7,33 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class RoomResponseDto {
+
+    @Getter
+    @Builder
+    public static class AssignmentResponseDto {
+        private Long assignmentId;
+
+        public static AssignmentResponseDto of(Long assignmentId) {
+            return AssignmentResponseDto.builder()
+                    .assignmentId(assignmentId)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class EventResponseDto {
+        private Long eventId;
+
+        public static EventResponseDto of(Long eventId) {
+            return EventResponseDto.builder()
+                    .eventId(eventId)
+                    .build();
+        }
+    }
 
     @Builder
     @Getter
@@ -30,6 +55,57 @@ public class RoomResponseDto {
         Long roomId;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    public static class RoomMainDto {
+        private String name;
+        private LocalDate startDay;
+        private LocalDate endDay;
+        private LocalDate recruitStartDay;
+        private LocalDate recruitEndDay;
+        private Long daysLeftForRecruit;
+        private Long applicantCount;
+
+        // 수정된 생성자
+        public RoomMainDto(String name, LocalDate startDay, LocalDate endDay,
+                           LocalDate recruitStartDay, LocalDate recruitEndDay,
+                           Long daysLeftForRecruit, Long applicantCount) {
+            this.name = name;
+            this.startDay = startDay;
+            this.endDay = endDay;
+            this.recruitStartDay = recruitStartDay;
+            this.recruitEndDay = recruitEndDay;
+            this.applicantCount = applicantCount;
+
+            if(daysLeftForRecruit < 0 ){
+                this.daysLeftForRecruit = 0L;
+            }else{
+                this.daysLeftForRecruit = daysLeftForRecruit;
+            }
+
+        }
+    }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MainRoomNoticeDto {
+        private Long latestNoticeId;
+        private String latestNoticeTitle;
+        private List<NoticePreview> noticePreviews;
+
+        @Getter
+        @AllArgsConstructor
+        @NoArgsConstructor
+        public static class NoticePreview {
+            private Long id;
+            private String title;
+            private String body;
+        }
+    }
 
     @Builder
     @Getter
@@ -114,5 +190,35 @@ public class RoomResponseDto {
         private LocalDate startDate;
         private LocalDate endDate;
     }
+
+
+    // 스터디룸 메인 게시판 글 불러오기
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RoomMainNoticeDto {
+        private Long id;
+        private String authorName;
+        private String title;
+        private String body;
+        private Long confirmCount;
+        private LocalDateTime createdAt;
+        private Integer viewCount;
+        private String timeSincePosted;
+
+        // 이 생성자를 추가합니다
+        public RoomMainNoticeDto(Long id, String authorName, String title, String body, Long confirmCount, LocalDateTime createdAt, Integer viewCount) {
+            this.id = id;
+            this.authorName = authorName;
+            this.title = title;
+            this.body = body;
+            this.confirmCount = confirmCount;
+            this.createdAt = createdAt;
+            this.viewCount = viewCount;
+        }
+    }
+
+
 
 }
