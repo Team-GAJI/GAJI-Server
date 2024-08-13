@@ -14,7 +14,7 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.VoiceChatUser;
 import gaji.service.domain.roomPost.entity.*;
-import gaji.service.domain.studyMate.*;
+import gaji.service.domain.studyMate.entity.*;
 import gaji.service.oauth2.dto.TransferUserDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -123,6 +123,10 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<RoomComment> roomCommentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<WeeklyUserProgress> weeklyUserProgressList = new ArrayList<>();
+
 
     private String nickname;
 

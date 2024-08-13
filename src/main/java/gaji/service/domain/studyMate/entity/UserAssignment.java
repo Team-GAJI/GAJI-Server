@@ -1,8 +1,11 @@
-package gaji.service.domain.studyMate;
+package gaji.service.domain.studyMate.entity;
 
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,8 +28,7 @@ public class UserAssignment {
     //완료여부
     private boolean isComplete;
 
-
-
-
-
+    public void setComplete(boolean isComplete) {
+        this.isComplete = true;
+    }
 }
