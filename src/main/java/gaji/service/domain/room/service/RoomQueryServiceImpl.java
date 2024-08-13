@@ -3,13 +3,15 @@ package gaji.service.domain.room.service;
 
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.room.repository.RoomQueryRepository;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.repository.RoomEventRepository;
-import gaji.service.domain.room.repository.RoomQueryRepository;
 import gaji.service.domain.room.repository.RoomRepository;
-import gaji.service.domain.room.repository.WeeklyUserProgressRepository;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.domain.room.repository.WeeklyUserProgressRepository;
 import gaji.service.global.exception.RestApiException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +20,13 @@ import org.webjars.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 @RequiredArgsConstructor
-public class RoomQueryServiceImpl implements RoomQueryService{
+@Transactional(readOnly = true)
+public class RoomQueryServiceImpl implements RoomQueryService {
+
+    @PersistenceContext
     private final RoomEventRepository roomEventRepository;
     private final RoomRepository roomRepository;
     private final RoomQueryRepository roomQueryRepository;
@@ -32,13 +38,12 @@ public class RoomQueryServiceImpl implements RoomQueryService{
 //                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
 //
 //    }
+@Override
+public Room findRoomById(Long roomId) {
+    return roomRepository.findById(roomId)
+            .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
 
-    @Override
-    public Room findRoomById(Long roomId) {
-        return roomRepository.findById(roomId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
-
-    }
+}
 
     @Override
     public RoomEvent findRoomEventByRoomIdAndWeeks(Long roomId, Integer weeks) {
@@ -95,4 +100,16 @@ public class RoomQueryServiceImpl implements RoomQueryService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId) {
+
+        RoomResponseDto.RoomMainDto mainStudyRoom = roomQueryRepository.getMainStudyRoom(roomId);
+        return mainStudyRoom;
+    }
+
+    @Override
+    public RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId){
+        return roomQueryRepository.getRoomNotices(roomId);
+    }
 }
+

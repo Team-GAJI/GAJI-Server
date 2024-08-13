@@ -81,7 +81,6 @@ public class PostCommandServiceImpl implements PostCommandService {
         findPost.increaseCommentCnt();
         return commentService.saveNewComment(newComment);
     }
-
     @Override
     public void softDeleteComment(Long commentId) {
         Comment findComment = commentService.findByCommentId(commentId);
