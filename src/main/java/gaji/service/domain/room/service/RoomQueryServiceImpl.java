@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 public class RoomQueryServiceImpl implements RoomQueryService {
 
     @PersistenceContext
-    private EntityManager em;
     private final RoomEventRepository roomEventRepository;
     private final RoomRepository roomRepository;
     private final RoomQueryRepository roomQueryRepository;
