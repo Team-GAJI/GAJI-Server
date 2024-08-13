@@ -1,16 +1,14 @@
 package gaji.service.domain.room.entity;
 
-import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.curriculum.Curriculum;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
-import gaji.service.domain.roomPost.entity.RoomBoard;
-import gaji.service.domain.studyMate.Assignment;
-import gaji.service.domain.studyMate.Chat;
-import gaji.service.domain.studyMate.StudyApplicant;
-import gaji.service.domain.studyMate.StudyMate;
+import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.studyMate.entity.Chat;
+import gaji.service.domain.studyMate.entity.StudyApplicant;
+import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,7 +31,7 @@ public class Room {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    
+
     // 스터디룸 관련 매핑
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RoomEvent> roomEventList = new ArrayList<>();
@@ -115,6 +113,9 @@ public class Room {
     public void addView() {
         this.views++;
     }
+    private LocalDate startDay;
+    private LocalDate endDay;
+
 
     // 스터디 자료 추가
     public void addMaterial(Material material) {
