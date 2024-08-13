@@ -1,7 +1,12 @@
 package gaji.service.domain.room.entity;
 
+import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,10 +19,37 @@ public class RoomNotice {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "room_id")
-    private Room room;
+    @JoinColumn(name = "study_mate_id")
+    private StudyMate studyMate;
+
+    @OneToMany(mappedBy = "roomNotice", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NoticeConfirmation> confirmations = new ArrayList<>();
+
 
     private String title;
 
     private String body;
+
+    private Integer viewCount;
+    private Integer confirmCount;
+
+    private LocalDateTime createdAt;
+
+
+    //생성
+    @PrePersist
+    public void prePersist() {
+        this.viewCount = 0;
+        this.confirmCount = 0;
+        this.createdAt = LocalDateTime.now();
+    }
+    public void incrementConfirmCount() {
+        this.confirmCount++;
+    }
+
+    public void decrementConfirmCount() {
+        if (this.confirmCount > 0) {
+            this.confirmCount--;
+        }
+    }
 }

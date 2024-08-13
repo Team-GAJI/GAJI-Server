@@ -10,7 +10,7 @@ import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.studyMate.StudyMate;
+import gaji.service.domain.studyMate.entity.StudyMate;
 
 import java.util.ArrayList;
 import java.util.List;
