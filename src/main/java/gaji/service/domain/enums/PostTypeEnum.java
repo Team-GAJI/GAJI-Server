@@ -2,23 +2,23 @@ package gaji.service.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gaji.service.domain.post.code.PostErrorStatus;
+import gaji.service.global.exception.RestApiException;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Slf4j
+@RequiredArgsConstructor
 public enum PostTypeEnum {
     ROOM("스터디"),
     BLOG("블로그"),
-    PROJECT_RECRUITMENT("프로젝트 모집"),
+    PROJECT("프로젝트"),
     QUESTION("질문");
 
     @JsonValue
     private final String value;
-
-    PostTypeEnum(String value) {
-        this.value = value;
-    }
 
     @JsonCreator // Json -> Object, 역직렬화 수행하는 메서드
     public static PostTypeEnum from(String param) {
@@ -28,7 +28,7 @@ public enum PostTypeEnum {
             }
         }
         log.error("PostTypeEnum.from() exception occur param: {}", param);
-        return null;
+        throw new RestApiException(PostErrorStatus._INVALID_POST_TYPE);
     }
 
 }

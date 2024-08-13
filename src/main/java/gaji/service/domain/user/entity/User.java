@@ -13,8 +13,8 @@ import gaji.service.domain.recruit.entity.SearchKeyword;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.VoiceChatUser;
-import gaji.service.domain.roomPost.entity.*;
-import gaji.service.domain.studyMate.*;
+import gaji.service.domain.roomBoard.entity.*;
+import gaji.service.domain.studyMate.entity.*;
 import gaji.service.oauth2.dto.TransferUserDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -124,6 +124,10 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<RoomComment> roomCommentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<WeeklyUserProgress> weeklyUserProgressList = new ArrayList<>();
+
+
     private String nickname;
 
     @Enumerated(EnumType.STRING)
@@ -195,5 +199,13 @@ public class User extends BaseEntity {
         this.usernameId = usernameId;
     }
 
+    public void updateStatus(UserActive status) {
+        this.status=status;
+        this.inactiveTime=LocalDateTime.now();
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
 }

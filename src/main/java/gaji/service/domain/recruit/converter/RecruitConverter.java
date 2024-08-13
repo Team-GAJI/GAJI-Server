@@ -1,5 +1,6 @@
 package gaji.service.domain.recruit.converter;
 
+import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.user.entity.User;
@@ -9,7 +10,7 @@ import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.studyMate.StudyMate;
+import gaji.service.domain.studyMate.entity.StudyMate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,15 +41,15 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
+/*    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
         List<CategoryEnum> categoryList = new ArrayList<>();
         for (SelectCategory selectCategory : selectCategoryList) {
-            CategoryEnum category = selectCategory.getCategory();
-            categoryList.add(category);
+            Category category = selectCategory.getCategory();
+            categoryList.add(category.getCategory());
         }
 
         return categoryList;
-    }
+    }*/
 
     public static Material toMaterial(String materialPath, Room room) {
         return Material.builder()
