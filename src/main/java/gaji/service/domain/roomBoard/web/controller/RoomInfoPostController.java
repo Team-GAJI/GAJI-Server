@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.web.controller;
 
+import gaji.service.domain.roomBoard.service.RoomInfoPostCommandService;
 import gaji.service.domain.roomBoard.service.RoomTroublePostCommandService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/study-rooms")
 public class RoomInfoPostController {
     private final TokenProviderService tokenProviderService;
-    private final RoomTroublePostCommandService roomTroublePostCommandService;
+    private final RoomInfoPostCommandService roomInfoPostCommandService;
 
     @PostMapping("/assignments/{roomId}/")
     @Operation(summary = "스터디룸 정보나눔 게시판 등록 API")
@@ -26,7 +27,7 @@ public class RoomInfoPostController {
     ){
 
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        RoomPostResponseDto.toCreateRoomTroublePostIdDTO roomTroublePostIdDTO = roomTroublePostCommandService.createRoomTroublePost(roomId, userId, requestDto);
-        return BaseResponse.onSuccess(roomTroublePostIdDTO);
+        RoomPostResponseDto.toCreateRoomInfoPostIdDTO roomInfoPostIdDTO = roomInfoPostCommandService.createRoomInfoPostIdDTO(roomId, userId, requestDto);
+        return BaseResponse.onSuccess(roomInfoPostIdDTO);
     }
 }
