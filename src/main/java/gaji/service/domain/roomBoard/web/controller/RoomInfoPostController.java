@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/study-rooms")
-public class RoomTroublePostController {
-
+public class RoomInfoPostController {
     private final TokenProviderService tokenProviderService;
     private final RoomTroublePostCommandService roomTroublePostCommandService;
+
     @PostMapping("/assignments/{roomId}/")
     @Operation(summary = "스터디룸 정보나눔 게시판 등록 API")
-    public BaseResponse<RoomPostResponseDto.toCreateRoomTroublePostIdDTO> StudyRoomTroublePostController(
+    public BaseResponse<RoomPostResponseDto.toCreateRoomInfoPostIdDTO> StudyRoomInfoPostController(
             @RequestHeader("Authorization") String authorization,
-            @RequestBody @Valid RoomPostRequestDto.RoomTroubloePostDto requestDto,
+            @RequestBody @Valid RoomPostRequestDto.RoomInfoPostDto requestDto,
             @PathVariable Long roomId
     ){
 
@@ -30,5 +30,3 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess(roomTroublePostIdDTO);
     }
 }
-
-

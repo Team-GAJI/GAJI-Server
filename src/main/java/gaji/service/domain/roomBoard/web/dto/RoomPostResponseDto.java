@@ -38,5 +38,13 @@ public class RoomPostResponseDto {
         Long troublePostId;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class toCreateRoomInfoPostIdDTO {
+        Long infoPostId;
+    }
+
 
 }
