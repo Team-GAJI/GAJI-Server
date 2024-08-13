@@ -3,6 +3,8 @@ package gaji.service.domain.studyMate.entity;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomNotice;
+import gaji.service.domain.roomBoard.entity.RoomInfoPost;
+import gaji.service.domain.roomBoard.entity.RoomTroublePost;
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -33,6 +35,13 @@ public class StudyMate {
 
     @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
     private List<RoomNotice> roomNoticeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
+    private List<RoomTroublePost> roomTroublePostList = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
+    private List<RoomInfoPost> roomInfoPostList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;
