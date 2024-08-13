@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class RoomQueryServiceImpl implements RoomQueryService {
 
+    //@PersistenceContext
     private final RoomEventRepository roomEventRepository;
     private final RoomRepository roomRepository;
     private final RoomQueryRepository roomQueryRepository;
