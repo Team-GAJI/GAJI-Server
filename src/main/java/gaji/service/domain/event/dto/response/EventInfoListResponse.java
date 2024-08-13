@@ -23,6 +23,6 @@ public class EventInfoListResponse {
         private String description;
         private String startDate;
         private String endDate;
-        private boolean commitmentStatus;
+        private boolean completionStatus;
     }
 }
