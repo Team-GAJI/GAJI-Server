@@ -45,7 +45,7 @@ public class RecruitConverter {
                 .build();
     }
 
-/*    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
+    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
         List<CategoryEnum> categoryList = new ArrayList<>();
         for (SelectCategory selectCategory : selectCategoryList) {
             Category category = selectCategory.getCategory();
@@ -53,7 +53,7 @@ public class RecruitConverter {
         }
 
         return categoryList;
-    }*/
+    }
 
     public static Material toMaterial(String materialPath, Room room) {
         return Material.builder()
