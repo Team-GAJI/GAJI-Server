@@ -41,26 +41,29 @@ public class Post extends BaseEntity {
     private String title;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body; // TODO: 게시글 text 제한 20000자
-    private int viewCnt; // TODO: Integer vs int 고민해보기
+    private int hit; // TODO: Integer vs int 고민해보기
     private int likeCnt;
     private int bookmarkCnt;
+    private int commentCnt;
     @Getter(AccessLevel.NONE)
-    private int commentOrderNum;
+    private int commentGroupNum;
+    private String thumbnailUrl;
+    private Integer popularityScore;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PostTypeEnum type;
 
     @Enumerated(EnumType.STRING)
-
     @Column(nullable = false)
     private PostStatusEnum status;
 
     @Builder
-    public Post(User user, String title, String body, PostTypeEnum type, PostStatusEnum status) {
+    public Post(User user, String title, String body, String thumbnailUrl, PostTypeEnum type, PostStatusEnum status) {
         this.user = user;
         this.title = title;
         this.body = body;
+        this.thumbnailUrl = thumbnailUrl;
         this.type = type;
         this.status = status;
     }
@@ -68,14 +71,20 @@ public class Post extends BaseEntity {
     // 엔티티 생성 시 초기값 설정
     @PrePersist
     public void prePersist() {
-        this.viewCnt = 0;
+        this.hit = 0;
         this.likeCnt = 0;
         this.bookmarkCnt = 0;
-        this.commentOrderNum = 0;
+        this.commentCnt = 0;
+        this.commentGroupNum = 0;
+        this.popularityScore = 0;
     }
 
-    public int getCommentOrderNum() {
-        return ++this.commentOrderNum;
+    public String settingDefaultThumbnailUrl() {
+        return this.thumbnailUrl = "가지 로고 url";
+    }
+
+    public int getCommentGroupNum() {
+        return this.commentGroupNum++;
     }
 
     public void increaseBookmarkCnt() {
@@ -94,4 +103,27 @@ public class Post extends BaseEntity {
         this.likeCnt--;
     }
 
+    public void increaseHitCnt() {
+        this.hit++;
+    }
+
+    public void increasePopularityScoreByLike() {
+        this.popularityScore += 2;
+    }
+
+    public void decreasePopularityScoreByLike() {
+        this.popularityScore -= 2;
+    }
+
+    public void increasePopularityScoreByHit() {
+        this.popularityScore++;
+    }
+
+    public void increaseCommentCnt() {
+        this.commentCnt++;
+    }
+
+    public void decreaseCommentCnt() {
+        this.commentCnt--;
+    }
 }
