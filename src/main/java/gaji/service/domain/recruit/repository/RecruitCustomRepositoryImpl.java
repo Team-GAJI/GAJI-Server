@@ -100,7 +100,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
         return switch (sortType) {
             case RECENT -> room.id.lt(value);
             case LIKE -> room.likes.lt(value);
-            case VIEW -> room.views.lt(value);
+            case HIT -> room.views.lt(value);
             default -> throw new RestApiException(RecruitErrorStatus._INVALID_SORT_TYPE);
         };
     }
@@ -112,7 +112,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
         return switch (sortType) {
             case RECENT -> room.id.desc();
             case LIKE -> room.likes.desc();
-            case VIEW -> room.views.desc();
+            case HIT -> room.views.desc();
             default -> throw new RestApiException(RecruitErrorStatus._INVALID_SORT_TYPE);
         };
     }
@@ -124,7 +124,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
         return switch (sortType) {
             case RECENT -> results.get(results.size() - 1).getId();
             case LIKE -> (long) results.get(results.size() - 1).getLikes();
-            case VIEW -> (long) results.get(results.size() - 1).getViews();
+            case HIT -> (long) results.get(results.size() - 1).getViews();
             default -> throw new RestApiException(RecruitErrorStatus._INVALID_SORT_TYPE);
         };
     }
