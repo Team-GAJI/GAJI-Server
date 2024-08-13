@@ -18,4 +18,5 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new PostStatusConverter());
         registry.addConverter(new CategoryConverter());
     }
+
 }

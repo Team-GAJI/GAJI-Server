@@ -36,6 +36,10 @@ public class SecurityConfig {
             "/api/**"
     };
 
+    private static final String[] PUBLIC_URLS = {
+            "/api/auth/login/**"  // 로그인 관련 URL
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 

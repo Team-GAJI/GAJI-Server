@@ -64,8 +64,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // 1. 헤더로 보낼 경우
 //        response.setHeader("Authorization", "Bearer " + accessToken);
 
-
-
         // 2. body에 담아서 보낼 경우 Access 토큰을 JSON 응답으로 전송
         Map<String, String> tokenResponse = new HashMap<>();
         tokenResponse.put("access_token", accessToken);
