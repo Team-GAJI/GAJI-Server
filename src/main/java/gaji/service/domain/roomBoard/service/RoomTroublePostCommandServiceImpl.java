@@ -1,18 +1,17 @@
 package gaji.service.domain.roomBoard.service;
 
-import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
-import gaji.service.domain.roomBoard.entity.post.RoomBoard;
-import gaji.service.domain.roomBoard.entity.post.RoomTroublePost;
+import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomPostRepository;
 import gaji.service.domain.roomBoard.repository.RoomTroublePostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
-import gaji.service.domain.studyMate.StudyMate;
+import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
