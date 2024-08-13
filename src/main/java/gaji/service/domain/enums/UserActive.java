@@ -1,5 +1,5 @@
 package gaji.service.domain.enums;
 
 public enum UserActive {
-    ACTIVE, IN_ACTiVE
+    ACTIVE, IN_ACTIVE
 }

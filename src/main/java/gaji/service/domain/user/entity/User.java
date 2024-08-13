@@ -199,5 +199,13 @@ public class User extends BaseEntity {
         this.usernameId = usernameId;
     }
 
+    public void updateStatus(UserActive status) {
+        this.status=status;
+        this.inactiveTime=LocalDateTime.now();
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
 }

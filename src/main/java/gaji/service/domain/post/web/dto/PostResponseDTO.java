@@ -1,9 +1,14 @@
 package gaji.service.domain.post.web.dto;
 
+import gaji.service.domain.common.web.dto.HashtagResponseDTO;
+import gaji.service.domain.enums.PostTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PostResponseDTO {
@@ -12,7 +17,68 @@ public class PostResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreatePostDTO {
+    public static class UploadPostDTO {
         Long postId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostBookmarkIdDTO {
+        Long postBookmarkId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostLikesIdDTO {
+        Long postLikesId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostPreviewDTO {
+        private Long postId;
+        private int likeCnt;
+        private String thumbnailUrl;
+        private String title;
+        private String body;
+        private Long userId;
+        private String username;
+        private String uploadTime;
+        private int viewCnt;
+        private int popularityScore;
+        private List<String> hashtagList = new ArrayList<>();
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostPreviewListDTO {
+        private List<PostPreviewDTO> postList = new ArrayList<>();
+        private boolean hasNext;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostDetailDTO {
+        private Long userId;
+        private PostTypeEnum type;
+        private String createdAt;
+        private int viewCnt;
+        private int commentCnt;
+        private String username;
+        private String title;
+        private boolean isBookMarked;
+        private boolean isLiked;
+        private String body;
+        private List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagList = new ArrayList<>();
     }
 }
