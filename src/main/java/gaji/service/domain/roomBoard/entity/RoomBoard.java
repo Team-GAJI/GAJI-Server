@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.entity;
 
+import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,6 +26,10 @@ public class RoomBoard {
     private Room room;
 
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    RoomPostType roomPostType;
+
 
     public void addRoomPost(RoomPost roomPost) {
         this.roomPostList.add(roomPost);
