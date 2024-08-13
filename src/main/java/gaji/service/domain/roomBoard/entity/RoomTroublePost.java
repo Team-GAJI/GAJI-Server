@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.entity;
 
+import gaji.service.domain.roomBoard.entity.common.RoomBoard;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
