@@ -2,7 +2,7 @@ package gaji.service.domain.room.converter;
 
 import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
-import gaji.service.domain.studyMate.Assignment;
+import gaji.service.domain.studyMate.entity.Assignment;
 
 public class RoomConverter {
 
@@ -17,7 +17,7 @@ public class RoomConverter {
         return RoomResponseDto.RoomNoticeDto.builder()
                 .title(roomNotice.getTitle())
                 .body(roomNotice.getBody())
-                .roomId(roomNotice.getRoom().getId())
+                .roomId(roomNotice.getStudyMate().getId())
                 .build();
     }
 }

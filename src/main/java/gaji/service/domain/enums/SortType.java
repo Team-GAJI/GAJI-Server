@@ -12,9 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public enum SortType {
-    RECENT("최신순"),
-    VIEW("조회순"),
-    LIKE("좋아요순");
+
+    HOT("hot"),
+    RECENT("recent"),
+    LIKE("like"),
+    HIT("hit")
+    ; // 인기순, 최신순, 좋아요순, 히트순
 
     @JsonValue
     private final String value;
