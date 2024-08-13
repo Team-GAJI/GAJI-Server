@@ -54,7 +54,7 @@ public class RecruitController {
     public BaseResponse<RecruitResponseDTO.PreviewListDTO> getPreviewList(
             @RequestParam(required = false) CategoryEnum category,
             @RequestParam(required = false) PreviewFilter filter,
-            @RequestParam(defaultValue = "최신순") SortType sort,
+            @RequestParam(defaultValue = "recent") SortType sort,
             @RequestParam(required = false) @Min(value = 0, message = "lastValue는 0 이상 입니다.") Long lastValue,
             @RequestParam(value = "page", defaultValue = "20") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize){
 
