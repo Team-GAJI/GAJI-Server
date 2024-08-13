@@ -30,4 +30,13 @@ public class RoomPostResponseDto {
         private String profileImageUrl;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class toCreateRoomTroublePostIdDTO {
+        Long troublePostId;
+    }
+
+
 }
