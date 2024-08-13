@@ -27,7 +27,7 @@ public enum PreviewFilter {
                 return filter;
             }
         }
-        log.error("SortType.from() exception occur param: {}", param);
+        log.error("Filter.from() exception occur param: {}", param);
         throw new RestApiException(GlobalErrorStatus._FILTER_NOT_VALID);
     }
 }

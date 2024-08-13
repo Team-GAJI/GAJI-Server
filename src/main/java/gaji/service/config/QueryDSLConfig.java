@@ -3,7 +3,6 @@ package gaji.service.config;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class QueryDSLConfig {
 
-    @PersistenceContext
     private EntityManager entityManager;
 
     @Bean

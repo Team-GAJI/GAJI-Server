@@ -10,9 +10,7 @@ import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.studyMate.StudyMate;
-import gaji.service.global.converter.DateConverter;
-import org.springframework.data.domain.Page;
+import gaji.service.domain.studyMate.entity.StudyMate;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -47,7 +45,7 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
+/*    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
         List<CategoryEnum> categoryList = new ArrayList<>();
         for (SelectCategory selectCategory : selectCategoryList) {
             Category category = selectCategory.getCategory();
@@ -55,7 +53,7 @@ public class RecruitConverter {
         }
 
         return categoryList;
-    }
+    }*/
 
     public static Material toMaterial(String materialPath, Room room) {
         return Material.builder()

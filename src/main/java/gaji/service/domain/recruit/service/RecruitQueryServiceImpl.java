@@ -8,13 +8,11 @@ import gaji.service.domain.enums.SortType;
 import gaji.service.domain.recruit.repository.RecruitRepository;
 import gaji.service.domain.recruit.repository.SelectCategoryRepository;
 import gaji.service.domain.room.service.RoomCommandService;
+import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.recruit.converter.RecruitConverter;
-import gaji.service.domain.recruit.entity.StudyComment;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.room.repository.RoomRepository;
-import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.user.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.Lint;
@@ -23,12 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -55,9 +49,10 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
                 selectCategoryRepository.findAllByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
 
 
-        List<CategoryEnum> categoryList = RecruitConverter.toCategoryList(selectCategoryList);
+//        List<CategoryEnum> categoryList = RecruitConverter.toCategoryList(selectCategoryList);
 
-        return RecruitConverter.toStudyDetailDTO(user, room, categoryList);
+//        return RecruitConverter.toStudyDetailDTO(user, room, categoryList);
+        return null;
     }
 
     @Override

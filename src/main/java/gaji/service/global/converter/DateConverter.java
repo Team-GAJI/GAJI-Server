@@ -1,6 +1,7 @@
 package gaji.service.global.converter;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -32,5 +33,14 @@ public class DateConverter {
         }
 
         return dateTime.format(DATE_FORMATTER);
+    }
+
+    public static String convertWriteTimeFormat(LocalDate dateTime, String suffix) {
+        // 원하는 형식으로 포맷팅
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        String formattedDate = dateTime.format(formatter);
+
+        // 최종 결과 반환
+        return formattedDate + suffix;
     }
 }

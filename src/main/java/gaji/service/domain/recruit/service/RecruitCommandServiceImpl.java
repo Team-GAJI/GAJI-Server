@@ -2,19 +2,18 @@ package gaji.service.domain.recruit.service;
 
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
+import gaji.service.domain.common.repository.CategoryRepository;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.recruit.converter.RecruitConverter;
-import gaji.service.domain.recruit.repository.CategoryRepository;
 import gaji.service.domain.recruit.repository.SelectCategoryRepository;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.room.repository.MaterialRepository;
 import gaji.service.domain.room.service.MaterialCommandService;
 import gaji.service.domain.room.service.RoomCommandService;
-import gaji.service.domain.studyMate.StudyMate;
+import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
@@ -80,9 +79,9 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
             Category category = Category.builder()
                     .category(categoryEnum)
                     .build();
-            categoryRepository.save(category);
+//            categoryRepository.save(category);
             selectCategory = SelectCategory.builder()
-                    .category(category)
+//                    .category(category)
                     .entityId(room.getId())
                     .type(PostTypeEnum.ROOM)
                     .build();
