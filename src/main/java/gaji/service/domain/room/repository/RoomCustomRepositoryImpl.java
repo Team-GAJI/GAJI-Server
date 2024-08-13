@@ -4,7 +4,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gaji.service.domain.room.entity.QRoom;
-import gaji.service.domain.studyMate.QStudyMate;
+import gaji.service.domain.studyMate.entity.QStudyMate;
 import gaji.service.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 
