@@ -19,4 +19,8 @@ public interface RoomTroublePostCommandService {
     void deletePost(Long postId, Long userId);
 
     void updatePost(Long postId, Long userId, RoomPostRequestDto.RoomTroubloePostDto requestDto);
+
+    void updateComment(Long postId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto);
+
+    TroublePostComment findCommentByCommentId(Long commentId);
 }
