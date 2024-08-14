@@ -5,16 +5,13 @@ import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.repository.CategoryRepository;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.post.converter.PostConverter;
-import gaji.service.domain.post.entity.Post;
-import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
 import gaji.service.domain.recruit.repository.RecruitPostBookmarkRepository;
 import gaji.service.domain.recruit.repository.RecruitPostLikesRepository;
-import gaji.service.domain.recruit.repository.SelectCategoryRepository;
+import gaji.service.domain.common.repository.SelectCategoryRepository;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
@@ -140,6 +137,10 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
 
+        if (!recruitPostLikesRepository.existsByUserAndRoom(user, room)) {
+            throw new RestApiException(RecruitErrorStatus._ROOM_ALREADY_NO_LIKE);
+        }
+
         recruitPostLikesRepository.deleteByUserAndRoom(user, room);
         room.decreaseLike();
     }
@@ -166,6 +167,9 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
 
+        if (!recruitPostBookmarkRepository.existsByUserAndRoom(user, room)) {
+            throw new RestApiException(RecruitErrorStatus._ROOM_ALREADY_NO_BOOKMARK);
+        }
         recruitPostBookmarkRepository.deleteByUserAndRoom(user, room);
         room.decreaseBookmark();
     }
