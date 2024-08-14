@@ -64,4 +64,12 @@ public class RecruitResponseDTO {
         int commentCount;
         List<CommentResponseDTO> commentList;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class WriteCommentDTO {
+        Long commentId;
+    }
 }
