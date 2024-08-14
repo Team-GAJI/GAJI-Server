@@ -15,7 +15,10 @@ public enum RecruitErrorStatus implements BaseErrorCodeInterface {
     _RECRUIT_CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "RECRUIT_4002", "해당 카테고리가 존재하지 않습니다."),
 
     _ROOM_ALREADY_LIKE(HttpStatus.BAD_REQUEST, "LIKE_4001", "이미 좋아요 된 게시글 입니다."),
+    _ROOM_ALREADY_NO_LIKE(HttpStatus.BAD_REQUEST, "LIKE_4002", "이미 좋아요 취소된 게시글 입니다."),
+
     _ROOM_ALREADY_BOOKMARK(HttpStatus.BAD_REQUEST, "BOOKMARK_4001", "이미 북마크 된 게시글 입니다."),
+    _ROOM_ALREADY_NO_BOOKMARK(HttpStatus.BAD_REQUEST, "BOOKMARK_4002", "이미 북마크 취소된 게시글 입니다."),
     ;
 
     private final HttpStatus httpStatus;
