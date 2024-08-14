@@ -17,4 +17,6 @@ public interface RoomTroublePostCommandService {
     PostLikeStatus toggleLike(Long postId, Long userId, Long roomId);
 
     void deletePost(Long postId, Long userId);
+
+    void updatePost(Long postId, Long userId, RoomPostRequestDto.RoomTroubloePostDto requestDto);
 }

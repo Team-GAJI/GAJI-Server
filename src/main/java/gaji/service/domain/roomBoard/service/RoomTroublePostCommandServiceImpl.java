@@ -136,4 +136,16 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
         }
         roomTroublePostRepository.delete(post);
     }
+
+    @Override
+    public void updatePost(Long postId, Long userId, RoomPostRequestDto.RoomTroubloePostDto requestDto) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+
+        if (!post.isAuthor(userId)) {
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_UPDATE_AUTH);
+        }
+
+        post.update(requestDto.getTitle(), requestDto.getBody());
+    }
 }

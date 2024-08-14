@@ -61,4 +61,10 @@ public class RoomTroublePost extends BaseEntity {
     public boolean isAuthor(Long userId) {
         return this.studyMate.getUser().getId().equals(userId);
     }
+
+    public void update(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
+
 }

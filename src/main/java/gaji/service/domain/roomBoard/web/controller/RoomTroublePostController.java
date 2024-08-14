@@ -72,5 +72,17 @@ public class RoomTroublePostController {
         roomTroublePostCommandService.deletePost(postId, userId);
         return BaseResponse.onSuccess( "게시글이 성공적으로 삭제되었습니다.");
     }
+
+    @PutMapping("/trouble/{postId}")
+    @Operation(summary = "스터디룸 트러블슈팅 게시글 업데이트 API")
+    public BaseResponse<String> updatePost(
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody RoomPostRequestDto.RoomTroubloePostDto requestDto,
+            @PathVariable Long postId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomTroublePostCommandService.updatePost(postId, userId,requestDto);
+        return BaseResponse.onSuccess( "게시글이 성공적으로 업데이트되었습니다.");
+    }
 }
 
