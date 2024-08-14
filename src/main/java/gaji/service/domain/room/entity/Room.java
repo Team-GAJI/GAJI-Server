@@ -146,4 +146,12 @@ public class Room {
         this.bookmarks = 0;
         this.recruitPostTypeEnum = RecruitPostTypeEnum.RECRUITING;
     }
+
+    public void increaseLike() {
+        this.likes++;
+    }
+
+    public void increaseBookmark() {
+        this.bookmarks++;
+    }
 }
