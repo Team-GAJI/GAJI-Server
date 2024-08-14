@@ -15,4 +15,6 @@ public interface RoomTroublePostCommandService {
     RoomTroublePost findTroublePostById(Long postId);
 
     PostLikeStatus toggleLike(Long postId, Long userId, Long roomId);
+
+    void deletePost(Long postId, Long userId);
 }

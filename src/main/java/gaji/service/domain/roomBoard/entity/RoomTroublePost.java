@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.entity;
 
+import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class RoomTroublePost {
+public class RoomTroublePost extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -53,5 +54,11 @@ public class RoomTroublePost {
     public void removeLike(RoomTroublePostLike like) {
         this.likes.remove(like);
         this.likeCount = Math.max(0, this.likeCount - 1);
+
+
+    }
+
+    public boolean isAuthor(Long userId) {
+        return this.studyMate.getUser().getId().equals(userId);
     }
 }

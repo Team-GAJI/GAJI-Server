@@ -125,4 +125,15 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
             return PostLikeStatus.LIKED;
         }
     }
+
+
+    @Override
+    public void deletePost(Long postId, Long userId) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+        if (!post.isAuthor(userId)) {
+            throw new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND);
+        }
+        roomTroublePostRepository.delete(post);
+    }
 }
