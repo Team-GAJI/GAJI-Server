@@ -1,5 +1,6 @@
 package gaji.service.domain.post.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -9,12 +10,14 @@ import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static gaji.service.domain.post.entity.QPost.post;
@@ -72,6 +75,20 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
                 .fetchOne();
     }
 
+    @Override
+    public Slice<Tuple> findAllPostsByUser(User user, LocalDateTime cursorDateTime, Pageable pageable, PostTypeEnum type) {
+        List<Tuple> userPosts = jpaQueryFactory.select(post.id, post.user, post.title, post.body, post.type, post.status, post.hit, post.likeCnt, post.createdAt)
+                .from(post)
+                .where(post.user.eq(user), (postTypeEq(type))
+                        ,(post.createdAt.before(cursorDateTime))
+                )
+                .orderBy(post.createdAt.desc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        return checkLastPage(pageable, userPosts);
+    }
+
     private BooleanExpression postIdEq(Long postId) {
         return post.id.eq(postId);
     }
@@ -108,7 +125,7 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
         return (lastHit != null) ? post.hit.lt(lastHit) : null;
     }
 
-    private Slice<Post> checkLastPage(Pageable pageable, List<Post> postList) {
+    private <T> Slice<T> checkLastPage(Pageable pageable, List<T> postList) {
         boolean hasNext = false;
 
         // (조회한 결과 개수 > 요청한 페이지 사이즈) 이면 뒤에 데이터가 더 존재함
