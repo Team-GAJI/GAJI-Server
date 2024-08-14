@@ -36,6 +36,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     private final RoomTroublePostRepository roomTroublePostRepository;
     private final RoomPostCommentRepository roomPostCommentRepository;
     private final RoomTroublePostLikeRepository roomTroublePostLikeRepository;
+    private final TroublePostCommentRepository troublePostCommentRepository;
 
     @Override
     public TroublePostComment writeCommentOnTroublePost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
@@ -49,9 +50,9 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
                 .body(request.getBody())
                 .build();
         System.out.println(troublePostComment.getBody());
-        roomPostCommentRepository.save(troublePostComment);
+        troublePostCommentRepository.save(troublePostComment);
 
-                return troublePostComment;
+        return troublePostComment;
     }
 
     @Override
@@ -147,5 +148,21 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
         }
 
         post.update(requestDto.getTitle(), requestDto.getBody());
+    }
+
+    @Override
+    public void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto) {
+        TroublePostComment comment = findCommentByCommentId(commentId);
+        if (!comment.isAuthor(userId)){
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_UPDATE_AUTH);
+        }
+
+        comment.updateComment(requestDto.getBody());
+    }
+
+    @Override
+    public TroublePostComment findCommentByCommentId(Long commentId){
+        return troublePostCommentRepository.findById(commentId)
+                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._NOT_FOUND_COMMENT));
     }
 }

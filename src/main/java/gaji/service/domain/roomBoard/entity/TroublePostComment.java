@@ -27,4 +27,12 @@ public class TroublePostComment {
     private String body;
     @Enumerated(EnumType.STRING)
     private UserAlarmTypeEnum status;
+
+    public void updateComment(String body){
+        this.body = body;
+    }
+
+    public boolean isAuthor(Long userId) {
+        return this.user.getId().equals(userId);
+    }
 }
