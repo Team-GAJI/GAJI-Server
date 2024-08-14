@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/studyRecruitPosts")
+@RequestMapping("/api/study-recruit-posts")
 public class RecruitController {
 
     private final TokenProviderService tokenProviderService;
