@@ -76,7 +76,7 @@ public class RecruitResponseDTO {
         String name;
         Long deadLine;
         String description;
-        Long createdAt;
+        String createdAt;
         int recruitCount;
     }
 
