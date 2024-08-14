@@ -1,8 +1,10 @@
 package gaji.service.domain.roomBoard.converter;
 
+import gaji.service.domain.post.web.dto.CommunityPostCommentResponseDTO;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost;
 import gaji.service.domain.roomBoard.entity.RoomTroublePost;
+import gaji.service.domain.roomBoard.entity.TroublePostComment;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
@@ -39,4 +41,6 @@ public class RoomPostConverter {
     }
 
 
+    public static CommunityPostCommentResponseDTO.WriteCommentDTO toWriteCommentDTO(TroublePostComment newComment) {
+    }
 }

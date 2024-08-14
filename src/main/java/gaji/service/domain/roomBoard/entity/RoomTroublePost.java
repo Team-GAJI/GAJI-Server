@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +28,10 @@ public class RoomTroublePost {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private RoomBoard roomBoard;
+
+    @OneToMany(mappedBy = "roomTroublePost", cascade =  CascadeType.ALL)
+    private List<TroublePostComment> troublePostCommentList = new ArrayList<>();
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_mate_id")
