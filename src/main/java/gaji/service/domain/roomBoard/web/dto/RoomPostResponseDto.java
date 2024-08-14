@@ -37,6 +37,14 @@ public class RoomPostResponseDto {
     public static class toCreateRoomTroublePostIdDTO {
         Long troublePostId;
     }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class toWriteCommentDto {
+        Long commentId;
+    }
+
 
 
 }
