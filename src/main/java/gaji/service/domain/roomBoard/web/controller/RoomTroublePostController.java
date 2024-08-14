@@ -85,7 +85,7 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess( "게시글이 성공적으로 업데이트되었습니다.");
     }
 
-    @PutMapping("/trouble-post/comments/{commentId}")
+    @PutMapping("/trouble/comments/{commentId}")
     @Operation(summary = "스터디룸 트러블슈팅 댓글 업데이트 API")
     public BaseResponse<String> updateComment(
             @RequestHeader("Authorization") String authorization,
@@ -94,7 +94,7 @@ public class RoomTroublePostController {
     ) {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomTroublePostCommandService.updateComment(commentId, userId,requestDto);
-        return BaseResponse.onSuccess( "게시글이 성공적으로 업데이트되었습니다.");
+        return BaseResponse.onSuccess( "댓글이 성공적으로 업데이트되었습니다.");
     }
 }
 
