@@ -6,6 +6,7 @@ import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.recruit.annotation.ExistCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -74,5 +75,14 @@ public class RecruitRequestDTO {
         @Schema(description = "카테고리 목록")
         @ExistCategory
         private List<CategoryEnum> categoryList;
+    }
+
+    @Schema(description = "스터디 댓글 작성 DTO")
+    @Getter
+    @RequiredArgsConstructor
+    public static class WriteCommentDTO {
+        @Schema(description = "댓글 내용")
+        @NotBlank(message = "댓글 내용을 입력해주세요.")
+        private String body;
     }
 }
