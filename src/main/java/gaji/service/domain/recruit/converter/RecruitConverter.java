@@ -3,6 +3,8 @@ package gaji.service.domain.recruit.converter;
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.recruit.entity.RecruitPostBookmark;
+import gaji.service.domain.recruit.entity.RecruitPostLikes;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.entity.StudyComment;
@@ -107,6 +109,32 @@ public class RecruitConverter {
         return RecruitResponseDTO.CommentListDTO.builder()
                 .commentCount(commentCount)
                 .commentList(CommentResponseDTO)
+                .build();
+    }
+
+    public static RecruitPostLikes toRecruitPostLikes(User user, Room room) {
+        return RecruitPostLikes.builder()
+                .user(user)
+                .room(room)
+                .build();
+    }
+
+    public static RecruitResponseDTO.StudyLikesIdDTO toStudyLikesIdDTO(RecruitPostLikes likes) {
+        return RecruitResponseDTO.StudyLikesIdDTO.builder()
+                .studyLikesId(likes.getId())
+                .build();
+    }
+
+    public static RecruitPostBookmark toRecruitPostBookmark(User user, Room room) {
+        return RecruitPostBookmark.builder()
+                .user(user)
+                .room(room)
+                .build();
+    }
+
+    public static RecruitResponseDTO.StudyBookmarkIdDTO toStudyBookmarkIdDTO(RecruitPostBookmark bookmark) {
+        return RecruitResponseDTO.StudyBookmarkIdDTO.builder()
+                .studyBookmarkId(bookmark.getId())
                 .build();
     }
 
