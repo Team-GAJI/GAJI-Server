@@ -10,5 +10,9 @@ public interface RecruitCommandService {
 
     RecruitResponseDTO.StudyLikesIdDTO likeStudy(Long userId, Long roomId);
 
+    void unLikeStudy(Long userId, Long roomId);
+
     RecruitResponseDTO.StudyBookmarkIdDTO bookmarkStudy(Long userId, Long roomId);
+
+    void unBookmarkStudy(Long userId, Long roomId);
 }
