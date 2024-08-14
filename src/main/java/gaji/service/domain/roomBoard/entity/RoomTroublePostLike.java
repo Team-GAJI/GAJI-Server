@@ -29,4 +29,8 @@ public class RoomTroublePostLike {
     public void toggleLike() {
         this.status = (this.status == PostLikeStatus.LIKED) ? PostLikeStatus.NOT_LIKED : PostLikeStatus.LIKED;
     }
+
+    public void setStatus(PostLikeStatus postLikeStatus) {
+        this.status = postLikeStatus;
+    }
 }
