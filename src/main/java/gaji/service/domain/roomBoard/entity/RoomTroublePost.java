@@ -37,7 +37,10 @@ public class RoomTroublePost extends BaseEntity {
     private StudyMate studyMate;
 
     @OneToMany(mappedBy = "roomTroublePost", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoomTroublePostLike> likes = new ArrayList<>();
+    private List<RoomTroublePostLike> roomTroublePostLikeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "roomTroublePost", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoomTroublePostBookmark> roomTroublePostBookmarkList = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
@@ -47,14 +50,24 @@ public class RoomTroublePost extends BaseEntity {
     }
 
     public void addLike(RoomTroublePostLike like) {
-        this.likes.add(like);
+        this.roomTroublePostLikeList.add(like);
         this.likeCount++;
     }
 
     public void removeLike(RoomTroublePostLike like) {
-        this.likes.remove(like);
+        this.roomTroublePostLikeList.remove(like);
         this.likeCount = Math.max(0, this.likeCount - 1);
 
+    }
+
+    public void addBookmark(RoomTroublePostBookmark bookmark) {
+        this.roomTroublePostBookmarkList.add(bookmark);
+        this.bookmarkCount++;
+    }
+
+    public void removeBookmark(RoomTroublePostBookmark bookmark) {
+        this.roomTroublePostBookmarkList.remove(bookmark);
+        this. bookmarkCount = Math.max(0, this.bookmarkCount - 1);
 
     }
 
