@@ -25,8 +25,6 @@ public class TroublePostComment {
     private RoomTroublePost roomTroublePost;
 
     private String body;
-    @Enumerated(EnumType.STRING)
-    private UserAlarmTypeEnum status;
 
     public void updateComment(String body){
         this.body = body;
