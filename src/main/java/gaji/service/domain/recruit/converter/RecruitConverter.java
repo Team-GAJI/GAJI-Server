@@ -3,6 +3,9 @@ package gaji.service.domain.recruit.converter;
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.post.entity.Comment;
+import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.entity.StudyComment;
@@ -41,7 +44,7 @@ public class RecruitConverter {
                 .build();
     }
 
-/*    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
+    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
         List<CategoryEnum> categoryList = new ArrayList<>();
         for (SelectCategory selectCategory : selectCategoryList) {
             Category category = selectCategory.getCategory();
@@ -49,7 +52,7 @@ public class RecruitConverter {
         }
 
         return categoryList;
-    }*/
+    }
 
     public static Material toMaterial(String materialPath, Room room) {
         return Material.builder()
@@ -110,4 +113,18 @@ public class RecruitConverter {
                 .build();
     }
 
+    public static StudyComment toComment(RecruitRequestDTO.WriteCommentDTO request, User user, Room room, StudyComment parentComment) {
+        return StudyComment.builder()
+                .user(user)
+                .room(room)
+                .parentComment(parentComment)
+                .body(request.getBody())
+                .build();
+    }
+
+    public static RecruitResponseDTO.WriteCommentDTO toWriteCommentDTO(StudyComment comment) {
+        return RecruitResponseDTO.WriteCommentDTO.builder()
+                .commentId(comment.getId())
+                .build();
+    }
 }
