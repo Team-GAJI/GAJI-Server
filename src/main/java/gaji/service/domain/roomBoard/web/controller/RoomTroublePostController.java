@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.web.controller;
 
+import gaji.service.domain.enums.PostBookmarkStatus;
 import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.TroublePostComment;
@@ -106,6 +107,18 @@ public class RoomTroublePostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomTroublePostCommandService.deleteComment(commentId, userId);
         return BaseResponse.onSuccess( "댓글이 성공적으로 삭제되었습니다.");
+    }
+
+    @PostMapping("/trouble/{roomId}/posts/{postId}/bookmark")
+    @Operation(summary = "스터디룸 트러블슈팅 게시글 북마크 누르기 API")
+    public BaseResponse<PostBookmarkStatus> toggleBookmark(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long postId,
+            @PathVariable Long roomId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        PostBookmarkStatus status = roomTroublePostCommandService.toggleBookmark(postId, userId, roomId);
+        return BaseResponse.onSuccess(status);
     }
 }
 
