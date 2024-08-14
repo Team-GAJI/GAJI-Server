@@ -98,7 +98,7 @@ public class RoomTroublePostController {
     }
 
     @DeleteMapping("/trouble/comments/{commentId}")
-    @Operation(summary = "스터디룸 트러블슈팅 게시글 삭제 API")
+    @Operation(summary = "스터디룸 트러블슈팅 댓글 삭제 API")
     public BaseResponse<String> deleteComment(
             @RequestHeader("Authorization") String authorization,
             @PathVariable Long commentId
