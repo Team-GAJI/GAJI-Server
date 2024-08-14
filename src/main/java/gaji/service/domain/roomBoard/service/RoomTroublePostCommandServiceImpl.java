@@ -165,4 +165,22 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
         return troublePostCommentRepository.findById(commentId)
                 .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._NOT_FOUND_COMMENT));
     }
+
+    @Override
+    public void deleteComment(Long commentId, Long userId) {
+        TroublePostComment comment = findTroublePostCommentById(commentId);
+
+        if(!comment.isAuthor(userId)){
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_DELETE_AUTH);
+        }
+
+        troublePostCommentRepository.delete(comment);
+
+    }
+
+    @Override
+    public TroublePostComment findTroublePostCommentById(Long troublePostId){
+        return troublePostCommentRepository.findById(troublePostId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+    }
 }
