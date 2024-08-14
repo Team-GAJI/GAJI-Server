@@ -81,6 +81,8 @@ public class Room {
     private int likes;
     //북마크수
     private int bookmarks;
+    //댓글수
+    private int commentCount;
 
     private RecruitPostTypeEnum recruitPostTypeEnum;
 
@@ -144,6 +146,11 @@ public class Room {
         this.views = 0;
         this.likes = 0;
         this.bookmarks = 0;
+        this.commentCount = 0;
         this.recruitPostTypeEnum = RecruitPostTypeEnum.RECRUITING;
+    }
+
+    public void increaseCommentCount() {
+        this.commentCount++;
     }
 }
