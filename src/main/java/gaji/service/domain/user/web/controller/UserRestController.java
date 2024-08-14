@@ -79,7 +79,7 @@ public class UserRestController {
     @GetMapping("/posts/{userId}")
     public BaseResponse<UserResponseDTO.GetPostListDTO> getUserPostList(@PathVariable Long userId,
                                                                         @RequestParam(value = "cursorDate",required = false) LocalDateTime cursorDateTime,
-                                                                        @RequestParam("type") PostTypeEnum type,
+                                                                        @RequestParam(value = "type", required = false) PostTypeEnum type,
                                                                         @RequestParam(defaultValue = "10") int size) {
         Slice<Tuple> userPostList = userQueryService.getUserPostList(userId, cursorDateTime, type, size);
         return BaseResponse.onSuccess(UserConverter.toGetPostListDTO(userPostList, type));
