@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.service;
 
+import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
@@ -7,11 +8,9 @@ import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomTroublePost;
+import gaji.service.domain.roomBoard.entity.RoomTroublePostLike;
 import gaji.service.domain.roomBoard.entity.TroublePostComment;
-import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
-import gaji.service.domain.roomBoard.repository.RoomPostCommentRepository;
-import gaji.service.domain.roomBoard.repository.RoomPostRepository;
-import gaji.service.domain.roomBoard.repository.RoomTroublePostRepository;
+import gaji.service.domain.roomBoard.repository.*;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
@@ -22,6 +21,8 @@ import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     private final StudyMateQueryService studyMateQueryService;
     private final RoomTroublePostRepository roomTroublePostRepository;
     private final RoomPostCommentRepository roomPostCommentRepository;
+    private final RoomTroublePostLikeRepository roomTroublePostLikeRepository;
 
     @Override
     public TroublePostComment writeCommentOnTroublePost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
@@ -84,5 +86,43 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
         return roomTroublePostRepository.findById(postId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
 
+    }
+
+    @Override
+    @Transactional
+    public PostLikeStatus toggleLike(Long postId, Long studyMateId) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        StudyMate studyMate = studyMateQueryService.findById(studyMateId);
+
+        Optional<RoomTroublePostLike> likeOptional = roomTroublePostLikeRepository
+                .findByRoomTroublePostAndStudyMate(post, studyMate);
+
+        if (likeOptional.isPresent()) {
+            RoomTroublePostLike like = likeOptional.get();
+            if (like.getStatus() == PostLikeStatus.LIKED) {
+                // 이미 좋아요 상태인 경우, 좋아요 취소
+                like.setStatus(PostLikeStatus.NOT_LIKED);
+                post.removeLike(like);
+                roomTroublePostLikeRepository.delete(like);
+                return PostLikeStatus.NOT_LIKED;
+            } else {
+                // 좋아요가 취소된 상태인 경우, 다시 좋아요
+                like.setStatus(PostLikeStatus.LIKED);
+                post.addLike(like);
+                roomTroublePostLikeRepository.save(like);
+                return PostLikeStatus.LIKED;
+            }
+        } else {
+            // 새로운 좋아요 생성
+            RoomTroublePostLike newLike = RoomTroublePostLike.builder()
+                    .roomTroublePost(post)
+                    .studyMate(studyMate)
+                    .status(PostLikeStatus.LIKED)
+                    .build();
+            post.addLike(newLike);
+            roomTroublePostLikeRepository.save(newLike);
+            return PostLikeStatus.LIKED;
+        }
     }
 }

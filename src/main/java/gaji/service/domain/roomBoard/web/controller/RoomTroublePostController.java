@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.web.controller;
 
+import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.TroublePostComment;
 import gaji.service.domain.roomBoard.service.RoomTroublePostCommandService;
@@ -10,6 +11,7 @@ import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -43,5 +45,11 @@ public class RoomTroublePostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         TroublePostComment newComment = roomTroublePostCommandService.writeCommentOnTroublePost(userId, troublePostId, requestDto);
         return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(newComment));
+    }
+
+    @PostMapping("/comments/{commentId}/like")
+    public ResponseEntity<PostLikeStatus> toggleLike(@PathVariable Long commentId, @RequestParam Long userId) {
+        PostLikeStatus status = roomTroublePostCommandService.toggleLike(commentId, userId);
+        return ResponseEntity.ok(status);
     }
 }
