@@ -151,7 +151,15 @@ public class Room {
         this.likes++;
     }
 
+    public void decreaseLike() {
+        this.likes--;
+    }
+
     public void increaseBookmark() {
         this.bookmarks++;
+    }
+
+    public void decreaseBookmark() {
+        this.bookmarks--;
     }
 }
