@@ -9,8 +9,11 @@ import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,4 +61,16 @@ public class RoomTroublePostController {
         PostLikeStatus status = roomTroublePostCommandService.toggleLike(postId, userId, roomId);
         return BaseResponse.onSuccess(status);
     }
+
+    @DeleteMapping("/trouble/{postId}")
+    @Operation(summary = "스터디룸 트러블슈팅 게시글 삭제 API")
+    public BaseResponse<String> deletePost(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long postId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomTroublePostCommandService.deletePost(postId, userId);
+        return BaseResponse.onSuccess( "게시글이 성공적으로 삭제되었습니다.");
+    }
 }
+
