@@ -1,15 +1,13 @@
 package gaji.service.domain.roomBoard.service;
 
+import gaji.service.domain.enums.PostBookmarkStatus;
 import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
-import gaji.service.domain.roomBoard.entity.RoomBoard;
-import gaji.service.domain.roomBoard.entity.RoomTroublePost;
-import gaji.service.domain.roomBoard.entity.RoomTroublePostLike;
-import gaji.service.domain.roomBoard.entity.TroublePostComment;
+import gaji.service.domain.roomBoard.entity.*;
 import gaji.service.domain.roomBoard.repository.*;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
@@ -37,6 +35,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     private final RoomPostCommentRepository roomPostCommentRepository;
     private final RoomTroublePostLikeRepository roomTroublePostLikeRepository;
     private final TroublePostCommentRepository troublePostCommentRepository;
+    private final RoomTroublePostBookmarkRepository roomTroublePostBookmarkRepository;
 
     @Override
     public TroublePostComment writeCommentOnTroublePost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
@@ -90,10 +89,9 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     }
 
     @Override
-    @Transactional
     public PostLikeStatus toggleLike(Long postId, Long userId, Long roomId) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId,roomId);
 
         Optional<RoomTroublePostLike> likeOptional = roomTroublePostLikeRepository
@@ -182,5 +180,43 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     public TroublePostComment findTroublePostCommentById(Long troublePostId){
         return troublePostCommentRepository.findById(troublePostId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+    }
+
+    @Override
+    @Transactional
+    public PostBookmarkStatus toggleBookmark(Long postId, Long userId, Long roomId) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId,roomId);
+
+        Optional<RoomTroublePostBookmark> bookmarkOptional = roomTroublePostBookmarkRepository
+                .findByRoomTroublePostAndStudyMate(post, studyMate);
+
+        if (bookmarkOptional.isPresent()) {
+            RoomTroublePostBookmark bookmark = bookmarkOptional.get();
+            if (bookmark.getBookmarkStatus() == PostBookmarkStatus.BOOKMARK) {
+                // 이미 좋아요 상태인 경우, 좋아요 취소
+                bookmark.setStatus(PostBookmarkStatus.UN_BOOKMARK);
+                post.removeBookmark(bookmark);
+                roomTroublePostBookmarkRepository.delete(bookmark);
+                return PostBookmarkStatus.UN_BOOKMARK;
+            } else {
+                // 좋아요가 취소된 상태인 경우, 다시 좋아요
+                bookmark.setStatus(PostBookmarkStatus.BOOKMARK);
+                post.addBookmark(bookmark);
+                roomTroublePostBookmarkRepository.save(bookmark);
+                return PostBookmarkStatus.BOOKMARK;
+            }
+        } else {
+            // 새로운 좋아요 생성
+            RoomTroublePostBookmark bookmark = RoomTroublePostBookmark.builder()
+                    .roomTroublePost(post)
+                    .studyMate(studyMate)
+                    .bookmarkStatus(PostBookmarkStatus.BOOKMARK)
+                    .build();
+            post.addBookmark(bookmark);
+            roomTroublePostBookmarkRepository.save(bookmark);
+            return PostBookmarkStatus.BOOKMARK;
+        }
     }
 }
