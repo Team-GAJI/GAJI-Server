@@ -15,6 +15,7 @@ public enum RecruitErrorStatus implements BaseErrorCodeInterface {
     _RECRUIT_CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "RECRUIT_4002", "해당 카테고리가 존재하지 않습니다."),
 
     _COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "RECRUIT_4003", "존재하지 않는 댓글입니다."),
+    _COMMENT_ALREADY_DELETE(HttpStatus.BAD_REQUEST, "RECRUIT_4004", "이미 삭제된 댓글입니다.")
     ;
 
     private final HttpStatus httpStatus;
