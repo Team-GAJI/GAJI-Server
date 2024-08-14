@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.service;
 
+import gaji.service.domain.enums.PostBookmarkStatus;
 import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.roomBoard.entity.RoomTroublePost;
 import gaji.service.domain.roomBoard.entity.TroublePostComment;
@@ -27,4 +28,7 @@ public interface RoomTroublePostCommandService {
     void deleteComment(Long commentId, Long userId);
 
     TroublePostComment findTroublePostCommentById(Long troublePostId);
+
+    @Transactional
+    PostBookmarkStatus toggleBookmark(Long postId, Long userId, Long roomId);
 }

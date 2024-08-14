@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.entity;
 
+import gaji.service.domain.enums.PostBookmarkStatus;
 import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
@@ -24,5 +25,9 @@ public class RoomTroublePostBookmark {
     private RoomTroublePost roomTroublePost;
 
     @Enumerated(EnumType.STRING)
-    private PostLikeStatus status;
+    private PostBookmarkStatus bookmarkStatus;
+
+    public void setStatus(PostBookmarkStatus status) {
+        this.bookmarkStatus = status;
+    }
 }
