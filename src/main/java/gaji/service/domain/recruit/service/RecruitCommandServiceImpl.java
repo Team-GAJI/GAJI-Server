@@ -136,6 +136,16 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
     @Override
     @Transactional
+    public void unLikeStudy(Long userId, Long roomId) {
+        User user = userQueryService.findUserById(userId);
+        Room room = roomQueryService.findRoomById(roomId);
+
+        recruitPostLikesRepository.deleteByUserAndRoom(user, room);
+        room.decreaseLike();
+    }
+
+    @Override
+    @Transactional
     public RecruitResponseDTO.StudyBookmarkIdDTO bookmarkStudy(Long userId, Long roomId) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
@@ -148,5 +158,15 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         room.increaseBookmark();
 
         return RecruitConverter.toStudyBookmarkIdDTO(studyBookmark);
+    }
+
+    @Override
+    @Transactional
+    public void unBookmarkStudy(Long userId, Long roomId) {
+        User user = userQueryService.findUserById(userId);
+        Room room = roomQueryService.findRoomById(roomId);
+
+        recruitPostBookmarkRepository.deleteByUserAndRoom(user, room);
+        room.decreaseBookmark();
     }
 }
