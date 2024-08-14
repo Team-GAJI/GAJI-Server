@@ -1,5 +1,6 @@
 package gaji.service.domain.recruit.service;
 
+import gaji.service.domain.enums.CommentStatus;
 import gaji.service.domain.post.converter.PostConverter;
 import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
@@ -40,6 +41,17 @@ public class StudyCommentCommandServiceImpl implements StudyCommentCommandServic
         studyCommentRepository.save(comment);
         room.increaseCommentCount();
         return RecruitConverter.toWriteCommentDTO(comment);
+    }
+
+    @Override
+    public void softDeleteComment(Long commentId) {
+        StudyComment comment = studyCommentRepository.findById(commentId)
+                .orElseThrow(() -> new RestApiException(RecruitErrorStatus._COMMENT_NOT_FOUND));
+        if (comment.getStatus() == CommentStatus.DELETE) {
+            throw new RestApiException(RecruitErrorStatus._COMMENT_ALREADY_DELETE);
+        } else {
+            comment.updateStatus(CommentStatus.DELETE);
+        }
     }
 
     private StudyComment createComment(
