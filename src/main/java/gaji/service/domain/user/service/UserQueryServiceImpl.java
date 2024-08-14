@@ -69,7 +69,9 @@ public class UserQueryServiceImpl implements UserQueryService {
     @Override
     public Slice<Tuple> getUserPostList(Long userId, LocalDateTime cursorDateTime, PostTypeEnum type, int size) {
         User user = findUserById(userId);
+
         cursorDateTime = cursorDateTime == null ? LocalDateTime.now() : cursorDateTime;
+        type = type == null ? PostTypeEnum.PROJECT : type;
 
         PageRequest pageRequest = PageRequest.of(0, size);
 
