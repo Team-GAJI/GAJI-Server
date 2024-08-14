@@ -41,14 +41,17 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
                         .and(lastStudyValue(sortType ,value))
                         .and(checkFilter(filter)))
                 .orderBy(orderSpecifier)
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize()+1)
                 .fetch();
+
+        boolean hasNext = checkLastPage(pageable, results);
 
         List<RecruitResponseDTO.PreviewDTO> previewList = RecruitConverter.toPreviewDTOLIST(results);
 
         return RecruitResponseDTO.PreviewListDTO.builder()
                 .previewList(previewList)
                 .lastValue(getLastValue(results, sortType))
+                .hasNext(hasNext)
                 .build();
     }
 
@@ -65,15 +68,26 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
                 .selectFrom(room)
                 .where(room.id.in(roomIds))
                 .orderBy(room.id.desc())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize()+1)
                 .fetch();
+
+        boolean hasNext = checkLastPage(pageable, results);
 
         List<RecruitResponseDTO.PreviewDTO> previewList = RecruitConverter.toPreviewDTOLIST(results);
 
         return RecruitResponseDTO.DefaultPreviewDTO.builder()
                 .previewList(previewList)
                 .category(category)
+                .hasNext(hasNext)
                 .build();
+    }
+
+    private boolean checkLastPage(Pageable pageable, List<Room> roomList) {
+        boolean hasNext = roomList.size() > pageable.getPageSize();
+        if (hasNext) {
+            roomList.remove(roomList.size() - 1);
+        }
+        return hasNext;
     }
 
     private BooleanExpression categoryEq(CategoryEnum category) {

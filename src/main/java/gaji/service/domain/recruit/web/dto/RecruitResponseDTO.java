@@ -86,6 +86,7 @@ public class RecruitResponseDTO {
     @AllArgsConstructor
     public static class PreviewListDTO {
         List<PreviewDTO> previewList;
+        boolean hasNext;
         Long lastValue;
     }
 
@@ -95,6 +96,7 @@ public class RecruitResponseDTO {
     @AllArgsConstructor
     public static class DefaultPreviewDTO {
         CategoryEnum category;
+        boolean hasNext;
         List<PreviewDTO> previewList;
     }
 
