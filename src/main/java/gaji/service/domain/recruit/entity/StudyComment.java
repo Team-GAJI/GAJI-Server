@@ -64,4 +64,8 @@ public class StudyComment extends BaseEntity {
             this.commentOrder = parent.getCommentOrder();
         }
     }
+
+    public void updateStatus(CommentStatus status) {
+        this.status = status;
+    }
 }
