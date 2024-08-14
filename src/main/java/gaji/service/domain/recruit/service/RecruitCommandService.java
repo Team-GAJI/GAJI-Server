@@ -7,4 +7,8 @@ import gaji.service.domain.room.entity.Room;
 public interface RecruitCommandService {
 
     RecruitResponseDTO.CreateRoomDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId);
+
+    RecruitResponseDTO.StudyLikesIdDTO likeStudy(Long userId, Long roomId);
+
+    RecruitResponseDTO.StudyBookmarkIdDTO bookmarkStudy(Long userId, Long roomId);
 }
