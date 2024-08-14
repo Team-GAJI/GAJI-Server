@@ -90,10 +90,10 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
 
     @Override
     @Transactional
-    public PostLikeStatus toggleLike(Long postId, Long studyMateId) {
+    public PostLikeStatus toggleLike(Long postId, Long userId, Long roomId) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
-        StudyMate studyMate = studyMateQueryService.findById(studyMateId);
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId,roomId);
 
         Optional<RoomTroublePostLike> likeOptional = roomTroublePostLikeRepository
                 .findByRoomTroublePostAndStudyMate(post, studyMate);
