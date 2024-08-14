@@ -14,6 +14,5 @@ public interface RoomTroublePostCommandService {
 
     RoomTroublePost findTroublePostById(Long postId);
 
-    @Transactional
-    PostLikeStatus toggleLike(Long postId, Long studyMateId);
+    PostLikeStatus toggleLike(Long postId, Long userId, Long roomId);
 }

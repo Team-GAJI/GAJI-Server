@@ -47,9 +47,15 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(newComment));
     }
 
-    @PostMapping("/comments/{commentId}/like")
-    public ResponseEntity<PostLikeStatus> toggleLike(@PathVariable Long commentId, @RequestParam Long userId) {
-        PostLikeStatus status = roomTroublePostCommandService.toggleLike(commentId, userId);
-        return ResponseEntity.ok(status);
+    @PostMapping("/trouble/{roomId}/posts/{postId}/like")
+    @Operation(summary = "스터디룸 트러블슈팅 게시글 좋아요 누르기 API")
+    public BaseResponse<PostLikeStatus> toggleLike(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long postId,
+            @PathVariable Long roomId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        PostLikeStatus status = roomTroublePostCommandService.toggleLike(postId, userId, roomId);
+        return BaseResponse.onSuccess(status);
     }
 }
