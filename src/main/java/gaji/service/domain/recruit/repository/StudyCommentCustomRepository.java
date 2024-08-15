@@ -7,7 +7,9 @@ import gaji.service.domain.room.entity.Room;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import java.time.LocalDateTime;
+
 public interface StudyCommentCustomRepository {
     Slice<StudyComment> findByRoomFetchJoinWithUser(
-            Integer lastCommentOrder, Room room, Pageable pageable);
+            Integer lastCommentOrder, Integer lastDepth, Long lastCommentId, Room room, Pageable pageable);
 }
