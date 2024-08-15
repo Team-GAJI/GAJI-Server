@@ -68,7 +68,7 @@ public class RecruitRequestDTO {
 
         //인원제한 True 일 시 입력(false 면 0) -> 인원 채워지면 모집 완료로 변경
         @Schema(description = "최대 인원")
-        @Min(-1)
+        @Min(value = 1, message = "최대 인원은 1이상 이어야 합니다.")
         private int peopleMaximum;
 
         @Schema(description = "카테고리 목록")
