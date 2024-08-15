@@ -55,7 +55,7 @@ public class RecruitResponseDTO {
         String userNickName;
         Integer commentOrder;
         int depth;
-        LocalDateTime createdAt;
+        Long commentId;
         String commentWriteDate;
         String commentBody;
     }
