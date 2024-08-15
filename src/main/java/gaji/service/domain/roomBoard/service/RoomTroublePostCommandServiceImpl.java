@@ -158,29 +158,25 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
         comment.updateComment(requestDto.getBody());
     }
 
-    @Override
-    public TroublePostComment findCommentByCommentId(Long commentId){
-        return troublePostCommentRepository.findById(commentId)
-                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._NOT_FOUND_COMMENT));
-    }
 
     @Override
     public void deleteComment(Long commentId, Long userId) {
         TroublePostComment comment = findTroublePostCommentById(commentId);
 
-        if(!comment.isAuthor(userId)){
+        if (!comment.isAuthor(userId)) {
             throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_DELETE_AUTH);
         }
 
-        troublePostCommentRepository.delete(comment);
-
+        if (comment.isReply()) {
+            // 답글인 경우, 해당 답글만 삭제
+            deleteReply(comment);
+        } else {
+            // 댓글인 경우, 댓글과 모든 관련 답글 삭제
+            deleteCommentAndReplies(comment);
+        }
     }
 
-    @Override
-    public TroublePostComment findTroublePostCommentById(Long troublePostId){
-        return troublePostCommentRepository.findById(troublePostId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
-    }
+
 
     @Override
     @Transactional
@@ -240,5 +236,31 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
 
         parentComment.addReply(reply);
         return troublePostCommentRepository.save(reply);
+    }
+
+
+    @Override
+    public TroublePostComment findCommentByCommentId(Long commentId){
+        return troublePostCommentRepository.findById(commentId)
+                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._NOT_FOUND_COMMENT));
+    }
+
+    @Override
+    public TroublePostComment findTroublePostCommentById(Long troublePostId) {
+        return troublePostCommentRepository.findById(troublePostId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+    }
+
+
+    private void deleteReply(TroublePostComment reply) {
+        TroublePostComment parentComment = reply.getParentComment();
+        parentComment.getReplies().remove(reply);
+        troublePostCommentRepository.delete(reply);
+    }
+
+    private void deleteCommentAndReplies(TroublePostComment comment) {
+        // CascadeType.ALL과 orphanRemoval = true 설정으로 인해
+        // 댓글을 삭제하면 연관된 모든 답글도 자동으로 삭제됩니다.
+        troublePostCommentRepository.delete(comment);
     }
 }
