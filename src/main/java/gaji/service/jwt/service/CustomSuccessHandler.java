@@ -82,7 +82,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         //
 
         // 리다이렉션 URL 생성
-        String targetUrl = UriComponentsBuilder.fromUriString("https://genuine-valkyrie-e0010a.netlify.app/")
+        String targetUrl = UriComponentsBuilder.fromUriString(redirectionUrl)
                 .queryParam("access_token", accessToken)
                 .build().toUriString();
 
