@@ -42,7 +42,7 @@ public class StudyCommentCustomRepositoryImpl implements StudyCommentCustomRepos
         return checkLastPage(pageable, commentList);
     }
 
-    private BooleanExpression gtCommentOrderDepthAndCreatedAt(
+    private BooleanExpression gtCommentOrderDepthAndCommentId(
             Integer lastCommentOrder, Integer lastDepth, Long lastId) {
         if (lastCommentOrder == null || lastDepth == null || lastId == null) {
             return null;
