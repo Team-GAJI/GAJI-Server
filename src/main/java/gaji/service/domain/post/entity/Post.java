@@ -79,8 +79,8 @@ public class Post extends BaseEntity {
         this.popularityScore = 0;
     }
 
-    public String settingDefaultThumbnailUrl() {
-        return this.thumbnailUrl = "가지 로고 url";
+    public static String getDefaultThumbnailUrl() {
+        return "가지 로고 url";
     }
 
     public int getCommentGroupNum() {
