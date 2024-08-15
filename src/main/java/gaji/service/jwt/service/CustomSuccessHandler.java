@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Date;
@@ -76,8 +77,13 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setStatus(HttpStatus.OK.value());
         //
 
-        System.out.println("Access Token: " + accessToken);
-        System.out.println("Refresh Token: " + refreshToken);
+        // 리다이렉션 URL 생성
+        String targetUrl = UriComponentsBuilder.fromUriString("https://genuine-valkyrie-e0010a.netlify.app/")
+                .queryParam("access_token", accessToken)
+                .build().toUriString();
+
+        // 리다이렉션 수행
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {
