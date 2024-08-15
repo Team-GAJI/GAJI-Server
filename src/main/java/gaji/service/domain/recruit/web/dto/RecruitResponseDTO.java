@@ -4,6 +4,7 @@ import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.enums.UserActive;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,7 +55,8 @@ public class RecruitResponseDTO {
         String userNickName;
         Integer commentOrder;
         int depth;
-        String commentCreatedAt;
+        LocalDateTime createdAt;
+        String commentWriteDate;
         String commentBody;
     }
 
