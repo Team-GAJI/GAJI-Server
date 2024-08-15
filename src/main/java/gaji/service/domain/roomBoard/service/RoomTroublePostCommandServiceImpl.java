@@ -221,7 +221,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     }
 
     @Override
-    public TroublePostComment addReply(Long commentId, Long userId, String body) {
+    public TroublePostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request) {
         TroublePostComment parentComment = troublePostCommentRepository.findById(commentId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
 
@@ -233,7 +233,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
         TroublePostComment reply = TroublePostComment.builder()
                 .user(user)
                 .roomTroublePost(parentComment.getRoomTroublePost())
-                .body(body)
+                .body(request.getBody())
                 .isReply(true)
                 .parentComment(parentComment)
                 .build();

@@ -126,10 +126,10 @@ public class RoomTroublePostController {
     public BaseResponse<TroublePostComment> addReply(
             @RequestHeader("Authorization") String authorization,
             @PathVariable Long commentId,
-            @RequestBody String body
+            @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto
     ) {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        TroublePostComment reply = roomTroublePostCommandService.addReply(commentId, userId, body);
+        TroublePostComment reply = roomTroublePostCommandService.addReply(commentId, userId, requestDto);
         return BaseResponse.onSuccess(reply);
     }
 }
