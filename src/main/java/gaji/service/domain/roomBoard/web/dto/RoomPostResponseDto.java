@@ -47,17 +47,14 @@ public class RoomPostResponseDto {
     }
 
 
-    @Builder
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class TroublePostSummaryDto {
-        private Long id;
-        private String title;
-        private Long authorId;
-        private String createdAt;
-        private int viewCount;
-        private int commentCount;
+        private final Long id;
+        private final String title;
+        private final Long authorId;
+        private final String createdAt;
+        private final int viewCount;
+        private final int commentCount;
 
         public TroublePostSummaryDto(Long id, String title, Long authorId, LocalDateTime createdAt, int viewCount, int commentCount) {
             this.id = id;
