@@ -35,6 +35,8 @@ public class StudyCommentQueryServiceImpl implements StudyCommentQueryService{
                 studyCommentRepository.findByRoomFetchJoinWithUser(
                         lastCommentOrder, lastDepth, lastCommentId, room, pageRequest);
 
-        return RecruitConverter.toCommentListDTO(room.getCommentCount(), studyCommentList);
+        int commentCount = studyCommentRepository.countByRoom(room);
+
+        return RecruitConverter.toCommentListDTO(commentCount, studyCommentList);
     }
 }
