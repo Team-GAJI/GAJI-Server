@@ -1,7 +1,6 @@
 package gaji.service.domain.roomBoard.entity;
 
 import gaji.service.domain.enums.PostBookmarkStatus;
-import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
