@@ -4,6 +4,8 @@ import gaji.service.domain.enums.PostBookmarkStatus;
 import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.TroublePostComment;
+import gaji.service.domain.roomBoard.service.RoomPostQueryService;
+import gaji.service.domain.roomBoard.service.RoomPostQueryServiceImpl;
 import gaji.service.domain.roomBoard.service.RoomTroublePostCommandService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
@@ -18,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/study-rooms")
@@ -25,6 +29,7 @@ public class RoomTroublePostController {
 
     private final TokenProviderService tokenProviderService;
     private final RoomTroublePostCommandService roomTroublePostCommandService;
+    private final RoomPostQueryService roomPostQueryService;
 
     @PostMapping("/trouble/{roomId}")
     @Operation(summary = "스터디룸 트러블슈팅 게시판 등록 API")
@@ -131,6 +136,17 @@ public class RoomTroublePostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         TroublePostComment replyComment = roomTroublePostCommandService.addReply(commentId, userId, requestDto);
         return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(replyComment));
+    }
+
+    @GetMapping("/{boardId}/trouble-posts")
+    @Operation(summary = "트러블 슈팅 게시글 목록 조회 API")
+    @ApiResponse(responseCode = "200", description = "조회 성공")
+    public BaseResponse<List<RoomPostResponseDto.TroublePostSummaryDto>> getPaginatedTroublePosts(
+            @PathVariable Long boardId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        List<RoomPostResponseDto.TroublePostSummaryDto> posts = roomPostQueryService.getPaginatedTroublePosts(boardId, page, size);
+        return BaseResponse.onSuccess(posts);
     }
 }
 
