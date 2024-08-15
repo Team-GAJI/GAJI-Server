@@ -3,9 +3,6 @@ package gaji.service.domain.recruit.converter;
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.enums.CategoryEnum;
-import gaji.service.domain.post.entity.Comment;
-import gaji.service.domain.post.entity.Post;
-import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.entity.StudyComment;
@@ -18,6 +15,7 @@ import gaji.service.global.converter.DateConverter;
 import org.springframework.data.domain.Slice;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -131,5 +129,21 @@ public class RecruitConverter {
         return RecruitResponseDTO.WriteCommentDTO.builder()
                 .commentId(comment.getId())
                 .build();
+        }
+    public static RecruitResponseDTO.PreviewDTO toPreviewDTO(Room room) {
+        return RecruitResponseDTO.PreviewDTO.builder()
+                .imageUrl(room.getThumbnailUrl())
+                .recruitStatus(room.getRecruitPostTypeEnum())
+                .applicant(room.getStudyApplicantList().size())
+                .name(room.getName())
+                .deadLine(ChronoUnit.DAYS.between(room.getRecruitEndDay(), LocalDate.now()))
+                .description(room.getDescription())
+                .createdAt(DateConverter.convertToRelativeTimeFormat(room.getCreatedAt()))
+                .recruitCount(room.getPeopleMaximum())
+                .build();
+    }
+
+    public static List<RecruitResponseDTO.PreviewDTO> toPreviewDTOLIST(List<Room> roomList) {
+        return roomList.stream().map(RecruitConverter::toPreviewDTO).collect(Collectors.toList());
     }
 }

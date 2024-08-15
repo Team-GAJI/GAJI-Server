@@ -1,5 +1,7 @@
 package gaji.service.domain.room.entity;
 
+import gaji.service.domain.common.entity.BaseEntity;
+import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.curriculum.Curriculum;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
@@ -22,7 +24,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Room {
+public class Room extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -115,9 +117,6 @@ public class Room {
     public void addView() {
         this.views++;
     }
-    private LocalDate startDay;
-    private LocalDate endDay;
-
 
     // 스터디 자료 추가
     public void addMaterial(Material material) {
