@@ -74,7 +74,7 @@ public class RecruitRequestDTO {
 
         @Schema(description = "카테고리 목록")
         @ExistCategory
-        private List<CategoryEnum> categoryList;
+        private CategoryEnum category;
     }
 
     @Schema(description = "스터디 댓글 작성 DTO")

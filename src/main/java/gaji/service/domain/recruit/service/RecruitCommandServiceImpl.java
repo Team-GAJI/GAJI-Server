@@ -2,11 +2,10 @@ package gaji.service.domain.recruit.service;
 
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
-import gaji.service.domain.common.repository.CategoryRepository;
-import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.common.service.CategoryService;
+import gaji.service.domain.common.service.SelectCategoryService;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.recruit.converter.RecruitConverter;
-import gaji.service.domain.common.repository.SelectCategoryRepository;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
@@ -30,8 +29,8 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
     private final RoomCommandService roomCommandService;
     private final UserQueryService userQueryService;
-    private final SelectCategoryRepository selectCategoryRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
+    private final SelectCategoryService selectCategoryService;
     private final StudyMateRepository studyMateRepository;
     private final MaterialCommandService materialCommandService;
 
@@ -43,8 +42,6 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         String thumbnailUrl = DEFAULT_THUMBNAIL_URL;
         String inviteCode = null;
         int peopleMaximum = 0;
-        SelectCategory selectCategory;
-
 
         if (request.getThumbnailUrl() != null && !request.getThumbnailUrl().isEmpty()) {
             thumbnailUrl = request.getThumbnailUrl();
@@ -75,18 +72,17 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
         roomCommandService.saveRoom(room);
 
-        for (CategoryEnum categoryEnum : request.getCategoryList()) {
-            Category category = Category.builder()
-                    .category(categoryEnum)
-                    .build();
-            categoryRepository.save(category);
-            selectCategory = SelectCategory.builder()
-                    .category(category)
-                    .entityId(room.getId())
-                    .type(PostTypeEnum.ROOM)
-                    .build();
-            selectCategoryRepository.save(selectCategory);
-        }
+        Category category = Category.builder()
+                .category(request.getCategory())
+                .build();
+        categoryService.saveCategory(category);
+
+        SelectCategory selectCategory = SelectCategory.builder()
+                .category(category)
+                .entityId(room.getId())
+                .type(PostTypeEnum.ROOM)
+                .build();
+        selectCategoryService.saveSelectCategory(selectCategory);
 
         return RecruitConverter.toResponseDTO(room);
     }
