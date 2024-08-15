@@ -25,7 +25,7 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     @Override
     public List<RoomPostResponseDto.TroublePostSummaryDto> getPaginatedTroublePosts(Long boardId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return roomTroublePostRepository.findTroublePostSummaries(boardId, (Pageable) pageRequest);
+        return roomTroublePostRepository.findTroublePostSummaries(boardId, pageRequest);
     }
 
 }
