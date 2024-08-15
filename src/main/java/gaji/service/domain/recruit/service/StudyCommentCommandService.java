@@ -8,7 +8,7 @@ public interface StudyCommentCommandService {
     RecruitResponseDTO.WriteCommentDTO writeComment(
             Long userId, Long roomId, Long parentCommentId, RecruitRequestDTO.WriteCommentDTO request);
 
-    void softDeleteComment(Long commentId);
+    void deleteComment(Long commentId);
 }
 
 
