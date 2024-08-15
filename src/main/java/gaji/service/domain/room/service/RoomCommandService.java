@@ -34,6 +34,5 @@ public interface RoomCommandService {
     WeeklyUserProgress calculateAndSaveProgress(RoomEvent roomEvent, User user);
 
     List<Room> findRoomsByUserId(Long userId);
-
-    List<Assignment> findAssignmentsByRoomAndDate(Room room, LocalDate date);
+    List<RoomEvent> findRoomEventByRoomAndDate(Room room, LocalDate date);
 }

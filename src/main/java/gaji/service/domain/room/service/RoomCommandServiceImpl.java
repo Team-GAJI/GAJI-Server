@@ -273,18 +273,9 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Assignment> findAssignmentsByRoomAndDate(Room room, LocalDate date) {
+    public List<RoomEvent> findRoomEventByRoomAndDate(Room room, LocalDate date) {
+        // 주어진 date에 있는 RoomEvent 찾기
+        return roomEventRepository.findByRoomAndDateBetweenStartTimeAndEndTime(room, date);
 
-        List<RoomEvent> roomEvents = roomEventRepository.findByRoomAndDateBetweenStartTimeAndEndTime(room, date);
-
-        // 이벤트에서 Assignment 목록을 추출
-        return roomEvents.stream()
-                .flatMap(roomEvent -> {
-                    // AssignmentList가 null인 경우 빈 스트림을 반환
-                    return Optional.ofNullable(roomEvent.getAssignmentList())
-                            .orElse(Collections.emptyList())
-                            .stream();
-                })
-                .collect(Collectors.toList());
     }
 }
