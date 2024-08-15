@@ -120,5 +120,17 @@ public class RoomTroublePostController {
         PostBookmarkStatus status = roomTroublePostCommandService.toggleBookmark(postId, userId, roomId);
         return BaseResponse.onSuccess(status);
     }
+
+    @PostMapping("/comments/{commentId}/replies")
+    @Operation(summary = "트러블 슈팅 게시글 댓글의 답글 작성 API")
+    public BaseResponse<TroublePostComment> addReply(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long commentId,
+            @RequestBody String body
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        TroublePostComment reply = roomTroublePostCommandService.addReply(commentId, userId, body);
+        return BaseResponse.onSuccess(reply);
+    }
 }
 

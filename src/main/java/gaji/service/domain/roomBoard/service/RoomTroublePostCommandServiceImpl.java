@@ -220,6 +220,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
         }
     }
 
+    @Override
     public TroublePostComment addReply(Long commentId, Long userId, String body) {
         TroublePostComment parentComment = troublePostCommentRepository.findById(commentId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
