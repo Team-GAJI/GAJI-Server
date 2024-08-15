@@ -1,6 +1,7 @@
 package gaji.service.domain.room.service;
 
 import gaji.service.domain.room.repository.*;
+import gaji.service.domain.room.repository.RoomEvent.RoomEventRepository;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.user.entity.User;
@@ -17,14 +18,19 @@ import gaji.service.domain.studyMate.entity.UserAssignment;
 import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
+import gaji.service.domain.user.service.UserCommandServiceImpl;
 import gaji.service.domain.user.service.UserQueryServiceImpl;
 import gaji.service.global.exception.RestApiException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +50,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final RoomQueryRepository roomQueryRepository;
     private final RoomRepository roomRepository;
     private final WeeklyUserProgressRepository weeklyUserProgressRepository;
+    private final UserCommandServiceImpl userCommandServiceImpl;
 
     //과제생성1
     @Override
@@ -256,4 +263,28 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return weeklyUserProgressRepository.save(progress);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Room> findRoomsByUserId(Long userId) {
+        return studyMateRepository.findAllByUserId(userId).stream()
+                .map(StudyMate::getRoom)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Assignment> findAssignmentsByRoomAndDate(Room room, LocalDate date) {
+
+        List<RoomEvent> roomEvents = roomEventRepository.findByRoomAndDateBetweenStartTimeAndEndTime(room, date);
+
+        // 이벤트에서 Assignment 목록을 추출
+        return roomEvents.stream()
+                .flatMap(roomEvent -> {
+                    // AssignmentList가 null인 경우 빈 스트림을 반환
+                    return Optional.ofNullable(roomEvent.getAssignmentList())
+                            .orElse(Collections.emptyList())
+                            .stream();
+                })
+                .collect(Collectors.toList());
+    }
 }

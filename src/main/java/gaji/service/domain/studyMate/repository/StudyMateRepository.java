@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface StudyMateRepository extends JpaRepository<StudyMate, Long> {
     Optional<StudyMate> findByUserIdAndRoomId(Long userId, Long roomId);
+    List<StudyMate> findAllByUserId(Long userId);
 
     List<StudyMate> findByRoom(Room room);
+
 }

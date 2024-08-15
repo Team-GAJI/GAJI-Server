@@ -10,6 +10,9 @@ import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public interface RoomCommandService {
     @Transactional
     Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto);
@@ -29,4 +32,8 @@ public interface RoomCommandService {
     RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId);
 
     WeeklyUserProgress calculateAndSaveProgress(RoomEvent roomEvent, User user);
+
+    List<Room> findRoomsByUserId(Long userId);
+
+    List<Assignment> findAssignmentsByRoomAndDate(Room room, LocalDate date);
 }
