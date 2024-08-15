@@ -1,6 +1,5 @@
 package gaji.service.domain.roomBoard.entity;
 
-import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,14 +22,4 @@ public class RoomTroublePostLike {
     @JoinColumn(name = "post_id")
     private RoomTroublePost roomTroublePost;
 
-    @Enumerated(EnumType.STRING)
-    private PostLikeStatus status;
-
-    public void toggleLike() {
-        this.status = (this.status == PostLikeStatus.LIKED) ? PostLikeStatus.NOT_LIKED : PostLikeStatus.LIKED;
-    }
-
-    public void setStatus(PostLikeStatus postLikeStatus) {
-        this.status = postLikeStatus;
-    }
 }

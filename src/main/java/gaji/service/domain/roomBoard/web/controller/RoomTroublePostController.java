@@ -1,7 +1,6 @@
 package gaji.service.domain.roomBoard.web.controller;
 
 import gaji.service.domain.enums.PostBookmarkStatus;
-import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.TroublePostComment;
 import gaji.service.domain.roomBoard.service.RoomPostQueryService;
@@ -54,16 +53,29 @@ public class RoomTroublePostController {
     }
 
     @PostMapping("/trouble/{roomId}/posts/{postId}/like")
-    @Operation(summary = "스터디룸 트러블슈팅 게시글 좋아요 누르기 API")
-    public BaseResponse<PostLikeStatus> toggleLike(
+    @Operation(summary = "스터디룸 트러블슈팅 게시글 좋아요 API")
+    public BaseResponse<String> postLike(
             @RequestHeader("Authorization") String authorization,
             @PathVariable Long postId,
             @PathVariable Long roomId
     ) {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        PostLikeStatus status = roomTroublePostCommandService.toggleLike(postId, userId, roomId);
-        return BaseResponse.onSuccess(status);
+        roomTroublePostCommandService.addLike(postId, userId, roomId);
+        return BaseResponse.onSuccess("LIKE");
     }
+
+    @DeleteMapping("/trouble/{roomId}/posts/{postId}/unlike")
+    @Operation(summary = "스터디룸 트러블슈팅 게시글 좋아요 취소 API")
+    public BaseResponse<String> postUnlike(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long postId,
+            @PathVariable Long roomId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomTroublePostCommandService.removeLike(postId, userId, roomId);
+        return BaseResponse.onSuccess("UNLIKE");
+    }
+
 
     @DeleteMapping("/trouble/{postId}")
     @Operation(summary = "스터디룸 트러블슈팅 게시글 삭제 API")
