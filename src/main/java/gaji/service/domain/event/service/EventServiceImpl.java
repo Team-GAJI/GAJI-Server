@@ -10,8 +10,6 @@ import gaji.service.domain.event.repository.event.EventRepository;
 import gaji.service.domain.event.repository.RecurringEvent.RecurringEventRepository;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomCommandService;
-import gaji.service.domain.user.entity.User;
-import gaji.service.domain.user.service.UserCommandService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -86,7 +84,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     @Transactional
-    public Long putEvent(LocalDateTime date, Long userId, Long myId , EventInfoRequest request) {
+    public Long putEvent(LocalDate date, Long userId, Long myId , EventInfoRequest request) {
 
         // 나의 userId인지 확인하기
         if(!userId.equals(myId)){

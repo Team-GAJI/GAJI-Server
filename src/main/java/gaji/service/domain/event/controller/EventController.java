@@ -40,7 +40,7 @@ public class EventController {
             description = "해당 날짜에 맞는 ToDo를 생성합니다")
     public BaseResponse<EventIdResponse> putToDoList(
             @CurrentUser User user,
-            @PathVariable("date") LocalDateTime date,
+            @PathVariable("date") LocalDate date,
             @PathVariable("userId") Long userId,
             @RequestBody EventInfoRequest request
             )
