@@ -5,19 +5,16 @@ import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.TroublePostComment;
 import gaji.service.domain.roomBoard.service.RoomPostQueryService;
-import gaji.service.domain.roomBoard.service.RoomPostQueryServiceImpl;
 import gaji.service.domain.roomBoard.service.RoomTroublePostCommandService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -139,13 +136,16 @@ public class RoomTroublePostController {
     }
 
     @GetMapping("/{boardId}/trouble-posts")
-    @Operation(summary = "트러블 슈팅 게시글 목록 조회 API")
+    @Operation(summary = "트러블 슈팅 게시글 무한 스크롤 조회", description = "트러블 슈팅 게시글을 무한 스크롤 방식으로 조회합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
-    public BaseResponse<List<RoomPostResponseDto.TroublePostSummaryDto>> getPaginatedTroublePosts(
-            @PathVariable Long boardId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        List<RoomPostResponseDto.TroublePostSummaryDto> posts = roomPostQueryService.getPaginatedTroublePosts(boardId, page, size);
+    public BaseResponse<List<RoomPostResponseDto.TroublePostSummaryDto>> getNextTroublePosts(
+            @PathVariable @Parameter(description = "게시판 ID") Long boardId,
+            @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
+            @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
+
+        List<RoomPostResponseDto.TroublePostSummaryDto> posts =
+                roomPostQueryService.getNextTroublePosts(boardId, lastPostId, size);
+
         return BaseResponse.onSuccess(posts);
     }
 }

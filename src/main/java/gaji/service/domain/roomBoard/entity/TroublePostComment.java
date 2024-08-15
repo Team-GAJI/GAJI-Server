@@ -1,6 +1,5 @@
 package gaji.service.domain.roomBoard.entity;
 
-import gaji.service.domain.enums.UserAlarmTypeEnum;
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
