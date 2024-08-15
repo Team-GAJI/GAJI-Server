@@ -18,11 +18,8 @@ import gaji.service.domain.post.repository.PostBookmarkRepository;
 import gaji.service.domain.post.repository.PostLikesRepository;
 import gaji.service.domain.post.repository.PostJpaRepository;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
-import gaji.service.domain.user.code.UserErrorStatus;
 import gaji.service.domain.user.entity.User;
-import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.domain.user.service.UserQueryService;
-import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,14 +56,13 @@ public class PostCommandServiceImpl implements PostCommandService {
             hashtagService.saveAllSelectHashtag(selectHashtagList);
         }
 
-        // 카테고리 저장
-        // TODO: 카테고리 벌크성 insert 적용
-        if (request.getCategoryIdList() != null) {
-            List<Long> categoryIdList = request.getCategoryIdList();
-            List<Category> categoryEntityList = categoryService.findCategoryEntityList(categoryIdList);
+        // SelectCategory 저장
+        if (request.getCategoryId() != null) {
+            Long categoryId = request.getCategoryId();
+            Category findCateogry = categoryService.findByCategoryId(categoryId);
 
-            List<SelectCategory> selectCategoryList = CategoryConverter.toSelectCategoryList(categoryEntityList, newPost.getId(), newPost.getType());
-            categoryService.saveAllSelectCategory(selectCategoryList);
+            SelectCategory selectCategory = CategoryConverter.toSelectCategory(findCateogry, newPost.getId(), newPost.getType());
+            categoryService.saveSelectCategory(selectCategory);
         }
 
         return newPost;
@@ -82,9 +78,9 @@ public class PostCommandServiceImpl implements PostCommandService {
         return commentService.saveNewComment(newComment);
     }
     @Override
-    public void softDeleteComment(Long commentId) {
+    public void hardDeleteComment(Long commentId) {
         Comment findComment = commentService.findByCommentId(commentId);
-        findComment.updateStatus(CommentStatus.DELETE);
+        commentService.hardDeleteComment(findComment);
         findComment.getPost().decreaseCommentCnt(); // TODO: 지연 로딩으로 쿼리 1개 더 날라감;
     }
 

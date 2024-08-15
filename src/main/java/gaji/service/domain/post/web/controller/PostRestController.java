@@ -89,12 +89,17 @@ public class PostRestController {
                                                                                @Min(value = 0, message = "lastHit은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastHit,
                                                                                @RequestParam(required = false) PostTypeEnum postType,
                                                                                @RequestParam(required = false) Long categoryId,
-                                                                               @RequestParam(required = false) SortType sortType,
+                                                                               @RequestParam(required = false, defaultValue = "recent") SortType sortType,
                                                                                @RequestParam(required = false) PostStatusEnum filter,
                                                                                @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
         Slice<Post> postSlice = postQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, categoryId, sortType, filter, size);
         return BaseResponse.onSuccess(postConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
+    }
+
+    @GetMapping("/search")
+    public BaseResponse<PostResponseDTO.PostPreviewListDTO> searchCommunityPostList() {
+        return null;
     }
 
     @PostMapping("/{postId}/comments")
@@ -113,14 +118,14 @@ public class PostRestController {
     }
 
     @DeleteMapping("/comments/{commentId}")
-    @Operation(summary = "커뮤니티 게시글 댓글 삭제 API", description = "커뮤니티 게시글의 댓글을 삭제하는 API입니다. Comment를 DB에서 바로 삭제하지 않고 status를 DELETE로만 바꿉니다.(soft delete)")
+    @Operation(summary = "커뮤니티 게시글 댓글 삭제 API", description = "커뮤니티 게시글의 댓글을 삭제하는 API입니다.(hard delete)")
     @Parameters({
             @Parameter(name = "commentId", description = "댓글 id"),
     })
-    public BaseResponse softDeleteComment(@RequestHeader("Authorization") String authorizationHeader,
-            @Min(value = 1, message = "commentId는 1 이상 이어야 합니다.") @PathVariable Long commentId) {
+    public BaseResponse hardDeleteComment(@RequestHeader("Authorization") String authorizationHeader,
+                                          @Min(value = 1, message = "commentId는 1 이상 이어야 합니다.") @PathVariable Long commentId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        postCommandService.softDeleteComment(commentId);
+        postCommandService.hardDeleteComment(commentId);
         return BaseResponse.onSuccess(null);
     }
 

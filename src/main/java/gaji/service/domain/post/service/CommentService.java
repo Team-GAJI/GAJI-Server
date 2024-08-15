@@ -7,6 +7,7 @@ import org.springframework.data.domain.Slice;
 public interface CommentService {
 
     Comment saveNewComment(Comment comment);
+    void hardDeleteComment(Comment comment);
     Comment findByCommentId(Long commentId);
     Slice<Comment> getCommentListByPost(Long postId, Integer lastGroupNum, int size);
 }

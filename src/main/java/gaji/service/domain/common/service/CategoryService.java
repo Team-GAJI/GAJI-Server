@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface CategoryService {
     Category saveCategory(Category category);
+    SelectCategory saveSelectCategory(SelectCategory selectCategory);
     Category findByCategory(CategoryEnum category);
     Category findByCategoryId(Long categoryId);
     List<Long> findEntityIdListByCategoryIdAndPostType(Long categoryId, PostTypeEnum postType);
     boolean existsByCategory(CategoryEnum category);
     boolean existsByCategoryId(Long categoryId);
     List<SelectCategory> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType);
-    List<Category> findCategoryEntityList(List<Long> categoryIdList);
     List<CategoryResponseDTO.BaseDTO> findAllCategory();
     void saveAllSelectCategory(List<SelectCategory> selectCategoryList);
 }
