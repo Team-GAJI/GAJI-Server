@@ -23,9 +23,11 @@ public class HashtagListElementValidator implements ConstraintValidator<CheckHas
             return true;
         }
 
-        // 리스트 안의 element중에서 하나라도 ["", " ", null]값에 해당되면 false, 아니면 true
+        // 유효성 검사 통과 조건
+        // 1. 리스트 안의 모든 element가 ["", " ", null]값에 해당되지 않아야함
+        // 2. 모든 hastag의 글자 수가 15자 이하여야함
         boolean isValid = values.stream()
-                .allMatch(value -> value != null && !value.trim().isEmpty());
+                .allMatch(value -> value != null && !value.trim().isEmpty() && value.length() <= 15);
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
