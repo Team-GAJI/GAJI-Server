@@ -125,7 +125,7 @@ public class PostRestController {
     public BaseResponse hardDeleteComment(@RequestHeader("Authorization") String authorizationHeader,
                                           @Min(value = 1, message = "commentId는 1 이상 이어야 합니다.") @PathVariable Long commentId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        postCommandService.hardDeleteComment(commentId);
+        postCommandService.hardDeleteComment(userId, commentId);
         return BaseResponse.onSuccess(null);
     }
 

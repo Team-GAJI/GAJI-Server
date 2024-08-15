@@ -1,9 +1,11 @@
 package gaji.service.domain.post.service;
 
+import gaji.service.domain.post.code.CommentErrorStatus;
 import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.post.repository.CommentJpaRepository;
+import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,7 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     private final CommentJpaRepository commentRepository;
     private final PostQueryService postQueryService;
+    private final UserQueryService userQueryService;
 
     @Override
     @Transactional
@@ -45,4 +48,10 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new RestApiException(PostErrorStatus._COMMENT_NOT_FOUND));
     }
 
+    @Override
+    public void validCommentOwner(Long userId, Comment comment) {
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new RestApiException(CommentErrorStatus._NOT_OWNER);
+        }
+    }
 }
