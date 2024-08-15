@@ -11,25 +11,24 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Slf4j
 @RequiredArgsConstructor
-public enum SortType {
-
-    HOT("hot"),
-    RECENT("recent"),
-    LIKE("like"),
-    HIT("hit")
-    ; // 인기순, 최신순, 좋아요순, 히트순
+public enum PreviewFilter {
+    RECRUITING("모집중"),
+    RECRUITMENT_COMPLETED("모집 완료"),
+    PEOPLE_LIMITED("인원 제한"),
+    PEOPLE_NOT_LIMITED("인원 제한 없음");
 
     @JsonValue
     private final String value;
 
     @JsonCreator // Json -> Object, 역직렬화 수행하는 메서드
-    public static SortType from(String param) {
-        for (SortType sortType : SortType.values()) {
-            if (sortType.getValue().equals(param)) {
-                return sortType;
+    public static PreviewFilter from(String param) {
+        for (PreviewFilter filter : PreviewFilter.values()) {
+            if (filter.getValue().equals(param)) {
+                return filter;
             }
         }
-        log.error("SortType.from() exception occur param: {}", param);
-        throw new RestApiException(GlobalErrorStatus._SORT_TYPE_NOT_VALID);
+        log.error("Filter.from() exception occur param: {}", param);
+        throw new RestApiException(GlobalErrorStatus._FILTER_NOT_VALID);
     }
 }
+
