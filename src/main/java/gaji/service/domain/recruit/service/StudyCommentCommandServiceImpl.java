@@ -44,13 +44,13 @@ public class StudyCommentCommandServiceImpl implements StudyCommentCommandServic
     }
 
     @Override
-    public void softDeleteComment(Long commentId) {
+    public void deleteComment(Long commentId) {
         StudyComment comment = studyCommentRepository.findById(commentId)
                 .orElseThrow(() -> new RestApiException(RecruitErrorStatus._COMMENT_NOT_FOUND));
         if (comment.getStatus() == CommentStatus.DELETE) {
             throw new RestApiException(RecruitErrorStatus._COMMENT_ALREADY_DELETE);
         } else {
-            comment.updateStatus(CommentStatus.DELETE);
+            studyCommentRepository.deleteById(commentId);
         }
     }
 
