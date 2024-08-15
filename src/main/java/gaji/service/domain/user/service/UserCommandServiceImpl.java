@@ -8,10 +8,12 @@ import gaji.service.domain.enums.UserActive;
 import gaji.service.domain.user.enums.UserDeletePeriod;
 import gaji.service.domain.user.web.dto.UserRequestDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+@Service
 @RequiredArgsConstructor
 public class UserCommandServiceImpl implements UserCommandService{
 
