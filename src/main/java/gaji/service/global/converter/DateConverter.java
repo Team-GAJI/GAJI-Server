@@ -35,6 +35,10 @@ public class DateConverter {
         return dateTime.format(DATE_FORMATTER);
     }
 
+    public static String convertToTimeFormat(LocalDateTime dateTime) {
+        return dateTime.format(DATE_FORMATTER);
+    }
+
     public static String convertWriteTimeFormat(LocalDate dateTime, String suffix) {
         // 원하는 형식으로 포맷팅
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
