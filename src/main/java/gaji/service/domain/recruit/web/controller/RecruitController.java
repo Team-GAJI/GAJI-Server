@@ -22,6 +22,8 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -54,10 +56,13 @@ public class RecruitController {
     @GetMapping("/{roomId}/comments")
     @Operation(summary = "스터디 댓글 조회 API", description = "스터디 댓글을 조회하는 API입니다.")
     public BaseResponse<RecruitResponseDTO.CommentListDTO> getCommentList(
-            @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") @PathVariable Long roomId,
-            @Min(value = 0, message = "commentOrder는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer commentOrder,
-            @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
-        RecruitResponseDTO.CommentListDTO responseDTO = studyCommentQueryService.getCommentList(roomId, commentOrder, size);
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId,
+            @RequestParam(required = false) @Min(value = 0, message = "commentOrder는 0 이상 이어야 합니다.") Integer commentOrder,
+            @RequestParam(required = false) @Min(value = 0, message = "depth는 0 이상 이어야 합니다.") Integer depth,
+            @RequestParam(required = false) LocalDateTime createdAt,
+            @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 1 이상 이어야 합니다.") int size) {
+        RecruitResponseDTO.CommentListDTO responseDTO =
+                studyCommentQueryService.getCommentList(roomId, commentOrder, depth, createdAt, size);
         return BaseResponse.onSuccess(responseDTO);
     }
 
