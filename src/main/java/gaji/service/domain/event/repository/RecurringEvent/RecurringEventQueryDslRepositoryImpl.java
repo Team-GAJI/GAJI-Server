@@ -3,7 +3,8 @@ package gaji.service.domain.event.repository.RecurringEvent;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gaji.service.domain.event.domain.RecurringEvent;
-import lombok.AllArgsConstructor;
+import gaji.service.domain.event.entity.QEvent;
+import gaji.service.domain.event.entity.QRecurringEvent;
 import lombok.RequiredArgsConstructor;
 
 import java.time.DayOfWeek;
@@ -11,11 +12,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static gaji.service.domain.event.QRecurringEvent.recurringEvent;
 
 @RequiredArgsConstructor
 public class RecurringEventQueryDslRepositoryImpl implements RecurringEventQueryDslRepository{
     private final JPAQueryFactory queryFactory;
+    private final QEvent event = QEvent.event; // 다형성을 활용하기 위해 QEvent 사용
+    private final QRecurringEvent recurringEvent = QRecurringEvent.recurringEvent;
 
     @Override
     public List<RecurringEvent> findByDayOfWeekAndDate(LocalDate date, Long userId) {
@@ -38,9 +40,8 @@ public class RecurringEventQueryDslRepositoryImpl implements RecurringEventQuery
 
     // 요일이 일치하는지 확인하는 메서드
     private BooleanExpression dayOfWeekMatches(DayOfWeek dayOfWeek) {
-        // 요일에 따라 조건을 추가할 수 있습니다. 예를 들어 특정 요일에만 반복되는 이벤트를 필터링합니다.
-        // 예를 들어, 특정 요일에 반복되는 조건이 있는 경우 여기에 추가해야 합니다.
-        // 기본적으로 요일 필터는 이벤트 엔티티에 구현되어 있어야 합니다.
+        // 요일에 따라 조건을 추가할 수 있습니다. 예를 들어 특정 요일에만 반복되는 이벤트를 필터링
+        // 예를 들어, 특정 요일에 반복되는 조건이 있는 경우 여기에 추가하기
         return recurringEvent.startDateTime.dayOfWeek().eq(dayOfWeek.getValue());
     }
 }
