@@ -160,9 +160,13 @@ public class User extends BaseEntity {
         user.setSocialType(transferUserDTO.getSocialType());
         user.setGender(transferUserDTO.getGender());
         user.setStatus(transferUserDTO.getUserActive());
+        user.setNickname(transferUserDTO.getNickname());
+
         return user;
     }
-
+    private void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
     private void setStatus(UserActive userActive) {
         this.status = userActive;
     }
