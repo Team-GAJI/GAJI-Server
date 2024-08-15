@@ -33,7 +33,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
                         .and(categoryEq(category)))
                 .fetch();
 
-        OrderSpecifier<?> orderSpecifier = getOrderSpecifier(sortType);
+        OrderSpecifier<?>[] orderSpecifier = getOrderSpecifier(sortType);
 
         List<Room> results = queryFactory
                 .selectFrom(room)
@@ -119,14 +119,14 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
         };
     }
 
-    private OrderSpecifier<?> getOrderSpecifier(SortType sortType) {
+    private OrderSpecifier<?>[] getOrderSpecifier(SortType sortType) {
         if (sortType == null) {
             return null;
         }
         return switch (sortType) {
-            case RECENT -> room.id.desc();
-            case LIKE -> room.likes.desc();
-            case HIT -> room.views.desc();
+            case RECENT -> new OrderSpecifier<?>[]{room.id.desc()};
+            case LIKE -> new OrderSpecifier<?>[]{room.likes.desc(), room.id.desc()};
+            case HIT -> new OrderSpecifier<?>[]{room.views.desc(), room.id.desc()};
             default -> throw new RestApiException(GlobalErrorStatus._SORT_TYPE_NOT_VALID);
         };
     }
