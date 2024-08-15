@@ -13,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class EventInfoListResponse {
     private List<EventInfo> eventInfoList;
+    private List<StudyEventInfo> studyEventInfoList;
+
 
     @Getter
     @Builder
@@ -25,4 +27,18 @@ public class EventInfoListResponse {
         private String endDate;
         private boolean completionStatus;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class StudyEventInfo {
+        private Long eventId;
+        private String description;
+        private String StudyName;
+        private String startDate;
+        private String endDate;
+        private boolean completionStatus;
+    }
+
 }
