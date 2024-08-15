@@ -6,6 +6,7 @@ import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.entity.Assignment;
+import gaji.service.domain.studyMate.entity.UserAssignment;
 import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.user.entity.User;
 import jakarta.transaction.Transactional;
@@ -35,4 +36,5 @@ public interface RoomCommandService {
 
     List<Room> findRoomsByUserId(Long userId);
     List<RoomEvent> findRoomEventByRoomAndDate(Room room, LocalDate date);
+    UserAssignment findUserAssignmentByAssignmentAndUserId(Assignment assignment, Long userId);
 }

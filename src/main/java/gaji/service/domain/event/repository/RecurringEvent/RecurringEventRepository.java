@@ -1,4 +1,4 @@
-package gaji.service.domain.event.repository;
+package gaji.service.domain.event.repository.RecurringEvent;
 
 import gaji.service.domain.event.domain.Event;
 import gaji.service.domain.event.domain.RecurringEvent;
@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface RecurringEventRepository extends JpaRepository<RecurringEvent, Long>{
+public interface RecurringEventRepository extends JpaRepository<RecurringEvent, Long>, RecurringEventQueryDslRepository{
     List<Event> findRecurringEventsByWriter(User writer);
 }

@@ -5,6 +5,7 @@ import gaji.service.domain.event.dto.response.EventInfoListResponse;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.studyMate.entity.Assignment;
+import gaji.service.domain.studyMate.entity.UserAssignment;
 import gaji.service.global.converter.DateConverter;
 import org.springframework.stereotype.Component;
 
@@ -22,21 +23,20 @@ public class EventMapper {
                         .description(event.getContent())
                         .startDate(DateConverter.convertToTimeFormat(event.getStartDateTime()))
                         .endDate(DateConverter.convertToTimeFormat(event.getEndDateTime()))
+                        .completionStatus(event.getIsCompleted())
                         .build()
         ).collect(Collectors.toList());
     }
 
-    //RoomEvent를 EventInfoListResponse.StudyEventInfo List로 변환
-    public List<EventInfoListResponse.StudyEventInfo> toStudyEventInfoList(RoomEvent roomEvent, Room room) {
-        return roomEvent.getAssignmentList().stream().map(
-                assignment ->
-                        EventInfoListResponse.StudyEventInfo.builder()
+    //EventInfoListResponse.StudyEventInfo로 변환
+    public EventInfoListResponse.StudyEventInfo toStudyEventInfo(RoomEvent roomEvent, Room room, Assignment assignment,UserAssignment userAssignment) {
+        return EventInfoListResponse.StudyEventInfo.builder()
                                 .eventId(assignment.getId())
                                 .description(assignment.getBody())
                                 .startDate(DateConverter.convertWriteTimeFormat(roomEvent.getStartTime(), ""))
                                 .endDate(DateConverter.convertWriteTimeFormat(roomEvent.getEndTime(), ""))
                                 .StudyName(room.getName())
-                                .build()
-        ).collect(Collectors.toList());
+                                .completionStatus(userAssignment.isComplete())
+                                .build();
     }
 }

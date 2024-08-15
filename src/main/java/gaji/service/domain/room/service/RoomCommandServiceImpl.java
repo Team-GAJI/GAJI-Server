@@ -38,11 +38,10 @@ import java.util.stream.Collectors;
 public class RoomCommandServiceImpl implements RoomCommandService {
 
     private final AssignmentRepository assignmentRepository;
-
+    private final UserAssignmentRepository userAssignmentRepository;
     private final StudyMateRepository studyMateRepository;
     private final RoomEventRepository roomEventRepository;
     private final RoomQueryService roomQueryService;
-    private final UserAssignmentRepository userAssignmentRepository;
     private final UserQueryServiceImpl userQueryService;
     private final StudyMateQueryService studyMateQueryService;
     private final RoomNoticeRepository roomNoticeRepository;
@@ -276,6 +275,11 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     public List<RoomEvent> findRoomEventByRoomAndDate(Room room, LocalDate date) {
         // 주어진 date에 있는 RoomEvent 찾기
         return roomEventRepository.findByRoomAndDateBetweenStartTimeAndEndTime(room, date);
+    }
 
+    @Override
+    @Transactional(readOnly = true)
+    public UserAssignment findUserAssignmentByAssignmentAndUserId(Assignment assignment, Long userId){
+        return userAssignmentRepository.findByAssignmentAndUserId(assignment, userId);
     }
 }

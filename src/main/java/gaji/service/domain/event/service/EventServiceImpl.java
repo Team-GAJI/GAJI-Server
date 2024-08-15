@@ -4,8 +4,9 @@ import gaji.service.domain.event.code.EventErrorStatus;
 import gaji.service.domain.event.domain.Event;
 import gaji.service.domain.event.dto.request.EventInfoRequest;
 import gaji.service.domain.event.dto.response.EventInfoListResponse;
-import gaji.service.domain.event.repository.EventRepository;
-import gaji.service.domain.event.repository.RecurringEventRepository;
+import gaji.service.domain.event.mapper.EventMapper;
+import gaji.service.domain.event.repository.event.EventRepository;
+import gaji.service.domain.event.repository.RecurringEvent.RecurringEventRepository;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.user.entity.User;
@@ -29,6 +30,8 @@ public class EventServiceImpl implements EventService{
     private final UserCommandService userCommandService;
     private final RoomCommandService roomCommandService;
 
+    private final EventMapper eventMapper;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -37,27 +40,32 @@ public class EventServiceImpl implements EventService{
         User user = userCommandService.findById(userId);
 
         //userId와 date에 맞는 Event을 찾음 (response 값으로 변환)
-        //List<Event> events = eventRepository.findEventsByWriter(user);
+        List<Event> events = eventRepository.findEventsByDateAndUserId(date, userId);
 
         //userId와 date에 맞는 요일을 가진 RecurringEvent를 맞음 (response 값으로 변환)
-        //List<Event> recurringEvents = recurringEventRepository.findRecurringEventsByWriter(user);
+        //List<Event> recurringEvents = recurringEventRepository.findByDayOfWeekAndDate(date, userId);
 
         //Room 리스트 조회
         List<Room> rooms = roomCommandService.findRoomsByUserId(userId);
 
-        //Room과 Date로 Assignment 조회
-        rooms.stream().forEach(room -> {
+        //Room과 Date로 UserAssignment 조회
+        List<EventInfoListResponse.StudyEventInfo> studyEventInfoList = null;
+        rooms.forEach(room -> {
+            roomCommandService.findRoomEventByRoomAndDate(room, date).forEach(
+                    roomEvent->{
+                        roomEvent.getAssignmentList().forEach(
+                                assignment -> {
+                                    studyEventInfoList.add( // studyEventInfoList에 추가
+                                            eventMapper.toStudyEventInfo(
+                                                    roomEvent,room,assignment,roomCommandService.findUserAssignmentByAssignmentAndUserId(assignment, userId)
+                                                    )
+                                    );
+                                }
+                        );
+                    }
+            );
 
-            roomCommandService.findRoomEventByRoomAndDate(room, date)
         });
-
-
-
-        //스터디 관련 일정들 조회 (response 값으로 변환)
-        // 스터디 일정들은 RoomCommandService를 통해 조회
-        // RoomCommandService에서는 RoomRepository를 통해 Room을 조회
-        // Room에 있는 RoomEvent를 조회
-        // RoomEvent에 있는 나의 RoomAssignment를 조회
 
 
 
