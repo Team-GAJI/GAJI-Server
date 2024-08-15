@@ -78,8 +78,9 @@ public class PostCommandServiceImpl implements PostCommandService {
         return commentService.saveNewComment(newComment);
     }
     @Override
-    public void hardDeleteComment(Long commentId) {
+    public void hardDeleteComment(Long userId, Long commentId) {
         Comment findComment = commentService.findByCommentId(commentId);
+        commentService.validCommentOwner(userId, findComment);
         commentService.hardDeleteComment(findComment);
         findComment.getPost().decreaseCommentCnt(); // TODO: 지연 로딩으로 쿼리 1개 더 날라감;
     }
