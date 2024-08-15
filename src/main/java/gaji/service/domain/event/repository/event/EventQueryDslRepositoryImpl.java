@@ -2,7 +2,7 @@ package gaji.service.domain.event.repository.event;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gaji.service.domain.event.domain.Event;
-import gaji.service.domain.event.entity.QEvent;
+import gaji.service.domain.event.domain.QEvent;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;

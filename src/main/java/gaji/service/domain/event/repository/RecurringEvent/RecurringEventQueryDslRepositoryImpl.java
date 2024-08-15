@@ -2,9 +2,9 @@ package gaji.service.domain.event.repository.RecurringEvent;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import gaji.service.domain.event.domain.QEvent;
+import gaji.service.domain.event.domain.QRecurringEvent;
 import gaji.service.domain.event.domain.RecurringEvent;
-import gaji.service.domain.event.entity.QEvent;
-import gaji.service.domain.event.entity.QRecurringEvent;
 import lombok.RequiredArgsConstructor;
 
 import java.time.DayOfWeek;
