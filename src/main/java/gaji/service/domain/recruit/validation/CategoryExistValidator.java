@@ -2,7 +2,7 @@ package gaji.service.domain.recruit.validation;
 
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.recruit.annotation.ExistCategory;
-import gaji.service.domain.recruit.code.RecruitErrorStatus;
+import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class CategoryExistValidator implements ConstraintValidator<ExistCategory
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(RecruitErrorStatus._RECRUIT_CATEGORY_NOT_FOUND.getMessage()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(GlobalErrorStatus._INVALID_CATEGORY.getMessage()).addConstraintViolation();
         }
 
         return isValid;

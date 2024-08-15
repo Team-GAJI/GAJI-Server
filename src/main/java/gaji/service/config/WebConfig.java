@@ -1,7 +1,8 @@
 package gaji.service.config;
 
 import gaji.service.domain.recruit.converter.CategoryConverter;
-import gaji.service.domain.recruit.converter.SortTypeConverter;
+import gaji.service.domain.recruit.converter.FilterConverter;
+import gaji.service.domain.post.converter.SortTypeConverter;
 import gaji.service.domain.post.converter.PostStatusConverter;
 import gaji.service.domain.post.converter.PostTypeConverter;
 
@@ -17,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new PostTypeConverter());
         registry.addConverter(new SortTypeConverter());
+        registry.addConverter(new FilterConverter());
         registry.addConverter(new PostStatusConverter());
         registry.addConverter(new CategoryConverter());
     }

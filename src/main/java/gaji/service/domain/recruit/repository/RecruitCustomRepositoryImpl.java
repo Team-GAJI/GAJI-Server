@@ -4,11 +4,11 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gaji.service.domain.enums.*;
-import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.global.exception.RestApiException;
+import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -103,7 +103,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
             case RECRUITMENT_COMPLETED -> room.recruitPostTypeEnum.eq(RecruitPostTypeEnum.RECRUITMENT_COMPLETED);
             case PEOPLE_LIMITED -> room.peopleLimited.eq(true);
             case PEOPLE_NOT_LIMITED -> room.peopleLimited.eq(false);
-            default -> throw new RestApiException(RecruitErrorStatus._INVALID_FILTER);
+            default -> throw new RestApiException(GlobalErrorStatus._FILTER_NOT_VALID);
         };
     }
 
@@ -115,7 +115,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
             case RECENT -> room.id.lt(value);
             case LIKE -> room.likes.lt(value);
             case HIT -> room.views.lt(value);
-            default -> throw new RestApiException(RecruitErrorStatus._INVALID_SORT_TYPE);
+            default -> throw new RestApiException(GlobalErrorStatus._SORT_TYPE_NOT_VALID);
         };
     }
 
@@ -127,7 +127,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
             case RECENT -> room.id.desc();
             case LIKE -> room.likes.desc();
             case HIT -> room.views.desc();
-            default -> throw new RestApiException(RecruitErrorStatus._INVALID_SORT_TYPE);
+            default -> throw new RestApiException(GlobalErrorStatus._SORT_TYPE_NOT_VALID);
         };
     }
 
@@ -139,7 +139,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
             case RECENT -> results.get(results.size() - 1).getId();
             case LIKE -> (long) results.get(results.size() - 1).getLikes();
             case HIT -> (long) results.get(results.size() - 1).getViews();
-            default -> throw new RestApiException(RecruitErrorStatus._INVALID_SORT_TYPE);
+            default -> throw new RestApiException(GlobalErrorStatus._SORT_TYPE_NOT_VALID);
         };
     }
 }
