@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface RoomTroublePostRepository extends JpaRepository<RoomTroublePost, Long> {
     @Query("SELECT new gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto$TroublePostSummaryDto(" +
-            "r.id, r.title, r.studyMate.user.id, r.createdAt, r.viewCount, SIZE(r.troublePostCommentList)) " +
+            "r.id, r.title, r.studyMate.user.nickname, r.createdAt, r.viewCount, SIZE(r.troublePostCommentList)) " +
             "FROM RoomTroublePost r " +
             "WHERE r.roomBoard.id = :boardId AND r.id < :lastPostId " +
             "ORDER BY r.createdAt DESC")
