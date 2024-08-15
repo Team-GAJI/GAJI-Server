@@ -1,7 +1,6 @@
 package gaji.service.domain.roomBoard.service;
 
 import gaji.service.domain.enums.PostBookmarkStatus;
-import gaji.service.domain.enums.PostLikeStatus;
 import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
@@ -89,42 +88,39 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     }
 
     @Override
-    public PostLikeStatus toggleLike(Long postId, Long userId, Long roomId) {
+    public void addLike(Long postId, Long userId, Long roomId) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
-        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId,roomId);
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
 
         Optional<RoomTroublePostLike> likeOptional = roomTroublePostLikeRepository
                 .findByRoomTroublePostAndStudyMate(post, studyMate);
 
         if (likeOptional.isPresent()) {
-            RoomTroublePostLike like = likeOptional.get();
-            if (like.getStatus() == PostLikeStatus.LIKED) {
-                // 이미 좋아요 상태인 경우, 좋아요 취소
-                like.setStatus(PostLikeStatus.NOT_LIKED);
-                post.removeLike(like);
-                roomTroublePostLikeRepository.delete(like);
-                return PostLikeStatus.NOT_LIKED;
-            } else {
-                // 좋아요가 취소된 상태인 경우, 다시 좋아요
-                like.setStatus(PostLikeStatus.LIKED);
-                post.addLike(like);
-                roomTroublePostLikeRepository.save(like);
-                return PostLikeStatus.LIKED;
-            }
-        } else {
-            // 새로운 좋아요 생성
-            RoomTroublePostLike newLike = RoomTroublePostLike.builder()
-                    .roomTroublePost(post)
-                    .studyMate(studyMate)
-                    .status(PostLikeStatus.LIKED)
-                    .build();
-            post.addLike(newLike);
-            roomTroublePostLikeRepository.save(newLike);
-            return PostLikeStatus.LIKED;
+            throw new RestApiException(RoomPostErrorStatus._TROUBLE_POST_ALREADY_LIKED);
         }
+
+        RoomTroublePostLike newLike = RoomTroublePostLike.builder()
+                .roomTroublePost(post)
+                .studyMate(studyMate)
+                .build();
+        post.addLike(newLike);
+        roomTroublePostLikeRepository.save(newLike);
     }
 
+    @Override
+    public void removeLike(Long postId, Long userId, Long roomId) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        RoomTroublePostLike like = roomTroublePostLikeRepository
+                .findByRoomTroublePostAndStudyMate(post, studyMate)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus. _TROUBLE_POST_LIKE_NOT_FOUND));
+
+        post.removeLike(like);
+        roomTroublePostLikeRepository.delete(like);
+    }
 
     @Override
     public void deletePost(Long postId, Long userId) {

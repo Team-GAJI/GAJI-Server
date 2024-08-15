@@ -14,6 +14,8 @@ public enum RoomPostErrorStatus implements BaseErrorCodeInterface {
     _ROOM_BOARD_NOT_FOUND(HttpStatus.BAD_REQUEST, "ROOM_4001", "존재하지 않는 게시판입니다."),
 
     _TROUBLE_POST_NOT_FOUND(HttpStatus.BAD_REQUEST, "TROUBLE_4001", "존재하지 않는 게시글입니다."),
+    _TROUBLE_POST_ALREADY_LIKED(HttpStatus.BAD_REQUEST, "TROUBLE_4002", "이미 좋아요를 누른 게시글입니다."),
+    _TROUBLE_POST_LIKE_NOT_FOUND(HttpStatus.BAD_REQUEST, "TROUBLE_4003", "게시글에 좋아요를 누르지 않은 상태입니다."),
 
     _USER_NOT_DELETE_AUTH(HttpStatus.BAD_REQUEST, "AUTH_4001", "게시글을 삭제할 권한이 없습니다."),
     _USER_NOT_UPDATE_AUTH(HttpStatus.BAD_REQUEST, "AUTH_4002", "게시글을 수정할 권한이 없습니다."),
@@ -21,6 +23,10 @@ public enum RoomPostErrorStatus implements BaseErrorCodeInterface {
     _USER_NOT_COMMENT_DELETE_AUTH(HttpStatus.BAD_REQUEST, "AUTH_4004", "댓글을 삭제할 권한이 없습니다."),
 
     _NOT_FOUND_COMMENT(HttpStatus.BAD_REQUEST, "COMMENT_4001", "존재하지 않는 댓글입니다.");
+
+
+
+
 
 
 
