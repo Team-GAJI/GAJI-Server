@@ -53,8 +53,11 @@ public class RecruitController {
 
     @GetMapping("/{roomId}/comments")
     @Operation(summary = "스터디 댓글 조회 API", description = "스터디 댓글을 조회하는 API입니다.")
-    public BaseResponse<RecruitResponseDTO.CommentListDTO> getCommentList(@PathVariable Long roomId) {
-        RecruitResponseDTO.CommentListDTO responseDTO = studyCommentQueryService.getCommentList(roomId);
+    public BaseResponse<RecruitResponseDTO.CommentListDTO> getCommentList(
+            @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") @PathVariable Long roomId,
+            @Min(value = 0, message = "commentOrder는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer commentOrder,
+            @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
+        RecruitResponseDTO.CommentListDTO responseDTO = studyCommentQueryService.getCommentList(roomId, commentOrder, size);
         return BaseResponse.onSuccess(responseDTO);
     }
 
