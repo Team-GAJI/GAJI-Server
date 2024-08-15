@@ -59,10 +59,10 @@ public class RecruitController {
             @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId,
             @RequestParam(required = false) @Min(value = 0, message = "commentOrder는 0 이상 이어야 합니다.") Integer commentOrder,
             @RequestParam(required = false) @Min(value = 0, message = "depth는 0 이상 이어야 합니다.") Integer depth,
-            @RequestParam(required = false) LocalDateTime createdAt,
+            @RequestParam(required = false) @Min(value = 1, message = "commentId는 1 이상 이어야 합니다.") Long commentId,
             @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 1 이상 이어야 합니다.") int size) {
         RecruitResponseDTO.CommentListDTO responseDTO =
-                studyCommentQueryService.getCommentList(roomId, commentOrder, depth, createdAt, size);
+                studyCommentQueryService.getCommentList(roomId, commentOrder, depth, commentId, size);
         return BaseResponse.onSuccess(responseDTO);
     }
 
