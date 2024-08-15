@@ -10,6 +10,7 @@ import gaji.service.domain.event.repository.event.EventRepository;
 import gaji.service.domain.event.repository.RecurringEvent.RecurringEventRepository;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomCommandService;
+import gaji.service.domain.user.service.UserCommandService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,20 +31,17 @@ public class EventServiceImpl implements EventService{
     private final RecurringEventRepository recurringEventRepository;
 
     private final RoomCommandService roomCommandService;
+    private final UserCommandService userCommandService;
 
     private final EventMapper eventMapper;
 
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) //날짜에 맞는 나의 이벤트 리스트 조회
     public EventInfoListResponse getEventList(LocalDate date, Long userId) {
 
         //userId와 date에 맞는 Event을 찾음 (response 값으로 변환)
-        List<Event> events = eventRepository.findEventsByDateAndUserId(date, userId);
-
-        //userId와 date에 맞는 요일을 가진 RecurringEvent를 맞음 (response 값으로 변환)
-        List<RecurringEvent> recurringEvents = recurringEventRepository.findByDayOfWeekAndDate(date, userId);
-        events.addAll(new ArrayList<>(recurringEvents)); //타입 캐스팅해서 추가
+        List<Event> events = findAllEventByUserIdAndDate(date, userId);
 
         List<EventInfoListResponse.EventInfo> eventInfoList
                 = eventMapper.toEventInfoList( //DTO로 변환
@@ -83,7 +81,7 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    @Transactional
+    @Transactional  //날짜에 맞는 나의 이벤트 추가
     public Long putEvent(LocalDate date, Long userId, Long myId , EventInfoRequest request) {
 
         // 나의 userId인지 확인하기
@@ -92,11 +90,37 @@ public class EventServiceImpl implements EventService{
         }
 
         // 스터디 일정 제외하고 나의 일정이 20개 이상인지 확인하기 (20개 이상이면 에러)
+        if( findAllEventByUserIdAndDate(date, userId).size()>20){
+            throw new RestApiException(EventErrorStatus._EVENT_OVER_LIMIT); //이벤트가 20개 이상이면 에러
+        }
+
+        //반복 이벤트인 경우 RecurringEvent 생성
+        if(request.isRecurring()){
+            return recurringEventRepository.save(
+                    RecurringEvent.builder()
+                            .content(request.getContent())
+                            .writer(userCommandService.findById(userId))
+                            .startDateTime(request.getStartTime())
+                            .endDateTime(request.getEndTime())
+                            .build()
+            ).getId();
+        }
 
         //Event 생성
-        //Event 생성 후 EventId 반환
-        return null;
+        return eventRepository.save(
+                Event.builder()
+                        .content(request.getContent())
+                        .writer(userCommandService.findById(userId))
+                        .startDateTime(request.getStartTime())
+                        .endDateTime(request.getEndTime())
+                        .isRecurring(request.isRecurring())
+                        .build()
+        ).getId();
     }
+
+
+
+    //todo: 아래부터 쭉 다 반복 일정 생각한 코드로 작성
 
     @Override
     @Transactional
@@ -109,9 +133,9 @@ public class EventServiceImpl implements EventService{
         checkMyEvent(event, userId);
 
         // Event 수정
-        // EventId 반환
+        event.updateEvent(request);
 
-        return null;
+        return event.getId();
     }
 
     @Override
@@ -125,9 +149,9 @@ public class EventServiceImpl implements EventService{
         checkMyEvent(event, userId);
 
         // Event 삭제
-        // EventId 반환
+        eventRepository.delete(event);
 
-        return null;
+        return event.getId();
     }
 
     @Override
@@ -177,6 +201,18 @@ public class EventServiceImpl implements EventService{
         if (!event.getWriter().getId().equals(userId)) {
             throw new RestApiException(EventErrorStatus._EVENT_NOT_MY_EVENT);
         }
+    }
+
+    //유저가 직접 생성한 Event 리스트 찾기
+    private List<Event> findAllEventByUserIdAndDate(LocalDate date, Long userId ){
+        //userId와 date에 맞는 Event을 찾음 (response 값으로 변환)
+        List<Event> events = eventRepository.findEventsByDateAndUserId(date, userId);
+
+        //userId와 date에 맞는 요일을 가진 RecurringEvent를 맞음 (response 값으로 변환)
+        List<RecurringEvent> recurringEvents = recurringEventRepository.findByDayOfWeekAndDate(date, userId);
+        events.addAll(new ArrayList<>(recurringEvents)); //타입 캐스팅해서 추가
+
+        return events;
     }
 
 }
