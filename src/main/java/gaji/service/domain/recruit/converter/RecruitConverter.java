@@ -101,7 +101,8 @@ public class RecruitConverter {
                 .userNickName(comment.getUser().getNickname())
                 .commentOrder(comment.getCommentOrder())
                 .depth(comment.getDepth())
-                .commentCreatedAt(DateConverter.convertWriteTimeFormat(LocalDate.from(comment.getCreatedAt()), " 작성"))
+                .commentId(comment.getId())
+                .commentWriteDate(DateConverter.convertWriteTimeFormat(LocalDate.from(comment.getCreatedAt()), " 작성"))
                 .commentBody(comment.getBody())
                 .build();
     }
