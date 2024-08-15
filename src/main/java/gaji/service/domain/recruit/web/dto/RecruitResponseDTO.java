@@ -33,7 +33,7 @@ public class RecruitResponseDTO {
         String name;
         String imageUrl;
         RecruitPostTypeEnum recruitPostTypeEnum;
-        List<CategoryEnum> postCategoryList;
+        CategoryEnum studyCategory;
         int views;
         int likes;
         int bookmarks;
@@ -90,7 +90,7 @@ public class RecruitResponseDTO {
         Long deadLine;
         String description;
         String createdAt;
-        int recruitCount;
+        int recruitMaxCount;
     }
 
     @Builder

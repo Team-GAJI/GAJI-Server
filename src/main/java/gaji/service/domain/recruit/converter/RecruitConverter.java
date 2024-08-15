@@ -45,14 +45,8 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
-        List<CategoryEnum> categoryList = new ArrayList<>();
-        for (SelectCategory selectCategory : selectCategoryList) {
-            Category category = selectCategory.getCategory();
-            categoryList.add(category.getCategory());
-        }
-
-        return categoryList;
+    public static CategoryEnum toCategory(SelectCategory selectCategory) {
+        return selectCategory.getCategory().getCategory();
     }
 
     public static Material toMaterial(String materialPath, Room room) {
@@ -70,7 +64,7 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<CategoryEnum> categoryList) {
+    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, CategoryEnum category) {
         return RecruitResponseDTO.studyDetailDTO.builder()
                 .userNickName(user.getNickname())
                 .userActive(user.getStatus())
@@ -79,7 +73,7 @@ public class RecruitConverter {
                 .name(room.getName())
                 .imageUrl(room.getThumbnailUrl())
                 .recruitPostTypeEnum(room.getRecruitPostTypeEnum())
-                .postCategoryList(categoryList)
+                .studyCategory(category)
                 .views(room.getViews())
                 .likes(room.getLikes())
                 .bookmarks(room.getBookmarks())
@@ -139,7 +133,7 @@ public class RecruitConverter {
                 .deadLine(ChronoUnit.DAYS.between(room.getRecruitEndDay(), LocalDate.now()))
                 .description(room.getDescription())
                 .createdAt(DateConverter.convertToRelativeTimeFormat(room.getCreatedAt()))
-                .recruitCount(room.getPeopleMaximum())
+                .recruitMaxCount(room.getPeopleMaximum())
                 .build();
     }
 
