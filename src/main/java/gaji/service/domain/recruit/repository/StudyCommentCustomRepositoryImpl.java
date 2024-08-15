@@ -3,8 +3,6 @@ package gaji.service.domain.recruit.repository;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import gaji.service.domain.post.entity.Comment;
-import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.recruit.entity.StudyComment;
 import gaji.service.domain.room.entity.Room;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static gaji.service.domain.recruit.entity.QStudyComment.studyComment;
@@ -26,7 +24,7 @@ public class StudyCommentCustomRepositoryImpl implements StudyCommentCustomRepos
 
     @Override
     public Slice<StudyComment> findByRoomFetchJoinWithUser(
-            Integer lastCommentOrder, Room room, Pageable pageable) {
+            Integer lastCommentOrder, Integer lastDepth, Long lastCommentId, Room room, Pageable pageable) {
         List<StudyComment> commentList = jpaQueryFactory
                 .select(studyComment)
                 .from(studyComment)
@@ -34,7 +32,7 @@ public class StudyCommentCustomRepositoryImpl implements StudyCommentCustomRepos
                 .fetchJoin()
                 .where(
                         studyComment.room.eq(room),
-                        gtCommentOrder(lastCommentOrder)
+                        gtCommentOrderDepthAndCommentId(lastCommentOrder, lastDepth, lastCommentId)
                 )
                 .orderBy(
                         orderByCommentOrderAndDepth()
@@ -44,8 +42,24 @@ public class StudyCommentCustomRepositoryImpl implements StudyCommentCustomRepos
         return checkLastPage(pageable, commentList);
     }
 
-    private BooleanExpression gtCommentOrder(Integer lastCommentOrder) {
-        return (lastCommentOrder != null) ? studyComment.commentOrder.gt(lastCommentOrder) : null;
+    private BooleanExpression gtCommentOrderDepthAndCreatedAt(
+            Integer lastCommentOrder, Integer lastDepth, Long lastId) {
+        if (lastCommentOrder == null || lastDepth == null || lastId == null) {
+            return null;
+        }
+
+        return studyComment.commentOrder.gt(lastCommentOrder)  // 다음 commentOrder로 넘어가는 경우
+                .or(
+                        studyComment.commentOrder.eq(lastCommentOrder)
+                        .and(
+                                studyComment.depth.gt(lastDepth)  // 동일한 commentOrder 내에서 depth가 더 큰 경우
+                                .or(
+                                        studyComment.depth.eq(lastDepth)
+                                        .and(
+                                                studyComment.id.gt(lastId))  // 동일한 depth 내에서 createdAt이 더 큰 경우
+                                )
+                        )
+                );
     }
 
     private Slice<StudyComment> checkLastPage(Pageable pageable, List<StudyComment> commentList) {
