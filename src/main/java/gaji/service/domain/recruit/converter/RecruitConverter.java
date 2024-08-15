@@ -14,7 +14,10 @@ import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.entity.StudyMate;
+import gaji.service.global.converter.DateConverter;
+import org.springframework.data.domain.Slice;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -96,19 +99,20 @@ public class RecruitConverter {
         return RecruitResponseDTO.CommentResponseDTO.builder()
                 .userImage(comment.getUser().getProfileImagePth())
                 .userNickName(comment.getUser().getNickname())
-                .commentCreatedAt(comment.getCreatedAt())
+                .commentOrder(comment.getCommentOrder())
+                .depth(comment.getDepth())
+                .commentCreatedAt(DateConverter.convertWriteTimeFormat(LocalDate.from(comment.getCreatedAt()), " 작성"))
                 .commentBody(comment.getBody())
                 .build();
     }
 
-    public static List<RecruitResponseDTO.CommentResponseDTO> toCommentResponseDTOList(List<StudyComment> commentList) {
-        int toIndex = Math.min(4, commentList.size());
-        return commentList.subList(0, toIndex).stream().map(RecruitConverter::toCommentResponseDTO).collect(Collectors.toList());
-    }
+    public static RecruitResponseDTO.CommentListDTO toCommentListDTO(int commentCount, Slice<StudyComment> commentList) {
+        List<RecruitResponseDTO.CommentResponseDTO> CommentResponseDTO =
+                commentList.stream().map(RecruitConverter::toCommentResponseDTO).collect(Collectors.toList());
 
-    public static RecruitResponseDTO.CommentListDTO toCommentListDTO(int commentCount, List<RecruitResponseDTO.CommentResponseDTO> CommentResponseDTO) {
         return RecruitResponseDTO.CommentListDTO.builder()
                 .commentCount(commentCount)
+                .hasNext(commentList.hasNext())
                 .commentList(CommentResponseDTO)
                 .build();
     }
