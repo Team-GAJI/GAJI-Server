@@ -83,7 +83,7 @@ public class PostRestController {
             @Parameter(name = "sortType", description = "정렬 유형(hot, recent, like, hit)"),
             @Parameter(name = "filter", description = "게시글의 상태(모집중, 모집완료, 미완료질문, 해결완료)"),
     })
-    public BaseResponse<PostResponseDTO.PostPreviewListDTO> getPostPreivewList(@Min(value = 1, message = "lastPopularityScore는 1 이상 이어야 합니다.") @RequestParam(required = false) Integer lastPopularityScore,
+    public BaseResponse<PostResponseDTO.PostPreviewListDTO> getPostPreivewList(@Min(value = 0, message = "lastPopularityScore는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastPopularityScore,
                                                                                @Min(value = 1, message = "lastPostId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long lastPostId,
                                                                                @Min(value = 0, message = "lastLikeCnt는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastLikeCnt,
                                                                                @Min(value = 0, message = "lastHit은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastHit,
