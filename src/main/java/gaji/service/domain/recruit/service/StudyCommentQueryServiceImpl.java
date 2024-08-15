@@ -1,5 +1,6 @@
 package gaji.service.domain.recruit.service;
 
+import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.entity.StudyComment;
 import gaji.service.domain.recruit.repository.StudyCommentRepository;
@@ -7,6 +8,8 @@ import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,21 +25,13 @@ public class StudyCommentQueryServiceImpl implements StudyCommentQueryService{
     private final RoomQueryService roomQueryService;
 
     @Override
-    public RecruitResponseDTO.CommentListDTO getCommentList(Long roomId) {
+    public RecruitResponseDTO.CommentListDTO getCommentList(Long roomId, Integer lastCommentOrder, int size) {
         Room room = roomQueryService.findRoomById(roomId);
+        PageRequest pageRequest = PageRequest.of(0, size);
 
-        List<StudyComment> commentList = studyCommentRepository.findByRoomAndDepth(room, 0);
-        List<RecruitResponseDTO.CommentResponseDTO> CommentResponseDTO;
+        Slice<StudyComment> studyCommentList =
+                studyCommentRepository.findByRoomFetchJoinWithUser(lastCommentOrder, room, pageRequest);
 
-        int commentCount = studyCommentRepository.countByRoom(room);
-
-        if (commentList.isEmpty()) {
-            CommentResponseDTO = null;
-        } else {
-            commentList.sort(Comparator.comparing(StudyComment::getCreatedAt).reversed());
-            CommentResponseDTO = RecruitConverter.toCommentResponseDTOList(commentList);
-        }
-
-        return RecruitConverter.toCommentListDTO(commentCount, CommentResponseDTO);
+        return RecruitConverter.toCommentListDTO(room.getCommentCount(), studyCommentList);
     }
 }
