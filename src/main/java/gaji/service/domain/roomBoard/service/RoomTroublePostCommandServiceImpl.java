@@ -219,4 +219,25 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
             return PostBookmarkStatus.BOOKMARK;
         }
     }
+
+    public TroublePostComment addReply(Long commentId, Long userId, String body) {
+        TroublePostComment parentComment = troublePostCommentRepository.findById(commentId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+
+        if (parentComment.isReply()) {
+            throw new IllegalStateException("답글에는 답글을 달 수 없습니다.");
+        }
+
+        User user = userQueryService.findUserById(userId);
+        TroublePostComment reply = TroublePostComment.builder()
+                .user(user)
+                .roomTroublePost(parentComment.getRoomTroublePost())
+                .body(body)
+                .isReply(true)
+                .parentComment(parentComment)
+                .build();
+
+        parentComment.addReply(reply);
+        return troublePostCommentRepository.save(reply);
+    }
 }
