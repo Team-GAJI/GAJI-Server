@@ -21,7 +21,6 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     private final CommentJpaRepository commentRepository;
     private final PostQueryService postQueryService;
-    private final UserQueryService userQueryService;
 
     @Override
     @Transactional
@@ -36,8 +35,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Slice<Comment> getCommentListByPost(Long postId, Integer lastGroupNum, int size) {
-        PageRequest pageRequest = PageRequest.of(0, size);
+    public Slice<Comment> getCommentListByPost(Long postId, Integer lastGroupNum, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
         Post findPost = postQueryService.findPostByPostId(postId);
         return commentRepository.findBySliceAndPostFetchJoinWithUser(lastGroupNum, findPost, pageRequest);
     }
@@ -45,7 +44,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment findByCommentId(Long commentId) {
         return commentRepository.findById(commentId)
-                .orElseThrow(() -> new RestApiException(PostErrorStatus._COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(CommentErrorStatus._COMMENT_NOT_FOUND));
     }
 
     @Override

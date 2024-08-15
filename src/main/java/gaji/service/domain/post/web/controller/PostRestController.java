@@ -91,9 +91,10 @@ public class PostRestController {
                                                                                @RequestParam(required = false) Long categoryId,
                                                                                @RequestParam(required = false, defaultValue = "recent") SortType sortType,
                                                                                @RequestParam(required = false) PostStatusEnum filter,
+                                                                               @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
-        Slice<Post> postSlice = postQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, categoryId, sortType, filter, size);
+        Slice<Post> postSlice = postQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, categoryId, sortType, filter, page, size);
         return BaseResponse.onSuccess(postConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
     }
 
@@ -133,9 +134,10 @@ public class PostRestController {
     @Operation(summary = "커뮤니티 게시글 댓글 목록 조회 API", description = "lastGroupNum에 마지막으로 조회한 댓글의 grounNum과, size로 조회할 데이터의 개수를 보내주세요.")
     public BaseResponse<CommunityPostCommentResponseDTO.PostCommentListDTO> getCommentList(@Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
                                                                                            @Min(value = 0, message = "lastGroupNum은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastGroupNum, // 마지막 댓글 ID
+                                                                                           @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                            @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) // 페이지 크기 (기본값 10))
     {
-        Slice<Comment> commentSlice = commentService.getCommentListByPost(postId, lastGroupNum, size);
+        Slice<Comment> commentSlice = commentService.getCommentListByPost(postId, lastGroupNum, page, size);
         CommunityPostCommentResponseDTO.PostCommentListDTO postCommentDTOList = CommentConverter.toPostCommentListDTO(commentSlice.getContent(), commentSlice.hasNext());
         return BaseResponse.onSuccess(postCommentDTOList);
     }
