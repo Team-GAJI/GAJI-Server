@@ -123,14 +123,14 @@ public class RoomTroublePostController {
 
     @PostMapping("/comments/{commentId}/replies")
     @Operation(summary = "트러블 슈팅 게시글 댓글의 답글 작성 API")
-    public BaseResponse<TroublePostComment> addReply(
+    public BaseResponse<RoomPostResponseDto.toWriteCommentDto> addReply(
             @RequestHeader("Authorization") String authorization,
             @PathVariable Long commentId,
             @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto
     ) {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        TroublePostComment reply = roomTroublePostCommandService.addReply(commentId, userId, requestDto);
-        return BaseResponse.onSuccess(reply);
+        TroublePostComment replyComment = roomTroublePostCommandService.addReply(commentId, userId, requestDto);
+        return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(replyComment));
     }
 }
 
