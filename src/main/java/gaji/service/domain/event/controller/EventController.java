@@ -11,8 +11,10 @@ import gaji.service.global.base.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.joda.time.DateTime;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Tag(name = "Event API", description = "일정, ToDo 관련 API")
 @RestController
@@ -26,7 +28,7 @@ public class EventController {
     @Operation(summary = "날짜에 맞는 ToDo 조회 API",
             description = "해당 날짜에 맞는 ToDo를 조회합니다. 내가 아닌 다른 사람의 일정도 조회 가능합니다.")
     public BaseResponse<EventInfoListResponse> getToDoList(
-            @PathVariable("date") DateTime date,
+            @PathVariable("date") LocalDate date,
             @PathVariable("userId") Long userId
     )
     {
@@ -38,7 +40,7 @@ public class EventController {
             description = "해당 날짜에 맞는 ToDo를 생성합니다")
     public BaseResponse<EventIdResponse> putToDoList(
             @CurrentUser User user,
-            @PathVariable("date") DateTime date,
+            @PathVariable("date") LocalDateTime date,
             @PathVariable("userId") Long userId,
             @RequestBody EventInfoRequest request
             )

@@ -6,15 +6,17 @@ import gaji.service.domain.event.dto.request.EventInfoRequest;
 import gaji.service.domain.event.dto.response.EventInfoListResponse;
 import gaji.service.domain.event.repository.EventRepository;
 import gaji.service.domain.event.repository.RecurringEventRepository;
+import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.user.entity.User;
-import gaji.service.domain.user.repository.UserRepository;
-import gaji.service.domain.user.service.UserCommandServiceImpl;
+import gaji.service.domain.user.service.UserCommandService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,27 +24,43 @@ import java.util.List;
 public class EventServiceImpl implements EventService{
 
     private final EventRepository eventRepository;
-    private  final RecurringEventRepository recurringEventRepository;
+    private final RecurringEventRepository recurringEventRepository;
 
-    private final UserCommandServiceImpl userCommandService;
+    private final UserCommandService userCommandService;
+    private final RoomCommandService roomCommandService;
 
-    private final
-
-    private final int MAX_EVENT_COUNT = 20;
 
     @Override
     @Transactional(readOnly = true)
-    public EventInfoListResponse getEventList(DateTime date, Long userId) {
+    public EventInfoListResponse getEventList(LocalDate date, Long userId) {
 
         User user = userCommandService.findById(userId);
 
-        //userId에 맞는 Event을 찾음 (response 값으로 변환)
-        List<Event> events = eventRepository.findEventsByWriter(user);
+        //userId와 date에 맞는 Event을 찾음 (response 값으로 변환)
+        //List<Event> events = eventRepository.findEventsByWriter(user);
 
-        //userId에 맞는 RecurringEvent를 맞음 (response 값으로 변환)
-        List<Event> recurringEvents = recurringEventRepository.findRecurringEventsByWriter(user);
+        //userId와 date에 맞는 요일을 가진 RecurringEvent를 맞음 (response 값으로 변환)
+        //List<Event> recurringEvents = recurringEventRepository.findRecurringEventsByWriter(user);
+
+        //Room 리스트 조회
+        List<Room> rooms = roomCommandService.findRoomsByUserId(userId);
+
+        //Room과 Date로 Assignment 조회
+        rooms.stream().forEach(room -> {
+
+            roomCommandService.findRoomEventByRoomAndDate(room, date)
+        });
+
+
 
         //스터디 관련 일정들 조회 (response 값으로 변환)
+        // 스터디 일정들은 RoomCommandService를 통해 조회
+        // RoomCommandService에서는 RoomRepository를 통해 Room을 조회
+        // Room에 있는 RoomEvent를 조회
+        // RoomEvent에 있는 나의 RoomAssignment를 조회
+
+
+
         //시작 시간을 기준으로 정렬
 
         //response 값 반환
@@ -51,7 +69,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     @Transactional
-    public Long putEvent(DateTime date, Long userId, Long myId ,EventInfoRequest request) {
+    public Long putEvent(LocalDateTime date, Long userId, Long myId , EventInfoRequest request) {
 
         // 나의 userId인지 확인하기
         if(!userId.equals(myId)){
