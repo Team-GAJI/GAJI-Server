@@ -19,6 +19,7 @@ public class RecurringEventQueryDslRepositoryImpl implements RecurringEventQuery
 
     @Override
     public List<RecurringEvent> findByDayOfWeekAndDate(LocalDate date, Long userId) {
+
         DayOfWeek dayOfWeek = date.getDayOfWeek(); // 요일 추출
 
         // 해당 날짜의 시작 시각과 끝 시각 계산

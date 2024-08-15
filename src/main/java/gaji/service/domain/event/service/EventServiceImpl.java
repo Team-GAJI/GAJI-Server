@@ -2,6 +2,7 @@ package gaji.service.domain.event.service;
 
 import gaji.service.domain.event.code.EventErrorStatus;
 import gaji.service.domain.event.domain.Event;
+import gaji.service.domain.event.domain.RecurringEvent;
 import gaji.service.domain.event.dto.request.EventInfoRequest;
 import gaji.service.domain.event.dto.response.EventInfoListResponse;
 import gaji.service.domain.event.mapper.EventMapper;
@@ -18,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +31,6 @@ public class EventServiceImpl implements EventService{
     private final EventRepository eventRepository;
     private final RecurringEventRepository recurringEventRepository;
 
-    private final UserCommandService userCommandService;
     private final RoomCommandService roomCommandService;
 
     private final EventMapper eventMapper;
@@ -37,19 +40,26 @@ public class EventServiceImpl implements EventService{
     @Transactional(readOnly = true)
     public EventInfoListResponse getEventList(LocalDate date, Long userId) {
 
-        User user = userCommandService.findById(userId);
-
         //userId와 date에 맞는 Event을 찾음 (response 값으로 변환)
         List<Event> events = eventRepository.findEventsByDateAndUserId(date, userId);
 
         //userId와 date에 맞는 요일을 가진 RecurringEvent를 맞음 (response 값으로 변환)
-        //List<Event> recurringEvents = recurringEventRepository.findByDayOfWeekAndDate(date, userId);
+        List<RecurringEvent> recurringEvents = recurringEventRepository.findByDayOfWeekAndDate(date, userId);
+        events.addAll(new ArrayList<>(recurringEvents)); //타입 캐스팅해서 추가
+
+        List<EventInfoListResponse.EventInfo> eventInfoList
+                = eventMapper.toEventInfoList( //DTO로 변환
+                events.stream()
+                        //시작시간 기준으로 정렬
+                        .sorted(Comparator.comparing(Event::getStartDateTime))
+                        .collect(Collectors.toList())
+        );
 
         //Room 리스트 조회
         List<Room> rooms = roomCommandService.findRoomsByUserId(userId);
 
         //Room과 Date로 UserAssignment 조회
-        List<EventInfoListResponse.StudyEventInfo> studyEventInfoList = null;
+        List<EventInfoListResponse.StudyEventInfo> studyEventInfoList = new ArrayList<>();
         rooms.forEach(room -> {
             roomCommandService.findRoomEventByRoomAndDate(room, date).forEach(
                     roomEvent->{
@@ -67,12 +77,11 @@ public class EventServiceImpl implements EventService{
 
         });
 
-
-
-        //시작 시간을 기준으로 정렬
-
         //response 값 반환
-        return null;
+        return EventInfoListResponse.builder()
+                .studyEventInfoList(studyEventInfoList)
+                .eventInfoList(eventInfoList)
+                .build();
     }
 
     @Override
