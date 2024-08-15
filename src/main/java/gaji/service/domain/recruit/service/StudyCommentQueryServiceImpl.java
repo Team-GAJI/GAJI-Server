@@ -13,6 +13,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -25,12 +26,14 @@ public class StudyCommentQueryServiceImpl implements StudyCommentQueryService{
     private final RoomQueryService roomQueryService;
 
     @Override
-    public RecruitResponseDTO.CommentListDTO getCommentList(Long roomId, Integer lastCommentOrder, int size) {
+    public RecruitResponseDTO.CommentListDTO getCommentList(
+            Long roomId, Integer lastCommentOrder, Integer lastDepth, Long lastCommentId, int size) {
         Room room = roomQueryService.findRoomById(roomId);
         PageRequest pageRequest = PageRequest.of(0, size);
 
         Slice<StudyComment> studyCommentList =
-                studyCommentRepository.findByRoomFetchJoinWithUser(lastCommentOrder, room, pageRequest);
+                studyCommentRepository.findByRoomFetchJoinWithUser(
+                        lastCommentOrder, lastDepth, lastCommentId, room, pageRequest);
 
         return RecruitConverter.toCommentListDTO(room.getCommentCount(), studyCommentList);
     }
