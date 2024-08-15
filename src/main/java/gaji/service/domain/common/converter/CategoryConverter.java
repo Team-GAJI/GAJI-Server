@@ -24,15 +24,12 @@ public class CategoryConverter implements Converter<String, CategoryEnum> {
                 .build();
     }
 
-    public static List<SelectCategory> toSelectCategoryList(List<Category> categoryList, Long entityId, PostTypeEnum type) {
-        return categoryList.stream()
-                .map(category ->
-                        SelectCategory.builder()
-                                .category(category)
-                                .entityId(entityId)
-                                .type(type)
-                                .build()
-                ).collect(Collectors.toList());
+    public static SelectCategory toSelectCategory(Category category, Long entityId, PostTypeEnum type) {
+        return SelectCategory.builder()
+                        .category(category)
+                        .entityId(entityId)
+                        .type(type)
+                        .build();
     }
 
     public static CategoryResponseDTO.BaseDTO toBaseDTO(Category category) {

@@ -27,6 +27,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
+    public void hardDeleteComment(Comment comment) {
+        commentRepository.delete(comment);
+    }
+
+    @Override
     public Slice<Comment> getCommentListByPost(Long postId, Integer lastGroupNum, int size) {
         PageRequest pageRequest = PageRequest.of(0, size);
         Post findPost = postQueryService.findPostByPostId(postId);
