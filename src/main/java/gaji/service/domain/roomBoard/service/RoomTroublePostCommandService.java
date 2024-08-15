@@ -31,4 +31,6 @@ public interface RoomTroublePostCommandService {
 
     @Transactional
     PostBookmarkStatus toggleBookmark(Long postId, Long userId, Long roomId);
+
+    TroublePostComment addReply(Long commentId, Long userId, String body);
 }
