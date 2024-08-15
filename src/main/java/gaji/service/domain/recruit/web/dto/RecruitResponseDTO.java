@@ -52,7 +52,9 @@ public class RecruitResponseDTO {
     public static class CommentResponseDTO {
         String userImage;
         String userNickName;
-        LocalDateTime commentCreatedAt;
+        Integer commentOrder;
+        int depth;
+        String commentCreatedAt;
         String commentBody;
     }
 
@@ -62,6 +64,7 @@ public class RecruitResponseDTO {
     @AllArgsConstructor
     public static class CommentListDTO {
         int commentCount;
+        boolean hasNext;
         List<CommentResponseDTO> commentList;
     }
 
