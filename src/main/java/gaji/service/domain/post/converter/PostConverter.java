@@ -62,7 +62,8 @@ public class PostConverter {
                 .user(user)
                 .title(request.getTitle())
                 .body(request.getBody())
-                .thumbnailUrl(request.getThumbnailUrl())
+                .thumbnailUrl(/*(request.getThumbnailUrl() == null) ? Post.getDefaultThumbnailUrl() : request.getThumbnailUrl()*/
+                        request.getThumbnailUrl())
                 .type(request.getType())
                 .status(getInitialPostStatus(request.getType()))
                 .build();
@@ -98,7 +99,7 @@ public class PostConverter {
         return PostResponseDTO.PostPreviewDTO.builder()
                 .postId(post.getId())
                 .likeCnt(post.getLikeCnt())
-                .thumbnailUrl((post.getThumbnailUrl() == null) ? (post.settingDefaultThumbnailUrl()) : post.getThumbnailUrl())
+                .thumbnailUrl(post.getThumbnailUrl())
                 .title(post.getTitle())
                 .body(post.getBody())
                 .userId(post.getUser().getId())
