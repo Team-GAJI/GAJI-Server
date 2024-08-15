@@ -22,6 +22,7 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
         return roomPostQueryRepository.findTop3RecentPostsWithUserInfo(roomId);
     }
 
+    @Override
     public List<RoomPostResponseDto.TroublePostSummaryDto> getPaginatedTroublePosts(Long boardId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         return roomTroublePostRepository.findTroublePostSummaries(boardId, (Pageable) pageRequest);
