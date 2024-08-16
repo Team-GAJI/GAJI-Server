@@ -1,7 +1,7 @@
 package gaji.service.domain.roomBoard.repository;
 
-import gaji.service.domain.roomBoard.entity.RoomTroublePost;
-import gaji.service.domain.roomBoard.entity.RoomTroublePostLike;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePost;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostLike;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import org.springframework.data.jpa.repository.JpaRepository;
 

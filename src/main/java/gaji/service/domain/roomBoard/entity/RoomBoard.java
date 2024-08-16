@@ -1,8 +1,8 @@
-package gaji.service.domain.roomBoard.entity.common;
+package gaji.service.domain.roomBoard.entity;
 
 import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.roomBoard.entity.RoomPost;
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import jakarta.persistence.*;
 import lombok.*;
 
