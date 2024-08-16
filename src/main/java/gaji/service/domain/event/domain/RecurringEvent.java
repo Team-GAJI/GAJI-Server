@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at is null")
+@SuperBuilder
 public class RecurringEvent extends Event { // 반복 일정, Event를 상속받음
 
     // 반복 주기를 위한 필드

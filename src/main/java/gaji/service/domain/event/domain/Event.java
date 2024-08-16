@@ -5,6 +5,7 @@ import gaji.service.domain.event.dto.request.EventInfoRequest;
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at is null")
+@SuperBuilder
 public class Event extends BaseEntity {
 
     @Id
