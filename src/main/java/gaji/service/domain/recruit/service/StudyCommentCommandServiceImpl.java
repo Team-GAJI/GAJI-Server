@@ -59,6 +59,9 @@ public class StudyCommentCommandServiceImpl implements StudyCommentCommandServic
         if (parentCommentId != null) {
             StudyComment parentComment = studyCommentRepository.findById(parentCommentId).
                     orElseThrow(()->new RestApiException(RecruitErrorStatus._COMMENT_NOT_FOUND));
+            if (parentComment.getParent() != null) {
+                parentComment = parentComment.getParent();
+            }
             return RecruitConverter.toComment(request, user, room, parentComment);
         } else {
             return RecruitConverter.toComment(request, user, room, null);
