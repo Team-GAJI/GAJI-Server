@@ -82,4 +82,48 @@ public class RecruitResponseDTO {
         Long studyBookmarkId;
 
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PreviewDTO {
+        String imageUrl;
+        RecruitPostTypeEnum recruitStatus;
+        int applicant;
+        String name;
+        Long deadLine;
+        String description;
+        String createdAt;
+        int recruitCount;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PreviewListDTO {
+        List<PreviewDTO> previewList;
+        boolean hasNext;
+        Long lastValue;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DefaultPreviewDTO {
+        CategoryEnum category;
+        boolean hasNext;
+        List<PreviewDTO> previewList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DefaultPreviewListDTO {
+        List<DefaultPreviewDTO> defaultPreviewList;
+        int nextIndex;
+    }
 }

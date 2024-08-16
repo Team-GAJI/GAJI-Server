@@ -89,9 +89,9 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
             Category category = Category.builder()
                     .category(categoryEnum)
                     .build();
-//            categoryRepository.save(category);
+            categoryRepository.save(category);
             selectCategory = SelectCategory.builder()
-//                    .category(category)
+                    .category(category)
                     .entityId(room.getId())
                     .type(PostTypeEnum.ROOM)
                     .build();

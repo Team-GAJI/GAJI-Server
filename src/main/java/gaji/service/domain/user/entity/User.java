@@ -14,6 +14,7 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.VoiceChatUser;
 import gaji.service.domain.roomBoard.entity.*;
+import gaji.service.domain.roomBoard.entity.common.*;
 import gaji.service.domain.studyMate.entity.*;
 import gaji.service.oauth2.dto.TransferUserDTO;
 import jakarta.persistence.*;
@@ -160,9 +161,13 @@ public class User extends BaseEntity {
         user.setSocialType(transferUserDTO.getSocialType());
         user.setGender(transferUserDTO.getGender());
         user.setStatus(transferUserDTO.getUserActive());
+        user.setNickname(transferUserDTO.getNickname());
+
         return user;
     }
-
+    private void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
     private void setStatus(UserActive userActive) {
         this.status = userActive;
     }
