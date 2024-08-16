@@ -5,6 +5,7 @@ import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.PreviewFilter;
 import gaji.service.domain.enums.SortType;
+import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.repository.RecruitRepository;
 import gaji.service.domain.common.repository.SelectCategoryRepository;
@@ -14,6 +15,7 @@ import gaji.service.domain.user.entity.User;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.user.service.UserQueryService;
+import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +59,8 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     public RecruitResponseDTO.PreviewListDTO getPreviewList(
             CategoryEnum category, PreviewFilter filter, SortType sort, String query, Long value, int pageSize) {
 
+        validateQuery(query);
+
         Pageable pageable = PageRequest.of(0, pageSize);
 
         return recruitRepository.findByCategoryOrderBySortType(category, filter, sort, query, value, pageable);
@@ -94,5 +98,20 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
                 .defaultPreviewList(defaultPreviewList)
                 .nextIndex(count)
                 .build();
+    }
+
+    private void validateQuery(String query) {
+        if (query == null) {
+            return; // query가 null이면 검사를 하지 않음.
+        }
+
+        int queryLength = query.length();
+
+        if (queryLength < 2) {
+            throw new RestApiException(RecruitErrorStatus._QUERY_SO_SHORT);
+        }
+        if (queryLength > 20) {
+            throw new RestApiException(RecruitErrorStatus._QUERY_SO_LONG);
+        }
     }
 }

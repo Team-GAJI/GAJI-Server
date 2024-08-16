@@ -17,6 +17,9 @@ public enum RecruitErrorStatus implements BaseErrorCodeInterface {
 
     _ROOM_ALREADY_BOOKMARK(HttpStatus.BAD_REQUEST, "BOOKMARK_4001", "이미 북마크 된 게시글 입니다."),
     _ROOM_ALREADY_NO_BOOKMARK(HttpStatus.BAD_REQUEST, "BOOKMARK_4002", "이미 북마크 취소된 게시글 입니다."),
+
+    _QUERY_SO_SHORT(HttpStatus.BAD_REQUEST, "SEARCH_4001", "검색어가 너무 짧습니다."),
+    _QUERY_SO_LONG(HttpStatus.BAD_REQUEST, "SEARCH_4002", "검색어가 너무 깁니다.")
     ;
 
     private final HttpStatus httpStatus;
