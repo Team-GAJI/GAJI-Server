@@ -49,7 +49,7 @@ public class CommunityComment extends BaseEntity {
         this.parent = parent;
         this.body = body;
         this.status = CommentStatus.PUBLIC; // 댓글은 기본상태
-        this.depth = (parent == null) ? 0 : parent.depth + 1; // 부모 댓글이 있으면 depth = (부모댓글의 depth + 1)
+        this.depth = (parent == null) ? 0 : 1; // 부모 댓글이 있으면 depth = 1
         this.groupNum = (parent == null) ? post.getCommentGroupNum() : parent.getGroupNum(); // groupNum은 부모 댓글이 있으면 부모 댓글과 같은 값, 없으면 증가
     }
 }
