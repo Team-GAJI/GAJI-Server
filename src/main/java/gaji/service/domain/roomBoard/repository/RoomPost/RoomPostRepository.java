@@ -1,4 +1,4 @@
-package gaji.service.domain.roomBoard.repository;
+package gaji.service.domain.roomBoard.repository.RoomPost;
 
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import org.springframework.data.jpa.repository.JpaRepository;

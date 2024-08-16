@@ -2,8 +2,8 @@ package gaji.service.domain.roomBoard.web.controller;
 
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
-import gaji.service.domain.roomBoard.service.RoomPostQueryService;
-import gaji.service.domain.roomBoard.service.RoomTroublePostCommandService;
+import gaji.service.domain.roomBoard.service.RoomPost.RoomPostQueryService;
+import gaji.service.domain.roomBoard.service.RoomTrouble.RoomTroublePostCommandService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.global.base.BaseResponse;
