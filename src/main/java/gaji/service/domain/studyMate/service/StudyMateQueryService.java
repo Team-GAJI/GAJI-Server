@@ -4,4 +4,6 @@ import gaji.service.domain.studyMate.entity.StudyMate;
 
 public interface StudyMateQueryService {
     StudyMate findByUserIdAndRoomId(Long id, Long roomId);
+
+    StudyMate findById(Long studyMateId);
 }

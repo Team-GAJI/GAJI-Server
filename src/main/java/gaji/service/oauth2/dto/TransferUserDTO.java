@@ -19,4 +19,5 @@ public class TransferUserDTO {
     private LocalDate birthday;
     private SocialType socialType;
     private UserActive userActive;
+    private String nickname;
 }

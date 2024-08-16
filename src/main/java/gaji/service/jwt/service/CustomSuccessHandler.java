@@ -10,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -28,6 +29,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
     private final ObjectMapper objectMapper;
+
+    @Value("${redirectionUrl}")
+    private String redirectionUrl;
 
     public CustomSuccessHandler(JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper) {
         this.jwtUtil = jwtUtil;
@@ -78,7 +82,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         //
 
         // 리다이렉션 URL 생성
-        String targetUrl = UriComponentsBuilder.fromUriString("https://genuine-valkyrie-e0010a.netlify.app/")
+        String targetUrl = UriComponentsBuilder.fromUriString(redirectionUrl)
                 .queryParam("access_token", accessToken)
                 .build().toUriString();
 

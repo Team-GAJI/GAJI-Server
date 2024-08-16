@@ -68,6 +68,24 @@ public class RecruitResponseDTO {
         int commentCount;
         boolean hasNext;
         List<CommentResponseDTO> commentList;
+
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StudyLikesIdDTO {
+        Long studyLikesId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StudyBookmarkIdDTO {
+        Long studyBookmarkId;
+
     }
 
     @Builder

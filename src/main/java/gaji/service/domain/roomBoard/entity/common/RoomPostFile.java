@@ -1,33 +1,28 @@
-package gaji.service.domain.recruit.entity;
+package gaji.service.domain.roomBoard.entity.common;
 
-import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.roomBoard.entity.RoomPost;
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
-public class RecruitPostLikes {
+public class RoomPostFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private RoomPost roomPost;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
+    private String path;
 
-    @Builder
-    public RecruitPostLikes(User user, Room room) {
-        this.user = user;
-        this.room = room;
-    }
 }
