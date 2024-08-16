@@ -17,7 +17,7 @@ public class RoomTroublePostController {
 
     private final TokenProviderService tokenProviderService;
     private final RoomTroublePostCommandService roomTroublePostCommandService;
-    @PostMapping("/trouble-post/{roomId}/")
+    @PostMapping("/trouble-post/{roomId}")
     @Operation(summary = "스터디룸 정보나눔 게시판 등록 API")
     public BaseResponse<RoomPostResponseDto.toCreateRoomTroublePostIdDTO> StudyRoomTroublePostController(
             @RequestHeader("Authorization") String authorization,
