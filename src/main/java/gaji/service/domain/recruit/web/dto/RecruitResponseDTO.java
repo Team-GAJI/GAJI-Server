@@ -88,6 +88,7 @@ public class RecruitResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PreviewDTO {
+        Long roomId;
         String imageUrl;
         RecruitPostTypeEnum recruitStatus;
         int applicant;

@@ -143,6 +143,7 @@ public class RecruitConverter {
 
     public static RecruitResponseDTO.PreviewDTO toPreviewDTO(Room room) {
         return RecruitResponseDTO.PreviewDTO.builder()
+                .roomId(room.getId())
                 .imageUrl(room.getThumbnailUrl())
                 .recruitStatus(room.getRecruitPostTypeEnum())
                 .applicant(room.getStudyApplicantList().size())
