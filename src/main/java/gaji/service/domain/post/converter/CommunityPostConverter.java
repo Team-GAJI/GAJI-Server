@@ -13,7 +13,7 @@ import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.service.CommunityPostBookMarkService;
 import gaji.service.domain.post.service.CommunityPostLikesService;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
-import gaji.service.domain.post.web.dto.PostResponseDTO;
+import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.global.converter.DateConverter;
 import lombok.RequiredArgsConstructor;
@@ -36,22 +36,22 @@ public class CommunityPostConverter {
                 (type == PostTypeEnum.PROJECT) ? PostStatusEnum.RECRUITING : PostStatusEnum.BLOGING;
     }
 
-    public static PostResponseDTO.UploadPostDTO toUploadPostDTO(CommnuityPost post) {
-        return PostResponseDTO.UploadPostDTO
+    public static CommunityPostResponseDTO.UploadPostDTO toUploadPostDTO(CommnuityPost post) {
+        return CommunityPostResponseDTO.UploadPostDTO
                 .builder()
                 .postId(post.getId())
                 .build();
     }
 
-    public static PostResponseDTO.PostBookmarkIdDTO toPostBookmarkIdDTO(PostBookmark postBookmark) {
-        return PostResponseDTO.PostBookmarkIdDTO
+    public static CommunityPostResponseDTO.PostBookmarkIdDTO toPostBookmarkIdDTO(PostBookmark postBookmark) {
+        return CommunityPostResponseDTO.PostBookmarkIdDTO
                 .builder()
                 .postBookmarkId(postBookmark.getId())
                 .build();
     }
 
-    public static PostResponseDTO.PostLikesIdDTO toPostLikesIdDTO(PostLikes postLikes) {
-        return PostResponseDTO.PostLikesIdDTO
+    public static CommunityPostResponseDTO.PostLikesIdDTO toPostLikesIdDTO(PostLikes postLikes) {
+        return CommunityPostResponseDTO.PostLikesIdDTO
                 .builder()
                 .postLikesId(postLikes.getId())
                 .build();
@@ -92,18 +92,18 @@ public class CommunityPostConverter {
                 .build();
     }
 
-    public PostResponseDTO.PostPreviewDTO toPostPreviewDTO(CommnuityPost post) {
+    public CommunityPostResponseDTO.PostPreviewDTO toPostPreviewDTO(CommnuityPost post) {
         List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(post.getId(), post.getType());
         List<String> hashtagList = HashtagConverter.toHashtagNameList(selectHashtagList);
 
-        return PostResponseDTO.PostPreviewDTO.builder()
+        return CommunityPostResponseDTO.PostPreviewDTO.builder()
                 .postId(post.getId())
                 .likeCnt(post.getLikeCnt())
                 .thumbnailUrl(post.getThumbnailUrl())
                 .title(post.getTitle())
                 .body(post.getBody())
                 .userId(post.getUser().getId())
-                .username(post.getUser().getName())
+                .userNickname(post.getUser().getNickname())
                 .uploadTime(DateConverter.convertToRelativeTimeFormat(post.getCreatedAt()))
                 .hit(post.getHit())
                 .popularityScore(post.getPopularityScore())
@@ -111,31 +111,31 @@ public class CommunityPostConverter {
                 .build();
     }
 
-    public PostResponseDTO.PostPreviewListDTO toPostPreviewListDTO(List<CommnuityPost> postList, boolean hasNext) {
+    public CommunityPostResponseDTO.PostPreviewListDTO toPostPreviewListDTO(List<CommnuityPost> postList, boolean hasNext) {
         CommunityPostConverter postConverter = new CommunityPostConverter(hashtagService, postBookMarkService, postLikesService);
-        List<PostResponseDTO.PostPreviewDTO> postPreviewDTOList = postList.stream()
+        List<CommunityPostResponseDTO.PostPreviewDTO> postPreviewDTOList = postList.stream()
                 .map(postConverter::toPostPreviewDTO)
                 .collect(Collectors.toList());
 
-        return PostResponseDTO.PostPreviewListDTO.builder()
+        return CommunityPostResponseDTO.PostPreviewListDTO.builder()
                 .postList(postPreviewDTOList)
                 .hasNext(hasNext)
                 .build();
     }
 
-    public PostResponseDTO.PostDetailDTO toPostDetailDTO(CommnuityPost post, Long userId) {
+    public CommunityPostResponseDTO.PostDetailDTO toPostDetailDTO(CommnuityPost post, Long userId) {
         List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(post.getId(), post.getType());
         List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagNameAndIdDTOList = HashtagConverter.toHashtagNameAndIdDTOList(selectHashtagList);
         boolean isBookmarked = (userId == null) ? false : postBookMarkService.existsByUserAndPost(userId, post);
         boolean isLiked = (userId == null) ? false : postLikesService.existsByUserAndPost(userId, post);
 
-        return PostResponseDTO.PostDetailDTO.builder()
+        return CommunityPostResponseDTO.PostDetailDTO.builder()
                 .userId(post.getUser().getId())
                 .type(post.getType())
                 .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(post.getCreatedAt()), ""))
                 .hit(post.getHit())
                 .commentCnt(post.getCommentCnt())
-                .username(post.getUser().getName())
+                .userNickname(post.getUser().getNickname())
                 .title(post.getTitle())
                 .hashtagList(hashtagNameAndIdDTOList)
                 .isBookMarked(isBookmarked)
