@@ -28,6 +28,7 @@ public enum GlobalErrorStatus implements BaseErrorCodeInterface {
 
     // HASHTAG 에러
     _HASHTAG_ISBLANK(HttpStatus.BAD_REQUEST, "HASHTAG_4001", "공백은 해시태그로 등록할 수 없습니다."),
+    _INVALID_HASHTAG_LENGTH(HttpStatus.BAD_REQUEST, "HASHTAG_4002", "해시태그의 길이는 15자 이하여야 합니다."),
 
     // CATEGORY 에러
     _INVALID_CATEGORY(HttpStatus.BAD_REQUEST, "CATEGORY_4001", "유효하지 않은 카테고리입니다."),
