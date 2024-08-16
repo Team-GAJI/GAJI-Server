@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/api/studyRooms")
+@RequestMapping("/api/study-rooms")
 @RequiredArgsConstructor
 public class RoomNoticeController {
 

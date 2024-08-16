@@ -6,6 +6,7 @@ import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.*;
+import gaji.service.domain.roomBoard.entity.common.RoomBoard;
 import gaji.service.domain.roomBoard.repository.*;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;

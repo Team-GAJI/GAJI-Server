@@ -1,14 +1,17 @@
 package gaji.service.domain.roomBoard.service;
 
+import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
+import gaji.service.domain.roomBoard.entity.RoomInfoPost;
 import gaji.service.domain.roomBoard.entity.common.RoomBoard;
-import gaji.service.domain.roomBoard.entity.RoomPost;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
-import gaji.service.domain.roomBoard.repository.RoomPostRepository;
+import gaji.service.domain.roomBoard.repository.RoomInfoPostRepository;
+import gaji.service.domain.roomBoard.repository.RoomTroublePostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
-import gaji.service.domain.studyMate.repository.StudyMateRepository;
+import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
+import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
@@ -19,39 +22,39 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class RoomPostCommandServiceImpl implements RoomPostCommandService {
-    private final RoomPostRepository roomPostRepository;
+public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandService {
+    private final RoomInfoPostRepository roomInfoPostRepository;
     private final RoomBoardRepository roomBoardRepository;
-    private final StudyMateRepository studyMateRepository;
     private final UserQueryService userQueryService;
     private final RoomQueryService roomQueryService;
     private final StudyMateQueryService studyMateQueryService;
+    private final RoomTroublePostRepository roomTroublePostRepository;
+
 
     @Override
-    public RoomPost createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
+    public RoomPostResponseDto.toCreateRoomInfoPostIdDTO createRoomInfoPostIdDTO(Long roomId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
-        studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
 
         // 스터디룸 게시판 확인 또는 생성
         RoomBoard roomBoard = roomBoardRepository.findByRoomId(roomId)
                 .orElseGet(() -> {
                     RoomBoard newRoomBoard = RoomBoard.builder()
                             .room(room)
+                            .roomPostType(RoomPostType.ROOM_TROUBLE_POST)
                             .name(room.getName())
                             .build();
                     return roomBoardRepository.save(newRoomBoard);
                 });
 
-        // RoomPost 생성 및 저장
-        RoomPost roomPost = RoomPostConverter.toRoomPost(requestDto, user, roomBoard);
-        roomPost = roomPostRepository.save(roomPost);
+//        RoomTro roomPost = RoomPostConverter.toRoomPost(requestDto, user, roomBoard);
+//        roomPost = roomPostRepository.save(roomPost);
 
-        // RoomBoard에 새로운 RoomPost 추가
-        roomBoard.addRoomPost(roomPost);
-        roomBoardRepository.save(roomBoard);
 
-        return roomPost;
+        RoomInfoPost roomInfoPost = RoomPostConverter.toRoomInfoPost(requestDto, studyMate,roomBoard);
+        roomInfoPostRepository.save(roomInfoPost);
+
+        return RoomPostConverter.infoPostIdDto(roomInfoPost.getId());
     }
-
 }

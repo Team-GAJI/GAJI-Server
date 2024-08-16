@@ -1,5 +1,6 @@
-package gaji.service.domain.roomBoard.entity;
+package gaji.service.domain.roomBoard.entity.common;
 
+import gaji.service.domain.roomBoard.entity.RoomPost;
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,8 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomPostBookmark {
-
+public class RoomPostLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +20,6 @@ public class RoomPostBookmark {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "post_id")
     private RoomPost roomPost;
 }
