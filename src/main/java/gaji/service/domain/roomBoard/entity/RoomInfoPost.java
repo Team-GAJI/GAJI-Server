@@ -1,18 +1,21 @@
 package gaji.service.domain.roomBoard.entity;
 
-import gaji.service.domain.roomBoard.entity.common.RoomBoard;
+import gaji.service.domain.roomBoard.entity.common.*;
 import gaji.service.domain.studyMate.entity.StudyMate;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class RoomTroublePost {
+public class RoomInfoPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

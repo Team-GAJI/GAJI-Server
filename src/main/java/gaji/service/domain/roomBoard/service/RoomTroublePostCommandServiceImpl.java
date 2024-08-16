@@ -4,7 +4,7 @@ import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
-import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.roomBoard.entity.common.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomTroublePost;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomPostRepository;
