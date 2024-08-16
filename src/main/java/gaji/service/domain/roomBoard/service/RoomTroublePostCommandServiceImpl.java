@@ -3,21 +3,23 @@ package gaji.service.domain.roomBoard.service;
 import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
+import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
+import gaji.service.domain.roomBoard.entity.*;
 import gaji.service.domain.roomBoard.entity.common.RoomBoard;
-import gaji.service.domain.roomBoard.entity.RoomTroublePost;
-import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
-import gaji.service.domain.roomBoard.repository.RoomPostRepository;
-import gaji.service.domain.roomBoard.repository.RoomTroublePostRepository;
+import gaji.service.domain.roomBoard.repository.*;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
+import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,27 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     private final RoomQueryService roomQueryService;
     private final StudyMateQueryService studyMateQueryService;
     private final RoomTroublePostRepository roomTroublePostRepository;
+    private final RoomPostCommentRepository roomPostCommentRepository;
+    private final RoomTroublePostLikeRepository roomTroublePostLikeRepository;
+    private final TroublePostCommentRepository troublePostCommentRepository;
+    private final RoomTroublePostBookmarkRepository roomTroublePostBookmarkRepository;
+
+    @Override
+    public TroublePostComment writeCommentOnTroublePost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+        User user = userQueryService.findUserById(userId);
+        RoomTroublePost roomTroublePost = findTroublePostById(postId);
+
+        System.out.println("트러블 슈팅: " + roomTroublePost.getBody());
+        TroublePostComment troublePostComment = TroublePostComment.builder()
+                .user(user)
+                .roomTroublePost(roomTroublePost)
+                .body(request.getBody())
+                .build();
+        System.out.println(troublePostComment.getBody());
+        troublePostCommentRepository.save(troublePostComment);
+
+        return troublePostComment;
+    }
 
     @Override
     public RoomPostResponseDto.toCreateRoomTroublePostIdDTO createRoomTroublePost(Long roomId, Long userId, RoomPostRequestDto.RoomTroubloePostDto requestDto) {
@@ -55,5 +78,183 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
         roomTroublePostRepository.save(roomTroublePost);
 
         return RoomPostConverter.troublePostIdDto(roomTroublePost.getId());
+    }
+
+    @Override
+    public RoomTroublePost findTroublePostById(Long postId){
+        return roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+
+    }
+
+    @Override
+    public void addLike(Long postId, Long userId, Long roomId) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        Optional<RoomTroublePostLike> likeOptional = roomTroublePostLikeRepository
+                .findByRoomTroublePostAndStudyMate(post, studyMate);
+
+        if (likeOptional.isPresent()) {
+            throw new RestApiException(RoomPostErrorStatus._TROUBLE_POST_ALREADY_LIKED);
+        }
+
+        RoomTroublePostLike newLike = RoomTroublePostLike.builder()
+                .roomTroublePost(post)
+                .studyMate(studyMate)
+                .build();
+
+        post.addLike(newLike);
+        roomTroublePostLikeRepository.save(newLike);
+    }
+
+    @Override
+    public void removeLike(Long postId, Long userId, Long roomId) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        RoomTroublePostLike like = roomTroublePostLikeRepository
+                .findByRoomTroublePostAndStudyMate(post, studyMate)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus. _TROUBLE_POST_LIKE_NOT_FOUND));
+
+        post.removeLike(like);
+        roomTroublePostLikeRepository.delete(like);
+    }
+
+    @Override
+    public void addBookmark(Long postId, Long userId, Long roomId) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        if (roomTroublePostBookmarkRepository.findByRoomTroublePostAndStudyMate(post, studyMate).isPresent()) {
+            throw new RestApiException(RoomPostErrorStatus._TROUBLE_POST_ALREADY_BOOKMARKED);
+        }
+
+        RoomTroublePostBookmark newBookmark = RoomTroublePostBookmark.builder()
+                .roomTroublePost(post)
+                .studyMate(studyMate)
+                .build();
+        post.addBookmark(newBookmark);
+        roomTroublePostBookmarkRepository.save(newBookmark);
+
+    }
+
+    @Override
+    public void removeBookmark(Long postId, Long userId, Long roomId) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        RoomTroublePostBookmark bookmark = roomTroublePostBookmarkRepository
+                .findByRoomTroublePostAndStudyMate(post, studyMate)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_BOOKMARKED_NOT_FOUND));
+
+        post.removeBookmark(bookmark);
+        roomTroublePostBookmarkRepository.delete(bookmark);
+    }
+
+    @Override
+    public void deletePost(Long postId, Long userId) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+        if (!post.isAuthor(userId)) {
+            throw new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND);
+        }
+        roomTroublePostRepository.delete(post);
+    }
+
+    @Override
+    public void updatePost(Long postId, Long userId, RoomPostRequestDto.RoomTroubloePostDto requestDto) {
+        RoomTroublePost post = roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+
+        if (!post.isAuthor(userId)) {
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_UPDATE_AUTH);
+        }
+
+        post.update(requestDto.getTitle(), requestDto.getBody());
+    }
+
+    @Override
+    public void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto) {
+        TroublePostComment comment = findCommentByCommentId(commentId);
+        if (!comment.isAuthor(userId)){
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_UPDATE_AUTH);
+        }
+
+        comment.updateComment(requestDto.getBody());
+    }
+
+
+    @Override
+    public void deleteComment(Long commentId, Long userId) {
+        TroublePostComment comment = findTroublePostCommentById(commentId);
+
+        if (!comment.isAuthor(userId)) {
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_DELETE_AUTH);
+        }
+
+        if (comment.isReply()) {
+            // 답글인 경우, 해당 답글만 삭제
+            deleteReply(comment);
+        } else {
+            // 댓글인 경우, 댓글과 모든 관련 답글 삭제
+            deleteCommentAndReplies(comment);
+        }
+    }
+
+
+
+
+
+    @Override
+    public TroublePostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+        TroublePostComment parentComment = troublePostCommentRepository.findById(commentId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+
+        if (parentComment.isReply()) {
+            throw new IllegalStateException("답글에는 답글을 달 수 없습니다.");
+        }
+
+        User user = userQueryService.findUserById(userId);
+        TroublePostComment reply = TroublePostComment.builder()
+                .user(user)
+                .roomTroublePost(parentComment.getRoomTroublePost())
+                .body(request.getBody())
+                .isReply(true)
+                .parentComment(parentComment)
+                .build();
+
+        parentComment.addReply(reply);
+        return troublePostCommentRepository.save(reply);
+    }
+
+
+    @Override
+    public TroublePostComment findCommentByCommentId(Long commentId){
+        return troublePostCommentRepository.findById(commentId)
+                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._NOT_FOUND_COMMENT));
+    }
+
+    @Override
+    public TroublePostComment findTroublePostCommentById(Long troublePostId) {
+        return troublePostCommentRepository.findById(troublePostId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+    }
+
+
+    private void deleteReply(TroublePostComment reply) {
+        TroublePostComment parentComment = reply.getParentComment();
+        parentComment.getReplies().remove(reply);
+        troublePostCommentRepository.delete(reply);
+    }
+
+    private void deleteCommentAndReplies(TroublePostComment comment) {
+        // CascadeType.ALL과 orphanRemoval = true 설정으로 인해
+        // 댓글을 삭제하면 연관된 모든 답글도 자동으로 삭제됩니다.
+        troublePostCommentRepository.delete(comment);
     }
 }
