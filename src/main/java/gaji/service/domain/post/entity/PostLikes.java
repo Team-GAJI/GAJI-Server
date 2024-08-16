@@ -21,10 +21,10 @@ public class PostLikes {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private Post post;
+    private CommnuityPost post;
 
     @Builder
-    public PostLikes(User user, Post post) {
+    public PostLikes(User user, CommnuityPost post) {
         this.user = user;
         this.post = post;
     }

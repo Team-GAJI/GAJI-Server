@@ -40,6 +40,7 @@ public class PostRequestDTO {
         private final List<String> hashtagList = new ArrayList<>();
 
         @Schema(description = "카테고리의 id")
+        // TODO: 카테고리 존재 여부 검증 애노테이션 적용
         private final Long categoryId;
     }
 

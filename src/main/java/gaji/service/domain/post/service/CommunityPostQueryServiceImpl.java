@@ -1,15 +1,13 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.common.entity.Category;
-import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.post.code.PostErrorStatus;
-import gaji.service.domain.post.entity.Post;
-import gaji.service.domain.post.repository.PostBookmarkRepository;
-import gaji.service.domain.post.repository.PostJpaRepository;
-import gaji.service.domain.post.repository.PostLikesRepository;
+import gaji.service.domain.post.code.CommunityPostErrorStatus;
+import gaji.service.domain.post.entity.CommnuityPost;
+import gaji.service.domain.post.repository.CommunityPostBookmarkRepository;
+import gaji.service.domain.post.repository.CommunityPostJpaRepository;
+import gaji.service.domain.post.repository.CommunityPostLikesRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -17,18 +15,16 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PostQueryServiceImpl implements PostQueryService {
-    private final PostJpaRepository postRepository;
-    private final PostLikesRepository postLikesRepository;
-    private final PostBookmarkRepository postBookmarkRepository;
+public class CommunityPostQueryServiceImpl implements CommunityPostQueryService {
+    private final CommunityPostJpaRepository communityPostJpaRepository;
+    private final CommunityPostLikesRepository postLikesRepository;
+    private final CommunityPostBookmarkRepository postBookmarkRepository;
 
     @Override
-    public Slice<Post> getPostList(Integer lastPopularityScore,
+    public Slice<CommnuityPost> getPostList(Integer lastPopularityScore,
                                    Long lastPostId,
                                    Integer lastLikeCnt,
                                    Integer lastHit,
@@ -39,7 +35,7 @@ public class PostQueryServiceImpl implements PostQueryService {
                                    int page,
                                    int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return postRepository.findAllFetchJoinWithUser(lastPopularityScore,
+        return communityPostJpaRepository.findAllFetchJoinWithUser(lastPopularityScore,
                 lastPostId,
                 lastLikeCnt,
                 lastHit,
@@ -51,15 +47,15 @@ public class PostQueryServiceImpl implements PostQueryService {
     }
 
     @Override
-    public Slice<Post> searchPostList() {
+    public Slice<CommnuityPost> searchPostList() {
         return null;
     }
 
     @Override
-    public Post getPostDetail(Long postId) {
-        Post findPost = postRepository.findByIdFetchJoinWithUser(postId);
+    public CommnuityPost getPostDetail(Long postId) {
+        CommnuityPost findPost = communityPostJpaRepository.findByIdFetchJoinWithUser(postId);
         if (findPost == null) {
-            throw new RestApiException(PostErrorStatus._POST_NOT_FOUND);
+            throw new RestApiException(CommunityPostErrorStatus._POST_NOT_FOUND);
         }
         findPost.increaseHitCnt();
         findPost.increasePopularityScoreByHit();
@@ -67,29 +63,29 @@ public class PostQueryServiceImpl implements PostQueryService {
     }
 
     @Override
-    public Post findPostByPostId(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(PostErrorStatus._POST_NOT_FOUND));
+    public CommnuityPost findPostByPostId(Long postId) {
+        return communityPostJpaRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(CommunityPostErrorStatus._POST_NOT_FOUND));
     }
 
     @Override
-    public void validPostOwner(Long userId, Post post) {
+    public void validPostOwner(Long userId, CommnuityPost post) {
         if (!post.getUser().getId().equals(userId)) {
-            throw new RestApiException(PostErrorStatus._NOT_AUTHORIZED);
+            throw new RestApiException(CommunityPostErrorStatus._NOT_AUTHORIZED);
         }
     }
 
     @Override
-    public void validExistsPostLikes(Long userId, Post post) {
+    public void validExistsPostLikes(Long userId, CommnuityPost post) {
         if (postLikesRepository.existsByUserIdAndPost(userId, post)) {
-            throw new RestApiException(PostErrorStatus._ALREADY_EXIST_POST_LIKES);
+            throw new RestApiException(CommunityPostErrorStatus._ALREADY_EXIST_POST_LIKES);
         }
     }
 
     @Override
-    public void validExistsPostBookmark(Long userId, Post post) {
+    public void validExistsPostBookmark(Long userId, CommnuityPost post) {
         if (postBookmarkRepository.existsByUserIdAndPost(userId, post)) {
-            throw new RestApiException(PostErrorStatus._ALREADY_EXIST_POST_BOOKMARK);
+            throw new RestApiException(CommunityPostErrorStatus._ALREADY_EXIST_POST_BOOKMARK);
         }
     }
 }

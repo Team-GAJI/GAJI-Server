@@ -3,14 +3,14 @@ package gaji.service.domain.post.repository;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.post.entity.CommnuityPost;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 
-public interface PostQueryDslRepository {
+public interface CommunityPostQueryDslRepository {
 
-    Slice<Post> findAllFetchJoinWithUser(Integer lastPopularityScore,
+    Slice<CommnuityPost> findAllFetchJoinWithUser(Integer lastPopularityScore,
                                          Long lastPostId,
                                          Integer lastLikeCnt,
                                          Integer lastHit,
@@ -19,7 +19,7 @@ public interface PostQueryDslRepository {
                                          Long categoryId,
                                          SortType sortType,
                                          Pageable pageable);
-    Post findByIdFetchJoinWithUser(Long postId);
+    CommnuityPost findByIdFetchJoinWithUser(Long postId);
 
 }
 
