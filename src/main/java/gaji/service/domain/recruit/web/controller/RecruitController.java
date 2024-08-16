@@ -74,8 +74,10 @@ public class RecruitController {
     @DeleteMapping("/comments/{commentId}")
     @Operation(summary = "스터디 댓글 삭제 API", description = "스터디 댓글을 삭제하는 API입니다. 댓글의 자식 댓글들도 모두 삭제됩니다.")
     public BaseResponse deleteComment(
+            @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable @Min(value = 1, message = "commentId는 1 이상 이어야 합니다.") Long commentId) {
-        studyCommentCommandService.deleteComment(commentId);
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        studyCommentCommandService.deleteComment(userId, commentId);
         return BaseResponse.onSuccess(null);
     }
 

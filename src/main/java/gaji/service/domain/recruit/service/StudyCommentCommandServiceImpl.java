@@ -44,9 +44,12 @@ public class StudyCommentCommandServiceImpl implements StudyCommentCommandServic
     }
 
     @Override
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long userId, Long commentId) {
         StudyComment comment = studyCommentRepository.findById(commentId)
                 .orElseThrow(() -> new RestApiException(RecruitErrorStatus._COMMENT_NOT_FOUND));
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new RestApiException(RecruitErrorStatus._COMMENT_NOT_OWNER);
+        }
         if (comment.getStatus() == CommentStatus.DELETE) {
             throw new RestApiException(RecruitErrorStatus._COMMENT_ALREADY_DELETE);
         } else {
@@ -67,4 +70,6 @@ public class StudyCommentCommandServiceImpl implements StudyCommentCommandServic
             return RecruitConverter.toComment(request, user, room, null);
         }
     }
+
+
 }
