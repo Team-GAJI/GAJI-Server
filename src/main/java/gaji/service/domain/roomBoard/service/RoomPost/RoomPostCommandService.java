@@ -1,4 +1,4 @@
-package gaji.service.domain.roomBoard.service;
+package gaji.service.domain.roomBoard.service.RoomPost;
 
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;

@@ -1,4 +1,4 @@
-package gaji.service.domain.roomBoard.service;
+package gaji.service.domain.roomBoard.service.RoomPost;
 
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
@@ -6,7 +6,7 @@ import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
-import gaji.service.domain.roomBoard.repository.RoomPostRepository;
+import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;

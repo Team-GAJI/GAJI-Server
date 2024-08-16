@@ -1,4 +1,4 @@
-package gaji.service.domain.roomBoard.repository;
+package gaji.service.domain.roomBoard.repository.RoomTrouble;
 
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePost;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostBookmark;

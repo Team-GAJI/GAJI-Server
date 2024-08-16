@@ -1,7 +1,7 @@
-package gaji.service.domain.roomBoard.service;
+package gaji.service.domain.roomBoard.service.RoomPost;
 
-import gaji.service.domain.roomBoard.repository.RoomPostQueryRepository;
-import gaji.service.domain.roomBoard.repository.RoomTroublePostRepository;
+import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostQueryRepository;
+import gaji.service.domain.roomBoard.repository.RoomTrouble.RoomTroublePostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
