@@ -6,7 +6,6 @@ import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
-import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePost;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
@@ -52,13 +51,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         RoomPost roomPost = RoomPostConverter.toRoomPost(requestDto, studyMate, roomBoard);
         roomPostRepository.save(roomPost);
 
-        RoomTroublePost roomTroublePost = RoomPostConverter.toRoomTroublePost(requestDto, studyMate,roomBoard);
-        roomTroublePostRepository.save(roomTroublePost);
-
-        return RoomPostConverter.troublePostIdDto(roomTroublePost.getId());
-
-
-        return roomPost;
+        return RoomPostConverter.postIdDto(roomPost.getId());
     }
 
 

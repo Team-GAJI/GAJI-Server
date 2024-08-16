@@ -16,7 +16,7 @@ public class RoomPostConverter {
 
     public static RoomPost toRoomPost(RoomPostRequestDto.RoomPostDto requestDto, StudyMate studyMate, RoomBoard roomBoard) {
          RoomPost roomPost = RoomPost.builder()
-                 .user(user)
+                 .studyMate(studyMate)
                  .title(requestDto.getTitle())
                  .body(requestDto.getBody())
                  .postTime(LocalDateTime.now())
@@ -34,9 +34,17 @@ public class RoomPostConverter {
                 .roomBoard(roomBoard)
                 .build();
     }
+
+    //트러블 슈팅 게시판 id 반환 dto
     public static RoomPostResponseDto.toCreateRoomTroublePostIdDTO troublePostIdDto(Long id){
         return RoomPostResponseDto.toCreateRoomTroublePostIdDTO.builder()
                 .troublePostId(id)
+                .build();
+    }
+
+    public static RoomPostResponseDto.toCreateRoomPostIdDTO postIdDto(Long id){
+        return RoomPostResponseDto.toCreateRoomPostIdDTO.builder()
+                .roomPostId(id)
                 .build();
     }
 

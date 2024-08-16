@@ -5,5 +5,5 @@ import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 
 public interface RoomPostCommandService {
-    RoomPostResponseDto.toCreateRoomPostIdDTO createRoomePost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto);
+    RoomPostResponseDto.toCreateRoomPostIdDTO createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto);
 }
