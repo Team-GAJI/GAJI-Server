@@ -63,6 +63,24 @@ public class RecruitResponseDTO {
     public static class CommentListDTO {
         int commentCount;
         List<CommentResponseDTO> commentList;
+
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StudyLikesIdDTO {
+        Long studyLikesId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StudyBookmarkIdDTO {
+        Long studyBookmarkId;
+
     }
 
     @Builder

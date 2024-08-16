@@ -145,4 +145,20 @@ public class Room extends BaseEntity {
         this.bookmarks = 0;
         this.recruitPostTypeEnum = RecruitPostTypeEnum.RECRUITING;
     }
+
+    public void increaseLike() {
+        this.likes++;
+    }
+
+    public void decreaseLike() {
+        this.likes--;
+    }
+
+    public void increaseBookmark() {
+        this.bookmarks++;
+    }
+
+    public void decreaseBookmark() {
+        this.bookmarks--;
+    }
 }
