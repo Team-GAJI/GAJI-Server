@@ -79,6 +79,26 @@ public class RecruitController {
         return BaseResponse.onSuccess(null);
     }
 
+    @PostMapping("/{roomId}/bookmarks")
+    @Operation(summary = "스터디 모집 게시글 북마크 API", description = "스터디 모집 게시글 북마크 누르는 API입니다.")
+    public BaseResponse<RecruitResponseDTO.StudyBookmarkIdDTO> bookmarkStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        RecruitResponseDTO.StudyBookmarkIdDTO responseDTO = recruitCommandService.bookmarkStudy(userId, roomId);
+        return BaseResponse.onSuccess(responseDTO);
+    }
+
+    @DeleteMapping("/{roomId}/bookmarks")
+    @Operation(summary = "스터디 모집 게시글 북마크 취소 API", description = "스터디 모집 게시글 북마크 취소하는 API 입니다.")
+    public BaseResponse unBookmarkStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.")  Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        recruitCommandService.unBookmarkStudy(userId, roomId);
+        return BaseResponse.onSuccess(null);
+    }
+
     @GetMapping("/preview")
     @Operation(summary = "스터디 모집 게시글 미리보기 목록 조회 API", description = "모집 게시글 목록을 조회하는 API 입니다.")
     public BaseResponse<RecruitResponseDTO.PreviewListDTO> getPreviewList(

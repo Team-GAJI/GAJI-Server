@@ -1,24 +1,24 @@
 package gaji.service.domain.roomBoard.entity;
 
-import gaji.service.domain.user.entity.User;
+import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomPostLikes {
+@AllArgsConstructor
+@Builder
+public class RoomTroublePostBookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "study_mate_id")
+    private StudyMate studyMate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private RoomPost roomPost;
+    private RoomTroublePost roomTroublePost;
 }
