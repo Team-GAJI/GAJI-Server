@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum PostErrorStatus implements BaseErrorCodeInterface {
+public enum CommunityPostErrorStatus implements BaseErrorCodeInterface {
 
     _POST_NOT_FOUND(HttpStatus.BAD_REQUEST, "POST_4001", "존재하지 않는 게시글입니다."),
     _INVALID_POST_TYPE(HttpStatus.BAD_REQUEST, "POST_4002", "유효하지 않은 게시글 유형입니다."),

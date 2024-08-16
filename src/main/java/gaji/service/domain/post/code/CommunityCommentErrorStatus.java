@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum CommentErrorStatus implements BaseErrorCodeInterface {
+public enum CommunityCommentErrorStatus implements BaseErrorCodeInterface {
 
     _COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT_4001", "존재하지 않는 댓글입니다."),
     _NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "COMMENT_4031", "해당 댓글에 접근 권한이 없습니다.")

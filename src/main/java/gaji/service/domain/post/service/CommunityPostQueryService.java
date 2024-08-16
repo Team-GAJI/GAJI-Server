@@ -3,14 +3,14 @@ package gaji.service.domain.post.service;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.post.entity.CommnuityPost;
 import org.springframework.data.domain.Slice;
 
 
-public interface PostQueryService {
+public interface CommunityPostQueryService {
 
-    Post findPostByPostId(Long postId);
-    Slice<Post> getPostList(Integer lastPopularityScore,
+    CommnuityPost findPostByPostId(Long postId);
+    Slice<CommnuityPost> getPostList(Integer lastPopularityScore,
                             Long lastPostId,
                             Integer lastLikeCnt,
                             Integer lastHit,
@@ -20,9 +20,9 @@ public interface PostQueryService {
                             PostStatusEnum filter,
                             int page,
                             int size);
-    Slice<Post> searchPostList();
-    Post getPostDetail(Long postId);
-    void validPostOwner(Long userId, Post post);
-    void validExistsPostLikes(Long userId, Post post);
-    void validExistsPostBookmark(Long userId, Post post);
+    Slice<CommnuityPost> searchPostList();
+    CommnuityPost getPostDetail(Long postId);
+    void validPostOwner(Long userId, CommnuityPost post);
+    void validExistsPostLikes(Long userId, CommnuityPost post);
+    void validExistsPostBookmark(Long userId, CommnuityPost post);
 }

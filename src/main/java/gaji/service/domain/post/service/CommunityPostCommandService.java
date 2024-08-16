@@ -1,17 +1,17 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.post.entity.Comment;
-import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.post.entity.CommunityComment;
+import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
 
-public interface PostCommandService {
+public interface CommunityPostCommandService {
 
-    Post uploadPost(Long userId, PostRequestDTO.UploadPostDTO request);
-    Comment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, PostRequestDTO.WriteCommentDTO request);
+    CommnuityPost uploadPost(Long userId, PostRequestDTO.UploadPostDTO request);
+    CommunityComment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, PostRequestDTO.WriteCommentDTO request);
     void hardDeleteComment(Long userId, Long commentId);
-    void hardDeleteCommunityPost(Long postId);
+    void hardDeleteCommunityPost(Long userId, Long postId);
     PostBookmark bookmarkCommunityPost(Long userId, Long postId);
     void cancelbookmarkCommunityPost(Long userId, Long postId);
     PostLikes likeCommunityPost(Long userId, Long postId);

@@ -50,7 +50,7 @@ public class PostResponseDTO {
         private Long userId;
         private String username;
         private String uploadTime;
-        private int viewCnt;
+        private int hit;
         private int popularityScore;
         private List<String> hashtagList = new ArrayList<>();
     }
@@ -72,7 +72,7 @@ public class PostResponseDTO {
         private Long userId;
         private PostTypeEnum type;
         private String createdAt;
-        private int viewCnt;
+        private int hit;
         private int commentCnt;
         private String username;
         private String title;
@@ -81,4 +81,6 @@ public class PostResponseDTO {
         private String body;
         private List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagList = new ArrayList<>();
     }
+
+
 }
