@@ -55,14 +55,11 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     @Override
     @Transactional(readOnly = true)
     public RecruitResponseDTO.PreviewListDTO getPreviewList(
-            CategoryEnum category, PreviewFilter filter, SortType sort, Long value, int pageSize) {
+            CategoryEnum category, PreviewFilter filter, SortType sort, String query, Long value, int pageSize) {
 
         Pageable pageable = PageRequest.of(0, pageSize);
 
-        RecruitResponseDTO.PreviewListDTO previewList =
-                recruitRepository.findByCategoryOrderBySortType(category, filter, sort, value, pageable);
-
-        return previewList;
+        return recruitRepository.findByCategoryOrderBySortType(category, filter, sort, query, value, pageable);
     }
 
     @Override
