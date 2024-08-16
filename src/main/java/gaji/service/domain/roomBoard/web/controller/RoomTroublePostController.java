@@ -1,6 +1,5 @@
 package gaji.service.domain.roomBoard.web.controller;
 
-import gaji.service.domain.enums.PostBookmarkStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.TroublePostComment;
 import gaji.service.domain.roomBoard.service.RoomPostQueryService;
@@ -123,16 +122,28 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess( "댓글이 성공적으로 삭제되었습니다.");
     }
 
-    @PostMapping("/trouble/{roomId}/posts/{postId}/bookmark")
-    @Operation(summary = "스터디룸 트러블슈팅 게시글 북마크 누르기 API")
-    public BaseResponse<PostBookmarkStatus> toggleBookmark(
+    @PostMapping("/trouble/{roomId}/{postId}/bookmark-add")
+    @Operation(summary = "트러블 슈팅 게시글 북마크 추가 API")
+    public BaseResponse<String> addBookmark(
             @RequestHeader("Authorization") String authorization,
-            @PathVariable Long postId,
-            @PathVariable Long roomId
+            @PathVariable Long roomId,
+            @PathVariable Long postId
     ) {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        PostBookmarkStatus status = roomTroublePostCommandService.toggleBookmark(postId, userId, roomId);
-        return BaseResponse.onSuccess(status);
+        roomTroublePostCommandService.addBookmark(postId, userId, roomId);
+        return BaseResponse.onSuccess( "북마크가 성공적으로 업데이트 되었습니다.");
+    }
+
+    @DeleteMapping("/trouble/{roomId}/{postId}/bookmark-remove")
+    @Operation(summary = "트러블 슈팅 게시글 북마크 제거 API")
+    public BaseResponse<String> removeBookmark(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long roomId,
+            @PathVariable Long postId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomTroublePostCommandService.removeBookmark(postId, userId, roomId);
+        return BaseResponse.onSuccess( "북마크가 성공적으로 삭제되었습니다.");
     }
 
     @PostMapping("/comments/{commentId}/replies")
