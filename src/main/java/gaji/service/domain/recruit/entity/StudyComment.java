@@ -60,12 +60,8 @@ public class StudyComment extends BaseEntity {
             this.depth = 0;
             this.commentOrder = room.getCommentCount();
         } else {
-            this.depth = parent.depth + 1;
+            this.depth = 1;
             this.commentOrder = parent.getCommentOrder();
         }
-    }
-
-    public void updateStatus(CommentStatus status) {
-        this.status = status;
     }
 }
