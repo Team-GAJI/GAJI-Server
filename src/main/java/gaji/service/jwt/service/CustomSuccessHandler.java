@@ -10,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JWTUtil jwtUtil;
@@ -75,7 +77,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(tokenResponse));
         response.setStatus(HttpStatus.OK.value());
-        //
+
+        // 토큰 로그로 남기기
+        log.info("accessToken = {}", accessToken);
+        log.info("refreshToken = {}", refreshToken);
 
         // 리다이렉션 URL 생성
         String targetUrl = UriComponentsBuilder.fromUriString("https://genuine-valkyrie-e0010a.netlify.app/")
