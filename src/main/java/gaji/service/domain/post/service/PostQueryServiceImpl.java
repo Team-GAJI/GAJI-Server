@@ -7,7 +7,9 @@ import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.post.repository.PostBookmarkRepository;
 import gaji.service.domain.post.repository.PostJpaRepository;
+import gaji.service.domain.post.repository.PostLikesRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +24,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PostQueryServiceImpl implements PostQueryService {
     private final PostJpaRepository postRepository;
-    private final CategoryService categoryService;
+    private final PostLikesRepository postLikesRepository;
+    private final PostBookmarkRepository postBookmarkRepository;
 
     @Override
     public Slice<Post> getPostList(Integer lastPopularityScore,
@@ -33,8 +36,9 @@ public class PostQueryServiceImpl implements PostQueryService {
                                    Long categoryId,
                                    SortType sortType,
                                    PostStatusEnum postStatus,
+                                   int page,
                                    int size) {
-        PageRequest pageRequest = PageRequest.of(0, size);
+        PageRequest pageRequest = PageRequest.of(page, size);
         return postRepository.findAllFetchJoinWithUser(lastPopularityScore,
                 lastPostId,
                 lastLikeCnt,
@@ -44,6 +48,11 @@ public class PostQueryServiceImpl implements PostQueryService {
                 categoryId,
                 sortType,
                 pageRequest);
+    }
+
+    @Override
+    public Slice<Post> searchPostList() {
+        return null;
     }
 
     @Override
@@ -61,5 +70,26 @@ public class PostQueryServiceImpl implements PostQueryService {
     public Post findPostByPostId(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new RestApiException(PostErrorStatus._POST_NOT_FOUND));
+    }
+
+    @Override
+    public void validPostOwner(Long userId, Post post) {
+        if (!post.getUser().getId().equals(userId)) {
+            throw new RestApiException(PostErrorStatus._NOT_AUTHORIZED);
+        }
+    }
+
+    @Override
+    public void validExistsPostLikes(Long userId, Post post) {
+        if (postLikesRepository.existsByUserIdAndPost(userId, post)) {
+            throw new RestApiException(PostErrorStatus._ALREADY_EXIST_POST_LIKES);
+        }
+    }
+
+    @Override
+    public void validExistsPostBookmark(Long userId, Post post) {
+        if (postBookmarkRepository.existsByUserIdAndPost(userId, post)) {
+            throw new RestApiException(PostErrorStatus._ALREADY_EXIST_POST_BOOKMARK);
+        }
     }
 }

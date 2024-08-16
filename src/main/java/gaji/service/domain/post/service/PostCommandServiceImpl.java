@@ -32,13 +32,14 @@ import java.util.List;
 public class PostCommandServiceImpl implements PostCommandService {
 
     private final PostJpaRepository postRepository;
+    private final PostBookmarkRepository postBookmarkRepository;
+    private final PostLikesRepository postLikesRepository;
     private final UserQueryService userQueryService;
     private final PostQueryService postQueryService;
     private final CommentService commentService;
     private final HashtagService hashtagService;
     private final CategoryService categoryService;
-    private final PostBookmarkRepository postBookmarkRepository;
-    private final PostLikesRepository postLikesRepository;
+
 
     @Override
     public Post uploadPost(Long userId, PostRequestDTO.UploadPostDTO request) {
@@ -73,22 +74,39 @@ public class PostCommandServiceImpl implements PostCommandService {
         User findUser = userQueryService.findUserById(userId);
         Post findPost = postQueryService.findPostByPostId(postId);
 
-        Comment newComment = createCommentByCheckParentCommentIdIsNull(parentCommentId, request, findUser, findPost);
-        findPost.increaseCommentCnt();
-        return commentService.saveNewComment(newComment);
+        // 저장
+        Comment newComment = commentService.saveNewComment(
+                commentService.createCommentByCheckParentCommentIdIsNull(parentCommentId, request, findUser, findPost)
+        );
+
+        // 게시글의 댓글 수 증가
+        newComment.getPost().increaseCommentCnt();
+        return newComment;
     }
+
     @Override
     public void hardDeleteComment(Long userId, Long commentId) {
         Comment findComment = commentService.findByCommentId(commentId);
+
+        // 검증
         commentService.validCommentOwner(userId, findComment);
+
+        // 삭제
         commentService.hardDeleteComment(findComment);
+
+        // 게시글의 댓글 수 감소
         findComment.getPost().decreaseCommentCnt(); // TODO: 지연 로딩으로 쿼리 1개 더 날라감;
     }
 
     // TODO: 게시글 파일도 함께 삭제
     @Override
-    public void hardDeleteCommunityPost(Long postId) {
+    public void hardDeleteCommunityPost(Long userId, Long postId) {
         Post findPost = postQueryService.findPostByPostId(postId);
+
+        // 검증
+        postQueryService.validPostOwner(userId, findPost);
+
+        // 삭제
         hashtagService.deleteAllByEntityIdAndType(findPost.getId(), findPost.getType());
         postRepository.delete(findPost);
     }
@@ -97,10 +115,15 @@ public class PostCommandServiceImpl implements PostCommandService {
     public PostBookmark bookmarkCommunityPost(Long userId, Long postId) {
         User findUser = userQueryService.findUserById(userId);
         Post findPost = postQueryService.findPostByPostId(postId);
-        // TODO: 이미 북마크한 post인지 검증
-        PostBookmark newPostBookmark = postBookmarkRepository.save(PostConverter.toPostBookmark(findUser, findPost));
-        findPost.increaseBookmarkCnt();
 
+        // 검증
+        postQueryService.validExistsPostBookmark(userId, findPost);
+
+        // 저장
+        PostBookmark newPostBookmark = postBookmarkRepository.save(PostConverter.toPostBookmark(findUser, findPost));
+
+        // 게시글 북마크 수 증가
+        newPostBookmark.getPost().increaseBookmarkCnt();
         return newPostBookmark;
     }
 
@@ -108,7 +131,14 @@ public class PostCommandServiceImpl implements PostCommandService {
     public void cancelbookmarkCommunityPost(Long userId, Long postId) {
         User findUser = userQueryService.findUserById(userId);
         Post findPost = postQueryService.findPostByPostId(postId);
+
+        // 검증
+        postQueryService.validPostOwner(findUser.getId(), findPost);
+
+        // 삭제
         postBookmarkRepository.deleteByUserAndPost(findUser, findPost);
+
+        // 게시글 북마크 수 감소
         findPost.decreaseBookmarkCnt();
     }
 
@@ -116,11 +146,16 @@ public class PostCommandServiceImpl implements PostCommandService {
     public PostLikes likeCommunityPost(Long userId, Long postId) {
         User findUser = userQueryService.findUserById(userId);
         Post findPost = postQueryService.findPostByPostId(postId);
-        // TODO: 이미 좋아요한 post인지 검증
+
+        // 검증
+        postQueryService.validExistsPostLikes(userId, findPost);
+
+        // 저장
         PostLikes newPostLikes = postLikesRepository.save(PostConverter.toPostLikes(findUser, findPost));
+
+        // 좋아요 수, 인기점수 증가
         findPost.increaseLikeCnt();
         findPost.increasePopularityScoreByLike();
-
         return newPostLikes;
     }
 
@@ -128,17 +163,15 @@ public class PostCommandServiceImpl implements PostCommandService {
     public void cancelLikeCommunityPost(Long userId, Long postId) {
         User findUser = userQueryService.findUserById(userId);
         Post findPost = postQueryService.findPostByPostId(postId);
+
+        // 검증
+        postQueryService.validPostOwner(findUser.getId(), findPost);
+
+        // 삭제
         postLikesRepository.deleteByUserAndPost(findUser, findPost);
+
+        // 좋아요 수, 인기점수 감소
         findPost.decreaseLikeCnt();
         findPost.decreasePopularityScoreByLike();
-    }
-
-    private Comment createCommentByCheckParentCommentIdIsNull(Long parentCommentId, PostRequestDTO.WriteCommentDTO request, User findUser, Post findPost) {
-        if (parentCommentId != null) {
-            Comment parentComment = commentService.findByCommentId(parentCommentId);
-            return PostConverter.toComment(request, findUser, findPost, parentComment);
-        } else {
-            return PostConverter.toComment(request, findUser, findPost, null);
-        }
     }
 }
