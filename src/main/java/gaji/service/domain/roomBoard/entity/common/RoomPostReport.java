@@ -1,5 +1,6 @@
-package gaji.service.domain.roomBoard.entity;
+package gaji.service.domain.roomBoard.entity.common;
 
+import gaji.service.domain.roomBoard.entity.RoomPost;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.ReportPostTypeEnum;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package gaji.service.domain.recruit.repository;
+package gaji.service.domain.common.repository;
 
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.repository.SelectCategoryQueryDslRepository;

@@ -13,7 +13,10 @@ import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.entity.StudyMate;
+import gaji.service.global.converter.DateConverter;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +46,7 @@ public class RecruitConverter {
                 .build();
     }
 
-/*    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
+    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
         List<CategoryEnum> categoryList = new ArrayList<>();
         for (SelectCategory selectCategory : selectCategoryList) {
             Category category = selectCategory.getCategory();
@@ -51,7 +54,7 @@ public class RecruitConverter {
         }
 
         return categoryList;
-    }*/
+    }
 
     public static Material toMaterial(String materialPath, Room room) {
         return Material.builder()
@@ -138,4 +141,20 @@ public class RecruitConverter {
                 .build();
     }
 
+    public static RecruitResponseDTO.PreviewDTO toPreviewDTO(Room room) {
+        return RecruitResponseDTO.PreviewDTO.builder()
+                .imageUrl(room.getThumbnailUrl())
+                .recruitStatus(room.getRecruitPostTypeEnum())
+                .applicant(room.getStudyApplicantList().size())
+                .name(room.getName())
+                .deadLine(ChronoUnit.DAYS.between(room.getRecruitEndDay(), LocalDate.now()))
+                .description(room.getDescription())
+                .createdAt(DateConverter.convertToRelativeTimeFormat(room.getCreatedAt()))
+                .recruitCount(room.getPeopleMaximum())
+                .build();
+    }
+
+    public static List<RecruitResponseDTO.PreviewDTO> toPreviewDTOLIST(List<Room> roomList) {
+        return roomList.stream().map(RecruitConverter::toPreviewDTO).collect(Collectors.toList());
+    }
 }

@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/studyRooms")
+@RequestMapping("/api/study-rooms")
 public class RoomMainController {
 
     private final RoomCommandService roomCommandService;
