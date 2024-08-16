@@ -4,6 +4,7 @@ import gaji.service.domain.roomBoard.entity.RoomInfoPost;
 import gaji.service.domain.roomBoard.entity.common.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost;
 import gaji.service.domain.roomBoard.entity.RoomTroublePost;
+import gaji.service.domain.roomBoard.entity.TroublePostComment;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
@@ -55,4 +56,9 @@ public class RoomPostConverter {
     }
 
 
+    public static RoomPostResponseDto.toWriteCommentDto toWriteCommentDto(TroublePostComment newComment) {
+        return RoomPostResponseDto.toWriteCommentDto.builder()
+                .commentId(newComment.getId())
+                .build();
+    }
 }
