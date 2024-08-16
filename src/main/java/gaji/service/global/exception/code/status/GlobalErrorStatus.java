@@ -35,6 +35,9 @@ public enum GlobalErrorStatus implements BaseErrorCodeInterface {
     // 정렬 기준 Enum 에러
     _SORT_TYPE_NOT_VALID(HttpStatus.BAD_REQUEST, "SORT_4001", "유효하지 않은 정렬 기준입니다."),
 
+    // 필터 에러
+    _FILTER_NOT_VALID(HttpStatus.BAD_REQUEST, "FILTER_4001", "잘못된 필터입니다."),
+
     // For test
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "예외처리 테스트입니다."),
     ;

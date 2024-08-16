@@ -1,6 +1,7 @@
 package gaji.service.domain.user.web.controller;
 
 import com.querydsl.core.Tuple;
+import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.RoomTypeEnum;
 import gaji.service.domain.user.converter.UserConverter;
 import gaji.service.domain.user.entity.User;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/users")
@@ -66,5 +68,21 @@ public class UserRestController {
         return BaseResponse.onSuccess(UserConverter.toGetRoomListDTO(userRoomList));
     }
 
+    @GetMapping("/{userId}")
+    public BaseResponse<UserResponseDTO.GetUserDetailDTO> getUserDetail(@RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+                                                                        @PathVariable("userId") Long userId) {
+
+        User user = userQueryService.getUserDetail(userId);
+        return BaseResponse.onSuccess(UserConverter.toGetUserDetailDTO(user));
+    }
+
+    @GetMapping("/posts/{userId}")
+    public BaseResponse<UserResponseDTO.GetPostListDTO> getUserPostList(@PathVariable Long userId,
+                                                                        @RequestParam(value = "cursorDate",required = false) LocalDateTime cursorDateTime,
+                                                                        @RequestParam(value = "type", required = false) PostTypeEnum type,
+                                                                        @RequestParam(defaultValue = "10") int size) {
+        Slice<Tuple> userPostList = userQueryService.getUserPostList(userId, cursorDateTime, type, size);
+        return BaseResponse.onSuccess(UserConverter.toGetPostListDTO(userPostList, type));
+    }
 }
 
