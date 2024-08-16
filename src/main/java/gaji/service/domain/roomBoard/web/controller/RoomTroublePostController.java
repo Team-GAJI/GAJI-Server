@@ -1,7 +1,7 @@
 package gaji.service.domain.roomBoard.web.controller;
 
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
-import gaji.service.domain.roomBoard.entity.TroublePostComment;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
 import gaji.service.domain.roomBoard.service.RoomPostQueryService;
 import gaji.service.domain.roomBoard.service.RoomTroublePostCommandService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;

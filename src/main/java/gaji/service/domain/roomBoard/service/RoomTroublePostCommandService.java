@@ -1,10 +1,9 @@
 package gaji.service.domain.roomBoard.service;
 
-import gaji.service.domain.roomBoard.entity.RoomTroublePost;
-import gaji.service.domain.roomBoard.entity.TroublePostComment;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePost;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
-import jakarta.transaction.Transactional;
 
 public interface RoomTroublePostCommandService {
     TroublePostComment writeCommentOnTroublePost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request);
