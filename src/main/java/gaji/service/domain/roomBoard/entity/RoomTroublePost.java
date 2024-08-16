@@ -1,6 +1,7 @@
 package gaji.service.domain.roomBoard.entity;
 
 import gaji.service.domain.common.entity.BaseEntity;
+import gaji.service.domain.roomBoard.entity.common.RoomBoard;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +19,7 @@ public class RoomTroublePost extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
     private String body;
     private int viewCount;

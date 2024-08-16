@@ -1,0 +1,8 @@
+package gaji.service.domain.roomBoard.service;
+
+import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
+import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
+
+public interface RoomInfoPostCommandService {
+    RoomPostResponseDto.toCreateRoomInfoPostIdDTO createRoomInfoPostIdDTO(Long roomId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto);
+}

@@ -28,11 +28,12 @@ public class RoomTroublePostController {
 
     @PostMapping("/trouble/{roomId}")
     @Operation(summary = "스터디룸 트러블슈팅 게시판 등록 API")
-    public BaseResponse<RoomPostResponseDto.toCreateRoomTroublePostIdDTO> AssignmentController(
+    public BaseResponse<RoomPostResponseDto.toCreateRoomTroublePostIdDTO> TroublePostController(
             @RequestHeader("Authorization") String authorization,
             @RequestBody @Valid RoomPostRequestDto.RoomTroubloePostDto requestDto,
             @PathVariable Long roomId
     ){
+
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         RoomPostResponseDto.toCreateRoomTroublePostIdDTO roomTroublePostIdDTO = roomTroublePostCommandService.createRoomTroublePost(roomId, userId, requestDto);
         return BaseResponse.onSuccess(roomTroublePostIdDTO);
