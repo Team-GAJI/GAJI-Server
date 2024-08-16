@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PostResponseDTO {
+public class CommunityPostResponseDTO {
 
     @Builder
     @Getter
@@ -48,7 +48,7 @@ public class PostResponseDTO {
         private String title;
         private String body;
         private Long userId;
-        private String username;
+        private String userNickname;
         private String uploadTime;
         private int hit;
         private int popularityScore;
@@ -74,7 +74,7 @@ public class PostResponseDTO {
         private String createdAt;
         private int hit;
         private int commentCnt;
-        private String username;
+        private String userNickname;
         private String title;
         private boolean isBookMarked;
         private boolean isLiked;

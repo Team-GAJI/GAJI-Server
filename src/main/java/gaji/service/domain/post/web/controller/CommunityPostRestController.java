@@ -14,7 +14,7 @@ import gaji.service.domain.post.service.CommunityPostCommandService;
 import gaji.service.domain.post.service.CommunityPostQueryService;
 import gaji.service.domain.post.web.dto.CommunityPostCommentResponseDTO;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
-import gaji.service.domain.post.web.dto.PostResponseDTO;
+import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,8 +40,8 @@ public class CommunityPostRestController {
 
     @PostMapping
     @Operation(summary = "커뮤니티 게시글 업로드 API", description = "커뮤니티의 게시글을 업로드하는 API입니다. 게시글 유형과 제목, 본문 내용을 검증합니다.")
-    public BaseResponse<PostResponseDTO.UploadPostDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
-                                                                  @RequestBody @Valid PostRequestDTO.UploadPostDTO request) {
+    public BaseResponse<CommunityPostResponseDTO.UploadPostDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                           @RequestBody @Valid PostRequestDTO.UploadPostDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         CommnuityPost newPost = communityPostCommandService.uploadPost(userId, request);
         return BaseResponse.onSuccess(CommunityPostConverter.toUploadPostDTO(newPost));
@@ -64,8 +64,8 @@ public class CommunityPostRestController {
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
     })
-    public BaseResponse<PostResponseDTO.PostDetailDTO> getPostDetail(@Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
-                                                                     @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+    public BaseResponse<CommunityPostResponseDTO.PostDetailDTO> getPostDetail(@Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
+                                                                              @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
         Long userId = (authorizationHeader == null) ? null : tokenProviderService.getUserIdFromToken(authorizationHeader);
         CommnuityPost post = communityPostQueryService.getPostDetail(postId);
         return BaseResponse.onSuccess(communityPostConverter.toPostDetailDTO(post, userId));
@@ -83,23 +83,23 @@ public class CommunityPostRestController {
             @Parameter(name = "sortType", description = "정렬 유형(hot, recent, like, hit)"),
             @Parameter(name = "filter", description = "게시글의 상태(모집중, 모집완료, 미완료질문, 해결완료)"),
     })
-    public BaseResponse<PostResponseDTO.PostPreviewListDTO> getPostPreivewList(@Min(value = 0, message = "lastPopularityScore는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastPopularityScore,
-                                                                               @Min(value = 1, message = "lastPostId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long lastPostId,
-                                                                               @Min(value = 0, message = "lastLikeCnt는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastLikeCnt,
-                                                                               @Min(value = 0, message = "lastHit은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastHit,
-                                                                               @RequestParam(required = false) PostTypeEnum postType,
-                                                                               @RequestParam(required = false) Long categoryId,
-                                                                               @RequestParam(required = false, defaultValue = "recent") SortType sortType,
-                                                                               @RequestParam(required = false) PostStatusEnum filter,
-                                                                               @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
-                                                                               @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
+    public BaseResponse<CommunityPostResponseDTO.PostPreviewListDTO> getPostPreivewList(@Min(value = 0, message = "lastPopularityScore는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastPopularityScore,
+                                                                                        @Min(value = 1, message = "lastPostId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long lastPostId,
+                                                                                        @Min(value = 0, message = "lastLikeCnt는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastLikeCnt,
+                                                                                        @Min(value = 0, message = "lastHit은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastHit,
+                                                                                        @RequestParam(required = false) PostTypeEnum postType,
+                                                                                        @RequestParam(required = false) Long categoryId,
+                                                                                        @RequestParam(required = false, defaultValue = "recent") SortType sortType,
+                                                                                        @RequestParam(required = false) PostStatusEnum filter,
+                                                                                        @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
+                                                                                        @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
         Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, categoryId, sortType, filter, page, size);
         return BaseResponse.onSuccess(communityPostConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
     }
 
     @GetMapping("/search")
-    public BaseResponse<PostResponseDTO.PostPreviewListDTO> searchCommunityPostList() {
+    public BaseResponse<CommunityPostResponseDTO.PostPreviewListDTO> searchCommunityPostList() {
         return null;
     }
 
@@ -147,8 +147,8 @@ public class CommunityPostRestController {
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
     })
-    public BaseResponse<PostResponseDTO.PostBookmarkIdDTO> bookmarkCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
-                                                                                 @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
+    public BaseResponse<CommunityPostResponseDTO.PostBookmarkIdDTO> bookmarkCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                                          @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         PostBookmark newPostBookmark = communityPostCommandService.bookmarkCommunityPost(userId, postId);
 
@@ -172,8 +172,8 @@ public class CommunityPostRestController {
     @Parameters({
             @Parameter(name = "postId", description = "게시글 id"),
     })
-    public BaseResponse<PostResponseDTO.PostLikesIdDTO> likeCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
-                                                                          @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
+    public BaseResponse<CommunityPostResponseDTO.PostLikesIdDTO> likeCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                                   @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         PostLikes newPostLikes = communityPostCommandService.likeCommunityPost(userId, postId);
         return BaseResponse.onSuccess(CommunityPostConverter.toPostLikesIdDTO(newPostLikes));
