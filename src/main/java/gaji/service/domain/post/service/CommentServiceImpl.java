@@ -1,19 +1,18 @@
 package gaji.service.domain.post.service;
 
 import gaji.service.domain.post.code.CommentErrorStatus;
-import gaji.service.domain.post.code.PostErrorStatus;
+import gaji.service.domain.post.converter.PostConverter;
 import gaji.service.domain.post.entity.Comment;
 import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.post.repository.CommentJpaRepository;
-import gaji.service.domain.user.service.UserQueryService;
+import gaji.service.domain.post.web.dto.PostRequestDTO;
+import gaji.service.domain.user.entity.User;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +25,17 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public Comment saveNewComment(Comment newComment) {
         return commentRepository.save(newComment);
+    }
+
+    @Override
+    @Transactional
+    public Comment createCommentByCheckParentCommentIdIsNull(Long parentCommentId, PostRequestDTO.WriteCommentDTO request, User findUser, Post findPost) {
+        if (parentCommentId != null) {
+            Comment parentComment = findByCommentId(parentCommentId);
+            return PostConverter.toComment(request, findUser, findPost, parentComment);
+        } else {
+            return PostConverter.toComment(request, findUser, findPost, null);
+        }
     }
 
     @Override
@@ -50,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void validCommentOwner(Long userId, Comment comment) {
         if (!comment.getUser().getId().equals(userId)) {
-            throw new RestApiException(CommentErrorStatus._NOT_OWNER);
+            throw new RestApiException(CommentErrorStatus._NOT_AUTHORIZED);
         }
     }
 }

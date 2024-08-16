@@ -18,6 +18,11 @@ public interface PostQueryService {
                             Long categoryId,
                             SortType sortType,
                             PostStatusEnum filter,
+                            int page,
                             int size);
+    Slice<Post> searchPostList();
     Post getPostDetail(Long postId);
+    void validPostOwner(Long userId, Post post);
+    void validExistsPostLikes(Long userId, Post post);
+    void validExistsPostBookmark(Long userId, Post post);
 }
