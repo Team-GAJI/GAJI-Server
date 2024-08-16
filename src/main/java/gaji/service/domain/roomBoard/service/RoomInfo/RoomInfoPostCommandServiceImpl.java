@@ -48,9 +48,6 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
                     return roomBoardRepository.save(newRoomBoard);
                 });
 
-//        RoomTro roomPost = RoomPostConverter.toRoomPost(requestDto, user, roomBoard);
-//        roomPost = roomPostRepository.save(roomPost);
-
 
         RoomInfoPost roomInfoPost = RoomPostConverter.toRoomInfoPost(requestDto, studyMate,roomBoard);
         roomInfoPostRepository.save(roomInfoPost);
