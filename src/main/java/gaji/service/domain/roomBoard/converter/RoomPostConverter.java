@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 public class RoomPostConverter {
 
-    public static RoomPost toRoomPost(RoomPostRequestDto.RoomPostDto requestDto, User user, RoomBoard roomBoard) {
+    public static RoomPost toRoomPost(RoomPostRequestDto.RoomPostDto requestDto, StudyMate studyMate, RoomBoard roomBoard) {
          RoomPost roomPost = RoomPost.builder()
                  .user(user)
                  .title(requestDto.getTitle())

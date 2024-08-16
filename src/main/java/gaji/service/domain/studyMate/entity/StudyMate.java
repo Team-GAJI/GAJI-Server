@@ -3,6 +3,7 @@ package gaji.service.domain.studyMate.entity;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomNotice;
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostBookmark;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostLike;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
@@ -38,20 +39,26 @@ public class StudyMate {
     @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
     private List<RoomNotice> roomNoticeList = new ArrayList<>();
 
+
+    //  트러블 슈팅
     @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
     private List<RoomTroublePostLike> roomTroublePostLikeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
     private List<RoomTroublePostBookmark> roomTroublePostBookmarkList = new ArrayList<>();
 
-
-
     @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
     private List<RoomTroublePost> roomTroublePostList = new ArrayList<>();
 
 
+    //정보나눔
     @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
     private List<RoomInfoPost> roomInfoPostList = new ArrayList<>();
+
+
+    //게시글
+    @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
+    private List<RoomPost> roomPostList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;
