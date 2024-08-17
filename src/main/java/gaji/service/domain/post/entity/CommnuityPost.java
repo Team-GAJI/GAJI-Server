@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post extends BaseEntity {
+public class CommnuityPost extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,7 +35,7 @@ public class Post extends BaseEntity {
     private List<PostLikes> postLikesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> commentList = new ArrayList<>();
+    private List<CommunityComment> commentList = new ArrayList<>();
 
     @Column(nullable = false)
     private String title;
@@ -59,7 +59,7 @@ public class Post extends BaseEntity {
     private PostStatusEnum status;
 
     @Builder
-    public Post(User user, String title, String body, String thumbnailUrl, PostTypeEnum type, PostStatusEnum status) {
+    public CommnuityPost(User user, String title, String body, String thumbnailUrl, PostTypeEnum type, PostStatusEnum status) {
         this.user = user;
         this.title = title;
         this.body = body;
@@ -79,8 +79,8 @@ public class Post extends BaseEntity {
         this.popularityScore = 0;
     }
 
-    public String settingDefaultThumbnailUrl() {
-        return this.thumbnailUrl = "가지 로고 url";
+    public static String getDefaultThumbnailUrl() {
+        return "가지 로고 url";
     }
 
     public int getCommentGroupNum() {

@@ -4,12 +4,11 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -20,18 +19,18 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static gaji.service.domain.post.entity.QPost.post;
+import static gaji.service.domain.post.entity.QCommnuityPost.commnuityPost;
 import static gaji.service.domain.user.entity.QUser.user;
 
 
 @Repository
 @RequiredArgsConstructor
-public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
+public class CommunityPostQueryDslRepositoryImpl implements CommunityPostQueryDslRepository {
     private final JPAQueryFactory jpaQueryFactory;
     private final CategoryService categoryService;
 
     @Override
-    public Slice<Post> findAllFetchJoinWithUser(Integer lastPopularityScore,
+    public Slice<CommnuityPost> findAllFetchJoinWithUser(Integer lastPopularityScore,
                                                 Long lastPostId,
                                                 Integer lastLikeCnt,
                                                 Integer lastHit,
@@ -42,9 +41,9 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
                                                 Pageable pageable) {
         List<Long> entityIdList = (categoryId != null) ? getEntityIdListByCategoryIdAndPostType(categoryId, postType) : null;
 
-        List<Post> postList = jpaQueryFactory.
-                selectFrom(post)
-                .leftJoin(post.user, user)
+        List<CommnuityPost> postList = jpaQueryFactory.
+                selectFrom(commnuityPost)
+                .leftJoin(commnuityPost.user, user)
                 .fetchJoin()
                 .where(
                         ltPopularityScore(lastPopularityScore),
@@ -66,9 +65,9 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
     }
 
     @Override
-    public Post findByIdFetchJoinWithUser(Long postId) {
-        return jpaQueryFactory.selectFrom(post)
-                .leftJoin(post.user, user)
+    public CommnuityPost findByIdFetchJoinWithUser(Long postId) {
+        return jpaQueryFactory.selectFrom(commnuityPost)
+                .leftJoin(commnuityPost.user, user)
                 .where(
                         postIdEq(postId)
                 )
@@ -90,42 +89,43 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
     }
 
     private BooleanExpression postIdEq(Long postId) {
-        return post.id.eq(postId);
+        return commnuityPost.id.eq(postId);
     }
 
     private BooleanExpression postTypeEq(PostTypeEnum postTypeCond) {
-        return (postTypeCond != null) ? post.type.eq(postTypeCond) : null;
+        return (postTypeCond != null) ? commnuityPost.type.eq(postTypeCond) : null;
     }
 
     private BooleanExpression postStatusEq(PostStatusEnum postStatusCond) {
-        return (postStatusCond != null) ? post.status.eq(postStatusCond) : null;
-    }
-
-    private BooleanExpression categoryEq(PostStatusEnum postStatusCond) {
-        return (postStatusCond != null) ? post.status.eq(postStatusCond) : null;
+        return (postStatusCond != null) ? commnuityPost.status.eq(postStatusCond) : null;
     }
 
     private BooleanExpression ltPopularityScore(Integer popularityScore) {
-        return (popularityScore != null) ? post.popularityScore.lt(popularityScore) : null;
+        return (popularityScore != null) ? commnuityPost.popularityScore.lt(popularityScore) : null;
     }
 
     private BooleanExpression ltPostId(Long lastPostId) {
-        return (lastPostId != null) ? post.id.lt(lastPostId) : null;
+        return (lastPostId != null) ? commnuityPost.id.lt(lastPostId) : null;
     }
 
     private BooleanExpression ltLikeCnt(Integer lastLikeCnt) {
-        return (lastLikeCnt != null) ? post.likeCnt.lt(lastLikeCnt) : null;
+        return (lastLikeCnt != null) ? commnuityPost.likeCnt.lt(lastLikeCnt) : null;
     }
 
     private BooleanExpression postIdIn(List<Long> postIdList) {
-        return (postIdList != null) ? post.id.in(postIdList) : null;
+        return (postIdList != null) ? commnuityPost.id.in(postIdList) : null;
     }
 
     private BooleanExpression ltHit(Integer lastHit) {
-        return (lastHit != null) ? post.hit.lt(lastHit) : null;
+        return (lastHit != null) ? commnuityPost.hit.lt(lastHit) : null;
     }
 
-    private <T> Slice<T> checkLastPage(Pageable pageable, List<T> postList) {
+    private BooleanExpression searchKeyword(String keyword) {
+        return (keyword != null) ? commnuityPost.title.containsIgnoreCase(keyword)
+                : null;
+    }
+
+    private Slice<CommnuityPost> checkLastPage(Pageable pageable, List<CommnuityPost> postList) {
         boolean hasNext = false;
 
         // (조회한 결과 개수 > 요청한 페이지 사이즈) 이면 뒤에 데이터가 더 존재함
@@ -137,14 +137,11 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
     }
 
     private OrderSpecifier orderBySortType(SortType sortTypeCond) {
-        return (sortTypeCond == SortType.HOT) ?
-                post.popularityScore.desc() // HOT: 인기점수(popularityScore) 내림차순
-                :
-                (sortTypeCond == SortType.LIKE) ?
-                post.createdAt.desc() // LIKE: 좋아요 내림차순
-                :
-                (sortTypeCond == SortType.HIT) ?
-                post.hit.desc() // HIT: 조회수 내림차순
-                : post.createdAt.desc(); // null or RECENT: 최신순(생성일자 내림차순)
+        return switch (sortTypeCond) {
+            case HOT -> commnuityPost.popularityScore.desc(); // HOT: 인기점수 내림차순
+            case LIKE -> commnuityPost.createdAt.desc(); // LIKE: 좋아요 내림차순
+            case HIT -> commnuityPost.hit.desc(); // HIT: 조회수 내림차순
+            default -> commnuityPost.createdAt.desc(); // null or RECENT: 최신순(생성일자 내림차순)
+        };
     }
 }

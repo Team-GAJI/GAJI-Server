@@ -9,15 +9,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum PostErrorStatus implements BaseErrorCodeInterface {
+public enum CommunityCommentErrorStatus implements BaseErrorCodeInterface {
 
-    _POST_NOT_FOUND(HttpStatus.BAD_REQUEST, "POST_4001", "존재하지 않는 게시글입니다."),
-    _INVALID_POST_TYPE(HttpStatus.BAD_REQUEST, "POST_4002", "유효하지 않은 게시글 유형입니다."),
-    _INVALID_POST_STATUS(HttpStatus.BAD_REQUEST, "POST_4003", "유효하지 않은 게시글 상태값입니다."),
-
-
-    _COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "POST_4004", "존재하지 않는 댓글입니다."),
-
+    _COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT_4001", "존재하지 않는 댓글입니다."),
+    _NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "COMMENT_4031", "해당 댓글에 접근 권한이 없습니다.")
     ;
 
     private final HttpStatus httpStatus;
@@ -27,7 +22,7 @@ public enum PostErrorStatus implements BaseErrorCodeInterface {
 
     @Override
     public BaseCodeDto getErrorCode() {
-        return gaji.service.global.exception.code.BaseCodeDto.builder()
+        return BaseCodeDto.builder()
                 .httpStatus(httpStatus)
                 .isSuccess(isSuccess)
                 .code(code)
