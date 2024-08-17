@@ -90,4 +90,28 @@ public class RoomPostController {
         roomPostCommandService.deleteComment(commentId, userId);
         return BaseResponse.onSuccess( "댓글이 성공적으로 삭제되었습니다.");
     }
+
+    @PostMapping("/post/{roomId}/posts/{postId}/like")
+    @Operation(summary = "스터디룸 게시글 좋아요 API")
+    public BaseResponse<String> postLike(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long postId,
+            @PathVariable Long roomId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomPostCommandService.addLike(postId, userId, roomId);
+        return BaseResponse.onSuccess("LIKE");
+    }
+
+    @DeleteMapping("/post/{roomId}/posts/{postId}/unlike")
+    @Operation(summary = "스터디룸 게시글 좋아요 취소 API")
+    public BaseResponse<String> postUnlike(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long postId,
+            @PathVariable Long roomId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomPostCommandService.removeLike(postId, userId, roomId);
+        return BaseResponse.onSuccess("UNLIKE");
+    }
 }

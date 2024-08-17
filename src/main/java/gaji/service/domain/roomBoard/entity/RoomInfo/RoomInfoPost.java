@@ -1,11 +1,14 @@
 package gaji.service.domain.roomBoard.entity.RoomInfo;
 
 import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostLike;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +35,9 @@ public class RoomInfoPost {
     @JoinColumn(name = "study_mate_id")
     private StudyMate studyMate;
 
+    @OneToMany(mappedBy = "roomInfoPost", cascade = CascadeType.ALL)
+    private List<RoomInfoPostLikes> roomInfoPostLikesList = new ArrayList<>();
+
     @PrePersist
     public void prePersist() {
         this.viewCount = 0;
@@ -47,4 +53,16 @@ public class RoomInfoPost {
         this.title = title;
         this.body = body;
     }
+
+    public void addLike(RoomInfoPostLikes like) {
+        this.roomInfoPostLikesList.add(like);
+        this.likeCount++;
+    }
+
+    public void removeLike(RoomInfoPostLikes like) {
+        this.roomInfoPostLikesList.remove(like);
+        this.likeCount = Math.max(0, this.likeCount - 1);
+
+    }
+
 }

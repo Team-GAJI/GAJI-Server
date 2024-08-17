@@ -8,8 +8,10 @@ import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPostLikes;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.PostCommentRepository;
+import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostLikesRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
@@ -23,6 +25,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -35,6 +39,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final StudyMateQueryService studyMateQueryService;
     private final PostCommentRepository postCommentRepository;
     private final RoomPostQueryService roomPostQueryService;
+    private final RoomPostLikesRepository roomPostLikesRepository;
 
     @Override
     public RoomPostResponseDto.toCreateRoomPostIdDTO createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
@@ -139,5 +144,42 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
             // 댓글을 삭제하면 연관된 모든 답글도 자동으로 삭제됩니다.
             postCommentRepository.delete(comment);
         }
+
+    @Override
+    public void addLike(Long postId, Long userId, Long roomId) {
+        RoomPost post = roomPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        Optional<RoomPostLikes> likeOptional = roomPostLikesRepository
+                .findByRoomPostAndStudyMate(post, studyMate)
+                ;
+
+        if (likeOptional.isPresent()) {
+            throw new RestApiException(RoomPostErrorStatus._POST_ALREADY_LIKED);
+        }
+
+        RoomPostLikes newLike = RoomPostLikes.builder()
+                .roomPost(post)
+                .studyMate(studyMate)
+                .build();
+
+        post.addLike(newLike);
+        roomPostLikesRepository.save(newLike);
+    }
+
+    @Override
+    public void removeLike(Long postId, Long userId, Long roomId) {
+        RoomPost post = roomPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        RoomPostLikes like = roomPostLikesRepository
+                .findByRoomPostAndStudyMate(post, studyMate)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus. _POST_LIKE_NOT_FOUND));
+
+        post.removeLike(like);
+        roomPostLikesRepository.delete(like);
+    }
 
 }

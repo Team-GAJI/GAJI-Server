@@ -1,6 +1,7 @@
 package gaji.service.domain.roomBoard.entity.RoomPost;
 
 import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostLike;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -70,5 +71,16 @@ public class RoomPost {
     public void update(String title, String body) {
         this.title = title;
         this.body = body;
+    }
+
+    public void addLike(RoomPostLikes like) {
+        this.roomPostLikesList.add(like);
+        this.likeCount++;
+    }
+
+    public void removeLike(RoomPostLikes like) {
+        this.roomPostLikesList.remove(like);
+        this.likeCount = Math.max(0, this.likeCount - 1);
+
     }
 }

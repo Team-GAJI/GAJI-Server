@@ -52,11 +52,6 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<StudyMate> studyMateList;
 
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<RoomPostLikes> roomPostLikesList = new ArrayList<>();
-
-
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<RoomPostBookmark> roomPostBookmarkList = new ArrayList<>();
 
