@@ -38,4 +38,13 @@ public class RoomInfoPost {
         this.likeCount = 0;
         this.bookmarkCount = 0;
     }
+
+    public boolean isAuthor(Long userId){
+        return this.studyMate.getUser().getId().equals(userId);
+    }
+
+    public void update(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
 }

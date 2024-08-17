@@ -29,4 +29,16 @@ public class RoomInfoPostController {
         RoomPostResponseDto.toCreateRoomInfoPostIdDTO roomInfoPostIdDTO = roomInfoPostCommandService.createRoomInfoPostIdDTO(roomId, userId, requestDto);
         return BaseResponse.onSuccess(roomInfoPostIdDTO);
     }
+
+    @PutMapping("/info/{postId}")
+    @Operation(summary = "스터디룸 정보나눔 게시글 업데이트 API")
+    public BaseResponse<String> updatePost(
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody RoomPostRequestDto.RoomInfoPostDto requestDto,
+            @PathVariable Long postId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomInfoPostCommandService.updateInfoPost(postId, userId,requestDto);
+        return BaseResponse.onSuccess( "게시글이 성공적으로 업데이트되었습니다.");
+    }
 }

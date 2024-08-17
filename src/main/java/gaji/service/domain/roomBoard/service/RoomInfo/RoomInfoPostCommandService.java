@@ -5,4 +5,6 @@ import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 
 public interface RoomInfoPostCommandService {
     RoomPostResponseDto.toCreateRoomInfoPostIdDTO createRoomInfoPostIdDTO(Long roomId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto);
+
+    void updateInfoPost(Long postId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto);
 }
