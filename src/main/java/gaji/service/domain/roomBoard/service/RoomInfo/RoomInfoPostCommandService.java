@@ -13,4 +13,6 @@ public interface RoomInfoPostCommandService {
     RoomPostResponseDto.toWriteCommentDto writeCommentOnInfoPost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request);
 
     void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto);
+
+    void deleteComment(Long commentId, Long userId);
 }

@@ -20,7 +20,7 @@ public class RoomPostController {
     private final TokenProviderService tokenProviderService;
     private final RoomPostCommandService roomPostCommandService;
 
-    @PostMapping("/room-Post/{roomId}")
+    @PostMapping("/post/{roomId}")
     @Operation(summary = "스터디룸 게시글 등록 API")
     public BaseResponse<RoomPostResponseDto.toCreateRoomPostIdDTO> createRoomPostController(
             @RequestHeader("Authorization") String authorization,
@@ -33,8 +33,8 @@ public class RoomPostController {
 
     }
 
-    @PutMapping("/trouble/{postId}")
-    @Operation(summary = "스터디룸 트러블슈팅 게시글 업데이트 API")
+    @PutMapping("/post/{postId}")
+    @Operation(summary = "스터디룸 게시글 업데이트 API")
     public BaseResponse<String> updatePost(
             @RequestHeader("Authorization") String authorization,
             @RequestBody RoomPostRequestDto.RoomPostDto requestDto,
@@ -45,8 +45,8 @@ public class RoomPostController {
         return BaseResponse.onSuccess( "게시글이 성공적으로 업데이트되었습니다.");
     }
 
-    @DeleteMapping("/trouble/{postId}")
-    @Operation(summary = "스터디룸 트러블슈팅 게시글 삭제 API")
+    @DeleteMapping("/post/{postId}")
+    @Operation(summary = "스터디룸 게시글 삭제 API")
     public BaseResponse<String> deletePost(
             @RequestHeader("Authorization") String authorization,
             @PathVariable Long postId
@@ -57,7 +57,7 @@ public class RoomPostController {
     }
 
     @PostMapping("/post/{postId}/comments")
-    @Operation(summary = "스터디룸 트러블슈팅 댓글 등록 API")
+    @Operation(summary = "스터디룸 게시글 댓글 등록 API")
     public BaseResponse<RoomPostResponseDto.toWriteCommentDto> writeCommentOnPost(
             @RequestHeader("Authorization") String authorization,
             @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto,
@@ -68,8 +68,8 @@ public class RoomPostController {
         return BaseResponse.onSuccess(newComment);
     }
 
-    @PutMapping("/trouble/comments/{commentId}")
-    @Operation(summary = "스터디룸 트러블슈팅 댓글 업데이트 API")
+    @PutMapping("/post/comments/{commentId}")
+    @Operation(summary = "스터디룸 게시글 댓글 업데이트 API")
     public BaseResponse<String> updateComment(
             @RequestHeader("Authorization") String authorization,
             @RequestBody RoomPostRequestDto.RoomTroubleCommentDto requestDto,
@@ -78,5 +78,16 @@ public class RoomPostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomPostCommandService.updateComment(commentId, userId,requestDto);
         return BaseResponse.onSuccess( "댓글이 성공적으로 업데이트되었습니다.");
+    }
+
+    @DeleteMapping("/post/comments/{commentId}")
+    @Operation(summary = "스터디룸 게시글 댓글 삭제 API")
+    public BaseResponse<String> deleteComment(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long commentId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomPostCommandService.deleteComment(commentId, userId);
+        return BaseResponse.onSuccess( "댓글이 성공적으로 삭제되었습니다.");
     }
 }
