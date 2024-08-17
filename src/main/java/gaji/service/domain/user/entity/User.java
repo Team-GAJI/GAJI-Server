@@ -4,16 +4,22 @@ package gaji.service.domain.user.entity;
 import gaji.service.domain.Report;
 import gaji.service.domain.alram.Alarm;
 import gaji.service.domain.common.entity.BaseEntity;
-import gaji.service.domain.enums.*;
+import gaji.service.domain.enums.Gender;
+import gaji.service.domain.enums.ServiceRole;
+import gaji.service.domain.enums.SocialType;
+import gaji.service.domain.enums.UserActive;
 import gaji.service.domain.message.entity.Message;
-import gaji.service.domain.post.entity.*;
+import gaji.service.domain.post.entity.Comment;
+import gaji.service.domain.post.entity.Post;
+import gaji.service.domain.post.entity.PostFile;
+import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
 import gaji.service.domain.recruit.entity.SearchKeyword;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.VoiceChatUser;
-import gaji.service.domain.roomBoard.entity.RoomPost.*;
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPostFile;
 import gaji.service.domain.studyMate.entity.*;
 import gaji.service.oauth2.dto.TransferUserDTO;
 import jakarta.persistence.*;
@@ -52,8 +58,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<StudyMate> studyMateList;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
-    private List<RoomPostBookmark> roomPostBookmarkList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
+//    private List<RoomPostBookmark> roomPostBookmarkList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
     private List<Room> recruitPostList = new ArrayList<>();
@@ -89,8 +95,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Post> postList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<PostBookmark> postBookmarkList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    private List<PostBookmark> postBookmarkList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<PostFile> postFileList = new ArrayList<>();

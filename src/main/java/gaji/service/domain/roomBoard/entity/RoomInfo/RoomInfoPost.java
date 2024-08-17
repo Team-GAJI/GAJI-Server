@@ -1,9 +1,6 @@
 package gaji.service.domain.roomBoard.entity.RoomInfo;
 
 import gaji.service.domain.roomBoard.entity.RoomBoard;
-import gaji.service.domain.roomBoard.entity.RoomPost.RoomPostBookmark;
-import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostBookmark;
-import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostLike;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,6 +40,12 @@ public class RoomInfoPost {
 
     @OneToMany(mappedBy = "roomInfoPost", cascade = CascadeType.ALL)
     private List<RoomInfoPostBookmark> roomInfoPostBookmarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "roomInfoPost", cascade =  CascadeType.ALL)
+    private List<InfoPostComment> infoPostCommentList = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "roomInfoPost", cascade = CascadeType.ALL)
+//    private List<InfoPostComment> infoPostCommentList = new ArrayList<>();
 
 
     @PrePersist

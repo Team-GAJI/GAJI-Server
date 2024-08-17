@@ -7,8 +7,6 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 @Component
 public class PostTypeExistValidator implements ConstraintValidator<ExistPostType, PostTypeEnum> {
 

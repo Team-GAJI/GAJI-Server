@@ -1,8 +1,8 @@
 package gaji.service.domain.post.web.controller;
 
-import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.enums.SortType;
 import gaji.service.domain.post.converter.CommentConverter;
 import gaji.service.domain.post.converter.PostConverter;
 import gaji.service.domain.post.entity.Comment;

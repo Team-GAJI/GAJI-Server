@@ -5,9 +5,9 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
+import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomInfo.InfoPostComment;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
-import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPostBookmark;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPostLikes;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
@@ -98,7 +98,7 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
 
         InfoPostComment postComment = InfoPostComment.builder()
                 .user(user)
-                .roomInoPost(roomPost)
+                .roomInfoPost(roomPost)
                 .body(request.getBody())
                 .build();
          infoPostCommentRepository.save(postComment);

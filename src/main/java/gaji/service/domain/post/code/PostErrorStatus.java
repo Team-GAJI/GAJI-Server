@@ -27,7 +27,7 @@ public enum PostErrorStatus implements BaseErrorCodeInterface {
 
     @Override
     public BaseCodeDto getErrorCode() {
-        return gaji.service.global.exception.code.BaseCodeDto.builder()
+        return BaseCodeDto.builder()
                 .httpStatus(httpStatus)
                 .isSuccess(isSuccess)
                 .code(code)
