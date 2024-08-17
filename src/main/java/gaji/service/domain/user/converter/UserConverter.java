@@ -2,7 +2,7 @@ package gaji.service.domain.user.converter;
 
 import com.querydsl.core.Tuple;
 import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.post.entity.QPost;
+import gaji.service.domain.post.entity.QCommnuityPost;
 import gaji.service.domain.room.entity.QRoom;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.web.dto.UserResponseDTO;
@@ -50,17 +50,17 @@ public class UserConverter {
 
     public static UserResponseDTO.GetPostDTO toGetPostDTO(Tuple tuple) {
         return UserResponseDTO.GetPostDTO.builder()
-                .postId(tuple.get(QPost.post.id))
-                .title(tuple.get(QPost.post.title))
-                .body(tuple.get(QPost.post.body))
-                .type(tuple.get(QPost.post.type))
-                .status(tuple.get(QPost.post.status))
-                .userId(tuple.get(QPost.post.user.id))
-                .nickname(tuple.get(QPost.post.user.nickname))
-                .profileImagePth(tuple.get(QPost.post.user.profileImagePth))
-                .createdAt(DateConverter.convertToRelativeTimeFormat(tuple.get(QPost.post.createdAt)))
-                .viewCnt(tuple.get(QPost.post.hit))
-                .likeCnt(tuple.get(QPost.post.likeCnt))
+                .postId(tuple.get(QCommnuityPost.commnuityPost.id))
+                .title(tuple.get(QCommnuityPost.commnuityPost.title))
+                .body(tuple.get(QCommnuityPost.commnuityPost.body))
+                .type(tuple.get(QCommnuityPost.commnuityPost.type))
+                .status(tuple.get(QCommnuityPost.commnuityPost.status))
+                .userId(tuple.get(QCommnuityPost.commnuityPost.user.id))
+                .nickname(tuple.get(QCommnuityPost.commnuityPost.user.nickname))
+                .profileImagePth(tuple.get(QCommnuityPost.commnuityPost.user.profileImagePth))
+                .createdAt(DateConverter.convertToRelativeTimeFormat(tuple.get(QCommnuityPost.commnuityPost.createdAt)))
+                .viewCnt(tuple.get(QCommnuityPost.commnuityPost.hit))
+                .likeCnt(tuple.get(QCommnuityPost.commnuityPost.likeCnt))
                 .build();
     }
 
