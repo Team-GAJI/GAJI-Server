@@ -8,9 +8,11 @@ import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPostBookmark;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPostLikes;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.PostCommentRepository;
+import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostBookmarkRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostLikesRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
@@ -40,6 +42,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final PostCommentRepository postCommentRepository;
     private final RoomPostQueryService roomPostQueryService;
     private final RoomPostLikesRepository roomPostLikesRepository;
+    private final RoomPostBookmarkRepository roomPostBookmarkRepository;
 
     @Override
     public RoomPostResponseDto.toCreateRoomPostIdDTO createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
@@ -182,4 +185,36 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         roomPostLikesRepository.delete(like);
     }
 
+    @Override
+    public void addBookmark(Long postId, Long userId, Long roomId) {
+        RoomPost post = roomPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        if (roomPostBookmarkRepository.findByRoomPostAndStudyMate(post, studyMate).isPresent()) {
+            throw new RestApiException(RoomPostErrorStatus._POST_ALREADY_BOOKMARKED);
+        }
+
+        RoomPostBookmark newBookmark = RoomPostBookmark.builder()
+                .roomPost(post)
+                .studyMate(studyMate)
+                .build();
+        post.addBookmark(newBookmark);
+        roomPostBookmarkRepository.save(newBookmark);
+
+    }
+
+    @Override
+    public void removeBookmark(Long postId, Long userId, Long roomId) {
+        RoomPost post = roomPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        RoomPostBookmark bookmark = roomPostBookmarkRepository
+                .findByRoomPostAndStudyMate(post, studyMate)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_BOOKMARKED_NOT_FOUND));
+
+        post.removeBookmark(bookmark);
+        roomPostBookmarkRepository.delete(bookmark);
+    }
 }

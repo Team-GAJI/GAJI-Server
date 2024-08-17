@@ -1,8 +1,7 @@
-package gaji.service.domain.roomBoard.entity.RoomPost;
+package gaji.service.domain.roomBoard.entity.RoomInfo;
 
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePost;
 import gaji.service.domain.studyMate.entity.StudyMate;
-import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,8 +10,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class RoomPostBookmark {
-
+public class RoomInfoPostBookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,5 +21,5 @@ public class RoomPostBookmark {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private RoomPost roomPost;
+    private RoomInfoPost roomInfoPost;
 }

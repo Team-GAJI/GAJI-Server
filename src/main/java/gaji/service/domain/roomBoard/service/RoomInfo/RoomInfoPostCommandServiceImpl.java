@@ -8,9 +8,11 @@ import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomInfo.InfoPostComment;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPostBookmark;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPostLikes;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.InfoPostCommentRepository;
+import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostBookmarkRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostLikesRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostLikesRepository;
@@ -40,6 +42,7 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     private final InfoPostCommentRepository infoPostCommentRepository;
     private final RoomPostLikesRepository roomPostLikesRepository;
     private final RoomInfoPostLikesRepository roomInfoPostLikesRepository;
+    private final RoomInfoPostBookmarkRepository roomInfoPostBookmarkRepository;
 
     @Override
     public RoomPostResponseDto.toCreateRoomInfoPostIdDTO createRoomInfoPostIdDTO(Long roomId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto) {
@@ -179,4 +182,37 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
         post.removeLike(like);
         roomInfoPostLikesRepository.delete(like);
     }
+    @Override
+    public void addBookmark(Long postId, Long userId, Long roomId) {
+        RoomInfoPost post = roomInfoPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        if (roomInfoPostBookmarkRepository.findByRoomInfoPostAndStudyMate(post, studyMate).isPresent()) {
+            throw new RestApiException(RoomPostErrorStatus._POST_ALREADY_BOOKMARKED);
+        }
+
+        RoomInfoPostBookmark newBookmark = RoomInfoPostBookmark.builder()
+                .roomInfoPost(post)
+                .studyMate(studyMate)
+                .build();
+        post.addBookmark(newBookmark);
+        roomInfoPostBookmarkRepository.save(newBookmark);
+
+    }
+
+    @Override
+    public void removeBookmark(Long postId, Long userId, Long roomId) {
+        RoomInfoPost post = roomInfoPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        RoomInfoPostBookmark bookmark = roomInfoPostBookmarkRepository
+                .findByRoomInfoPostAndStudyMate(post, studyMate)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_BOOKMARKED_NOT_FOUND));
+
+        post.removeBookmark(bookmark);
+        roomInfoPostBookmarkRepository.delete(bookmark);
+    }
 }
+

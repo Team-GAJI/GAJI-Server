@@ -19,4 +19,8 @@ public interface RoomInfoPostCommandService {
     void addLike(Long postId, Long userId, Long roomId);
 
     void removeLike(Long postId, Long userId, Long roomId);
+
+    void addBookmark(Long postId, Long userId, Long roomId);
+
+    void removeBookmark(Long postId, Long userId, Long roomId);
 }

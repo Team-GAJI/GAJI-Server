@@ -1,6 +1,8 @@
 package gaji.service.domain.roomBoard.entity.RoomInfo;
 
 import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPostBookmark;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostBookmark;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostLike;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
@@ -38,6 +40,11 @@ public class RoomInfoPost {
     @OneToMany(mappedBy = "roomInfoPost", cascade = CascadeType.ALL)
     private List<RoomInfoPostLikes> roomInfoPostLikesList = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "roomInfoPost", cascade = CascadeType.ALL)
+    private List<RoomInfoPostBookmark> roomInfoPostBookmarkList = new ArrayList<>();
+
+
     @PrePersist
     public void prePersist() {
         this.viewCount = 0;
@@ -62,6 +69,17 @@ public class RoomInfoPost {
     public void removeLike(RoomInfoPostLikes like) {
         this.roomInfoPostLikesList.remove(like);
         this.likeCount = Math.max(0, this.likeCount - 1);
+
+    }
+
+    public void addBookmark(RoomInfoPostBookmark bookmark) {
+        this.roomInfoPostBookmarkList.add(bookmark);
+        this.bookmarkCount++;
+    }
+
+    public void removeBookmark(RoomInfoPostBookmark bookmark) {
+        this.roomInfoPostBookmarkList.remove(bookmark);
+        this. bookmarkCount = Math.max(0, this.bookmarkCount - 1);
 
     }
 
