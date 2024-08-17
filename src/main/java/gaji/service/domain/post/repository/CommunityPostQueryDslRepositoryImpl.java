@@ -76,12 +76,12 @@ public class CommunityPostQueryDslRepositoryImpl implements CommunityPostQueryDs
 
     @Override
     public Slice<Tuple> findAllPostsByUser(User user, LocalDateTime cursorDateTime, Pageable pageable, PostTypeEnum type) {
-        List<Tuple> userPosts = jpaQueryFactory.select(post.id, post.user, post.title, post.body, post.type, post.status, post.hit, post.likeCnt, post.createdAt)
-                .from(post)
-                .where(post.user.eq(user), (postTypeEq(type))
-                        ,(post.createdAt.before(cursorDateTime))
+        List<Tuple> userPosts = jpaQueryFactory.select(commnuityPost.id, commnuityPost.user, commnuityPost.title, commnuityPost.body, commnuityPost.type, commnuityPost.status, commnuityPost.hit, commnuityPost.likeCnt, commnuityPost.createdAt)
+                .from(commnuityPost)
+                .where(commnuityPost.user.eq(user), (postTypeEq(type))
+                        ,(commnuityPost.createdAt.before(cursorDateTime))
                 )
-                .orderBy(post.createdAt.desc())
+                .orderBy(commnuityPost.createdAt.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
@@ -125,7 +125,7 @@ public class CommunityPostQueryDslRepositoryImpl implements CommunityPostQueryDs
                 : null;
     }
 
-    private Slice<CommnuityPost> checkLastPage(Pageable pageable, List<CommnuityPost> postList) {
+    private <T> Slice<T> checkLastPage(Pageable pageable, List<T> postList) {
         boolean hasNext = false;
 
         // (조회한 결과 개수 > 요청한 페이지 사이즈) 이면 뒤에 데이터가 더 존재함
