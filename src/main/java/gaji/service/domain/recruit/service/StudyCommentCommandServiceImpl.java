@@ -1,10 +1,6 @@
 package gaji.service.domain.recruit.service;
 
 import gaji.service.domain.enums.CommentStatus;
-import gaji.service.domain.post.converter.PostConverter;
-import gaji.service.domain.post.entity.Comment;
-import gaji.service.domain.post.entity.Post;
-import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.entity.StudyComment;
@@ -19,9 +15,6 @@ import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Comparator;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

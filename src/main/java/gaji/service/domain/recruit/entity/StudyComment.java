@@ -1,7 +1,5 @@
 package gaji.service.domain.recruit.entity;
 
-import gaji.service.domain.post.entity.Comment;
-import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.enums.CommentStatus;
