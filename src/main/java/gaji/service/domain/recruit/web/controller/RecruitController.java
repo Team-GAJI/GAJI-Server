@@ -81,6 +81,26 @@ public class RecruitController {
         return BaseResponse.onSuccess(null);
     }
 
+    @PostMapping("/{roomId}/likes")
+    @Operation(summary = "스터디 모집 게시글 좋아요 API", description = "스터디 모집 게시글 좋아요 누르는 API입니다.")
+    public BaseResponse<RecruitResponseDTO.StudyLikesIdDTO> likeStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        RecruitResponseDTO.StudyLikesIdDTO responseDTO = recruitCommandService.likeStudy(userId, roomId);
+        return BaseResponse.onSuccess(responseDTO);
+    }
+
+    @DeleteMapping("/{roomId}/likes")
+    @Operation(summary = "스터디 모집 게시글 좋아요 취소 API", description = "스터디 모집 게시글 좋아요 취소하는 API 입니다.")
+    public BaseResponse unLikeStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.")  Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        recruitCommandService.unLikeStudy(userId, roomId);
+        return BaseResponse.onSuccess(null);
+    }
+
     @PostMapping("/{roomId}/bookmarks")
     @Operation(summary = "스터디 모집 게시글 북마크 API", description = "스터디 모집 게시글 북마크 누르는 API입니다.")
     public BaseResponse<RecruitResponseDTO.StudyBookmarkIdDTO> bookmarkStudy(
@@ -107,11 +127,11 @@ public class RecruitController {
             @RequestParam(required = false) CategoryEnum category,
             @RequestParam(required = false) PreviewFilter filter,
             @RequestParam(defaultValue = "recent") SortType sort,
+            @RequestParam(required = false) String query,
             @RequestParam(required = false) @Min(value = 0, message = "lastValue는 0 이상 입니다.") Long lastValue,
             @RequestParam(value = "page", defaultValue = "20") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize){
 
-        RecruitResponseDTO.PreviewListDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, lastValue, pageSize);
-
+        RecruitResponseDTO.PreviewListDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, query, lastValue, pageSize);
         return BaseResponse.onSuccess(responseDTO);
     }
 
@@ -120,10 +140,9 @@ public class RecruitController {
     public BaseResponse<RecruitResponseDTO.DefaultPreviewListDTO> getDefaultPreviewList(
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "index는 0 이상 이어야 합니다.") Integer nextCategoryIndex,
             @RequestParam(defaultValue = "true") boolean isFirst,
-            @RequestParam(value = "page", defaultValue = "5") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize){
+            @RequestParam(value = "page", defaultValue = "5") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize) {
 
         RecruitResponseDTO.DefaultPreviewListDTO responseDTO = recruitQueryService.getDefaultPreview(isFirst, nextCategoryIndex, pageSize);
-
         return BaseResponse.onSuccess(responseDTO);
     }
 }
