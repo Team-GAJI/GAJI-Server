@@ -41,10 +41,10 @@ public class RoomPost {
     private final List<RoomPostBookmark> roomPostBookmarkList = new ArrayList<>() ;
 
     @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
-    private final List<RoomComment> roomCommentList  = new ArrayList<>() ;
+    private final List<RoomPostFile> roomPostFileList  = new ArrayList<>() ;
 
     @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
-    private final List<RoomPostFile> roomPostFileList  = new ArrayList<>() ;
+    private final List<PostComment> postCommentList  = new ArrayList<>() ;
 
     //erd 설계에는 없지만 추가
     private int viewCount;

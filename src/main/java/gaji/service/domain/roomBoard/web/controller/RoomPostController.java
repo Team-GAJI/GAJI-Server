@@ -7,6 +7,7 @@ import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.ParameterScriptAssert;
 import org.springframework.web.bind.annotation.*;
@@ -53,5 +54,17 @@ public class RoomPostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomPostCommandService.deletePost(postId, userId);
         return BaseResponse.onSuccess( "게시글이 성공적으로 삭제되었습니다.");
+    }
+
+    @PostMapping("/post/{postId}/comments")
+    @Operation(summary = "스터디룸 트러블슈팅 댓글 등록 API")
+    public BaseResponse<RoomPostResponseDto.toWriteCommentDto> writeCommentOnPost(
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto,
+            @PathVariable Long postId
+    ){
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        RoomPostResponseDto.toWriteCommentDto newComment = roomPostCommandService.writeCommentOnPost(userId, postId, requestDto);
+        return BaseResponse.onSuccess(newComment);
     }
 }

@@ -52,4 +52,16 @@ public class RoomInfoPostController {
         roomInfoPostCommandService.deleteInfoPost(postId, userId);
         return BaseResponse.onSuccess( "게시글이 성공적으로 삭제되었습니다.");
     }
+
+    @PostMapping("/info/{postId}/comments")
+    @Operation(summary = "스터디룸 트러블슈팅 댓글 등록 API")
+    public BaseResponse<RoomPostResponseDto.toWriteCommentDto> writeCommentOnInfoPost(
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto,
+            @PathVariable Long postId
+    ){
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        RoomPostResponseDto.toWriteCommentDto newComment = roomInfoPostCommandService.writeCommentOnInfoPost(userId, postId, requestDto);
+        return BaseResponse.onSuccess(newComment);
+    }
 }

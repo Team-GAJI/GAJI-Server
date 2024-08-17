@@ -6,7 +6,7 @@ import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 
 public interface RoomTroublePostCommandService {
-    TroublePostComment writeCommentOnTroublePost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request);
+    RoomPostResponseDto.toWriteCommentDto writeCommentOnTroublePost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request);
 
     RoomPostResponseDto.toCreateRoomTroublePostIdDTO createRoomTroublePost(Long roomId, Long userId, RoomPostRequestDto.RoomTroubloePostDto requestDto);
 
@@ -20,13 +20,9 @@ public interface RoomTroublePostCommandService {
 
     void updatePost(Long postId, Long userId, RoomPostRequestDto.RoomTroubloePostDto requestDto);
 
-    void updateComment(Long postId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto);
-
-    TroublePostComment findCommentByCommentId(Long commentId);
+    void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto);
 
     void deleteComment(Long commentId, Long userId);
-
-    TroublePostComment findTroublePostCommentById(Long troublePostId);
 
     void addBookmark(Long postId, Long userId, Long roomId);
 

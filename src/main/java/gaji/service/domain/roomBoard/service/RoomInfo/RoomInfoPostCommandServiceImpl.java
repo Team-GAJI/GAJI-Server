@@ -5,12 +5,12 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
+import gaji.service.domain.roomBoard.entity.RoomInfo.InfoPostComment;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
+import gaji.service.domain.roomBoard.repository.RoomInfo.InfoPostCommentRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostRepository;
-import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
-import gaji.service.domain.roomBoard.repository.RoomTrouble.RoomTroublePostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
@@ -31,10 +31,8 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     private final UserQueryService userQueryService;
     private final RoomQueryService roomQueryService;
     private final StudyMateQueryService studyMateQueryService;
-    private final RoomTroublePostRepository roomTroublePostRepository;
-    private final RoomPostRepository roomPostRepository;
-
-
+    private final RoomInfoPostQueryService roomInfoPostQueryService;
+    private final InfoPostCommentRepository infoPostCommentRepository;
     @Override
     public RoomPostResponseDto.toCreateRoomInfoPostIdDTO createRoomInfoPostIdDTO(Long roomId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto) {
         User user = userQueryService.findUserById(userId);
@@ -80,6 +78,21 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
             throw new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND);
         }
         roomInfoPostRepository.delete(post);
+    }
+
+    @Override
+    public RoomPostResponseDto.toWriteCommentDto writeCommentOnInfoPost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+        User user = userQueryService.findUserById(userId);
+        RoomInfoPost roomPost = roomInfoPostQueryService.findInfoPostById(postId);
+
+        InfoPostComment postComment = InfoPostComment.builder()
+                .user(user)
+                .roomInoPost(roomPost)
+                .body(request.getBody())
+                .build();
+         infoPostCommentRepository.save(postComment);
+
+        return RoomPostConverter.toWriteInfoPostCommentDto(postComment);
     }
 
 }

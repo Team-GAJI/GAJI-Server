@@ -6,8 +6,10 @@ import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
+import gaji.service.domain.roomBoard.repository.RoomPost.PostCommentRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
@@ -31,6 +33,8 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final UserQueryService userQueryService;
     private final RoomQueryService roomQueryService;
     private final StudyMateQueryService studyMateQueryService;
+    private final PostCommentRepository postCommentRepository;
+    private final RoomPostQueryService roomPostQueryService;
 
     @Override
     public RoomPostResponseDto.toCreateRoomPostIdDTO createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
@@ -79,5 +83,20 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         roomPostRepository.delete(post);
     }
 
+
+    @Override
+    public RoomPostResponseDto.toWriteCommentDto writeCommentOnPost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+        User user = userQueryService.findUserById(userId);
+        RoomPost roomPost = roomPostQueryService.findPostById(postId);
+
+        PostComment postComment = PostComment.builder()
+                .user(user)
+                .roomPost(roomPost)
+                .body(request.getBody())
+                .build();
+        postCommentRepository.save(postComment);
+
+        return RoomPostConverter.toWritePostCommentDto(postComment);
+    }
 
 }
