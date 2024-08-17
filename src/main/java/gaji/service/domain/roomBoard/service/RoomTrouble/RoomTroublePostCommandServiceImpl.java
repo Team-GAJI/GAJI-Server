@@ -92,21 +92,21 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     @Override
     public RoomTroublePost findTroublePostById(Long postId){
         return roomTroublePostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
 
     }
 
     @Override
     public void addLike(Long postId, Long userId, Long roomId) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
 
         Optional<RoomTroublePostLike> likeOptional = roomTroublePostLikeRepository
                 .findByRoomTroublePostAndStudyMate(post, studyMate);
 
         if (likeOptional.isPresent()) {
-            throw new RestApiException(RoomPostErrorStatus._TROUBLE_POST_ALREADY_LIKED);
+            throw new RestApiException(RoomPostErrorStatus._POST_ALREADY_LIKED);
         }
 
         RoomTroublePostLike newLike = RoomTroublePostLike.builder()
@@ -121,12 +121,12 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     @Override
     public void removeLike(Long postId, Long userId, Long roomId) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
 
         RoomTroublePostLike like = roomTroublePostLikeRepository
                 .findByRoomTroublePostAndStudyMate(post, studyMate)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus. _TROUBLE_POST_LIKE_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus. _POST_LIKE_NOT_FOUND));
 
         post.removeLike(like);
         roomTroublePostLikeRepository.delete(like);
@@ -135,11 +135,11 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     @Override
     public void addBookmark(Long postId, Long userId, Long roomId) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
 
         if (roomTroublePostBookmarkRepository.findByRoomTroublePostAndStudyMate(post, studyMate).isPresent()) {
-            throw new RestApiException(RoomPostErrorStatus._TROUBLE_POST_ALREADY_BOOKMARKED);
+            throw new RestApiException(RoomPostErrorStatus._POST_ALREADY_BOOKMARKED);
         }
 
         RoomTroublePostBookmark newBookmark = RoomTroublePostBookmark.builder()
@@ -154,12 +154,12 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     @Override
     public void removeBookmark(Long postId, Long userId, Long roomId) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
 
         RoomTroublePostBookmark bookmark = roomTroublePostBookmarkRepository
                 .findByRoomTroublePostAndStudyMate(post, studyMate)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_BOOKMARKED_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_BOOKMARKED_NOT_FOUND));
 
         post.removeBookmark(bookmark);
         roomTroublePostBookmarkRepository.delete(bookmark);
@@ -168,9 +168,9 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     @Override
     public void deletePost(Long postId, Long userId) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
         if (!post.isAuthor(userId)) {
-            throw new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND);
+            throw new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND);
         }
         roomTroublePostRepository.delete(post);
     }
@@ -178,7 +178,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     @Override
     public void updatePost(Long postId, Long userId, RoomPostRequestDto.RoomTroubloePostDto requestDto) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._TROUBLE_POST_NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
 
         if (!post.isAuthor(userId)) {
             throw new RestApiException(RoomPostErrorStatus._USER_NOT_UPDATE_AUTH);

@@ -3,11 +3,13 @@ package gaji.service.domain.roomBoard.service.RoomInfo;
 import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
+import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostRepository;
+import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.repository.RoomTrouble.RoomTroublePostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
@@ -15,6 +17,7 @@ import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
+import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,7 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     private final RoomQueryService roomQueryService;
     private final StudyMateQueryService studyMateQueryService;
     private final RoomTroublePostRepository roomTroublePostRepository;
+    private final RoomPostRepository roomPostRepository;
 
 
     @Override
@@ -54,4 +58,19 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
 
         return RoomPostConverter.infoPostIdDto(roomInfoPost.getId());
     }
+
+    @Override
+    public void updateInfoPost(Long postId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto) {
+        RoomInfoPost post = roomInfoPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+
+        if (!post.isAuthor(userId)) {
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_UPDATE_AUTH);
+        }
+
+        post.update(requestDto.getTitle(), requestDto.getBody());
+    }
+
+
+
 }

@@ -32,4 +32,16 @@ public class RoomPostController {
 
     }
 
+    @PutMapping("/trouble/{postId}")
+    @Operation(summary = "스터디룸 트러블슈팅 게시글 업데이트 API")
+    public BaseResponse<String> updatePost(
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody RoomPostRequestDto.RoomPostDto requestDto,
+            @PathVariable Long postId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomPostCommandService.updatePost(postId, userId,requestDto);
+        return BaseResponse.onSuccess( "게시글이 성공적으로 업데이트되었습니다.");
+    }
+
 }
