@@ -21,10 +21,10 @@ public class PostBookmark {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private Post post;
+    private CommnuityPost post;
 
     @Builder
-    public PostBookmark(User user, Post post) {
+    public PostBookmark(User user, CommnuityPost post) {
         this.user = user;
         this.post = post;
     }
