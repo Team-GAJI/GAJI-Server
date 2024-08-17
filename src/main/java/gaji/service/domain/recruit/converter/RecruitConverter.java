@@ -1,6 +1,5 @@
 package gaji.service.domain.recruit.converter;
 
-import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
@@ -14,10 +13,10 @@ import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.global.converter.DateConverter;
+import org.springframework.data.domain.Slice;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,14 +45,8 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static List<CategoryEnum> toCategoryList(List<SelectCategory> selectCategoryList) {
-        List<CategoryEnum> categoryList = new ArrayList<>();
-        for (SelectCategory selectCategory : selectCategoryList) {
-            Category category = selectCategory.getCategory();
-            categoryList.add(category.getCategory());
-        }
-
-        return categoryList;
+    public static CategoryEnum toCategory(SelectCategory selectCategory) {
+        return selectCategory.getCategory().getCategory();
     }
 
     public static Material toMaterial(String materialPath, Room room) {
@@ -71,7 +64,7 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, List<CategoryEnum> categoryList) {
+    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, CategoryEnum category) {
         return RecruitResponseDTO.studyDetailDTO.builder()
                 .userNickName(user.getNickname())
                 .userActive(user.getStatus())
@@ -80,7 +73,7 @@ public class RecruitConverter {
                 .name(room.getName())
                 .imageUrl(room.getThumbnailUrl())
                 .recruitPostTypeEnum(room.getRecruitPostTypeEnum())
-                .postCategoryList(categoryList)
+                .studyCategory(category)
                 .views(room.getViews())
                 .likes(room.getLikes())
                 .bookmarks(room.getBookmarks())
@@ -98,20 +91,37 @@ public class RecruitConverter {
         return RecruitResponseDTO.CommentResponseDTO.builder()
                 .userImage(comment.getUser().getProfileImagePth())
                 .userNickName(comment.getUser().getNickname())
-                .commentCreatedAt(comment.getCreatedAt())
+                .commentOrder(comment.getCommentOrder())
+                .depth(comment.getDepth())
+                .commentId(comment.getId())
+                .commentWriteDate(DateConverter.convertWriteTimeFormat(LocalDate.from(comment.getCreatedAt()), " 작성"))
                 .commentBody(comment.getBody())
                 .build();
     }
 
-    public static List<RecruitResponseDTO.CommentResponseDTO> toCommentResponseDTOList(List<StudyComment> commentList) {
-        int toIndex = Math.min(4, commentList.size());
-        return commentList.subList(0, toIndex).stream().map(RecruitConverter::toCommentResponseDTO).collect(Collectors.toList());
-    }
+    public static RecruitResponseDTO.CommentListDTO toCommentListDTO(int commentCount, Slice<StudyComment> commentList) {
+        List<RecruitResponseDTO.CommentResponseDTO> CommentResponseDTO =
+                commentList.stream().map(RecruitConverter::toCommentResponseDTO).collect(Collectors.toList());
 
-    public static RecruitResponseDTO.CommentListDTO toCommentListDTO(int commentCount, List<RecruitResponseDTO.CommentResponseDTO> CommentResponseDTO) {
         return RecruitResponseDTO.CommentListDTO.builder()
                 .commentCount(commentCount)
+                .hasNext(commentList.hasNext())
                 .commentList(CommentResponseDTO)
+                .build();
+    }
+
+    public static StudyComment toComment(RecruitRequestDTO.WriteCommentDTO request, User user, Room room, StudyComment parentComment) {
+        return StudyComment.builder()
+                .user(user)
+                .room(room)
+                .parentComment(parentComment)
+                .body(request.getBody())
+                .build();
+    }
+
+    public static RecruitResponseDTO.WriteCommentDTO toWriteCommentDTO(StudyComment comment) {
+        return RecruitResponseDTO.WriteCommentDTO.builder()
+                .commentId(comment.getId())
                 .build();
     }
 
@@ -150,7 +160,7 @@ public class RecruitConverter {
                 .deadLine(ChronoUnit.DAYS.between(room.getRecruitEndDay(), LocalDate.now()))
                 .description(room.getDescription())
                 .createdAt(DateConverter.convertToRelativeTimeFormat(room.getCreatedAt()))
-                .recruitCount(room.getPeopleMaximum())
+                .recruitMaxCount(room.getPeopleMaximum())
                 .build();
     }
 
