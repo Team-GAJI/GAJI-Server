@@ -1,6 +1,7 @@
 package gaji.service.domain.recruit.service;
 
 import gaji.service.domain.common.entity.SelectCategory;
+import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.PreviewFilter;
@@ -8,7 +9,6 @@ import gaji.service.domain.enums.SortType;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.repository.RecruitRepository;
-import gaji.service.domain.common.repository.SelectCategoryRepository;
 import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.user.entity.User;
@@ -32,7 +32,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     private final UserQueryService userQueryService;
     private final RoomQueryService roomQueryService;
     private final RoomCommandService roomCommandService;
-    private final SelectCategoryRepository selectCategoryRepository;
+    private final CategoryService categoryService;
     private final RecruitRepository recruitRepository;
 
     @Override
@@ -45,13 +45,12 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
         room.addView();
         roomCommandService.saveRoom(room);
 
-        List<SelectCategory> selectCategoryList =
-                selectCategoryRepository.findAllByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
+        SelectCategory selectCategory =
+                categoryService.findByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
 
+        CategoryEnum category = RecruitConverter.toCategory(selectCategory);
 
-        List<CategoryEnum> categoryList = RecruitConverter.toCategoryList(selectCategoryList);
-
-        return RecruitConverter.toStudyDetailDTO(user, room, categoryList);
+        return RecruitConverter.toStudyDetailDTO(user, room, category);
     }
 
     @Override

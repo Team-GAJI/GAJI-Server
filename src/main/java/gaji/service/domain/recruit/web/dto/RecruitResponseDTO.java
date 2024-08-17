@@ -32,7 +32,7 @@ public class RecruitResponseDTO {
         String name;
         String imageUrl;
         RecruitPostTypeEnum recruitPostTypeEnum;
-        List<CategoryEnum> postCategoryList;
+        CategoryEnum studyCategory;
         int views;
         int likes;
         int bookmarks;
@@ -52,7 +52,10 @@ public class RecruitResponseDTO {
     public static class CommentResponseDTO {
         String userImage;
         String userNickName;
-        LocalDateTime commentCreatedAt;
+        Integer commentOrder;
+        int depth;
+        Long commentId;
+        String commentWriteDate;
         String commentBody;
     }
 
@@ -62,6 +65,7 @@ public class RecruitResponseDTO {
     @AllArgsConstructor
     public static class CommentListDTO {
         int commentCount;
+        boolean hasNext;
         List<CommentResponseDTO> commentList;
 
     }
@@ -87,6 +91,14 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class WriteCommentDTO {
+        Long commentId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PreviewDTO {
         Long roomId;
         String imageUrl;
@@ -96,7 +108,7 @@ public class RecruitResponseDTO {
         Long deadLine;
         String description;
         String createdAt;
-        int recruitCount;
+        int recruitMaxCount;
     }
 
     @Builder
