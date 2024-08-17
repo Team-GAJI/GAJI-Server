@@ -27,7 +27,7 @@ public class RoomPostController {
             @RequestBody RoomPostRequestDto.RoomPostDto requestDto
             ){
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        RoomPostResponseDto.toCreateRoomPostIdDTO toCreateRoomPostIdDTO = roomPostCommandService.createRoomePost(roomId, userId, requestDto);
+        RoomPostResponseDto.toCreateRoomPostIdDTO toCreateRoomPostIdDTO = roomPostCommandService.createRoomPost(roomId, userId, requestDto);
         return BaseResponse.onSuccess(toCreateRoomPostIdDTO);
 
     }

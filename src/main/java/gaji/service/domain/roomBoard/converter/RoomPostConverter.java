@@ -15,14 +15,13 @@ import java.time.LocalDateTime;
 public class RoomPostConverter {
 
     public static RoomPost toRoomPost(RoomPostRequestDto.RoomPostDto requestDto, StudyMate studyMate, RoomBoard roomBoard) {
-         RoomPost roomPost = RoomPost.builder()
+        return RoomPost.builder()
                  .studyMate(studyMate)
                  .title(requestDto.getTitle())
                  .body(requestDto.getBody())
                  .postTime(LocalDateTime.now())
                  .roomBoard(roomBoard)
                  .build();
-         return roomPost;
     }
 
     public static RoomTroublePost toRoomTroublePost(RoomPostRequestDto.RoomTroubloePostDto requestDto, StudyMate studyMate, RoomBoard roomBoard) {
