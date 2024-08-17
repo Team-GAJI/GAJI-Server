@@ -31,6 +31,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public SelectCategory saveSelectCategory(SelectCategory selectCategory) {
+        return selectCategoryRepository.save(selectCategory);
+    }
+
+    @Override
     public Category findByCategory(CategoryEnum category) {
         return categoryRepository.findByCategory(category);
     }
@@ -59,20 +64,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<SelectCategory> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
         return selectCategoryRepository.findAllFetchJoinWithCategoryByEntityIdAndPostType(entityId, postType);
-    }
-
-    // 카테고리가 존재하면 category에 찾아서 저장, 존재하지 않으면 예외 발생
-    @Override
-    public List<Category> findCategoryEntityList(List<Long> categoryIdList) {
-        return categoryIdList.stream()
-                .map(categoryId -> {
-                    if (existsByCategoryId(categoryId)) {
-                        return findByCategoryId(categoryId);
-                    } else {
-                        throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
-                    }
-                })
-                .collect(Collectors.toList());
     }
 
     @Override

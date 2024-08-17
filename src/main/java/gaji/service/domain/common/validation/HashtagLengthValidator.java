@@ -1,6 +1,7 @@
 package gaji.service.domain.common.validation;
 
-import gaji.service.domain.common.annotation.CheckHashtagListElement;
+import gaji.service.domain.common.annotation.CheckHashtagBlank;
+import gaji.service.domain.common.annotation.CheckHashtagLength;
 import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -9,10 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class HashtagListElementValidator implements ConstraintValidator<CheckHashtagListElement, List<String>> {
+public class HashtagLengthValidator implements ConstraintValidator<CheckHashtagLength, List<String>> {
 
     @Override
-    public void initialize(CheckHashtagListElement constraintAnnotation) {
+    public void initialize(CheckHashtagLength constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
 
@@ -23,13 +24,14 @@ public class HashtagListElementValidator implements ConstraintValidator<CheckHas
             return true;
         }
 
-        // 리스트 안의 element중에서 하나라도 ["", " ", null]값에 해당되면 false, 아니면 true
+        // 유효성 검사 통과 조건
+        // 리스트 안의 모든 element의 글자 수가 15자 이하여야함
         boolean isValid = values.stream()
-                .allMatch(value -> value != null && !value.trim().isEmpty());
+                .allMatch(value -> value.length() <= 15);
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(GlobalErrorStatus._HASHTAG_ISBLANK.getMessage()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(GlobalErrorStatus._INVALID_HASHTAG_LENGTH.getMessage()).addConstraintViolation();
         }
 
         return isValid;
