@@ -25,23 +25,15 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
 
     @Override
     public RecruitResponseDTO.PreviewListDTO findByCategoryOrderBySortType(
-            CategoryEnum category, PreviewFilter filter, SortType sortType, Long value, Pageable pageable) {
-        List<Long> roomIds = queryFactory
-                .select(selectCategory.entityId)
-                .from(selectCategory)
-                .where(selectCategory.type.eq(PostTypeEnum.ROOM)
-                        .and(categoryEq(category)))
-                .fetch();
-
-        OrderSpecifier<?>[] orderSpecifier = getOrderSpecifier(sortType);
-
+            CategoryEnum category, PreviewFilter filter, SortType sortType, String query, Long value, Pageable pageable) {
         List<Room> results = queryFactory
                 .selectFrom(room)
-                .where(room.id.in(roomIds)
-                        .and(lastStudyValue(sortType ,value))
-                        .and(checkFilter(filter)))
-                .orderBy(orderSpecifier)
-                .limit(pageable.getPageSize()+1)
+                .join(selectCategory).on(selectCategory.entityId.eq(room.id)
+                        .and(selectCategory.type.eq(PostTypeEnum.ROOM))
+                        .and(categoryEq(category)))
+                .where(lastStudyValue(sortType, value), checkFilter(filter), searchPost(query))
+                .orderBy(getOrderSpecifier(sortType))
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         boolean hasNext = checkLastPage(pageable, results);
@@ -57,18 +49,13 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
 
     @Override
     public RecruitResponseDTO.DefaultPreviewDTO findByCategory(CategoryEnum category, Pageable pageable) {
-        List<Long> roomIds = queryFactory
-                .select(selectCategory.entityId)
-                .from(selectCategory)
-                .where(selectCategory.type.eq(PostTypeEnum.ROOM)
-                        .and(categoryEq(category)))
-                .fetch();
-
         List<Room> results = queryFactory
                 .selectFrom(room)
-                .where(room.id.in(roomIds))
+                .join(selectCategory).on(selectCategory.entityId.eq(room.id)
+                        .and(selectCategory.type.eq(PostTypeEnum.ROOM))
+                        .and(categoryEq(category)))
                 .orderBy(room.id.desc())
-                .limit(pageable.getPageSize()+1)
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         boolean hasNext = checkLastPage(pageable, results);
@@ -92,6 +79,14 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
 
     private BooleanExpression categoryEq(CategoryEnum category) {
         return category != null ? selectCategory.category.category.eq(category) : null;
+    }
+
+    private BooleanExpression searchPost(String query) {
+        if (query == null) {
+            return null;
+        }
+        return room.name.containsIgnoreCase(query)
+                .or(room.description.containsIgnoreCase(query));
     }
 
     private BooleanExpression checkFilter(PreviewFilter filter) {
