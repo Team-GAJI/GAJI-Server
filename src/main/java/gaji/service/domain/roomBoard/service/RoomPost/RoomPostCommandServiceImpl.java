@@ -99,4 +99,14 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         return RoomPostConverter.toWritePostCommentDto(postComment);
     }
 
+    @Override
+    public void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto) {
+        PostComment comment = roomPostQueryService.findCommentByCommentId(commentId);
+        if (!comment.isAuthor(userId)){
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_UPDATE_AUTH);
+        }
+
+        comment.updateComment(requestDto.getBody());
+    }
+
 }
