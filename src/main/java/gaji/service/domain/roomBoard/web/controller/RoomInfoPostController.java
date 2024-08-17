@@ -41,4 +41,15 @@ public class RoomInfoPostController {
         roomInfoPostCommandService.updateInfoPost(postId, userId,requestDto);
         return BaseResponse.onSuccess( "게시글이 성공적으로 업데이트되었습니다.");
     }
+
+    @DeleteMapping("/trouble/{postId}")
+    @Operation(summary = "스터디룸 트러블슈팅 게시글 삭제 API")
+    public BaseResponse<String> deletePost(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long postId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomInfoPostCommandService.deleteInfoPost(postId, userId);
+        return BaseResponse.onSuccess( "게시글이 성공적으로 삭제되었습니다.");
+    }
 }
