@@ -4,6 +4,7 @@ import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPostLikes;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostBookmark;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostLike;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
@@ -59,6 +60,9 @@ public class StudyMate {
     //게시글
     @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
     private List<RoomPost> roomPostList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "studyMate", cascade =  CascadeType.ALL)
+    private List<RoomPostLikes> roomPostLikesList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;

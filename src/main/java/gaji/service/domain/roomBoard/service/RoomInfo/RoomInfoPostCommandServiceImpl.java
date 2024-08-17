@@ -8,9 +8,12 @@ import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomInfo.InfoPostComment;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPostLikes;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.InfoPostCommentRepository;
+import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostLikesRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostRepository;
+import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostLikesRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
@@ -21,6 +24,8 @@ import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +38,9 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     private final StudyMateQueryService studyMateQueryService;
     private final RoomInfoPostQueryService roomInfoPostQueryService;
     private final InfoPostCommentRepository infoPostCommentRepository;
+    private final RoomPostLikesRepository roomPostLikesRepository;
+    private final RoomInfoPostLikesRepository roomInfoPostLikesRepository;
+
     @Override
     public RoomPostResponseDto.toCreateRoomInfoPostIdDTO createRoomInfoPostIdDTO(Long roomId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto) {
         User user = userQueryService.findUserById(userId);
@@ -134,5 +142,41 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
         // CascadeType.ALL과 orphanRemoval = true 설정으로 인해
         // 댓글을 삭제하면 연관된 모든 답글도 자동으로 삭제됩니다.
         infoPostCommentRepository.delete(comment);
+    }
+
+    @Override
+    public void addLike(Long postId, Long userId, Long roomId) {
+        RoomInfoPost post = roomInfoPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        Optional<RoomInfoPostLikes> likeOptional = roomInfoPostLikesRepository
+                .findByRoomInfoPostAndStudyMate(post, studyMate);
+
+        if (likeOptional.isPresent()) {
+            throw new RestApiException(RoomPostErrorStatus._POST_ALREADY_LIKED);
+        }
+
+        RoomInfoPostLikes newLike = RoomInfoPostLikes.builder()
+                .roomInfoPost(post)
+                .studyMate(studyMate)
+                .build();
+
+        post.addLike(newLike);
+        roomInfoPostLikesRepository.save(newLike);
+    }
+
+    @Override
+    public void removeLike(Long postId, Long userId, Long roomId) {
+        RoomInfoPost post = roomInfoPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+
+        RoomInfoPostLikes like = roomInfoPostLikesRepository
+                .findByRoomInfoPostAndStudyMate(post, studyMate)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus. _POST_LIKE_NOT_FOUND));
+
+        post.removeLike(like);
+        roomInfoPostLikesRepository.delete(like);
     }
 }

@@ -16,4 +16,8 @@ public interface RoomPostCommandService {
     void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto);
 
     void deleteComment(Long commentId, Long userId);
+
+    void addLike(Long postId, Long userId, Long roomId);
+
+    void removeLike(Long postId, Long userId, Long roomId);
 }
