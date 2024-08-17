@@ -1,10 +1,9 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.service.CategoryService;
-import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.enums.SortType;
 import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.post.entity.Post;
 import gaji.service.domain.post.repository.PostJpaRepository;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

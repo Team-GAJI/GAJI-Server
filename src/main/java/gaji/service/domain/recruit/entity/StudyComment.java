@@ -1,9 +1,9 @@
 package gaji.service.domain.recruit.entity;
 
-import gaji.service.domain.user.entity.User;
 import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.enums.CommentStatus;
 import gaji.service.domain.room.entity.Room;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

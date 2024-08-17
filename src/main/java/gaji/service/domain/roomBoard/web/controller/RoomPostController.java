@@ -1,6 +1,5 @@
 package gaji.service.domain.roomBoard.web.controller;
 
-import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import gaji.service.domain.roomBoard.service.RoomPost.RoomPostCommandService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
@@ -9,7 +8,6 @@ import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.ParameterScriptAssert;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

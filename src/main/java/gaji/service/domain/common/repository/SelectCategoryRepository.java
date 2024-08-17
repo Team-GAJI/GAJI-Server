@@ -1,7 +1,6 @@
 package gaji.service.domain.common.repository;
 
 import gaji.service.domain.common.entity.SelectCategory;
-import gaji.service.domain.common.repository.SelectCategoryQueryDslRepository;
 import gaji.service.domain.enums.PostTypeEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 

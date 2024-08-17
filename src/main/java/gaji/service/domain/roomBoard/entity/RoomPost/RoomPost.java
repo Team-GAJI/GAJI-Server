@@ -1,10 +1,7 @@
 package gaji.service.domain.roomBoard.entity.RoomPost;
 
 import gaji.service.domain.roomBoard.entity.RoomBoard;
-import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostBookmark;
-import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostLike;
 import gaji.service.domain.studyMate.entity.StudyMate;
-import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 

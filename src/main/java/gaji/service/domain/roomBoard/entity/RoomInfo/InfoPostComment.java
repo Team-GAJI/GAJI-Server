@@ -1,7 +1,5 @@
 package gaji.service.domain.roomBoard.entity.RoomInfo;
 
-import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
-import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,9 +21,13 @@ public class InfoPostComment {
     @JoinColumn(name = "user_id")
     private User user;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "post_id")
+//    private RoomInfoPost roomInfoPost;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private RoomInfoPost roomInoPost;
+    private RoomInfoPost roomInfoPost;
 
     private String body;
 
@@ -36,8 +38,6 @@ public class InfoPostComment {
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InfoPostComment> replies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "roomPost",cascade = CascadeType.ALL)
-    private final List<RoomInfoPost> infoPostList  = new ArrayList<>() ;
 
     private boolean isReply;
 

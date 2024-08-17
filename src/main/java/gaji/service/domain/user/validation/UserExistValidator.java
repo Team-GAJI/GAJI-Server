@@ -1,7 +1,6 @@
 package gaji.service.domain.user.validation;
 
 import gaji.service.domain.user.annotation.ExistUser;
-import gaji.service.domain.post.code.PostErrorStatus;
 import gaji.service.domain.user.code.UserErrorStatus;
 import gaji.service.domain.user.service.UserQueryService;
 import jakarta.validation.ConstraintValidator;
