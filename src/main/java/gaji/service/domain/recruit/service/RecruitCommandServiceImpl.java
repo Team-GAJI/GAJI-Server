@@ -3,7 +3,6 @@ package gaji.service.domain.recruit.service;
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.service.CategoryService;
-import gaji.service.domain.common.service.SelectCategoryService;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
@@ -11,7 +10,6 @@ import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
 import gaji.service.domain.recruit.repository.RecruitPostBookmarkRepository;
 import gaji.service.domain.recruit.repository.RecruitPostLikesRepository;
-import gaji.service.domain.common.repository.SelectCategoryRepository;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
@@ -38,7 +36,6 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
     private final RoomCommandService roomCommandService;
     private final UserQueryService userQueryService;
     private final CategoryService categoryService;
-    private final SelectCategoryService selectCategoryService;
     private final RoomQueryService roomQueryService;
     private final StudyMateRepository studyMateRepository;
     private final MaterialCommandService materialCommandService;
@@ -93,7 +90,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
                 .entityId(room.getId())
                 .type(PostTypeEnum.ROOM)
                 .build();
-        selectCategoryService.saveSelectCategory(selectCategory);
+        categoryService.saveSelectCategory(selectCategory);
 
         return RecruitConverter.toResponseDTO(room);
     }
