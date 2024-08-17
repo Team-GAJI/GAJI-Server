@@ -19,5 +19,7 @@ public interface CategoryService {
     List<SelectCategory> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType);
     List<CategoryResponseDTO.BaseDTO> findAllCategory();
     void saveAllSelectCategory(List<SelectCategory> selectCategoryList);
+
+    SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type);
 }
 

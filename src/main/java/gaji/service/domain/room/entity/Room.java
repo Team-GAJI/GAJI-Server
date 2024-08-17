@@ -1,7 +1,6 @@
 package gaji.service.domain.room.entity;
 
 import gaji.service.domain.common.entity.BaseEntity;
-import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.curriculum.Curriculum;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
@@ -83,6 +82,8 @@ public class Room extends BaseEntity {
     private int likes;
     //북마크수
     private int bookmarks;
+    //댓글수
+    private int commentCount;
 
     private RecruitPostTypeEnum recruitPostTypeEnum;
 
@@ -143,9 +144,13 @@ public class Room extends BaseEntity {
         this.views = 0;
         this.likes = 0;
         this.bookmarks = 0;
+        this.commentCount = 0;
         this.recruitPostTypeEnum = RecruitPostTypeEnum.RECRUITING;
     }
 
+    public void increaseCommentCount() {
+        this.commentCount++;
+    }
     public void increaseLike() {
         this.likes++;
     }
