@@ -69,5 +69,15 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     }
 
 
+    @Override
+    public void deletePost(Long postId, Long userId) {
+        RoomPost post = roomPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        if (!post.isAuthor(userId)) {
+            throw new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND);
+        }
+        roomPostRepository.delete(post);
+    }
+
 
 }

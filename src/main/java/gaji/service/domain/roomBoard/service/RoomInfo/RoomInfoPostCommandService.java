@@ -7,4 +7,6 @@ public interface RoomInfoPostCommandService {
     RoomPostResponseDto.toCreateRoomInfoPostIdDTO createRoomInfoPostIdDTO(Long roomId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto);
 
     void updateInfoPost(Long postId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto);
+
+    void deleteInfoPost(Long postId, Long userId);
 }

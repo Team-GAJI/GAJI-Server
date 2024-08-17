@@ -72,5 +72,14 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     }
 
 
+    @Override
+    public void deleteInfoPost(Long postId, Long userId) {
+        RoomInfoPost post = roomInfoPostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        if (!post.isAuthor(userId)) {
+            throw new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND);
+        }
+        roomInfoPostRepository.delete(post);
+    }
 
 }
