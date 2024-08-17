@@ -1,7 +1,7 @@
 package gaji.service.domain.recruit.service;
 
 import gaji.service.domain.common.entity.SelectCategory;
-import gaji.service.domain.common.service.SelectCategoryService;
+import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.PreviewFilter;
@@ -30,7 +30,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     private final UserQueryService userQueryService;
     private final RoomQueryService roomQueryService;
     private final RoomCommandService roomCommandService;
-    private final SelectCategoryService selectCategoryService;
+    private final CategoryService categoryService;
     private final RecruitRepository recruitRepository;
 
     @Override
@@ -44,7 +44,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
         roomCommandService.saveRoom(room);
 
         SelectCategory selectCategory =
-                selectCategoryService.findByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
+                categoryService.findByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
 
         CategoryEnum category = RecruitConverter.toCategory(selectCategory);
 
