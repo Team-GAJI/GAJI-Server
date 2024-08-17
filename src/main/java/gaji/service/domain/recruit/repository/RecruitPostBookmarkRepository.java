@@ -1,7 +1,6 @@
 package gaji.service.domain.recruit.repository;
 
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
-import gaji.service.domain.recruit.entity.RecruitPostLikes;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

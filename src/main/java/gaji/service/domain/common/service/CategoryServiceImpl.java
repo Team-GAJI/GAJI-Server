@@ -77,4 +77,9 @@ public class CategoryServiceImpl implements CategoryService {
     public void saveAllSelectCategory(List<SelectCategory> selectCategoryList) {
         selectCategoryRepository.saveAll(selectCategoryList);
     }
+
+    @Override
+    public SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type) {
+        return selectCategoryRepository.findByEntityIdAndType(entityId, type);
+    }
 }
