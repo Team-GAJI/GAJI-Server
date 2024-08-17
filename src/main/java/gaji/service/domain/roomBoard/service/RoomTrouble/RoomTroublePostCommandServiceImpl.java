@@ -215,9 +215,6 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     }
 
 
-
-
-
     @Override
     public TroublePostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request) {
         TroublePostComment parentComment = troublePostCommentRepository.findById(commentId)
@@ -239,8 +236,6 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
         parentComment.addReply(reply);
         return troublePostCommentRepository.save(reply);
     }
-
-
 
 
     private void deleteReply(TroublePostComment reply) {
