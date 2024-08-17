@@ -1,7 +1,9 @@
 package gaji.service.domain.roomBoard.converter;
 
+import gaji.service.domain.roomBoard.entity.RoomInfo.InfoPostComment;
 import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePost;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
@@ -64,6 +66,17 @@ public class RoomPostConverter {
 
 
     public static RoomPostResponseDto.toWriteCommentDto toWriteCommentDto(TroublePostComment newComment) {
+        return RoomPostResponseDto.toWriteCommentDto.builder()
+                .commentId(newComment.getId())
+                .build();
+    }
+
+    public static RoomPostResponseDto.toWriteCommentDto toWritePostCommentDto(PostComment newComment) {
+        return RoomPostResponseDto.toWriteCommentDto.builder()
+                .commentId(newComment.getId())
+                .build();
+    }
+    public static RoomPostResponseDto.toWriteCommentDto toWriteInfoPostCommentDto(InfoPostComment newComment) {
         return RoomPostResponseDto.toWriteCommentDto.builder()
                 .commentId(newComment.getId())
                 .build();

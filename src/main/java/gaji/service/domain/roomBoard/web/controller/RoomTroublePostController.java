@@ -46,10 +46,9 @@ public class RoomTroublePostController {
             @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto,
             @PathVariable Long troublePostId
     ){
-        System.out.println("댓글: " + requestDto.getBody());
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        TroublePostComment newComment = roomTroublePostCommandService.writeCommentOnTroublePost(userId, troublePostId, requestDto);
-        return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(newComment));
+        RoomPostResponseDto.toWriteCommentDto newComment = roomTroublePostCommandService.writeCommentOnTroublePost(userId, troublePostId, requestDto);
+        return BaseResponse.onSuccess(newComment);
     }
 
     @PostMapping("/trouble/{roomId}/posts/{postId}/like")

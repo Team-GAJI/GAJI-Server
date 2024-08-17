@@ -44,22 +44,21 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     private final RoomTroublePostLikeRepository roomTroublePostLikeRepository;
     private final TroublePostCommentRepository troublePostCommentRepository;
     private final RoomTroublePostBookmarkRepository roomTroublePostBookmarkRepository;
+    private final RoomTroublePostQueryService roomTroublePostQueryService;
 
     @Override
-    public TroublePostComment writeCommentOnTroublePost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+    public RoomPostResponseDto.toWriteCommentDto writeCommentOnTroublePost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
         User user = userQueryService.findUserById(userId);
         RoomTroublePost roomTroublePost = findTroublePostById(postId);
 
-        System.out.println("트러블 슈팅: " + roomTroublePost.getBody());
         TroublePostComment troublePostComment = TroublePostComment.builder()
                 .user(user)
                 .roomTroublePost(roomTroublePost)
                 .body(request.getBody())
                 .build();
-        System.out.println(troublePostComment.getBody());
         troublePostCommentRepository.save(troublePostComment);
 
-        return troublePostComment;
+        return RoomPostConverter.toWriteCommentDto(troublePostComment);
     }
 
     @Override
@@ -189,7 +188,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
 
     @Override
     public void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto) {
-        TroublePostComment comment = findCommentByCommentId(commentId);
+        TroublePostComment comment = roomTroublePostQueryService.findCommentByCommentId(commentId);
         if (!comment.isAuthor(userId)){
             throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_UPDATE_AUTH);
         }
@@ -200,7 +199,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
 
     @Override
     public void deleteComment(Long commentId, Long userId) {
-        TroublePostComment comment = findTroublePostCommentById(commentId);
+        TroublePostComment comment = roomTroublePostQueryService.findTroublePostCommentById(commentId);
 
         if (!comment.isAuthor(userId)) {
             throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_DELETE_AUTH);
@@ -242,17 +241,6 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     }
 
 
-    @Override
-    public TroublePostComment findCommentByCommentId(Long commentId){
-        return troublePostCommentRepository.findById(commentId)
-                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._NOT_FOUND_COMMENT));
-    }
-
-    @Override
-    public TroublePostComment findTroublePostCommentById(Long troublePostId) {
-        return troublePostCommentRepository.findById(troublePostId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
-    }
 
 
     private void deleteReply(TroublePostComment reply) {

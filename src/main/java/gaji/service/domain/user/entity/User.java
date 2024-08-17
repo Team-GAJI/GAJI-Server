@@ -115,11 +115,6 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<ChatMessage> chatMessageList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<RoomCommentLikes> roomCommentLikesList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<RoomComment> roomCommentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<WeeklyUserProgress> weeklyUserProgressList = new ArrayList<>();
