@@ -1,6 +1,7 @@
 package gaji.service.domain.roomBoard.entity.RoomPost;
 
 import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostBookmark;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePostLike;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.user.entity.User;
@@ -83,4 +84,15 @@ public class RoomPost {
         this.likeCount = Math.max(0, this.likeCount - 1);
 
     }
+    public void addBookmark(RoomPostBookmark bookmark) {
+        this.roomPostBookmarkList.add(bookmark);
+        this.bookmarkCount++;
+    }
+
+    public void removeBookmark(RoomPostBookmark bookmark) {
+        this.roomPostBookmarkList.remove(bookmark);
+        this. bookmarkCount = Math.max(0, this.bookmarkCount - 1);
+
+    }
+
 }

@@ -111,4 +111,28 @@ public class RoomInfoPostController {
         roomInfoPostCommandService.removeLike(postId, userId, roomId);
         return BaseResponse.onSuccess("UNLIKE");
     }
+
+    @PostMapping("/info/{roomId}/{postId}/bookmark-add")
+    @Operation(summary = "정보나눔 게시글 북마크 추가 API")
+    public BaseResponse<String> addBookmark(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long roomId,
+            @PathVariable Long postId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomInfoPostCommandService.addBookmark(postId, userId, roomId);
+        return BaseResponse.onSuccess( "북마크가 성공적으로 업데이트 되었습니다.");
+    }
+
+    @DeleteMapping("/info/{roomId}/{postId}/bookmark-remove")
+    @Operation(summary = "정보나눔 게시글 북마크 제거 API")
+    public BaseResponse<String> removeBookmark(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long roomId,
+            @PathVariable Long postId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomInfoPostCommandService.removeBookmark(postId, userId, roomId);
+        return BaseResponse.onSuccess( "북마크가 성공적으로 삭제되었습니다.");
+    }
 }
