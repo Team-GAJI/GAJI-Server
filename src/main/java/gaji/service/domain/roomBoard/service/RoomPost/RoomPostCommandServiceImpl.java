@@ -109,4 +109,35 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         comment.updateComment(requestDto.getBody());
     }
 
+    @Override
+    public void deleteComment(Long commentId, Long userId) {
+        PostComment comment = roomPostQueryService.findPostCommentById(commentId);
+
+        if (!comment.isAuthor(userId)) {
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_DELETE_AUTH);
+        }
+
+        if (comment.isReply()) {
+            // 답글인 경우, 해당 답글만 삭제
+            deleteReply(comment);
+        } else {
+            // 댓글인 경우, 댓글과 모든 관련 답글 삭제
+            deleteCommentAndReplies(comment);
+        }
+
+
+    }
+
+        private void deleteReply(PostComment reply) {
+            PostComment parentComment = reply.getParentComment();
+            parentComment.getReplies().remove(reply);
+            postCommentRepository.delete(reply);
+        }
+
+        private void deleteCommentAndReplies(PostComment comment) {
+            // CascadeType.ALL과 orphanRemoval = true 설정으로 인해
+            // 댓글을 삭제하면 연관된 모든 답글도 자동으로 삭제됩니다.
+            postCommentRepository.delete(comment);
+        }
+
 }

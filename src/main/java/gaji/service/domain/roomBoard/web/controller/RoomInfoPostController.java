@@ -17,7 +17,7 @@ public class RoomInfoPostController {
     private final TokenProviderService tokenProviderService;
     private final RoomInfoPostCommandService roomInfoPostCommandService;
 
-    @PostMapping("/info-post/{roomId}")
+    @PostMapping("/info/{roomId}")
     @Operation(summary = "스터디룸 정보나눔 게시판 등록 API")
     public BaseResponse<RoomPostResponseDto.toCreateRoomInfoPostIdDTO> StudyRoomInfoPostController(
             @RequestHeader("Authorization") String authorization,
@@ -42,8 +42,8 @@ public class RoomInfoPostController {
         return BaseResponse.onSuccess( "게시글이 성공적으로 업데이트되었습니다.");
     }
 
-    @DeleteMapping("/trouble/{postId}")
-    @Operation(summary = "스터디룸 트러블슈팅 게시글 삭제 API")
+    @DeleteMapping("/info/{postId}")
+    @Operation(summary = "스터디룸 정보나눔 게시글 삭제 API")
     public BaseResponse<String> deletePost(
             @RequestHeader("Authorization") String authorization,
             @PathVariable Long postId
@@ -54,7 +54,7 @@ public class RoomInfoPostController {
     }
 
     @PostMapping("/info/{postId}/comments")
-    @Operation(summary = "스터디룸 트러블슈팅 댓글 등록 API")
+    @Operation(summary = "스터디룸 정보나눔 댓글 등록 API")
     public BaseResponse<RoomPostResponseDto.toWriteCommentDto> writeCommentOnInfoPost(
             @RequestHeader("Authorization") String authorization,
             @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto,
@@ -65,8 +65,8 @@ public class RoomInfoPostController {
         return BaseResponse.onSuccess(newComment);
     }
 
-    @PutMapping("/trouble/comments/{commentId}")
-    @Operation(summary = "스터디룸 트러블슈팅 댓글 업데이트 API")
+    @PutMapping("/info/comments/{commentId}")
+    @Operation(summary = "스터디룸 정보나눔 댓글 업데이트 API")
     public BaseResponse<String> updateComment(
             @RequestHeader("Authorization") String authorization,
             @RequestBody RoomPostRequestDto.RoomTroubleCommentDto requestDto,
@@ -75,5 +75,16 @@ public class RoomInfoPostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomInfoPostCommandService.updateComment(commentId, userId,requestDto);
         return BaseResponse.onSuccess( "댓글이 성공적으로 업데이트되었습니다.");
+    }
+
+    @DeleteMapping("/info/comments/{commentId}")
+    @Operation(summary = "스터디룸 정보나눔 게시글 댓글 삭제 API")
+    public BaseResponse<String> deleteComment(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long commentId
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomInfoPostCommandService.deleteComment(commentId, userId);
+        return BaseResponse.onSuccess( "댓글이 성공적으로 삭제되었습니다.");
     }
 }
