@@ -1,6 +1,5 @@
 package gaji.service.domain.roomBoard.service.RoomInfo;
 
-import gaji.service.domain.roomBoard.entity.RoomInfo.InfoPostComment;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 
@@ -16,6 +15,4 @@ public interface RoomInfoPostCommandService {
     void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto);
 
     void deleteComment(Long commentId, Long userId);
-
-    InfoPostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request);
 }

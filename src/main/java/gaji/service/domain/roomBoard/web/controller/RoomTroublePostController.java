@@ -146,7 +146,7 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess( "북마크가 성공적으로 삭제되었습니다.");
     }
 
-    @PostMapping("/trouble/comments/{commentId}/replies")
+    @PostMapping("/comments/{commentId}/replies")
     @Operation(summary = "트러블 슈팅 게시글 댓글의 답글 작성 API")
     public BaseResponse<RoomPostResponseDto.toWriteCommentDto> addReply(
             @RequestHeader("Authorization") String authorization,
@@ -158,7 +158,7 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(replyComment));
     }
 
-    @GetMapping("/{boardId}/trouble")
+    @GetMapping("/{boardId}/trouble-posts")
     @Operation(summary = "트러블 슈팅 게시글 무한 스크롤 조회", description = "트러블 슈팅 게시글을 무한 스크롤 방식으로 조회합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
     public BaseResponse<List<RoomPostResponseDto.TroublePostSummaryDto>> getNextTroublePosts(
