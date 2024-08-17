@@ -1,8 +1,5 @@
 package gaji.service.domain.roomBoard.web.controller;
 
-import gaji.service.domain.roomBoard.converter.RoomPostConverter;
-import gaji.service.domain.roomBoard.entity.RoomInfo.InfoPostComment;
-import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.service.RoomInfo.RoomInfoPostCommandService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
@@ -89,17 +86,5 @@ public class RoomInfoPostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomInfoPostCommandService.deleteComment(commentId, userId);
         return BaseResponse.onSuccess( "댓글이 성공적으로 삭제되었습니다.");
-    }
-
-    @PostMapping("/info/comments/{commentId}/replies")
-    @Operation(summary = "정보나눔 게시글 댓글의 답글 작성 API")
-    public BaseResponse<RoomPostResponseDto.toWriteCommentDto> addReply(
-            @RequestHeader("Authorization") String authorization,
-            @PathVariable Long commentId,
-            @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto
-    ) {
-        Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        InfoPostComment replyComment = roomInfoPostCommandService.addReply(commentId, userId, requestDto);
-        return BaseResponse.onSuccess(RoomPostConverter.toWriteInfoPostCommentDto(replyComment));
     }
 }

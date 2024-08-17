@@ -140,27 +140,4 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
             postCommentRepository.delete(comment);
         }
 
-    @Override
-    public PostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request) {
-        PostComment parentComment = postCommentRepository.findById(commentId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
-
-        if (parentComment.isReply()) {
-            throw new IllegalStateException("답글에는 답글을 달 수 없습니다.");
-        }
-
-        User user = userQueryService.findUserById(userId);
-        PostComment reply = PostComment.builder()
-                .user(user)
-                .roomPost(parentComment.getRoomPost())
-                .body(request.getBody())
-                .isReply(true)
-                .parentComment(parentComment)
-                .build();
-
-        parentComment.addReply(reply);
-        return postCommentRepository.save(reply);
-    }
-
-
 }
