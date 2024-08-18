@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.service.RoomPost;
 
+import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 
@@ -22,4 +23,6 @@ public interface RoomPostCommandService {
     void addBookmark(Long postId, Long userId, Long roomId);
 
     void removeBookmark(Long postId, Long userId, Long roomId);
+
+    PostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request);
 }

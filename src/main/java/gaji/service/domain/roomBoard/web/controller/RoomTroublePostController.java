@@ -147,7 +147,7 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess( "북마크가 성공적으로 삭제되었습니다.");
     }
 
-    @PostMapping("/comments/{commentId}/replies")
+    @PostMapping("/trouble/comments/{commentId}/replies")
     @Operation(summary = "트러블 슈팅 게시글 댓글의 답글 작성 API")
     public BaseResponse<RoomPostResponseDto.toWriteCommentDto> addReply(
             @RequestHeader("Authorization") String authorization,

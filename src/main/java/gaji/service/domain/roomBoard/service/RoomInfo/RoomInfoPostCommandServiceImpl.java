@@ -214,5 +214,27 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
         post.removeBookmark(bookmark);
         roomInfoPostBookmarkRepository.delete(bookmark);
     }
+
+    @Override
+    public InfoPostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+        InfoPostComment parentComment = infoPostCommentRepository.findById(commentId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+
+        if (parentComment.isReply()) {
+            throw new IllegalStateException("답글에는 답글을 달 수 없습니다.");
+        }
+
+        User user = userQueryService.findUserById(userId);
+        InfoPostComment reply = InfoPostComment.builder()
+                .user(user)
+                .roomInfoPost(parentComment.getRoomInfoPost())
+                .body(request.getBody())
+                .isReply(true)
+                .parentComment(parentComment)
+                .build();
+
+        parentComment.addReply(reply);
+        return infoPostCommentRepository.save(reply);
+    }
 }
 
