@@ -144,4 +144,12 @@ public class RecruitResponseDTO {
         boolean hasNext;
         int nextCategoryId;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class JoinStudyResponseDTO {
+        Long roomId;
+    }
 }

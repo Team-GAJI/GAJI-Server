@@ -5,6 +5,7 @@ import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
@@ -18,8 +19,9 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.MaterialCommandService;
 import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
-import gaji.service.domain.studyMate.entity.StudyApplicant;
+import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.studyMate.entity.StudyMate;
+import gaji.service.domain.studyMate.service.StudyMateCommandService;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
@@ -42,7 +44,6 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
     private final RoomQueryService roomQueryService;
     private final StudyMateCommandService studyMateCommandService;
     private final StudyMateQueryService studyMateQueryService;
-    private final StudyApplicantService studyApplicantService;
     private final MaterialCommandService materialCommandService;
     private final RecruitPostLikesRepository recruitPostLikesRepository;
     private final RecruitPostBookmarkRepository recruitPostBookmarkRepository;
@@ -67,7 +68,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         User user = userQueryService.findUserById(userId);
         Room room = RecruitConverter.toRoom(request, user, request.getThumbnailUrl(), inviteCode, peopleMaximum);
 
-        StudyMate studyMate = RecruitConverter.toStudyMate(user, room);
+        StudyMate studyMate = RecruitConverter.toStudyMate(user, room, Role.READER);
         studyMateCommandService.saveStudyMate(studyMate);
 
         if (request.getMaterialList() != null && !request.getMaterialList().isEmpty()){
@@ -165,5 +166,20 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         }
         recruitPostBookmarkRepository.deleteByUserAndRoom(user, room);
         room.decreaseBookmark();
+    }
+
+    @Override
+    public RecruitResponseDTO.JoinStudyResponseDTO joinStudy(Long userId, Long roomId) {
+        User user = userQueryService.findUserById(userId);
+        Room room = roomQueryService.findRoomById(roomId);
+
+        if (studyMateQueryService.existsByUserAndRoom(user, room)) {
+            throw new RestApiException(StudyMateErrorStatus._USER_ALREADY_JOIN);
+        }
+
+        StudyMate studyMate = RecruitConverter.toStudyMate(user, room, Role.MEMBER);
+        studyMateCommandService.saveStudyMate(studyMate);
+
+        return RecruitConverter.toJoinStudyResponseDTO(roomId);
     }
 }
