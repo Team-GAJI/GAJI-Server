@@ -189,7 +189,7 @@ public class RoomTroublePostController {
     }
 
     @GetMapping("/trouble/{postId}/comments")
-    @Operation(summary = "트러블 슈팅 게시글 댓글 및 답글 추가 로딩")
+    @Operation(summary = "트러블 슈팅 게시글 댓글 및 답글 추가 로딩", description = "추가로 댓글을 무한 스크롤 형태로 불러올 때 호출하는 api 입니다")
     public BaseResponse<Page<RoomPostResponseDto.CommentWithRepliesDTO>> getMoreComments(
             @PathVariable Long postId,
             @RequestParam(defaultValue = "0") int page,
