@@ -157,5 +157,26 @@ public class RecruitController {
                 recruitCommandService.joinStudy(userId, roomId)
         );
     }
+
+    @DeleteMapping("/{roomId}/leave")
+    @Operation(summary = "스터디 나가기 API", description = "스터디에서 나가는 API 입니다.")
+    public BaseResponse leaveStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        recruitCommandService.leaveStudy(userId, roomId);
+        return BaseResponse.onSuccess(null);
+    }
+
+    @DeleteMapping("/{roomId}/kick/{targetId}")
+    @Operation(summary = "스터디 내보내기 API", description = "스터디에서 내보내는 API 입니다.")
+    public BaseResponse kickStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId,
+            @PathVariable @Min(value = 1, message = "targetId 1 이상 이어야 합니다.") Long targetId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        recruitCommandService.kickStudy(userId, roomId, targetId);
+        return BaseResponse.onSuccess(null);
+    }
 }
 
