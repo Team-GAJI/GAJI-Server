@@ -2,7 +2,6 @@ package gaji.service.domain.roomBoard.web.controller;
 
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomInfo.InfoPostComment;
-import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.service.RoomInfo.RoomInfoPostCommandService;
 import gaji.service.domain.roomBoard.service.RoomInfo.RoomInfoPostQueryService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
