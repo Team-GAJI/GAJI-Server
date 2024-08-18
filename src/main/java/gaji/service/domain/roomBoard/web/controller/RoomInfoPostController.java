@@ -1,14 +1,19 @@
 package gaji.service.domain.roomBoard.web.controller;
 
 import gaji.service.domain.roomBoard.service.RoomInfo.RoomInfoPostCommandService;
+import gaji.service.domain.roomBoard.service.RoomInfo.RoomInfoPostQueryService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class RoomInfoPostController {
     private final TokenProviderService tokenProviderService;
     private final RoomInfoPostCommandService roomInfoPostCommandService;
+    private final RoomInfoPostQueryService roomInfoPostQueryService;
 
     @PostMapping("/info/{roomId}")
     @Operation(summary = "스터디룸 정보나눔 게시판 등록 API")
@@ -134,5 +140,19 @@ public class RoomInfoPostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomInfoPostCommandService.removeBookmark(postId, userId, roomId);
         return BaseResponse.onSuccess( "북마크가 성공적으로 삭제되었습니다.");
+    }
+
+    @GetMapping("/{boardId}/info")
+    @Operation(summary = "게시글 무한 스크롤 조회", description = "게시글을 무한 스크롤 방식으로 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "조회 성공")
+    public BaseResponse<List<RoomPostResponseDto.InfoPostSummaryDto>> getNextTroublePosts(
+            @PathVariable @Parameter(description = "게시판 ID") Long boardId,
+            @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
+            @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
+
+        List<RoomPostResponseDto.InfoPostSummaryDto> posts =
+                roomInfoPostQueryService.getNextPosts(boardId, lastPostId, size);
+
+        return BaseResponse.onSuccess(posts);
     }
 }

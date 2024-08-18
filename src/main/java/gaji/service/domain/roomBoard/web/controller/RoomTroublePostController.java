@@ -4,6 +4,8 @@ import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
 import gaji.service.domain.roomBoard.service.RoomPost.RoomPostQueryService;
 import gaji.service.domain.roomBoard.service.RoomTrouble.RoomTroublePostCommandService;
+import gaji.service.domain.roomBoard.service.RoomTrouble.RoomTroublePostQueryService;
+import gaji.service.domain.roomBoard.service.RoomTrouble.RoomTroublePostQueryServiceImpl;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.global.base.BaseResponse;
@@ -24,8 +26,7 @@ public class RoomTroublePostController {
 
     private final TokenProviderService tokenProviderService;
     private final RoomTroublePostCommandService roomTroublePostCommandService;
-    private final RoomPostQueryService roomPostQueryService;
-
+    private final RoomTroublePostQueryService roomTroublePostQueryService;
     @PostMapping("/trouble/{roomId}")
     @Operation(summary = "스터디룸 트러블슈팅 게시판 등록 API")
     public BaseResponse<RoomPostResponseDto.toCreateRoomTroublePostIdDTO> TroublePostController(
@@ -158,7 +159,7 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(replyComment));
     }
 
-    @GetMapping("/{boardId}/trouble-posts")
+    @GetMapping("/{boardId}/trouble")
     @Operation(summary = "트러블 슈팅 게시글 무한 스크롤 조회", description = "트러블 슈팅 게시글을 무한 스크롤 방식으로 조회합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
     public BaseResponse<List<RoomPostResponseDto.TroublePostSummaryDto>> getNextTroublePosts(
@@ -167,7 +168,7 @@ public class RoomTroublePostController {
             @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
 
         List<RoomPostResponseDto.TroublePostSummaryDto> posts =
-                roomPostQueryService.getNextTroublePosts(boardId, lastPostId, size);
+                roomTroublePostQueryService.getNextTroublePosts(boardId, lastPostId, size);
 
         return BaseResponse.onSuccess(posts);
     }
