@@ -184,7 +184,7 @@ public class RoomInfoPostController {
         return BaseResponse.onSuccess(postDetail);
     }
 
-    @GetMapping("/info/{postId}/comments")
+    @GetMapping("/info/{postId}/get/comments")
     @Operation(summary = "스터디룸 정보나눔 게시글 댓글 및 답글 추가 로딩")
     public BaseResponse<Page<RoomPostResponseDto.CommentWithRepliesDTO>> getMoreComments(
             @PathVariable Long postId,
