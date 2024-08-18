@@ -77,7 +77,7 @@ public class EventController {
         );
     }
 
-    @PutMapping("/{eventId}")
+    @PutMapping("/{eventId}/complete")
     @Operation(summary = "ToDo 완료 API")
     public BaseResponse<EventIdResponse> putToDoComplete(
             @CurrentUser User user,
@@ -90,7 +90,7 @@ public class EventController {
         );
     }
 
-    @PatchMapping("/{eventId}")
+    @PatchMapping("/{eventId}/complete-delete")
     @Operation(summary = "ToDo 완료 취소 API")
     public BaseResponse<EventIdResponse> deleteToDoComplete(
             @CurrentUser User user,
