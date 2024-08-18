@@ -12,6 +12,7 @@ import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +30,14 @@ public class RecruitController {
     private final StudyCommentQueryService studyCommentQueryService;
 
     @PostMapping("")
-    @Operation(summary = "스터디 모집 게시글 생성 API", description = "스터디 모집 게시글을 생성하는 API입니다.")
+    @Operation(summary = "스터디 모집 게시글 생성 성성 API", description = "스터디 모집 게시글을 생성하는 API입니다.")
     public BaseResponse<RecruitResponseDTO.CreateRoomDTO> createRoom(
             @RequestBody @Valid RecruitRequestDTO.CreateRoomDTO request,
             @RequestHeader("Authorization") String authorizationHeader) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        RecruitResponseDTO.CreateRoomDTO responseDTO = recruitCommandService.createRoom(request, userId);
-        return BaseResponse.onSuccess(responseDTO);
+        return BaseResponse.onSuccess(
+                recruitCommandService.createRoom(request, userId)
+        );
     }
 
     @GetMapping("/{roomId}")

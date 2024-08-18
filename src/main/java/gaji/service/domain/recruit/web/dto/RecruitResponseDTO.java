@@ -1,9 +1,13 @@
 package gaji.service.domain.recruit.web.dto;
 
+
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.enums.UserActive;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,6 +29,7 @@ public class RecruitResponseDTO {
     @AllArgsConstructor
     public static class studyDetailDTO {
         // 유저 관련
+        Long writerId;
         String userNickName;
         UserActive userActive;
         LocalDateTime inactiveTime;

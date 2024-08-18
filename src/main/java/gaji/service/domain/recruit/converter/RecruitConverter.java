@@ -71,6 +71,7 @@ public class RecruitConverter {
                 .userNickName(user.getNickname())
                 .userActive(user.getStatus())
                 .inactiveTime(user.getInactiveTime())
+                .writerId(user.getId())
 
                 .name(room.getName())
                 .imageUrl(room.getThumbnailUrl())
