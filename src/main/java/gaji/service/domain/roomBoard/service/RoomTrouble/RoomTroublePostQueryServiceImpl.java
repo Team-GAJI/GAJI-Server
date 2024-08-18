@@ -92,6 +92,7 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
         return dto;
     }
 
+    @Override
     public List<RoomPostResponseDto.CommentDTO> getMoreComments(Long postId, Long lastCommentId, int size) {
         List<TroublePostComment> comments = troublePostCommentRepository
                 .findMoreComments(postId, lastCommentId, PageRequest.of(0, size));
@@ -100,6 +101,7 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<RoomPostResponseDto.CommentDTO> getMoreReplies(Long commentId, Long lastReplyId, int size) {
         List<TroublePostComment> replies = troublePostCommentRepository
                 .findMoreReplies(commentId, lastReplyId, PageRequest.of(0, size));

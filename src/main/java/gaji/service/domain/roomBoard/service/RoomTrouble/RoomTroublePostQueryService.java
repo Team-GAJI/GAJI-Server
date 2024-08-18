@@ -13,4 +13,8 @@ public interface RoomTroublePostQueryService {
     List<RoomPostResponseDto.TroublePostSummaryDto> getNextTroublePosts(Long boardId, Long lastPostId, int size);
 
     RoomPostResponseDto.TroublePostDetailDTO getPostDetail(Long postId, Long userId);
+
+    List<RoomPostResponseDto.CommentDTO> getMoreComments(Long postId, Long lastCommentId, int size);
+
+    List<RoomPostResponseDto.CommentDTO> getMoreReplies(Long commentId, Long lastReplyId, int size);
 }
