@@ -13,10 +13,10 @@ import java.util.List;
 @Repository
 public interface RoomInfoPostRepository extends JpaRepository<RoomInfoPost, Long> {
     @Query("SELECT new gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto$InfoPostSummaryDto(" +
-            "r.id, r.title, r.studyMate.user.nickname, r.createdAt, r.viewCount, SIZE(r.infoPostCommentList)) " +
+            "r.id, r.title, r.studyMate.user.nickname, r.postTime, r.viewCount, SIZE(r.infoPostCommentList)) " +
             "FROM RoomInfoPost r " +
             "WHERE r.roomBoard.id = :boardId AND r.id < :lastPostId " +
-            "ORDER BY r.createdAt DESC")
+            "ORDER BY r.postTime DESC")
     List<RoomPostResponseDto.InfoPostSummaryDto> findInfoPostSummariesForInfiniteScroll(
             @Param("boardId") Long boardId,
             @Param("lastPostId") Long lastPostId,

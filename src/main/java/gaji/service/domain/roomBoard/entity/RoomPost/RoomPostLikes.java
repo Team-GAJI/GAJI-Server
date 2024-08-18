@@ -15,7 +15,7 @@ public class RoomPostLikes {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_mate_id")
+    @JoinColumn(name = "user_id")
     private StudyMate studyMate;
 
     @ManyToOne(fetch = FetchType.LAZY)
