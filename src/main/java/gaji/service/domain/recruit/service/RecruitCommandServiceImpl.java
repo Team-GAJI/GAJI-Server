@@ -169,6 +169,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
     }
 
     @Override
+    @Transactional
     public RecruitResponseDTO.JoinStudyResponseDTO joinStudy(Long userId, Long roomId) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
@@ -181,5 +182,42 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         studyMateCommandService.saveStudyMate(studyMate);
 
         return RecruitConverter.toJoinStudyResponseDTO(roomId);
+    }
+
+    @Override
+    @Transactional
+    public void leaveStudy(Long userId, Long roomId) {
+        User user = userQueryService.findUserById(userId);
+        Room room = roomQueryService.findRoomById(roomId);
+
+        if (!studyMateQueryService.existsByUserAndRoom(user, room)) {
+            throw new RestApiException(StudyMateErrorStatus._USER_NOT_IN_STUDYROOM);
+        } else {
+            if (studyMateQueryService.checkLeader(user, room)) {
+                throw new RestApiException(StudyMateErrorStatus._LEADER_IMPOSSIBLE_LEAVE);
+            }
+            studyMateCommandService.deleteByUserAndRoom(user, room);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void kickStudy(Long userId, Long roomId, Long targetId) {
+        Room room = roomQueryService.findRoomById(roomId);
+        User target = userQueryService.findUserById(targetId);
+
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
+        if (studyMate.getRole() != Role.READER) {
+            throw new RestApiException(StudyMateErrorStatus._ONLY_LEADER_POSSIBLE);
+        }
+
+        if (!studyMateQueryService.existsByUserAndRoom(target, room)) {
+            throw new RestApiException(StudyMateErrorStatus._USER_NOT_IN_STUDYROOM);
+        } else {
+            if (studyMateQueryService.checkLeader(target, room)) {
+                throw new RestApiException(StudyMateErrorStatus._LEADER_IMPOSSIBLE_LEAVE);
+            }
+            studyMateCommandService.deleteByUserAndRoom(target, room);
+        }
     }
 }

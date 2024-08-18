@@ -16,4 +16,8 @@ public interface RecruitCommandService {
     void unBookmarkStudy(Long userId, Long roomId);
 
     RecruitResponseDTO.JoinStudyResponseDTO joinStudy(Long userId, Long roomId);
+
+    void leaveStudy(Long userId, Long roomId);
+
+    void kickStudy(Long userId, Long roomId, Long targetId);
 }

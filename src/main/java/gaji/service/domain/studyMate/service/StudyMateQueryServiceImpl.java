@@ -1,5 +1,6 @@
 package gaji.service.domain.studyMate.service;
 
+import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.studyMate.entity.StudyMate;
@@ -31,6 +32,12 @@ public class StudyMateQueryServiceImpl implements StudyMateQueryService {
     @Override
     public boolean existsByUserAndRoom(User user, Room room) {
         return studyMateRepository.existsByUserAndRoom(user, room);
+    }
+
+    @Override
+    public boolean checkLeader(User user, Room room) {
+        StudyMate studyMate = findByUserIdAndRoomId(user.getId(), room.getId());
+        return studyMate.getRole() == Role.READER;
     }
 
 }

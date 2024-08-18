@@ -10,4 +10,6 @@ public interface StudyMateQueryService {
     StudyMate findById(Long studyMateId);
 
     boolean existsByUserAndRoom(User user, Room room);
+
+    boolean checkLeader(User user, Room room);
 }

@@ -16,4 +16,6 @@ public interface StudyMateRepository extends JpaRepository<StudyMate, Long> {
     List<StudyMate> findByRoom(Room room);
 
     boolean existsByUserAndRoom(User user, Room room);
+
+    void deleteByUserAndRoom(User user, Room room);
 }
