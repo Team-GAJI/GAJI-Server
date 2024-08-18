@@ -47,13 +47,9 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
     @Override
     @Transactional
     public RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId) {
-        String thumbnailUrl = DEFAULT_THUMBNAIL_URL;
+
         String inviteCode = null;
         int peopleMaximum = 0;
-
-        if (request.getThumbnailUrl() != null && !request.getThumbnailUrl().isEmpty()) {
-            thumbnailUrl = request.getThumbnailUrl();
-        }
 
         if (request.isPrivate()) {
             inviteCode = generateInviteCode();
@@ -64,7 +60,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         }
 
         User user = userQueryService.findUserById(userId);
-        Room room = RecruitConverter.toRoom(request, user, thumbnailUrl, inviteCode, peopleMaximum);
+        Room room = RecruitConverter.toRoom(request, user, request.getThumbnailUrl(), inviteCode, peopleMaximum);
 
         StudyMate studyMate = RecruitConverter.toStudyMate(user, room);
         studyMateRepository.save(studyMate);
