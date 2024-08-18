@@ -3,7 +3,7 @@ package gaji.service.domain.user.service;
 import com.querydsl.core.Tuple;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.RoomTypeEnum;
-import gaji.service.domain.post.repository.PostJpaRepository;
+import gaji.service.domain.post.repository.CommunityPostJpaRepository;
 import gaji.service.domain.room.repository.RoomCustomRepository;
 import gaji.service.domain.user.code.UserErrorStatus;
 import gaji.service.domain.user.entity.User;
@@ -25,7 +25,7 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     private final UserRepository userRepository;
     private final RoomCustomRepository roomCustomRepository;
-    private final PostJpaRepository postJpaRepository;
+    private final CommunityPostJpaRepository communityPostJpaRepository;
 
     @Override
     public boolean existUserById(Long userId) {
@@ -75,7 +75,7 @@ public class UserQueryServiceImpl implements UserQueryService {
 
         PageRequest pageRequest = PageRequest.of(0, size);
 
-        Slice<Tuple> postList = postJpaRepository.findAllPostsByUser(user, cursorDateTime, pageRequest, type);
+        Slice<Tuple> postList = communityPostJpaRepository.findAllPostsByUser(user, cursorDateTime, pageRequest, type);
 
         return postList;
     }

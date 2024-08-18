@@ -2,7 +2,7 @@ package gaji.service.domain.post.validation;
 
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.annotation.ExistPostType;
-import gaji.service.domain.post.code.PostErrorStatus;
+import gaji.service.domain.post.code.CommunityPostErrorStatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ public class PostTypeExistValidator implements ConstraintValidator<ExistPostType
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(PostErrorStatus._INVALID_POST_TYPE.getMessage()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(CommunityPostErrorStatus._INVALID_POST_TYPE.getMessage()).addConstraintViolation();
         }
 
         return isValid;

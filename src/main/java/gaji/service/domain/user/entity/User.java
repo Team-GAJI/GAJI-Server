@@ -90,10 +90,10 @@ public class User extends BaseEntity {
     private List<RecruitPostLikes> recruitPostLikesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Comment> commentList = new ArrayList<>();
+    private List<CommunityComment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Post> postList = new ArrayList<>();
+    private List<CommnuityPost> postList = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "user")
 //    private List<PostBookmark> postBookmarkList = new ArrayList<>();

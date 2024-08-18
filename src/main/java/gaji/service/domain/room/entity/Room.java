@@ -82,6 +82,8 @@ public class Room extends BaseEntity {
     private int likes;
     //북마크수
     private int bookmarks;
+    //댓글수
+    private int commentCount;
 
     private RecruitPostTypeEnum recruitPostTypeEnum;
 
@@ -142,6 +144,26 @@ public class Room extends BaseEntity {
         this.views = 0;
         this.likes = 0;
         this.bookmarks = 0;
+        this.commentCount = 0;
         this.recruitPostTypeEnum = RecruitPostTypeEnum.RECRUITING;
+    }
+
+    public void increaseCommentCount() {
+        this.commentCount++;
+    }
+    public void increaseLike() {
+        this.likes++;
+    }
+
+    public void decreaseLike() {
+        this.likes--;
+    }
+
+    public void increaseBookmark() {
+        this.bookmarks++;
+    }
+
+    public void decreaseBookmark() {
+        this.bookmarks--;
     }
 }

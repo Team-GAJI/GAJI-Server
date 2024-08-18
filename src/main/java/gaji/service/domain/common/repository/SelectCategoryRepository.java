@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface SelectCategoryRepository extends JpaRepository<SelectCategory, Long>, SelectCategoryQueryDslRepository {
 
-    List<SelectCategory> findAllByEntityIdAndType(Long entityId, PostTypeEnum type);
+    SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type);
 }
