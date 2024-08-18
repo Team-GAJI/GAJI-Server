@@ -139,6 +139,7 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private ServiceRole role;
+
     private String profileImagePth;
 
     private String usernameId;
