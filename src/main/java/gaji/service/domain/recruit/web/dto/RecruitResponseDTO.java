@@ -1,6 +1,5 @@
 package gaji.service.domain.recruit.web.dto;
 
-
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.enums.UserActive;
@@ -142,6 +141,7 @@ public class RecruitResponseDTO {
     @AllArgsConstructor
     public static class DefaultPreviewListResponseDTO {
         List<DefaultPreviewDTO> defaultPreviewList;
-        int nextIndex;
+        boolean hasNext;
+        int nextCategoryId;
     }
 }
