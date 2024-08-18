@@ -1,7 +1,7 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.post.entity.CommunityComment;
 import gaji.service.domain.post.entity.CommnuityPost;
+import gaji.service.domain.post.entity.CommunityComment;
 import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
