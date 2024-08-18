@@ -2,14 +2,14 @@ package gaji.service.domain.room.entity;
 
 import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.curriculum.Curriculum;
-import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
-import gaji.service.domain.roomBoard.entity.common.RoomBoard;
+import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.studyMate.entity.Chat;
 import gaji.service.domain.studyMate.entity.StudyApplicant;
 import gaji.service.domain.studyMate.entity.StudyMate;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

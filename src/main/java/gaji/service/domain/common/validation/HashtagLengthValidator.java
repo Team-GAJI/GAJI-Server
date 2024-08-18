@@ -1,6 +1,5 @@
 package gaji.service.domain.common.validation;
 
-import gaji.service.domain.common.annotation.CheckHashtagBlank;
 import gaji.service.domain.common.annotation.CheckHashtagLength;
 import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import jakarta.validation.ConstraintValidator;

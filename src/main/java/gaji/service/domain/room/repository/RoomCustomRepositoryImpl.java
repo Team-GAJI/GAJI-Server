@@ -7,7 +7,6 @@ import gaji.service.domain.room.entity.QRoom;
 import gaji.service.domain.studyMate.entity.QStudyMate;
 import gaji.service.domain.user.entity.User;
 import lombok.AllArgsConstructor;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
