@@ -31,7 +31,7 @@ public class RecruitController {
 
     @PostMapping("")
     @Operation(summary = "스터디 모집 게시글 생성 성성 API", description = "스터디 모집 게시글을 생성하는 API입니다.")
-    public BaseResponse<RecruitResponseDTO.CreateRoomDTO> createRoom(
+    public BaseResponse<RecruitResponseDTO.CreateRoomResponseDTO> createRoom(
             @RequestBody @Valid RecruitRequestDTO.CreateRoomDTO request,
             @RequestHeader("Authorization") String authorizationHeader) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
@@ -42,33 +42,33 @@ public class RecruitController {
 
     @GetMapping("/{roomId}")
     @Operation(summary = "스터디 정보 상세 조회 API", description = "스터디 상세 정보를 조회하는 API입니다.")
-    public BaseResponse<RecruitResponseDTO.studyDetailDTO> getStudyDetail(@PathVariable Long roomId) {
-        RecruitResponseDTO.studyDetailDTO responseDTO = recruitQueryService.getStudyDetail(roomId);
+    public BaseResponse<RecruitResponseDTO.studyDetailResponseDTO> getStudyDetail(@PathVariable Long roomId) {
+        RecruitResponseDTO.studyDetailResponseDTO responseDTO = recruitQueryService.getStudyDetail(roomId);
         return BaseResponse.onSuccess(responseDTO);
     }
 
     @GetMapping("/{roomId}/comments")
     @Operation(summary = "스터디 댓글 조회 API", description = "스터디 댓글을 조회하는 API입니다.")
-    public BaseResponse<RecruitResponseDTO.CommentListDTO> getCommentList(
+    public BaseResponse<RecruitResponseDTO.CommentListResponseDTO> getCommentList(
             @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId,
             @RequestParam(required = false) @Min(value = 0, message = "commentOrder는 0 이상 이어야 합니다.") Integer commentOrder,
             @RequestParam(required = false) @Min(value = 0, message = "depth는 0 이상 이어야 합니다.") Integer depth,
             @RequestParam(required = false) @Min(value = 1, message = "commentId는 1 이상 이어야 합니다.") Long commentId,
             @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 1 이상 이어야 합니다.") int size) {
-        RecruitResponseDTO.CommentListDTO responseDTO =
+        RecruitResponseDTO.CommentListResponseDTO responseDTO =
                 studyCommentQueryService.getCommentList(roomId, commentOrder, depth, commentId, size);
         return BaseResponse.onSuccess(responseDTO);
     }
 
     @PostMapping("/{roomId}/comments")
     @Operation(summary = "스터디 댓글 작성 API", description = "스터디 댓글을 작성하는 API입니다. 대댓글은 parentCommentId를 받아 작성합니다.")
-    public BaseResponse<RecruitResponseDTO.WriteCommentDTO> writeComment(
+    public BaseResponse<RecruitResponseDTO.WriteCommentResponseDTO> writeComment(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId,
             @RequestParam(required = false) @Min(value = 1, message = "parentCommentId는 1 이상 이어야 합니다.") Long parentCommentId,
             @RequestBody @Valid RecruitRequestDTO.WriteCommentDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        RecruitResponseDTO.WriteCommentDTO responseDTO =
+        RecruitResponseDTO.WriteCommentResponseDTO responseDTO =
                 studyCommentCommandService.writeComment(userId, roomId, parentCommentId, request);
         return BaseResponse.onSuccess(responseDTO);
     }
@@ -85,11 +85,11 @@ public class RecruitController {
 
     @PostMapping("/{roomId}/likes")
     @Operation(summary = "스터디 모집 게시글 좋아요 API", description = "스터디 모집 게시글 좋아요 누르는 API입니다.")
-    public BaseResponse<RecruitResponseDTO.StudyLikesIdDTO> likeStudy(
+    public BaseResponse<RecruitResponseDTO.StudyLikesIdResponseDTO> likeStudy(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        RecruitResponseDTO.StudyLikesIdDTO responseDTO = recruitCommandService.likeStudy(userId, roomId);
+        RecruitResponseDTO.StudyLikesIdResponseDTO responseDTO = recruitCommandService.likeStudy(userId, roomId);
         return BaseResponse.onSuccess(responseDTO);
     }
 
@@ -125,7 +125,7 @@ public class RecruitController {
 
     @GetMapping("/preview")
     @Operation(summary = "스터디 모집 게시글 미리보기 목록 조회 API", description = "모집 게시글 목록을 조회하는 API 입니다.")
-    public BaseResponse<RecruitResponseDTO.PreviewListDTO> getPreviewList(
+    public BaseResponse<RecruitResponseDTO.PreviewListResponseDTO> getPreviewList(
             @RequestParam(required = false) CategoryEnum category,
             @RequestParam(required = false) PreviewFilter filter,
             @RequestParam(defaultValue = "recent") SortType sort,
@@ -133,18 +133,18 @@ public class RecruitController {
             @RequestParam(required = false) @Min(value = 0, message = "lastValue는 0 이상 입니다.") Long lastValue,
             @RequestParam(value = "page", defaultValue = "20") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize){
 
-        RecruitResponseDTO.PreviewListDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, query, lastValue, pageSize);
+        RecruitResponseDTO.PreviewListResponseDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, query, lastValue, pageSize);
         return BaseResponse.onSuccess(responseDTO);
     }
 
     @GetMapping("/preview-default")
     @Operation(summary = "스터디 미리보기 목록 조회 기본 페이지 API", description = "스터디 목록 조회 기본 페이지입니다.")
-    public BaseResponse<RecruitResponseDTO.DefaultPreviewListDTO> getDefaultPreviewList(
+    public BaseResponse<RecruitResponseDTO.DefaultPreviewListResponseDTO> getDefaultPreviewList(
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "index는 0 이상 이어야 합니다.") Integer nextCategoryIndex,
             @RequestParam(defaultValue = "true") boolean isFirst,
             @RequestParam(value = "page", defaultValue = "5") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize) {
 
-        RecruitResponseDTO.DefaultPreviewListDTO responseDTO = recruitQueryService.getDefaultPreview(isFirst, nextCategoryIndex, pageSize);
+        RecruitResponseDTO.DefaultPreviewListResponseDTO responseDTO = recruitQueryService.getDefaultPreview(isFirst, nextCategoryIndex, pageSize);
         return BaseResponse.onSuccess(responseDTO);
     }
 }

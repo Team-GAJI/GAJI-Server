@@ -37,7 +37,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
 
     @Override
     @Transactional
-    public RecruitResponseDTO.studyDetailDTO getStudyDetail(Long roomId) {
+    public RecruitResponseDTO.studyDetailResponseDTO getStudyDetail(Long roomId) {
 
         Room room = roomQueryService.findRoomById(roomId);
         User user = userQueryService.findUserById(room.getUser().getId());
@@ -55,7 +55,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
 
     @Override
     @Transactional(readOnly = true)
-    public RecruitResponseDTO.PreviewListDTO getPreviewList(
+    public RecruitResponseDTO.PreviewListResponseDTO getPreviewList(
             CategoryEnum category, PreviewFilter filter, SortType sort, String query, Long value, int pageSize) {
 
         validateQuery(query);
@@ -66,7 +66,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     }
 
     @Override
-    public RecruitResponseDTO.DefaultPreviewListDTO getDefaultPreview(boolean isFirst, Integer nextCategoryIndex, int pageSize) {
+    public RecruitResponseDTO.DefaultPreviewListResponseDTO getDefaultPreview(boolean isFirst, Integer nextCategoryIndex, int pageSize) {
         Pageable pageable = PageRequest.of(0, pageSize);
         List<RecruitResponseDTO.DefaultPreviewDTO> defaultPreviewList = new ArrayList<>();
 
@@ -93,7 +93,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
             defaultPreviewList.add(previewList);
         }
 
-        return RecruitResponseDTO.DefaultPreviewListDTO.builder()
+        return RecruitResponseDTO.DefaultPreviewListResponseDTO.builder()
                 .defaultPreviewList(defaultPreviewList)
                 .nextIndex(count)
                 .build();

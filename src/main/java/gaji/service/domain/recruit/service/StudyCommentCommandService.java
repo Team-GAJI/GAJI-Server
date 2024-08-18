@@ -5,7 +5,7 @@ import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 
 public interface StudyCommentCommandService {
 
-    RecruitResponseDTO.WriteCommentDTO writeComment(
+    RecruitResponseDTO.WriteCommentResponseDTO writeComment(
             Long userId, Long roomId, Long parentCommentId, RecruitRequestDTO.WriteCommentDTO request);
 
     void deleteComment(Long userId, Long commentId);
