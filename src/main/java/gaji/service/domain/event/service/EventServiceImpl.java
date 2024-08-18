@@ -13,6 +13,7 @@ import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.user.service.UserCommandService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,9 +115,6 @@ public class EventServiceImpl implements EventService{
     }
 
 
-
-    //todo: 아래부터 쭉 다 반복 일정 생각한 코드로 작성
-
     @Override
     @Transactional
     public Long patchEvent(Long eventId, Long userId, EventInfoRequest request) {
@@ -128,6 +126,22 @@ public class EventServiceImpl implements EventService{
         checkMyEvent(event, userId);
 
         // Event 수정
+        if(request.isRecurring()){
+            //반복 이벤트로 수정
+
+            //이벤트 삭제
+            eventRepository.delete(event);
+
+            //RecurringEvent 생성
+            return recurringEventRepository.save(
+                    new RecurringEvent(userCommandService.findById(userId), request.getContent(), request.getStartTime(), request.getEndTime())
+            ).getId();
+        }
+
+        //반복 이벤트 수정 시
+        if(event.isRecurring()){
+            return recurringEventRepository.findById(eventId).get().updateRecurringEvent(request).getId();
+        }
         event.updateEvent(request);
 
         return event.getId();
@@ -142,6 +156,11 @@ public class EventServiceImpl implements EventService{
 
         // Event가 내 것인지 확인하기
         checkMyEvent(event, userId);
+
+        if(event.isRecurring()){
+            //반복 이벤트인 경우 RecurringEndDate 설정
+            return recurringEventRepository.findById(eventId).get().setRecurrenceEndDate(LocalDateTime.now()).getId();
+        }
 
         // Event 삭제
         eventRepository.delete(event);
@@ -160,11 +179,12 @@ public class EventServiceImpl implements EventService{
         checkMyEvent(event, userId);
 
         // Event가 이미 완료된 상태인지 확인하기
+        if(event.getIsCompleted()){
+            throw new RestApiException(EventErrorStatus._EVENT_ALREADY_COMPLETED);
+        }
 
         // Event 완료 처리
-        // EventId 반환
-
-        return null;
+        return event.setIsCompleted(true).getId();
     }
 
     @Override
@@ -178,11 +198,12 @@ public class EventServiceImpl implements EventService{
         checkMyEvent(event, userId);
 
         // Event가 완료되지 않은 상태인지 확인하기
+        if(!event.getIsCompleted()){
+            throw new RestApiException(EventErrorStatus._EVENT_NOT_COMPLETED);
+        }
 
-        // Event 완료 취소 처리
-        // EventId 반환
-
-        return null;
+        // 이벤트 완료 취소 처리
+        return event.setIsCompleted(false).getId();
     }
 
     // EventId에 맞는 Event 찾기

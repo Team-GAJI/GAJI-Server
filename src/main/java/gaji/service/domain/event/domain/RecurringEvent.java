@@ -37,11 +37,18 @@ public class RecurringEvent extends Event { // 반복 일정, Event를 상속받
         super(writer, content, startDateTime, endDateTime, true); // 반복 일정이므로 true로 설정
     }
 
-    public void updateRecurringEvent(EventInfoRequest request) {
+    public RecurringEvent updateRecurringEvent(EventInfoRequest request) {
         super.updateEvent(request);
 
         if(!request.isRecurring()) { // 반복 일정이 아니게 바뀌면
             this.recurrenceEndDate = LocalDateTime.now(); // 반복 종료 날짜를 현재 날짜로 설정
         }
+        return this;
     }
+
+    public RecurringEvent setRecurrenceEndDate(LocalDateTime recurrenceEndDate) {
+        this.recurrenceEndDate = recurrenceEndDate;
+        return this;
+    }
+
 }
