@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at is null")
-@SuperBuilder
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Event extends BaseEntity {
 
     @Id

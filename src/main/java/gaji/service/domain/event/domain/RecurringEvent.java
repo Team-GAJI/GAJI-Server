@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at is null")
-@SuperBuilder
 public class RecurringEvent extends Event { // 반복 일정, Event를 상속받음
 
     // 반복 주기를 위한 필드
@@ -34,7 +33,6 @@ public class RecurringEvent extends Event { // 반복 일정, Event를 상속받
 
     private LocalDateTime recurrenceEndDate; // 반복 종료 날짜 (null이면 무한 반복)
 
-    @Builder
     public RecurringEvent(User writer, String content, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         super(writer, content, startDateTime, endDateTime, true); // 반복 일정이므로 true로 설정
     }

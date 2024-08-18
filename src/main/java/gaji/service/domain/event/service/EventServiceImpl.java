@@ -97,12 +97,7 @@ public class EventServiceImpl implements EventService{
         //반복 이벤트인 경우 RecurringEvent 생성
         if(request.isRecurring()){
             return recurringEventRepository.save(
-                    RecurringEvent.builder()
-                            .content(request.getContent())
-                            .writer(userCommandService.findById(userId))
-                            .startDateTime(request.getStartTime())
-                            .endDateTime(request.getEndTime())
-                            .build()
+                    new RecurringEvent(userCommandService.findById(userId), request.getContent(), request.getStartTime(), request.getEndTime())
             ).getId();
         }
 
