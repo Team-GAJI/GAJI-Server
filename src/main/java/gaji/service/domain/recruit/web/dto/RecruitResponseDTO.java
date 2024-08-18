@@ -34,7 +34,7 @@ public class RecruitResponseDTO {
         UserActive userActive;
         LocalDateTime inactiveTime;
 
-        String name;
+        String studyTitle;
         String imageUrl;
         RecruitPostTypeEnum recruitPostTypeEnum;
         CategoryEnum studyCategory;
