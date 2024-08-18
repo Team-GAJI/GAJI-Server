@@ -1,11 +1,13 @@
 package gaji.service.domain.roomBoard.web.dto;
 
+import gaji.service.global.converter.DateConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class RoomPostResponseDto {
     @Builder
@@ -37,6 +39,45 @@ public class RoomPostResponseDto {
     public static class toCreateRoomTroublePostIdDTO {
         Long troublePostId;
     }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class toWriteCommentDto {
+        Long commentId;
+    }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class toCreateRoomInfoPostIdDTO {
+        Long infoPostId;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class TroublePostSummaryListDto {
+        private List<TroublePostSummaryDto> troublePostSummaryDtoList;
+    }
+
+    @Getter
+    public static class TroublePostSummaryDto {
+        private final Long id;
+        private final String title;
+        private final String nickname;
+        private final String createdAt;
+        private final int viewCount;
+        private final int commentCount;
+
+        public TroublePostSummaryDto(Long id, String title, String nickname, LocalDateTime createdAt, int viewCount, int commentCount) {
+            this.id = id;
+            this.title = title;
+            this.nickname = nickname;
+            this.createdAt = DateConverter.convertToRelativeTimeFormat(createdAt);
+            this.viewCount = viewCount;
+            this.commentCount = commentCount;
+        }
+    }
 
 }

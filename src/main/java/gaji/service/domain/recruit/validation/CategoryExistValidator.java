@@ -2,17 +2,15 @@ package gaji.service.domain.recruit.validation;
 
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.recruit.annotation.ExistCategory;
-import gaji.service.domain.recruit.code.RecruitErrorStatus;
+import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @RequiredArgsConstructor
-public class CategoryExistValidator implements ConstraintValidator<ExistCategory, List<CategoryEnum>> {
+public class CategoryExistValidator implements ConstraintValidator<ExistCategory, CategoryEnum> {
 
     @Override
     public void initialize(ExistCategory constraintAnnotation) {
@@ -20,17 +18,16 @@ public class CategoryExistValidator implements ConstraintValidator<ExistCategory
     }
 
     @Override
-    public boolean isValid(List<CategoryEnum> values, ConstraintValidatorContext context) {
-        if (values == null) {
+    public boolean isValid(CategoryEnum value, ConstraintValidatorContext context) {
+        if (value == null) {
             return true;
         }
 
-        boolean isValid = values.stream()
-                .allMatch(this::isEnumValueValid);
+        boolean isValid = isEnumValueValid(value);
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(RecruitErrorStatus._RECRUIT_CATEGORY_NOT_FOUND.getMessage()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(GlobalErrorStatus._INVALID_CATEGORY.getMessage()).addConstraintViolation();
         }
 
         return isValid;

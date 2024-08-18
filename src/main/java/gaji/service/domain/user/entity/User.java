@@ -14,6 +14,7 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.VoiceChatUser;
 import gaji.service.domain.roomBoard.entity.*;
+import gaji.service.domain.roomBoard.entity.common.*;
 import gaji.service.domain.studyMate.entity.*;
 import gaji.service.oauth2.dto.TransferUserDTO;
 import jakarta.persistence.*;
@@ -92,10 +93,10 @@ public class User extends BaseEntity {
     private List<RecruitPostLikes> recruitPostLikesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Comment> commentList = new ArrayList<>();
+    private List<CommunityComment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Post> postList = new ArrayList<>();
+    private List<CommnuityPost> postList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<PostBookmark> postBookmarkList = new ArrayList<>();
@@ -160,9 +161,13 @@ public class User extends BaseEntity {
         user.setSocialType(transferUserDTO.getSocialType());
         user.setGender(transferUserDTO.getGender());
         user.setStatus(transferUserDTO.getUserActive());
+        user.setNickname(transferUserDTO.getNickname());
+
         return user;
     }
-
+    private void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
     private void setStatus(UserActive userActive) {
         this.status = userActive;
     }

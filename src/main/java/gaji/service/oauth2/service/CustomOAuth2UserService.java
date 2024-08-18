@@ -62,6 +62,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 TransferUserDTO transferUserDTO =new TransferUserDTO();
                 transferUserDTO.setUsernameId(usernameId);
                 transferUserDTO.setEmail(oAuth2Response.getEmail());
+                transferUserDTO.setNickname(extractNickname(oAuth2Response.getEmail()));
                 transferUserDTO.setName(oAuth2Response.getName());
                 transferUserDTO.setGender(toEnumGender(oAuth2Response.getGender()));
                 transferUserDTO.setBirthday(formatDate(oAuth2Response.getBirthyear(), oAuth2Response.getBirthday()));
@@ -79,6 +80,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 transferUserDTO.setEmail(oAuth2Response.getEmail());
                 transferUserDTO.setName(oAuth2Response.getName());
                 transferUserDTO.setGender(toEnumGender(oAuth2Response.getGender()));
+                transferUserDTO.setNickname(extractNickname(oAuth2Response.getEmail()));
 //                transferUserDTO.setBirthday(formatDate(oAuth2Response.getBirthyear(), oAuth2Response.getBirthday()));
                 transferUserDTO.setUserActive(UserActive.ACTIVE);
                 transferUserDTO.setSocialType(setSocialType(registrationId));
@@ -149,6 +151,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }else{
             return SocialType.GOOGLE;
         }
+    }
+
+    public static String extractNickname(String email) {
+        if (email == null || email.isEmpty()) {
+            return null;
+        }
+
+        int atIndex = email.indexOf('@');
+        if (atIndex == -1) {
+            return null; // '@'가 없는 경우 유효하지 않은 이메일로 간주
+        }
+
+        return email.substring(0, atIndex);
     }
 
 
