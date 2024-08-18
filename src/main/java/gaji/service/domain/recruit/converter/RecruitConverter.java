@@ -73,7 +73,7 @@ public class RecruitConverter {
                 .inactiveTime(user.getInactiveTime())
                 .writerId(user.getId())
 
-                .name(room.getName())
+                .studyTitle(room.getName())
                 .imageUrl(room.getThumbnailUrl())
                 .recruitPostTypeEnum(room.getRecruitPostTypeEnum())
                 .studyCategory(category)
