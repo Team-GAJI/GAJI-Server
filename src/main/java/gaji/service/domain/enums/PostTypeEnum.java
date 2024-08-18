@@ -2,7 +2,7 @@ package gaji.service.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import gaji.service.domain.post.code.PostErrorStatus;
+import gaji.service.domain.post.code.CommunityPostErrorStatus;
 import gaji.service.global.exception.RestApiException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public enum PostTypeEnum {
             }
         }
         log.error("PostTypeEnum.from() exception occur param: {}", param);
-        throw new RestApiException(PostErrorStatus._INVALID_POST_TYPE);
+        throw new RestApiException(CommunityPostErrorStatus._INVALID_POST_TYPE);
     }
 
 }

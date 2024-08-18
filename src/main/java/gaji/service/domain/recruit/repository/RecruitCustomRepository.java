@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface RecruitCustomRepository {
 
-    RecruitResponseDTO.PreviewListDTO findByCategoryOrderBySortType(
-            CategoryEnum category, PreviewFilter filter, SortType sortType, Long value, Pageable pageable);
+    RecruitResponseDTO.PreviewListResponseDTO findByCategoryOrderBySortType(
+            CategoryEnum category, PreviewFilter filter, SortType sortType, String query, Long value, Pageable pageable);
 
     RecruitResponseDTO.DefaultPreviewDTO findByCategory(
             CategoryEnum category, Pageable pageable);

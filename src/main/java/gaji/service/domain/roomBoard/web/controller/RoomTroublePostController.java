@@ -28,7 +28,7 @@ public class RoomTroublePostController {
     private final RoomTroublePostCommandService roomTroublePostCommandService;
     private final RoomTroublePostQueryService roomTroublePostQueryService;
     @PostMapping("/trouble/{roomId}")
-    @Operation(summary = "스터디룸 트러블슈팅 게시판 등록 API")
+    @Operation(summary = "스터디룸 트러블슈팅 게시판 게시글 등록 API")
     public BaseResponse<RoomPostResponseDto.toCreateRoomTroublePostIdDTO> TroublePostController(
             @RequestHeader("Authorization") String authorization,
             @RequestBody @Valid RoomPostRequestDto.RoomTroubloePostDto requestDto,
@@ -162,7 +162,7 @@ public class RoomTroublePostController {
     @GetMapping("/{boardId}/trouble")
     @Operation(summary = "트러블 슈팅 게시글 무한 스크롤 조회", description = "트러블 슈팅 게시글을 무한 스크롤 방식으로 조회합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
-    public BaseResponse<List<RoomPostResponseDto.TroublePostSummaryDto>> getNextTroublePosts(
+    public BaseResponse<RoomPostResponseDto.TroublePostSummaryListDto> getNextTroublePosts(
             @PathVariable @Parameter(description = "게시판 ID") Long boardId,
             @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
             @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
@@ -170,7 +170,9 @@ public class RoomTroublePostController {
         List<RoomPostResponseDto.TroublePostSummaryDto> posts =
                 roomTroublePostQueryService.getNextTroublePosts(boardId, lastPostId, size);
 
-        return BaseResponse.onSuccess(posts);
+        return BaseResponse.onSuccess(
+                new RoomPostResponseDto.TroublePostSummaryListDto(posts)
+        );
     }
 }
 

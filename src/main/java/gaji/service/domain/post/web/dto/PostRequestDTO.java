@@ -1,7 +1,8 @@
 package gaji.service.domain.post.web.dto;
 
-import gaji.service.domain.common.annotation.CheckHashtagListElement;
+import gaji.service.domain.common.annotation.CheckHashtagLength;
 import gaji.service.domain.common.annotation.ExistsCategory;
+import gaji.service.domain.common.annotation.CheckHashtagBlank;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.annotation.ExistPostType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,12 +35,13 @@ public class PostRequestDTO {
         private final PostTypeEnum type;
 
         @Schema(description = "해시태그 리스트")
-        @CheckHashtagListElement
+        @CheckHashtagBlank
+        @CheckHashtagLength
         private final List<String> hashtagList = new ArrayList<>();
 
-        @Schema(description = "카테고리의 id 리스트")
-        @ExistsCategory
-        private final List<Long> categoryIdList = new ArrayList<>();
+        @Schema(description = "카테고리의 id")
+        // TODO: 카테고리 존재 여부 검증 애노테이션 적용
+        private final Long categoryId;
     }
 
     @Schema(description = "커뮤니티 게시글 댓글 작성 DTO")
