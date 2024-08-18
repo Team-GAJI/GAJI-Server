@@ -177,7 +177,7 @@ public class RoomTroublePostController {
     }
 
     @GetMapping("/trouble/detail/{postId}")
-    @Operation(summary = "트러블 슈팅 게시글 상세 조회")
+    @Operation(summary = "트러블 슈팅 게시글 상세 조회", description = "1페이지를 불러오고 싶다면 page : 0으로 입력해야 합니다. ex) page 0 > 1페이지 / page 1 > 2페이지 ")
     public BaseResponse<RoomPostResponseDto.TroublePostDetailDTO> getPostDetail(
             @RequestHeader("Authorization") String authorization,
             @PathVariable Long postId,
