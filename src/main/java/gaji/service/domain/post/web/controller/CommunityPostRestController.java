@@ -1,20 +1,20 @@
 package gaji.service.domain.post.web.controller;
 
-import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.enums.SortType;
 import gaji.service.domain.post.converter.CommunityCommentConverter;
 import gaji.service.domain.post.converter.CommunityPostConverter;
-import gaji.service.domain.post.entity.CommunityComment;
 import gaji.service.domain.post.entity.CommnuityPost;
+import gaji.service.domain.post.entity.CommunityComment;
 import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.service.CommunityCommentService;
 import gaji.service.domain.post.service.CommunityPostCommandService;
 import gaji.service.domain.post.service.CommunityPostQueryService;
 import gaji.service.domain.post.web.dto.CommunityPostCommentResponseDTO;
-import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
+import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;

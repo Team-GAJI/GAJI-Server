@@ -1,8 +1,8 @@
 package gaji.service.domain.common.annotation;
 
 import gaji.service.domain.common.validation.PageNumberValidator;
-import jakarta.validation.Payload;
 import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
