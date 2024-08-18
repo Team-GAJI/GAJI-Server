@@ -13,6 +13,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -169,6 +172,30 @@ public class RoomTroublePostController {
                 roomTroublePostQueryService.getNextTroublePosts(boardId, lastPostId, size);
 
         return BaseResponse.onSuccess(posts);
+    }
+
+    @GetMapping("/rouble/read/{postId}")
+    public BaseResponse<RoomPostResponseDto.TroublePostDetailDTO> getPostDetail(@PathVariable Long postId,
+                                                                                  @AuthenticationPrincipal UserDetails userDetails) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        RoomPostResponseDto.TroublePostDetailDTO postDetail = roomTroublePostQueryService.getPostDetail(postId, userId);
+        return BaseResponse.onSuccess(postDetail);
+    }
+
+    @GetMapping("/{postId}/comments")
+    public BaseResponse<List<RoomPostResponseDto.CommentDTO>> getMoreComments(@PathVariable Long postId,
+                                                                              @RequestParam Long lastCommentId,
+                                                                              @RequestParam(defaultValue = "10") int size) {
+        List<RoomPostResponseDto.CommentDTO> comments = roomTroublePostQueryService.getMoreComments(postId, lastCommentId, size);
+        return BaseResponse.onSuccess(comments);
+    }
+
+    @GetMapping("/comments/{commentId}/replies")
+    public BaseResponse<List<RoomPostResponseDto.CommentDTO>> getMoreReplies(@PathVariable Long commentId,
+                                                                               @RequestParam Long lastReplyId,
+                                                                               @RequestParam(defaultValue = "10") int size) {
+        List<RoomPostResponseDto.CommentDTO> replies = roomTroublePostQueryService.getMoreReplies(commentId, lastReplyId, size);
+        return BaseResponse.onSuccess(replies);
     }
 }
 
