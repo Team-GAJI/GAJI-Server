@@ -1,5 +1,6 @@
 package gaji.service.domain.recruit.service;
 
+import gaji.service.domain.common.converter.CategoryConverter;
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.service.CategoryService;
@@ -17,11 +18,13 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.MaterialCommandService;
 import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
+import gaji.service.domain.studyMate.entity.StudyApplicant;
 import gaji.service.domain.studyMate.entity.StudyMate;
-import gaji.service.domain.studyMate.repository.StudyMateRepository;
+import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.global.exception.RestApiException;
+import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +40,9 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
     private final UserQueryService userQueryService;
     private final CategoryService categoryService;
     private final RoomQueryService roomQueryService;
-    private final StudyMateRepository studyMateRepository;
+    private final StudyMateCommandService studyMateCommandService;
+    private final StudyMateQueryService studyMateQueryService;
+    private final StudyApplicantService studyApplicantService;
     private final MaterialCommandService materialCommandService;
     private final RecruitPostLikesRepository recruitPostLikesRepository;
     private final RecruitPostBookmarkRepository recruitPostBookmarkRepository;
@@ -63,7 +68,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         Room room = RecruitConverter.toRoom(request, user, request.getThumbnailUrl(), inviteCode, peopleMaximum);
 
         StudyMate studyMate = RecruitConverter.toStudyMate(user, room);
-        studyMateRepository.save(studyMate);
+        studyMateCommandService.saveStudyMate(studyMate);
 
         if (request.getMaterialList() != null && !request.getMaterialList().isEmpty()){
             Material material;
@@ -76,16 +81,14 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
         roomCommandService.saveRoom(room);
 
-        Category category = Category.builder()
-                .category(request.getCategory())
-                .build();
-        categoryService.saveCategory(category);
+        if (request.getCategoryId() == null) {
+            throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
+        }
 
-        SelectCategory selectCategory = SelectCategory.builder()
-                .category(category)
-                .entityId(room.getId())
-                .type(PostTypeEnum.ROOM)
-                .build();
+        Long categoryId = request.getCategoryId();
+        Category category = categoryService.findByCategoryId(categoryId);
+
+        SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
         categoryService.saveSelectCategory(selectCategory);
 
         return RecruitConverter.toResponseDTO(room);
