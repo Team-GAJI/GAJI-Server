@@ -146,5 +146,16 @@ public class RecruitController {
         RecruitResponseDTO.DefaultPreviewListResponseDTO responseDTO = recruitQueryService.getDefaultPreview(isFirst, nextCategoryId, pageSize);
         return BaseResponse.onSuccess(responseDTO);
     }
+
+    @PostMapping("/{roomId}")
+    @Operation(summary = "스터디 가지기 API", description = "스터디에 참여하는 API 입니다.")
+    public BaseResponse<RecruitResponseDTO.JoinStudyResponseDTO> joinStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        return BaseResponse.onSuccess(
+                recruitCommandService.joinStudy(userId, roomId)
+        );
+    }
 }
 

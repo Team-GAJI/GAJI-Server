@@ -59,11 +59,11 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static StudyMate toStudyMate(User user, Room room) {
+    public static StudyMate toStudyMate(User user, Room room, Role role) {
         return StudyMate.builder()
                 .user(user)
                 .room(room)
-                .role(Role.READER)
+                .role(role)
                 .build();
     }
 
@@ -171,5 +171,11 @@ public class RecruitConverter {
 
     public static List<RecruitResponseDTO.PreviewResponseDTO> toPreviewDTOLIST(List<Room> roomList) {
         return roomList.stream().map(RecruitConverter::toPreviewDTO).collect(Collectors.toList());
+    }
+
+    public static RecruitResponseDTO.JoinStudyResponseDTO toJoinStudyResponseDTO(Long roomId) {
+        return RecruitResponseDTO.JoinStudyResponseDTO.builder()
+                .roomId(roomId)
+                .build();
     }
 }

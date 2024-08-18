@@ -11,8 +11,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum StudyMateErrorStatus implements BaseErrorCodeInterface {
     // 스터디룸 게시판
-    _USER_NOT_IN_STUDYROOM(HttpStatus.BAD_REQUEST, "StudyMateError_4001", "회원이 해당 스터디룸에 참여하고 있지 않습니다.");
-
+    _USER_NOT_IN_STUDYROOM(HttpStatus.BAD_REQUEST, "StudyMateError_4001", "회원이 해당 스터디룸에 참여하고 있지 않습니다."),
+    _USER_ALREADY_JOIN(HttpStatus.BAD_REQUEST, "StudyMateError_4002", "이미 참여중인 회원입니다."),
+    ;
 
 
     private final HttpStatus httpStatus;
