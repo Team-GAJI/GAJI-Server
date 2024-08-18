@@ -50,11 +50,11 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .map(GrantedAuthority::getAuthority)
                 .orElse("ROLE_USER");
 
-        String accessToken = jwtUtil.createJwt("access", usernameId, role, 600000L);
-        String refreshToken = jwtUtil.createJwt("refresh", usernameId, role, 86400000L);
+        String accessToken = jwtUtil.createJwt("access", usernameId, role, 600000000L);
+        String refreshToken = jwtUtil.createJwt("refresh", usernameId, role, 86400000000L);
 
         if (!refreshRepository.existsByUsername(usernameId)) {
-            addRefreshEntity(usernameId, refreshToken, 86400000L);
+            addRefreshEntity(usernameId, refreshToken, 86400000000L);
         }
 
 
@@ -64,7 +64,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true); // HTTPS에서만 사용
         refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(86400); // 24시간
+        refreshTokenCookie.setMaxAge(8640000); // 24시간
         response.addCookie(refreshTokenCookie);
 
 

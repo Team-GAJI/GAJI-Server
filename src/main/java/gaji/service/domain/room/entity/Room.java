@@ -40,14 +40,6 @@ public class Room extends BaseEntity {
 //    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
 //    private List<Assignment> assignmentList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="curriculum_id" )
-    private Curriculum curriculum;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "way_id")
-    private Way way;
-
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<VoiceChat> voiceChatList = new ArrayList<>();
 
