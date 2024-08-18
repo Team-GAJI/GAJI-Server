@@ -10,11 +10,10 @@ import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +46,7 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
 
 
     @Override
-    public RoomPostResponseDto.TroublePostDetailDTO getPostDetail(Long postId, Long userId) {
+    public RoomPostResponseDto.TroublePostDetailDTO getPostDetail(Long postId, Long userId, int page, int size) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
 
@@ -67,46 +66,42 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
         dto.setBookmarked(post.getRoomTroublePostBookmarkList().stream()
                 .anyMatch(bookmark -> bookmark.getStudyMate().getId().equals(studyMate.getId())));
 
-        List<RoomPostResponseDto.CommentDTO> comments = getCommentsWithReplies(post.getId());
+        Page<RoomPostResponseDto.CommentWithRepliesDTO> comments = getCommentsWithReplies(postId, PageRequest.of(page, size));
         dto.setComments(comments);
 
         return dto;
     }
 
-    private List<RoomPostResponseDto.CommentDTO> getCommentsWithReplies(Long postId) {
-        List<TroublePostComment> comments = troublePostCommentRepository.findByRoomTroublePostIdAndIsReplyFalse(postId);
-        return comments.stream()
-                .map(this::convertToCommentDTO)
+    @Override
+    public Page<RoomPostResponseDto.CommentWithRepliesDTO> getCommentsWithReplies(Long postId, Pageable pageable) {
+        Page<TroublePostComment> commentPage = troublePostCommentRepository.findOldestComments(postId, pageable);
+
+        List<RoomPostResponseDto.CommentWithRepliesDTO> commentDTOs = commentPage.getContent().stream()
+                .map(this::convertToCommentWithRepliesDTO)
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(commentDTOs, pageable, commentPage.getTotalElements());
     }
 
-    private RoomPostResponseDto.CommentDTO convertToCommentDTO(TroublePostComment comment) {
-        RoomPostResponseDto.CommentDTO dto = new RoomPostResponseDto.CommentDTO();
+    private RoomPostResponseDto.CommentWithRepliesDTO convertToCommentWithRepliesDTO(TroublePostComment comment) {
+        RoomPostResponseDto.CommentWithRepliesDTO dto = new RoomPostResponseDto.CommentWithRepliesDTO();
         dto.setId(comment.getId());
         dto.setAuthorName(comment.getUser().getName());
         dto.setBody(comment.getBody());
         dto.setCreatedAt(comment.getCreatedAt());
         dto.setReplies(comment.getReplies().stream()
+                .sorted(Comparator.comparing(TroublePostComment::getCreatedAt))
                 .map(this::convertToCommentDTO)
                 .collect(Collectors.toList()));
         return dto;
     }
 
-    @Override
-    public List<RoomPostResponseDto.CommentDTO> getMoreComments(Long postId, Long lastCommentId, int size) {
-        List<TroublePostComment> comments = troublePostCommentRepository
-                .findMoreComments(postId, lastCommentId, PageRequest.of(0, size));
-        return comments.stream()
-                .map(this::convertToCommentDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<RoomPostResponseDto.CommentDTO> getMoreReplies(Long commentId, Long lastReplyId, int size) {
-        List<TroublePostComment> replies = troublePostCommentRepository
-                .findMoreReplies(commentId, lastReplyId, PageRequest.of(0, size));
-        return replies.stream()
-                .map(this::convertToCommentDTO)
-                .collect(Collectors.toList());
+    private RoomPostResponseDto.CommentDTO convertToCommentDTO(TroublePostComment reply) {
+        RoomPostResponseDto.CommentDTO dto = new RoomPostResponseDto.CommentDTO();
+        dto.setId(reply.getId());
+        dto.setAuthorName(reply.getUser().getName());
+        dto.setBody(reply.getBody());
+        dto.setCreatedAt(reply.getCreatedAt());
+        return dto;
     }
 }
