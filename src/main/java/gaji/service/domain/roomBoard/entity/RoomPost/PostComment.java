@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.entity.RoomPost;
 
+import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
-public class PostComment {
+public class PostComment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
