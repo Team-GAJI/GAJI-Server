@@ -1,5 +1,6 @@
 package gaji.service.domain.roomBoard.entity.RoomInfo;
 
+import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class RoomInfoPost {
+public class RoomInfoPost extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +25,6 @@ public class RoomInfoPost {
     private int viewCount;
     private int likeCount;
     private int bookmarkCount;
-    private LocalDateTime postTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")

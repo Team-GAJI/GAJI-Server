@@ -20,7 +20,6 @@ public class RoomPostConverter {
                  .studyMate(studyMate)
                  .title(requestDto.getTitle())
                  .body(requestDto.getBody())
-                 .postTime(LocalDateTime.now())
                  .roomBoard(roomBoard)
                  .build();
     }
@@ -30,7 +29,6 @@ public class RoomPostConverter {
                 .studyMate(studyMate)
                 .title(requestDto.getTitle())
                 .body(requestDto.getBody())
-                .postTime(LocalDateTime.now())
                 .roomBoard(roomBoard)
                 .build();
     }
@@ -53,7 +51,6 @@ public class RoomPostConverter {
                 .studyMate(studyMate)
                 .title(requestDto.getTitle())
                 .body(requestDto.getBody())
-                .postTime(LocalDateTime.now())
                 .roomBoard(roomBoard)
                 .build();
     }
