@@ -25,7 +25,6 @@ public class RoomTroublePost extends BaseEntity {
     private int viewCount;
     private int likeCount;
     private int bookmarkCount;
-    private LocalDateTime postTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
