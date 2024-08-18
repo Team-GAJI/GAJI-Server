@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -169,6 +171,28 @@ public class RoomPostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         PostComment replyComment = roomPostCommandService.addReply(commentId, userId, requestDto);
         return BaseResponse.onSuccess(RoomPostConverter.toWritePostCommentDto(replyComment));
+    }
+
+    @GetMapping("/post/{postId}detail")
+    @Operation(summary = "스터디룸 게시글 상세 조회")
+    public BaseResponse<RoomPostResponseDto.RoomPostDetailDTO> getPostDetail(
+            @PathVariable Long postId,
+            @RequestHeader("Authorization") String authorization,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        RoomPostResponseDto.RoomPostDetailDTO postDetail = roomPostQueryService.getPostDetail(postId, userId, page, size);
+        return BaseResponse.onSuccess(postDetail);
+    }
+
+    @GetMapping("/post/{postId}/get/comments")
+    @Operation(summary = "스터디룸 게시글 댓글 및 답글 추가 로딩")
+    public BaseResponse<Page<RoomPostResponseDto.CommentWithRepliesDTO>> getMoreComments(
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<RoomPostResponseDto.CommentWithRepliesDTO> comments = roomPostQueryService.getCommentsWithReplies(postId, PageRequest.of(page, size));
+        return BaseResponse.onSuccess(comments);
     }
 
 }

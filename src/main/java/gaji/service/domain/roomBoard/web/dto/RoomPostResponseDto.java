@@ -170,6 +170,21 @@ public class RoomPostResponseDto {
         private Page<CommentWithRepliesDTO> comments;
     }
 
+    @Getter
+    @Setter
+    public static class RoomPostDetailDTO {
+        private Long id;
+        private String title;
+        private String body;
+        private String authorName;
+        private LocalDateTime createdAt;
+        private int viewCount;
+        private int likeCount;
+        private int bookmarkCount;
+        private boolean isLiked;
+        private boolean isBookmarked;
+        private Page<CommentWithRepliesDTO> comments;
+    }
 }
 
 
