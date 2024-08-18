@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -174,28 +176,29 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess(posts);
     }
 
-    @GetMapping("/rouble/read/{postId}")
-    public BaseResponse<RoomPostResponseDto.TroublePostDetailDTO> getPostDetail(@PathVariable Long postId,
-                                                                                  @AuthenticationPrincipal UserDetails userDetails) {
-        Long userId = Long.parseLong(userDetails.getUsername());
-        RoomPostResponseDto.TroublePostDetailDTO postDetail = roomTroublePostQueryService.getPostDetail(postId, userId);
+    @GetMapping("/trouble/detail/{postId}")
+    @Operation(summary = "트러블 슈팅 게시글 상세 조회")
+    public BaseResponse<RoomPostResponseDto.TroublePostDetailDTO> getPostDetail(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        RoomPostResponseDto.TroublePostDetailDTO postDetail = roomTroublePostQueryService.getPostDetail(postId, userId, page, size);
         return BaseResponse.onSuccess(postDetail);
     }
 
-    @GetMapping("/{postId}/comments")
-    public BaseResponse<List<RoomPostResponseDto.CommentDTO>> getMoreComments(@PathVariable Long postId,
-                                                                              @RequestParam Long lastCommentId,
-                                                                              @RequestParam(defaultValue = "10") int size) {
-        List<RoomPostResponseDto.CommentDTO> comments = roomTroublePostQueryService.getMoreComments(postId, lastCommentId, size);
+    @GetMapping("/trouble/{postId}/comments")
+    @Operation(summary = "트러블 슈팅 게시글 댓글 및 답글 추가 로딩")
+    public BaseResponse<Page<RoomPostResponseDto.CommentWithRepliesDTO>> getMoreComments(
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<RoomPostResponseDto.CommentWithRepliesDTO> comments = roomTroublePostQueryService.getCommentsWithReplies(postId, PageRequest.of(page, size));
         return BaseResponse.onSuccess(comments);
     }
-
-    @GetMapping("/comments/{commentId}/replies")
-    public BaseResponse<List<RoomPostResponseDto.CommentDTO>> getMoreReplies(@PathVariable Long commentId,
-                                                                               @RequestParam Long lastReplyId,
-                                                                               @RequestParam(defaultValue = "10") int size) {
-        List<RoomPostResponseDto.CommentDTO> replies = roomTroublePostQueryService.getMoreReplies(commentId, lastReplyId, size);
-        return BaseResponse.onSuccess(replies);
-    }
 }
+
+
+
 

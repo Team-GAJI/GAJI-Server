@@ -2,6 +2,7 @@ package gaji.service.domain.roomBoard.web.dto;
 
 import gaji.service.global.converter.DateConverter;
 import lombok.*;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -131,7 +132,17 @@ public class RoomPostResponseDto {
         private int bookmarkCount;
         private boolean isLiked;
         private boolean isBookmarked;
-        private List<CommentDTO> comments;
+        private Page<CommentWithRepliesDTO> comments;
+    }
+
+    @Getter
+    @Setter
+    public static class CommentWithRepliesDTO {
+        private Long id;
+        private String authorName;
+        private String body;
+        private LocalDateTime createdAt;
+        private List<CommentDTO> replies;
     }
 
     @Getter
@@ -141,6 +152,12 @@ public class RoomPostResponseDto {
         private String authorName;
         private String body;
         private LocalDateTime createdAt;
-        private List<CommentDTO> replies;
     }
 }
+
+
+
+
+
+
+
