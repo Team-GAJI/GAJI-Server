@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class RoomPostResponseDto {
     @Builder
@@ -54,6 +55,11 @@ public class RoomPostResponseDto {
         Long infoPostId;
     }
 
+    @Getter
+    @AllArgsConstructor
+    public static class TroublePostSummaryListDto {
+        private List<TroublePostSummaryDto> troublePostSummaryDtoList;
+    }
 
     @Getter
     public static class TroublePostSummaryDto {

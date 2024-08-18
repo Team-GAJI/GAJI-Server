@@ -19,7 +19,7 @@ public class RoomInfoPostController {
     private final RoomInfoPostCommandService roomInfoPostCommandService;
 
     @PostMapping("/info-post/{roomId}")
-    @Operation(summary = "스터디룸 정보나눔 게시판 등록 API")
+    @Operation(summary = "스터디룸 정보나눔 게시판 게시글 등록 API")
     public BaseResponse<RoomPostResponseDto.toCreateRoomInfoPostIdDTO> StudyRoomInfoPostController(
             @RequestHeader("Authorization") String authorization,
             @RequestBody @Valid RoomPostRequestDto.RoomInfoPostDto requestDto,
