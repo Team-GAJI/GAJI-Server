@@ -1,12 +1,10 @@
 package gaji.service.domain.roomBoard.web.dto;
 
 import gaji.service.global.converter.DateConverter;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class RoomPostResponseDto {
     @Builder
@@ -120,4 +118,29 @@ public class RoomPostResponseDto {
         }
     }
 
+    @Getter
+    @Setter
+    public static class TroublePostDetailDTO {
+        private Long id;
+        private String title;
+        private String body;
+        private String authorName;
+        private LocalDateTime createdAt;
+        private int viewCount;
+        private int likeCount;
+        private int bookmarkCount;
+        private boolean isLiked;
+        private boolean isBookmarked;
+        private List<CommentDTO> comments;
+    }
+
+    @Getter
+    @Setter
+    public static class CommentDTO {
+        private Long id;
+        private String authorName;
+        private String body;
+        private LocalDateTime createdAt;
+        private List<CommentDTO> replies;
+    }
 }
