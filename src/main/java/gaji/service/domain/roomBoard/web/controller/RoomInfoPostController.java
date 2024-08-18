@@ -170,4 +170,5 @@ public class RoomInfoPostController {
         InfoPostComment replyComment = roomInfoPostCommandService.addReply(commentId, userId, requestDto);
         return BaseResponse.onSuccess(RoomPostConverter.toWriteInfoPostCommentDto(replyComment));
     }
+
 }
