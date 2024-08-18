@@ -6,14 +6,16 @@ import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
 import gaji.service.domain.roomBoard.repository.RoomInfo.InfoPostCommentRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
+import gaji.service.domain.studyMate.entity.StudyMate;
+import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class RoomInfoPostQueryServiceImpl implements RoomInfoPostQueryService{
 
     private final RoomInfoPostRepository roomInfoPostRepository;
     private final InfoPostCommentRepository infoPostCommentRepository;
-
+    private final StudyMateQueryService studyMateQueryService;
     @Override
     public RoomInfoPost findInfoPostById(Long PostId){
         return roomInfoPostRepository.findById(PostId)
@@ -45,5 +47,66 @@ public class RoomInfoPostQueryServiceImpl implements RoomInfoPostQueryService{
     public List<RoomPostResponseDto.InfoPostSummaryDto> getNextPosts(Long boardId, Long lastPostId, int size) {
         Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         return roomInfoPostRepository.findInfoPostSummariesForInfiniteScroll(boardId, lastPostId,pageable);
+    }
+
+
+    @Override
+    public RoomPostResponseDto.RoomInfoPostDetailDTO getPostDetail(Long postId, Long userId, int page, int size) {
+        RoomInfoPost post = roomInfoPostRepository.findById(postId)
+                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._POST_NOT_FOUND));
+
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, post.getRoomBoard().getRoom().getId());
+
+        RoomPostResponseDto.RoomInfoPostDetailDTO dto = new RoomPostResponseDto.RoomInfoPostDetailDTO();
+        dto.setId(post.getId());
+        dto.setTitle(post.getTitle());
+        dto.setBody(post.getBody());
+        dto.setAuthorName(post.getStudyMate().getUser().getName());
+        dto.setCreatedAt(post.getCreatedAt());
+        dto.setViewCount(post.getViewCount());
+        dto.setLikeCount(post.getLikeCount());
+        dto.setBookmarkCount(post.getBookmarkCount());
+        dto.setLiked(post.getRoomInfoPostLikesList().stream()
+                .anyMatch(like -> like.getStudyMate().getId().equals(studyMate.getId())));
+        dto.setBookmarked(post.getRoomInfoPostBookmarkList().stream()
+                .anyMatch(bookmark -> bookmark.getStudyMate().getId().equals(studyMate.getId())));
+
+        Page<RoomPostResponseDto.CommentWithRepliesDTO> comments = getCommentsWithReplies(postId, PageRequest.of(page, size));
+        dto.setComments(comments);
+
+        return dto;
+    }
+
+    @Override
+    public Page<RoomPostResponseDto.CommentWithRepliesDTO> getCommentsWithReplies(Long postId, Pageable pageable) {
+        Page<InfoPostComment> commentPage = infoPostCommentRepository.findOldestComments(postId, pageable);
+
+        List<RoomPostResponseDto.CommentWithRepliesDTO> commentDTOs = commentPage.getContent().stream()
+                .map(this::convertToCommentWithRepliesDTO)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(commentDTOs, pageable, commentPage.getTotalElements());
+    }
+
+    private RoomPostResponseDto.CommentWithRepliesDTO convertToCommentWithRepliesDTO(InfoPostComment comment) {
+        RoomPostResponseDto.CommentWithRepliesDTO dto = new RoomPostResponseDto.CommentWithRepliesDTO();
+        dto.setId(comment.getId());
+        dto.setAuthorName(comment.getUser().getName());
+        dto.setBody(comment.getBody());
+        dto.setCreatedAt(comment.getCreatedAt());
+        dto.setReplies(comment.getReplies().stream()
+                .sorted(Comparator.comparing(InfoPostComment::getCreatedAt))
+                .map(this::convertToCommentDTO)
+                .collect(Collectors.toList()));
+        return dto;
+    }
+
+    private RoomPostResponseDto.CommentDTO convertToCommentDTO(InfoPostComment reply) {
+        RoomPostResponseDto.CommentDTO dto = new RoomPostResponseDto.CommentDTO();
+        dto.setId(reply.getId());
+        dto.setAuthorName(reply.getUser().getName());
+        dto.setBody(reply.getBody());
+        dto.setCreatedAt(reply.getCreatedAt());
+        return dto;
     }
 }
