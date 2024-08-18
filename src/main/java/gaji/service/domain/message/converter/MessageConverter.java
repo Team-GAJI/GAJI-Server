@@ -2,7 +2,6 @@ package gaji.service.domain.message.converter;
 
 import gaji.service.domain.message.entity.Message;
 import gaji.service.domain.message.enums.MessageTypeEnum;
-import gaji.service.domain.message.web.dto.MessageRequestDTO;
 import gaji.service.domain.message.web.dto.MessageResponseDTO;
 import gaji.service.domain.user.entity.User;
 

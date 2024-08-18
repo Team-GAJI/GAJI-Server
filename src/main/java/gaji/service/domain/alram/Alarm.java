@@ -1,7 +1,7 @@
 package gaji.service.domain.alram;
 
-import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.IsConfirmed;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
