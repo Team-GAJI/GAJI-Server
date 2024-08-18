@@ -10,6 +10,7 @@ import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPostBookmark;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPostLikes;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.PostCommentRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostBookmarkRepository;
@@ -217,4 +218,27 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         post.removeBookmark(bookmark);
         roomPostBookmarkRepository.delete(bookmark);
     }
+
+    @Override
+    public PostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+        PostComment parentComment = postCommentRepository.findById(commentId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+
+        if (parentComment.isReply()) {
+            throw new IllegalStateException("답글에는 답글을 달 수 없습니다.");
+        }
+
+        User user = userQueryService.findUserById(userId);
+        PostComment reply = PostComment.builder()
+                .user(user)
+                .roomPost(parentComment.getRoomPost())
+                .body(request.getBody())
+                .isReply(true)
+                .parentComment(parentComment)
+                .build();
+
+        parentComment.addReply(reply);
+        return postCommentRepository.save(reply);
+    }
+
 }
