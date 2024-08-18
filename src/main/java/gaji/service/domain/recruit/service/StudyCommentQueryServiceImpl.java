@@ -21,7 +21,7 @@ public class StudyCommentQueryServiceImpl implements StudyCommentQueryService{
     private final RoomQueryService roomQueryService;
 
     @Override
-    public RecruitResponseDTO.CommentListDTO getCommentList(
+    public RecruitResponseDTO.CommentListResponseDTO getCommentList(
             Long roomId, Integer lastCommentOrder, Integer lastDepth, Long lastCommentId, int size) {
         Room room = roomQueryService.findRoomById(roomId);
         PageRequest pageRequest = PageRequest.of(0, size);

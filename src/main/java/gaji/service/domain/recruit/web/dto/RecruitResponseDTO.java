@@ -19,7 +19,7 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateRoomDTO {
+    public static class CreateRoomResponseDTO {
         Long roomId;
     }
 
@@ -27,7 +27,7 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class studyDetailDTO {
+    public static class studyDetailResponseDTO {
         // 유저 관련
         Long writerId;
         String userNickName;
@@ -68,7 +68,7 @@ public class RecruitResponseDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CommentListDTO {
+    public static class CommentListResponseDTO {
         int commentCount;
         boolean hasNext;
         List<CommentResponseDTO> commentList;
@@ -79,7 +79,7 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class StudyLikesIdDTO {
+    public static class StudyLikesIdResponseDTO {
         Long studyLikesId;
     }
 
@@ -96,7 +96,7 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class WriteCommentDTO {
+    public static class WriteCommentResponseDTO {
         Long commentId;
     }
 
@@ -104,7 +104,7 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PreviewDTO {
+    public static class PreviewResponseDTO {
         Long roomId;
         String imageUrl;
         RecruitPostTypeEnum recruitStatus;
@@ -120,8 +120,8 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PreviewListDTO {
-        List<PreviewDTO> previewList;
+    public static class PreviewListResponseDTO {
+        List<PreviewResponseDTO> previewList;
         boolean hasNext;
         Long lastValue;
     }
@@ -133,14 +133,14 @@ public class RecruitResponseDTO {
     public static class DefaultPreviewDTO {
         CategoryEnum category;
         boolean hasNext;
-        List<PreviewDTO> previewList;
+        List<PreviewResponseDTO> previewList;
     }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class DefaultPreviewListDTO {
+    public static class DefaultPreviewListResponseDTO {
         List<DefaultPreviewDTO> defaultPreviewList;
         int nextIndex;
     }

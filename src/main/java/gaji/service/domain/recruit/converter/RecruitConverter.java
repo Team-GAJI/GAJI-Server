@@ -41,8 +41,8 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.CreateRoomDTO toResponseDTO(Room room) {
-        return RecruitResponseDTO.CreateRoomDTO.builder()
+    public static RecruitResponseDTO.CreateRoomResponseDTO toResponseDTO(Room room) {
+        return RecruitResponseDTO.CreateRoomResponseDTO.builder()
                 .roomId(room.getId())
                 .build();
     }
@@ -66,8 +66,8 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.studyDetailDTO toStudyDetailDTO(User user, Room room, CategoryEnum category) {
-        return RecruitResponseDTO.studyDetailDTO.builder()
+    public static RecruitResponseDTO.studyDetailResponseDTO toStudyDetailDTO(User user, Room room, CategoryEnum category) {
+        return RecruitResponseDTO.studyDetailResponseDTO.builder()
                 .userNickName(user.getNickname())
                 .userActive(user.getStatus())
                 .inactiveTime(user.getInactiveTime())
@@ -102,11 +102,11 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.CommentListDTO toCommentListDTO(int commentCount, Slice<StudyComment> commentList) {
+    public static RecruitResponseDTO.CommentListResponseDTO toCommentListDTO(int commentCount, Slice<StudyComment> commentList) {
         List<RecruitResponseDTO.CommentResponseDTO> CommentResponseDTO =
                 commentList.stream().map(RecruitConverter::toCommentResponseDTO).collect(Collectors.toList());
 
-        return RecruitResponseDTO.CommentListDTO.builder()
+        return RecruitResponseDTO.CommentListResponseDTO.builder()
                 .commentCount(commentCount)
                 .hasNext(commentList.hasNext())
                 .commentList(CommentResponseDTO)
@@ -122,8 +122,8 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.WriteCommentDTO toWriteCommentDTO(StudyComment comment) {
-        return RecruitResponseDTO.WriteCommentDTO.builder()
+    public static RecruitResponseDTO.WriteCommentResponseDTO toWriteCommentDTO(StudyComment comment) {
+        return RecruitResponseDTO.WriteCommentResponseDTO.builder()
                 .commentId(comment.getId())
                 .build();
     }
@@ -135,8 +135,8 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.StudyLikesIdDTO toStudyLikesIdDTO(RecruitPostLikes likes) {
-        return RecruitResponseDTO.StudyLikesIdDTO.builder()
+    public static RecruitResponseDTO.StudyLikesIdResponseDTO toStudyLikesIdDTO(RecruitPostLikes likes) {
+        return RecruitResponseDTO.StudyLikesIdResponseDTO.builder()
                 .studyLikesId(likes.getId())
                 .build();
     }
@@ -154,8 +154,8 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.PreviewDTO toPreviewDTO(Room room) {
-        return RecruitResponseDTO.PreviewDTO.builder()
+    public static RecruitResponseDTO.PreviewResponseDTO toPreviewDTO(Room room) {
+        return RecruitResponseDTO.PreviewResponseDTO.builder()
                 .roomId(room.getId())
                 .imageUrl(room.getThumbnailUrl())
                 .recruitStatus(room.getRecruitPostTypeEnum())
@@ -168,7 +168,7 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static List<RecruitResponseDTO.PreviewDTO> toPreviewDTOLIST(List<Room> roomList) {
+    public static List<RecruitResponseDTO.PreviewResponseDTO> toPreviewDTOLIST(List<Room> roomList) {
         return roomList.stream().map(RecruitConverter::toPreviewDTO).collect(Collectors.toList());
     }
 }

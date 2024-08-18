@@ -26,7 +26,7 @@ public class StudyCommentCommandServiceImpl implements StudyCommentCommandServic
     private final RoomQueryService roomQueryService;
 
     @Override
-    public RecruitResponseDTO.WriteCommentDTO writeComment(Long userId, Long roomId, Long parentCommentId, RecruitRequestDTO.WriteCommentDTO request) {
+    public RecruitResponseDTO.WriteCommentResponseDTO writeComment(Long userId, Long roomId, Long parentCommentId, RecruitRequestDTO.WriteCommentDTO request) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
 

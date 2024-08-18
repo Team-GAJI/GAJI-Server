@@ -5,9 +5,9 @@ import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 
 public interface RecruitCommandService {
 
-    RecruitResponseDTO.CreateRoomDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId);
+    RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId);
 
-    RecruitResponseDTO.StudyLikesIdDTO likeStudy(Long userId, Long roomId);
+    RecruitResponseDTO.StudyLikesIdResponseDTO likeStudy(Long userId, Long roomId);
 
     void unLikeStudy(Long userId, Long roomId);
 

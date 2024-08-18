@@ -24,7 +24,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public RecruitResponseDTO.PreviewListDTO findByCategoryOrderBySortType(
+    public RecruitResponseDTO.PreviewListResponseDTO findByCategoryOrderBySortType(
             CategoryEnum category, PreviewFilter filter, SortType sortType, String query, Long value, Pageable pageable) {
         List<Room> results = queryFactory
                 .selectFrom(room)
@@ -38,9 +38,9 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
 
         boolean hasNext = checkLastPage(pageable, results);
 
-        List<RecruitResponseDTO.PreviewDTO> previewList = RecruitConverter.toPreviewDTOLIST(results);
+        List<RecruitResponseDTO.PreviewResponseDTO> previewList = RecruitConverter.toPreviewDTOLIST(results);
 
-        return RecruitResponseDTO.PreviewListDTO.builder()
+        return RecruitResponseDTO.PreviewListResponseDTO.builder()
                 .previewList(previewList)
                 .lastValue(getLastValue(results, sortType))
                 .hasNext(hasNext)
@@ -60,7 +60,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
 
         boolean hasNext = checkLastPage(pageable, results);
 
-        List<RecruitResponseDTO.PreviewDTO> previewList = RecruitConverter.toPreviewDTOLIST(results);
+        List<RecruitResponseDTO.PreviewResponseDTO> previewList = RecruitConverter.toPreviewDTOLIST(results);
 
         return RecruitResponseDTO.DefaultPreviewDTO.builder()
                 .previewList(previewList)

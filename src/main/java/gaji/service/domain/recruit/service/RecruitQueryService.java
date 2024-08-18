@@ -6,10 +6,10 @@ import gaji.service.domain.enums.SortType;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 
 public interface RecruitQueryService {
-    RecruitResponseDTO.studyDetailDTO getStudyDetail(Long roomId);
+    RecruitResponseDTO.studyDetailResponseDTO getStudyDetail(Long roomId);
 
-    RecruitResponseDTO.PreviewListDTO getPreviewList(
+    RecruitResponseDTO.PreviewListResponseDTO getPreviewList(
             CategoryEnum category, PreviewFilter filter, SortType sort, String query, Long value, int pageSize);
 
-    RecruitResponseDTO.DefaultPreviewListDTO getDefaultPreview(boolean isFirst, Integer nextCategoryIndex, int pageSize);
+    RecruitResponseDTO.DefaultPreviewListResponseDTO getDefaultPreview(boolean isFirst, Integer nextCategoryIndex, int pageSize);
 }

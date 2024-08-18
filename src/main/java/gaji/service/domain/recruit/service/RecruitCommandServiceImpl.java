@@ -46,7 +46,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
     @Override
     @Transactional
-    public RecruitResponseDTO.CreateRoomDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId) {
+    public RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId) {
         String thumbnailUrl = DEFAULT_THUMBNAIL_URL;
         String inviteCode = null;
         int peopleMaximum = 0;
@@ -111,7 +111,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
     @Override
     @Transactional
-    public RecruitResponseDTO.StudyLikesIdDTO likeStudy(Long userId, Long roomId) {
+    public RecruitResponseDTO.StudyLikesIdResponseDTO likeStudy(Long userId, Long roomId) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
 
