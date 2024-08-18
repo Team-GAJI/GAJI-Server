@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class RoomPostResponseDto {
     @Builder
@@ -55,11 +54,14 @@ public class RoomPostResponseDto {
         Long infoPostId;
     }
 
+    @Builder
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
-    public static class TroublePostSummaryListDto {
-        private List<TroublePostSummaryDto> troublePostSummaryDtoList;
+    public static class toCreateRoomPostIdDTO {
+        Long roomPostId;
     }
+
 
     @Getter
     public static class TroublePostSummaryDto {
@@ -71,6 +73,44 @@ public class RoomPostResponseDto {
         private final int commentCount;
 
         public TroublePostSummaryDto(Long id, String title, String nickname, LocalDateTime createdAt, int viewCount, int commentCount) {
+            this.id = id;
+            this.title = title;
+            this.nickname = nickname;
+            this.createdAt = DateConverter.convertToRelativeTimeFormat(createdAt);
+            this.viewCount = viewCount;
+            this.commentCount = commentCount;
+        }
+    }
+
+    @Getter
+    public static class PostSummaryDto {
+        private final Long id;
+        private final String title;
+        private final String nickname;
+        private final String createdAt;
+        private final int viewCount;
+        private final int commentCount;
+
+        public PostSummaryDto(Long id, String title, String nickname, LocalDateTime createdAt, int viewCount, int commentCount) {
+            this.id = id;
+            this.title = title;
+            this.nickname = nickname;
+            this.createdAt = DateConverter.convertToRelativeTimeFormat(createdAt);
+            this.viewCount = viewCount;
+            this.commentCount = commentCount;
+        }
+    }
+
+    @Getter
+    public static class InfoPostSummaryDto {
+        private final Long id;
+        private final String title;
+        private final String nickname;
+        private final String createdAt;
+        private final int viewCount;
+        private final int commentCount;
+
+        public InfoPostSummaryDto(Long id, String title, String nickname, LocalDateTime createdAt, int viewCount, int commentCount) {
             this.id = id;
             this.title = title;
             this.nickname = nickname;

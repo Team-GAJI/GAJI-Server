@@ -1,28 +1,25 @@
 package gaji.service.domain.roomBoard.converter;
 
-import gaji.service.domain.roomBoard.entity.RoomInfoPost;
-import gaji.service.domain.roomBoard.entity.common.RoomBoard;
-import gaji.service.domain.roomBoard.entity.RoomPost;
-import gaji.service.domain.roomBoard.entity.RoomTroublePost;
-import gaji.service.domain.roomBoard.entity.TroublePostComment;
+import gaji.service.domain.roomBoard.entity.RoomBoard;
+import gaji.service.domain.roomBoard.entity.RoomInfo.InfoPostComment;
+import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
+import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePost;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
-import gaji.service.domain.user.entity.User;
-
-import java.time.LocalDateTime;
 
 public class RoomPostConverter {
 
-    public static RoomPost toRoomPost(RoomPostRequestDto.RoomPostDto requestDto, User user, RoomBoard roomBoard) {
-         RoomPost roomPost = RoomPost.builder()
-                 .user(user)
+    public static RoomPost toRoomPost(RoomPostRequestDto.RoomPostDto requestDto, StudyMate studyMate, RoomBoard roomBoard) {
+        return RoomPost.builder()
+                 .studyMate(studyMate)
                  .title(requestDto.getTitle())
                  .body(requestDto.getBody())
-                 .postTime(LocalDateTime.now())
                  .roomBoard(roomBoard)
                  .build();
-         return roomPost;
     }
 
     public static RoomTroublePost toRoomTroublePost(RoomPostRequestDto.RoomTroubloePostDto requestDto, StudyMate studyMate, RoomBoard roomBoard) {
@@ -30,13 +27,20 @@ public class RoomPostConverter {
                 .studyMate(studyMate)
                 .title(requestDto.getTitle())
                 .body(requestDto.getBody())
-                .postTime(LocalDateTime.now())
                 .roomBoard(roomBoard)
                 .build();
     }
+
+    //트러블 슈팅 게시판 id 반환 dto
     public static RoomPostResponseDto.toCreateRoomTroublePostIdDTO troublePostIdDto(Long id){
         return RoomPostResponseDto.toCreateRoomTroublePostIdDTO.builder()
                 .troublePostId(id)
+                .build();
+    }
+
+    public static RoomPostResponseDto.toCreateRoomPostIdDTO postIdDto(Long id){
+        return RoomPostResponseDto.toCreateRoomPostIdDTO.builder()
+                .roomPostId(id)
                 .build();
     }
 
@@ -45,7 +49,6 @@ public class RoomPostConverter {
                 .studyMate(studyMate)
                 .title(requestDto.getTitle())
                 .body(requestDto.getBody())
-                .postTime(LocalDateTime.now())
                 .roomBoard(roomBoard)
                 .build();
     }
@@ -57,6 +60,17 @@ public class RoomPostConverter {
 
 
     public static RoomPostResponseDto.toWriteCommentDto toWriteCommentDto(TroublePostComment newComment) {
+        return RoomPostResponseDto.toWriteCommentDto.builder()
+                .commentId(newComment.getId())
+                .build();
+    }
+
+    public static RoomPostResponseDto.toWriteCommentDto toWritePostCommentDto(PostComment newComment) {
+        return RoomPostResponseDto.toWriteCommentDto.builder()
+                .commentId(newComment.getId())
+                .build();
+    }
+    public static RoomPostResponseDto.toWriteCommentDto toWriteInfoPostCommentDto(InfoPostComment newComment) {
         return RoomPostResponseDto.toWriteCommentDto.builder()
                 .commentId(newComment.getId())
                 .build();

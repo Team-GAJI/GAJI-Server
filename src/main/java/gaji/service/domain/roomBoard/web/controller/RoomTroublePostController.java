@@ -1,9 +1,9 @@
 package gaji.service.domain.roomBoard.web.controller;
 
 import gaji.service.domain.roomBoard.converter.RoomPostConverter;
-import gaji.service.domain.roomBoard.entity.TroublePostComment;
-import gaji.service.domain.roomBoard.service.RoomPostQueryService;
-import gaji.service.domain.roomBoard.service.RoomTroublePostCommandService;
+import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
+import gaji.service.domain.roomBoard.service.RoomTrouble.RoomTroublePostCommandService;
+import gaji.service.domain.roomBoard.service.RoomTrouble.RoomTroublePostQueryService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.global.base.BaseResponse;
@@ -24,10 +24,9 @@ public class RoomTroublePostController {
 
     private final TokenProviderService tokenProviderService;
     private final RoomTroublePostCommandService roomTroublePostCommandService;
-    private final RoomPostQueryService roomPostQueryService;
-
+    private final RoomTroublePostQueryService roomTroublePostQueryService;
     @PostMapping("/trouble/{roomId}")
-    @Operation(summary = "스터디룸 트러블슈팅 게시판 게시글 등록 API")
+    @Operation(summary = "스터디룸 트러블슈팅 게시판 등록 API")
     public BaseResponse<RoomPostResponseDto.toCreateRoomTroublePostIdDTO> TroublePostController(
             @RequestHeader("Authorization") String authorization,
             @RequestBody @Valid RoomPostRequestDto.RoomTroubloePostDto requestDto,
@@ -46,10 +45,9 @@ public class RoomTroublePostController {
             @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto,
             @PathVariable Long troublePostId
     ){
-        System.out.println("댓글: " + requestDto.getBody());
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        TroublePostComment newComment = roomTroublePostCommandService.writeCommentOnTroublePost(userId, troublePostId, requestDto);
-        return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(newComment));
+        RoomPostResponseDto.toWriteCommentDto newComment = roomTroublePostCommandService.writeCommentOnTroublePost(userId, troublePostId, requestDto);
+        return BaseResponse.onSuccess(newComment);
     }
 
     @PostMapping("/trouble/{roomId}/posts/{postId}/like")
@@ -147,7 +145,7 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess( "북마크가 성공적으로 삭제되었습니다.");
     }
 
-    @PostMapping("/comments/{commentId}/replies")
+    @PostMapping("/trouble/comments/{commentId}/replies")
     @Operation(summary = "트러블 슈팅 게시글 댓글의 답글 작성 API")
     public BaseResponse<RoomPostResponseDto.toWriteCommentDto> addReply(
             @RequestHeader("Authorization") String authorization,
@@ -159,20 +157,18 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(replyComment));
     }
 
-    @GetMapping("/{boardId}/trouble-posts")
+    @GetMapping("/{boardId}/trouble")
     @Operation(summary = "트러블 슈팅 게시글 무한 스크롤 조회", description = "트러블 슈팅 게시글을 무한 스크롤 방식으로 조회합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
-    public BaseResponse<RoomPostResponseDto.TroublePostSummaryListDto> getNextTroublePosts(
+    public BaseResponse<List<RoomPostResponseDto.TroublePostSummaryDto>> getNextTroublePosts(
             @PathVariable @Parameter(description = "게시판 ID") Long boardId,
             @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
             @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
 
         List<RoomPostResponseDto.TroublePostSummaryDto> posts =
-                roomPostQueryService.getNextTroublePosts(boardId, lastPostId, size);
+                roomTroublePostQueryService.getNextTroublePosts(boardId, lastPostId, size);
 
-        return BaseResponse.onSuccess(
-                new RoomPostResponseDto.TroublePostSummaryListDto(posts)
-        );
+        return BaseResponse.onSuccess(posts);
     }
 }
 

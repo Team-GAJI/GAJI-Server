@@ -1,8 +1,7 @@
 package gaji.service.domain.post.web.dto;
 
-import gaji.service.domain.common.annotation.CheckHashtagLength;
-import gaji.service.domain.common.annotation.ExistsCategory;
 import gaji.service.domain.common.annotation.CheckHashtagBlank;
+import gaji.service.domain.common.annotation.CheckHashtagLength;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.annotation.ExistPostType;
 import io.swagger.v3.oas.annotations.media.Schema;

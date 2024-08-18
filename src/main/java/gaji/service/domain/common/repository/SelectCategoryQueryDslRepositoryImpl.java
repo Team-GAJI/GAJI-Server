@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static gaji.service.domain.common.entity.QSelectCategory.selectCategory;
 import static gaji.service.domain.common.entity.QCategory.category1;
+import static gaji.service.domain.common.entity.QSelectCategory.selectCategory;
 
 
 @Repository

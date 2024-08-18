@@ -1,8 +1,8 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.enums.SortType;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.enums.SortType;
 import gaji.service.domain.post.code.CommunityPostErrorStatus;
 import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.post.repository.CommunityPostBookmarkRepository;

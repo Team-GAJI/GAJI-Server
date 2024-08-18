@@ -4,10 +4,10 @@ import gaji.service.domain.common.converter.CategoryConverter;
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.repository.CategoryRepository;
+import gaji.service.domain.common.repository.SelectCategoryRepository;
 import gaji.service.domain.common.web.dto.CategoryResponseDTO;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.common.repository.SelectCategoryRepository;
 import gaji.service.global.exception.RestApiException;
 import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
