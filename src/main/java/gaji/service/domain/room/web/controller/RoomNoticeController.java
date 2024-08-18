@@ -41,12 +41,14 @@ public class RoomNoticeController {
 
     @GetMapping("/{roomId}/notices")
     @Operation(summary = "스터디룸 공지 목록 조회 API")
-    public ResponseEntity<List<RoomResponseDto.NoticeDto>> getNotices(
+    public BaseResponse<RoomResponseDto.NoticeDtoList> getNotices(
             @PathVariable Long roomId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "5") int size) {
         List<RoomResponseDto.NoticeDto> notices = roomQueryService.getNotices(roomId, page, size);
-        return ResponseEntity.ok(notices);
+        return BaseResponse.onSuccess(
+                new RoomResponseDto.NoticeDtoList(notices)
+        );
     }
 
 //    @GetMapping("/notice/{noticeId}")
@@ -61,14 +63,16 @@ public class RoomNoticeController {
 
     @PostMapping("/notice/{noticeId}/confirm/{userId}")
     @Operation(summary = "스터디룸 공지 확인 버튼 누르기 API", description = "공지사항 확인 상태를 토글합니다.")
-    public ResponseEntity<Boolean> toggleNoticeConfirmation(
+    public BaseResponse<RoomResponseDto.IsConfirmedResponse> toggleNoticeConfirmation(
             @PathVariable Long noticeId,
             @RequestHeader("Authorization") String authorizationHeader) {
 
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         boolean isConfirmed = roomCommandService.toggleNoticeConfirmation(noticeId,userId);
 
-        return ResponseEntity.ok(isConfirmed);
+        return BaseResponse.onSuccess(
+                new RoomResponseDto.IsConfirmedResponse(isConfirmed)
+        );
     }
 
 
