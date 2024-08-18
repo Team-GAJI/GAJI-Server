@@ -153,6 +153,23 @@ public class RoomPostResponseDto {
         private String body;
         private LocalDateTime createdAt;
     }
+
+    @Getter
+    @Setter
+    public static class RoomInfoPostDetailDTO {
+        private Long id;
+        private String title;
+        private String body;
+        private String authorName;
+        private LocalDateTime createdAt;
+        private int viewCount;
+        private int likeCount;
+        private int bookmarkCount;
+        private boolean isLiked;
+        private boolean isBookmarked;
+        private Page<CommentWithRepliesDTO> comments;
+    }
+
 }
 
 
