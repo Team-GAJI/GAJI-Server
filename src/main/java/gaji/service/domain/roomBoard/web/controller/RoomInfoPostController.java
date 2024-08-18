@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -170,4 +172,25 @@ public class RoomInfoPostController {
         return BaseResponse.onSuccess(RoomPostConverter.toWriteInfoPostCommentDto(replyComment));
     }
 
+    @GetMapping("/info/detail/{postId}")
+    @Operation(summary = "정보나눔 게시글 상세 조회", description = "1페이지를 불러오고 싶다면 page : 0으로 입력해야 합니다. ex) page 0 > 1페이지 / page 1 > 2페이지 ")
+    public BaseResponse<RoomPostResponseDto.RoomInfoPostDetailDTO> getPostDetail(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        RoomPostResponseDto.RoomInfoPostDetailDTO postDetail = roomInfoPostQueryService.getPostDetail(postId, userId, page, size);
+        return BaseResponse.onSuccess(postDetail);
+    }
+
+    @GetMapping("/info/{postId}/get/comments")
+    @Operation(summary = "정보나눔 게시글 댓글 및 답글 추가 로딩", description = "추가로 댓글을 무한 스크롤 형태로 불러올 때 호출하는 api 입니다")
+    public BaseResponse<Page<RoomPostResponseDto.CommentWithRepliesDTO>> getMoreComments(
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<RoomPostResponseDto.CommentWithRepliesDTO> comments = roomInfoPostQueryService.getCommentsWithReplies(postId, PageRequest.of(page, size));
+        return BaseResponse.onSuccess(comments);
+    }
 }
