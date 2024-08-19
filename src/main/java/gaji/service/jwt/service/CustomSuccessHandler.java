@@ -60,8 +60,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             addRefreshEntity(usernameId, refreshToken, 86400000000L);
         }
 
-
-
         // Refresh 토큰을 HttpOnly 쿠키로 설정
         Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
@@ -72,31 +70,26 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 
         // 1. 헤더로 보낼 경우
-//        response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader("Authorization", "Bearer " + accessToken);
 
 
 
         // 2. body에 담아서 보낼 경우 Access 토큰을 JSON 응답으로 전송
-        Map<String, String> tokenResponse = new HashMap<>();
-        tokenResponse.put("access_token", accessToken);
-
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(tokenResponse));
-        response.setStatus(HttpStatus.OK.value());
+//        Map<String, String> tokenResponse = new HashMap<>();
+//        tokenResponse.put("access_token", accessToken);
+//
+//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//        response.setCharacterEncoding("UTF-8");
+//        response.getWriter().write(objectMapper.writeValueAsString(tokenResponse));
+//        response.setStatus(HttpStatus.OK.value());
 
         // 토큰 로그로 남기기
         log.info("accessToken = {}", accessToken);
         log.info("refreshToken = {}", refreshToken);
 
 
-        String finalRedirectionUrl;
-        if (customUserDetails.isNewUser()) {
-            finalRedirectionUrl = this.nicknameRedirectionUrl;
+        String finalRedirectionUrl = customUserDetails.isNewUser() ? this.nicknameRedirectionUrl : this.redirectionUrl;
 
-        } else {
-            finalRedirectionUrl = this.redirectionUrl;
-        }
 
 
         // 리다이렉션 URL 생성
