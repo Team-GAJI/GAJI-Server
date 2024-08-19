@@ -10,12 +10,14 @@ import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+
 public interface RoomCommandService {
     @Transactional
     void createUserAssignmentsForStudyMembers(Assignment assignment);
 
     //과제생성1
-    Assignment createAssignment(Long roomId, Long userId, Integer weeks, RoomRequestDto.AssignmentDto requestDto);
+    List<Assignment> createAssignment(Long roomId, Long userId, Integer weeks, RoomRequestDto.AssignmentDto requestDto);
 
     @Transactional
     RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto);

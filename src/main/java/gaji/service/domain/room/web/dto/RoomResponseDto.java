@@ -1,24 +1,29 @@
 package gaji.service.domain.room.web.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import gaji.service.domain.studyMate.entity.Assignment;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoomResponseDto {
 
     @Getter
+    @Setter
     @Builder
     public static class AssignmentResponseDto {
-        private Long assignmentId;
+        private List<Long> assignmentIds;
 
-        public static AssignmentResponseDto of(Long assignmentId) {
+        public static AssignmentResponseDto of(List<Assignment> assignments) {
+            List<Long> ids = assignments.stream()
+                    .map(Assignment::getId)
+                    .collect(Collectors.toList());
             return AssignmentResponseDto.builder()
-                    .assignmentId(assignmentId)
+                    .assignmentIds(ids)
                     .build();
         }
     }
@@ -146,30 +151,24 @@ public class RoomResponseDto {
     }
 
     @Getter
+    @Setter
     @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class AssignmentProgressResponse {
+        @JsonProperty("progressPercentage")
         private Double progressPercentage;
+
+        @JsonProperty("completedAssignments")
         private Integer completedAssignments;
+
+        @JsonProperty("totalAssignments")
         private Integer totalAssignments;
+
+        @JsonProperty("isCompleted")
         private Boolean isCompleted;
+
+        @JsonProperty("deadline")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate deadline;
-
-        // Custom method to check if the deadline has passed
-        public boolean isDeadlinePassed() {
-            return LocalDate.now().isAfter(deadline);
-        }
-
-        // Custom method to get remaining days until deadline
-        public long getRemainingDays() {
-            return LocalDate.now().until(deadline).getDays();
-        }
-
-        // Custom method to get a formatted string of progress
-        public String getFormattedProgress() {
-            return String.format("%.1f%%", progressPercentage);
-        }
     }
 
     @Getter
