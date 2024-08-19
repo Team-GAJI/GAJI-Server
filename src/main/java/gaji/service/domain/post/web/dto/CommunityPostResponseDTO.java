@@ -70,7 +70,7 @@ public class CommunityPostResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PostDetailDTO {
-//        private CategoryEnum category;
+        private CategoryEnum category;
         private Long userId;
         private PostTypeEnum type;
         private String createdAt;
