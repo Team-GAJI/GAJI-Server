@@ -4,6 +4,8 @@ package gaji.service.oauth2.service;
 import gaji.service.domain.enums.*;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.domain.user.service.UserCommandService;
+import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.oauth2.dto.CustomOAuth2User;
 import gaji.service.oauth2.dto.OAuthUserDTO;
 import gaji.service.oauth2.dto.TransferUserDTO;
@@ -24,14 +26,15 @@ import java.time.format.DateTimeParseException;
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-    private final UserRepository userRepository;
+    private final UserQueryService userQueryService;
+    private final UserCommandService userCommandService;
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
-
+        boolean isNewUser = false;
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2Response oAuth2Response = null;
         if (registrationId.equals("naver")) {
@@ -49,13 +52,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         //리소스 서버에서 발급 받은 정보로 사용자를 특정할 아이디값을 만듬
         String usernameId = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
-        User existData = userRepository.findByUsernameId(usernameId);
+        User existData = userQueryService.findByUsernameId(usernameId);
+
 
         if (existData == null) {
 
             OAuthUserDTO oAuthuserDTO = new OAuthUserDTO();
             oAuthuserDTO.setUsernameId(usernameId);
             oAuthuserDTO.setRole(ServiceRole.ROLE_USER);
+            isNewUser = true;
 
             if (registrationId.equals("naver")) {
 
@@ -71,7 +76,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 transferUserDTO.setRole(ServiceRole.ROLE_USER);
 
                 User user = User.createUser(transferUserDTO); // 정적 팩토리 메서드 사용
-                userRepository.save(user);
+                userCommandService.save(user);
             }
             else if (registrationId.equals("google")) {
                 TransferUserDTO transferUserDTO =new TransferUserDTO();
@@ -88,7 +93,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
                 User user = User.createUser(transferUserDTO); // 정적 팩토리 메서드 사용
                 System.out.println(user.getGender());
-                userRepository.save(user);
+                userCommandService.save(user);
             }
 
             return new CustomOAuth2User(oAuthuserDTO);
@@ -98,11 +103,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             existData.setEmail(oAuth2Response.getEmail());
             existData.setName(oAuth2Response.getName());
 
-            userRepository.save(existData);
+            userCommandService.save(existData);
 
             OAuthUserDTO oAuthuserDTO = new OAuthUserDTO();
             oAuthuserDTO.setUsernameId(usernameId);
             oAuthuserDTO.setRole(ServiceRole.ROLE_USER);
+            oAuthuserDTO.setNewUser(isNewUser);
+
 
             return new CustomOAuth2User(oAuthuserDTO);
         }
@@ -165,8 +172,5 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         return email.substring(0, atIndex);
     }
-
-
-
 
 }
