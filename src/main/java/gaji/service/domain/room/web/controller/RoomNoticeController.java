@@ -1,7 +1,9 @@
 package gaji.service.domain.room.web.controller;
 
 import gaji.service.domain.room.converter.RoomConverter;
+import gaji.service.domain.room.entity.QNoticeConfirmation;
 import gaji.service.domain.room.entity.RoomNotice;
+import gaji.service.domain.room.repository.NoticeConfirmationRepository;
 import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
@@ -74,5 +76,10 @@ public class RoomNoticeController {
         );
     }
 
+    @GetMapping("/{noticeId}/confirmed-users")
+    public BaseResponse<List<String>> getConfirmedUserNicknames(@PathVariable Long noticeId) {
+        List<String> confirmedNicknames = roomQueryService.getConfirmedUserNicknames(noticeId);
+        return BaseResponse.onSuccess(confirmedNicknames);
+    }
 
 }
