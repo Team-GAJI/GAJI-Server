@@ -12,9 +12,11 @@ import jakarta.transaction.Transactional;
 
 public interface RoomCommandService {
     @Transactional
-    Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto);
-
     void createUserAssignmentsForStudyMembers(Assignment assignment);
+
+    //과제생성1
+    Assignment createAssignment(Long roomId, Long userId, Integer weeks, RoomRequestDto.AssignmentDto requestDto);
+
     @Transactional
     RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto);
 
