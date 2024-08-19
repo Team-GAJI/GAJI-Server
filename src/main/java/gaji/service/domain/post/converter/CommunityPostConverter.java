@@ -12,6 +12,7 @@ import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.service.CommunityPostBookMarkService;
 import gaji.service.domain.post.service.CommunityPostLikesService;
+import gaji.service.domain.post.service.CommunityPostQueryService;
 import gaji.service.domain.post.web.dto.PostRequestDTO;
 import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
 import gaji.service.domain.user.entity.User;
@@ -29,6 +30,7 @@ public class CommunityPostConverter {
     private final HashtagService hashtagService;
     private final CommunityPostBookMarkService postBookMarkService;
     private final CommunityPostLikesService postLikesService;
+    private final CommunityPostQueryService communityPostQueryService;
 
     // 초기 PostStatus 지정
     public static PostStatusEnum getInitialPostStatus(PostTypeEnum type) {
@@ -112,7 +114,7 @@ public class CommunityPostConverter {
     }
 
     public CommunityPostResponseDTO.PostPreviewListDTO toPostPreviewListDTO(List<CommnuityPost> postList, boolean hasNext) {
-        CommunityPostConverter postConverter = new CommunityPostConverter(hashtagService, postBookMarkService, postLikesService);
+        CommunityPostConverter postConverter = new CommunityPostConverter(hashtagService, postBookMarkService, postLikesService, communityPostQueryService);
         List<CommunityPostResponseDTO.PostPreviewDTO> postPreviewDTOList = postList.stream()
                 .map(postConverter::toPostPreviewDTO)
                 .collect(Collectors.toList());
@@ -128,8 +130,10 @@ public class CommunityPostConverter {
         List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagNameAndIdDTOList = HashtagConverter.toHashtagNameAndIdDTOList(selectHashtagList);
         boolean isBookmarked = (userId == null) ? false : postBookMarkService.existsByUserAndPost(userId, post);
         boolean isLiked = (userId == null) ? false : postLikesService.existsByUserAndPost(userId, post);
+        boolean isWriter = (userId == null) ? false : communityPostQueryService.isPostWriter(userId, post);
 
         return CommunityPostResponseDTO.PostDetailDTO.builder()
+//                .category()
                 .userId(post.getUser().getId())
                 .type(post.getType())
                 .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(post.getCreatedAt()), ""))
@@ -140,6 +144,7 @@ public class CommunityPostConverter {
                 .hashtagList(hashtagNameAndIdDTOList)
                 .isBookMarked(isBookmarked)
                 .isLiked(isLiked)
+                .isWriter(isWriter)
                 .body(post.getBody())
                 .build();
     }

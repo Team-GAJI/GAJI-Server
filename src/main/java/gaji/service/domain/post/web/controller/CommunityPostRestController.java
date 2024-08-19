@@ -37,6 +37,7 @@ public class CommunityPostRestController {
     private final CommunityCommentService commentService;
     private final TokenProviderService tokenProviderService;
     private final CommunityPostConverter communityPostConverter;
+    private final CommunityCommentConverter communityCommentConverter;
 
     @PostMapping
     @Operation(summary = "커뮤니티 게시글 업로드 API", description = "커뮤니티의 게시글을 업로드하는 API입니다. 게시글 유형과 제목, 본문 내용을 검증합니다.")
@@ -132,13 +133,15 @@ public class CommunityPostRestController {
 
     @GetMapping("/{postId}/comments")
     @Operation(summary = "커뮤니티 게시글 댓글 목록 조회 API", description = "lastGroupNum에 마지막으로 조회한 댓글의 grounNum과, size로 조회할 데이터의 개수를 보내주세요.")
-    public BaseResponse<CommunityPostCommentResponseDTO.PostCommentListDTO> getCommentList(@Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
+    public BaseResponse<CommunityPostCommentResponseDTO.PostCommentListDTO> getCommentList(@RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+                                                                                           @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
                                                                                            @Min(value = 0, message = "lastGroupNum은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastGroupNum, // 마지막 댓글 ID
                                                                                            @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                            @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) // 페이지 크기 (기본값 10))
     {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         Slice<CommunityComment> commentSlice = commentService.getCommentListByPost(postId, lastGroupNum, page, size);
-        CommunityPostCommentResponseDTO.PostCommentListDTO postCommentDTOList = CommunityCommentConverter.toPostCommentListDTO(commentSlice.getContent(), commentSlice.hasNext());
+        CommunityPostCommentResponseDTO.PostCommentListDTO postCommentDTOList = communityCommentConverter.toPostCommentListDTO(commentSlice.getContent(), commentSlice.hasNext(), userId);
         return BaseResponse.onSuccess(postCommentDTOList);
     }
 

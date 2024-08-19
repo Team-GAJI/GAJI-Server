@@ -30,6 +30,7 @@ public class CommunityPostCommentResponseDTO {
         private Integer groupNum;
         private int depth;
         private String createdAt;
+        private boolean isWriter;
     }
 
     @Builder

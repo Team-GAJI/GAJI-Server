@@ -22,7 +22,8 @@ public interface CommunityPostQueryService {
                             int size);
     Slice<CommnuityPost> searchPostList();
     CommnuityPost getPostDetail(Long postId);
-    void validPostOwner(Long userId, CommnuityPost post);
+    boolean isPostWriter(Long userId, CommnuityPost post);
+    void validPostWriter(Long userId, CommnuityPost post);
     void validExistsPostLikes(Long userId, CommnuityPost post);
     void validExistsPostBookmark(Long userId, CommnuityPost post);
 }
