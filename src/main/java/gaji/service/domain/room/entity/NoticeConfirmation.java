@@ -1,5 +1,6 @@
 package gaji.service.domain.room.entity;
 
+import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class NoticeConfirmation {
+public class NoticeConfirmation extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,10 +25,4 @@ public class NoticeConfirmation {
     @JoinColumn(name = "study_mate_id")
     private StudyMate studyMate;
 
-    private LocalDateTime confirmedAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.confirmedAt = LocalDateTime.now();
-    }
 }
