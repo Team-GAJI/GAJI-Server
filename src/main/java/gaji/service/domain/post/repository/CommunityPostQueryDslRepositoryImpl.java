@@ -3,6 +3,8 @@ package gaji.service.domain.post.repository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.EnumPath;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.PostStatusEnum;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static gaji.service.domain.common.entity.QSelectHashtag.selectHashtag;
 import static gaji.service.domain.post.entity.QCommnuityPost.commnuityPost;
 import static gaji.service.domain.user.entity.QUser.user;
 
@@ -30,7 +33,8 @@ public class CommunityPostQueryDslRepositoryImpl implements CommunityPostQueryDs
     private final CategoryService categoryService;
 
     @Override
-    public Slice<CommnuityPost> findAllFetchJoinWithUser(Integer lastPopularityScore,
+    public Slice<CommnuityPost> findAllFetchJoinWithUser(String keyword,
+                                                Integer lastPopularityScore,
                                                 Long lastPostId,
                                                 Integer lastLikeCnt,
                                                 Integer lastHit,
@@ -44,6 +48,8 @@ public class CommunityPostQueryDslRepositoryImpl implements CommunityPostQueryDs
         List<CommnuityPost> postList = jpaQueryFactory.
                 selectFrom(commnuityPost)
                 .leftJoin(commnuityPost.user, user)
+//                .join(selectHashtag) // TODO: 연관관계가 맺어져 있지 않아도 조인 가능, 추후 리팩토링 고려
+//                .on(joinSelectHashtag(commnuityPost.id, commnuityPost.type))
                 .fetchJoin()
                 .where(
                         ltPopularityScore(lastPopularityScore),
@@ -52,7 +58,8 @@ public class CommunityPostQueryDslRepositoryImpl implements CommunityPostQueryDs
                         ltHit(lastHit),
                         postTypeEq(postType),
                         postStatusEq(postStatus),
-                        postIdIn(entityIdList)
+                        postIdIn(entityIdList),
+                        searchByKeyword(keyword)
                 )
                 .orderBy(orderBySortType(sortType))
                 .limit(pageable.getPageSize() + 1)
@@ -120,9 +127,13 @@ public class CommunityPostQueryDslRepositoryImpl implements CommunityPostQueryDs
         return (lastHit != null) ? commnuityPost.hit.lt(lastHit) : null;
     }
 
-    private BooleanExpression searchKeyword(String keyword) {
-        return (keyword != null) ? commnuityPost.title.containsIgnoreCase(keyword)
-                : null;
+    private BooleanExpression searchByKeyword(String keyword) {
+        return (keyword != null) ? commnuityPost.title.containsIgnoreCase(keyword).or(commnuityPost.body.containsIgnoreCase(keyword)) : null;
+    }
+
+    private BooleanExpression joinSelectHashtag(NumberPath<Long> entityId, EnumPath<PostTypeEnum> postType) {
+        return selectHashtag.entityId.eq(entityId)
+                .and(selectHashtag.type.eq(postType));
     }
 
     private <T> Slice<T> checkLastPage(Pageable pageable, List<T> postList) {

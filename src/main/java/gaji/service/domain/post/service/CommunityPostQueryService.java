@@ -10,7 +10,8 @@ import org.springframework.data.domain.Slice;
 public interface CommunityPostQueryService {
 
     CommnuityPost findPostByPostId(Long postId);
-    Slice<CommnuityPost> getPostList(Integer lastPopularityScore,
+    Slice<CommnuityPost> getPostList(String keyword,
+                            Integer lastPopularityScore,
                             Long lastPostId,
                             Integer lastLikeCnt,
                             Integer lastHit,
@@ -20,7 +21,6 @@ public interface CommunityPostQueryService {
                             PostStatusEnum filter,
                             int page,
                             int size);
-    Slice<CommnuityPost> searchPostList();
     CommnuityPost getPostDetail(Long postId);
     boolean isPostWriter(Long userId, CommnuityPost post);
     void validPostWriter(Long userId, CommnuityPost post);
