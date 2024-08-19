@@ -1,9 +1,11 @@
 package gaji.service.oauth2.service;
 
 
-import gaji.service.domain.enums.*;
+import gaji.service.domain.enums.Gender;
+import gaji.service.domain.enums.ServiceRole;
+import gaji.service.domain.enums.SocialType;
+import gaji.service.domain.enums.UserActive;
 import gaji.service.domain.user.entity.User;
-import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.domain.user.service.UserCommandService;
 import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.oauth2.dto.CustomOAuth2User;
@@ -57,10 +59,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         if (existData == null) {
 
+            isNewUser = true;
             OAuthUserDTO oAuthuserDTO = new OAuthUserDTO();
             oAuthuserDTO.setUsernameId(usernameId);
             oAuthuserDTO.setRole(ServiceRole.ROLE_USER);
-            isNewUser = true;
+            oAuthuserDTO.setNewUser(isNewUser);
 
             if (registrationId.equals("naver")) {
 
@@ -99,7 +102,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return new CustomOAuth2User(oAuthuserDTO);
 
         }else{
-
             existData.setEmail(oAuth2Response.getEmail());
             existData.setName(oAuth2Response.getName());
 

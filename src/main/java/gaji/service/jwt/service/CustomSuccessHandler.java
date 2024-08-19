@@ -9,9 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -38,8 +37,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Value("${nicknameRedirectionUrl}")
     private String nicknameRedirectionUrl;
 
-    private String finalRedirectionUrl;
-
     public CustomSuccessHandler(JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper) {
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
@@ -49,6 +46,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
+
         String usernameId = customUserDetails.getName();
         String role = authentication.getAuthorities().stream()
                 .findFirst()
@@ -92,6 +90,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("refreshToken = {}", refreshToken);
 
 
+        String finalRedirectionUrl;
         if (customUserDetails.isNewUser()) {
             finalRedirectionUrl = this.nicknameRedirectionUrl;
 
