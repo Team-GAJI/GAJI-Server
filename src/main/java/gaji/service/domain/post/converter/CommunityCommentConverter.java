@@ -10,15 +10,14 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 public class CommunityCommentConverter {
     private final CommunityCommentService communityCommentService;
 
-    public static CommunityPostCommentResponseDTO.WriteCommentDTO toWriteCommentDTO(CommunityComment comment) {
-        return CommunityPostCommentResponseDTO.WriteCommentDTO.builder()
+    public static CommunityPostCommentResponseDTO.WriteCommentResponseDTO toWriteCommentResponseDTO(CommunityComment comment) {
+        return CommunityPostCommentResponseDTO.WriteCommentResponseDTO.builder()
                 .commentId(comment.getId())
                 .build();
     }

@@ -5,7 +5,7 @@ import gaji.service.domain.post.converter.CommunityPostConverter;
 import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.post.entity.CommunityComment;
 import gaji.service.domain.post.repository.CommunityCommentJpaRepository;
-import gaji.service.domain.post.web.dto.PostRequestDTO;
+import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class CommunityCommentServiceImpl implements CommunityCommentService {
 
     @Override
     @Transactional
-    public CommunityComment createCommentByCheckParentCommentIdIsNull(Long parentCommentId, PostRequestDTO.WriteCommentDTO request, User findUser, CommnuityPost findPost) {
+    public CommunityComment createCommentByCheckParentCommentIdIsNull(Long parentCommentId, CommunityPostRequestDTO.WriteCommentRequestDTO request, User findUser, CommnuityPost findPost) {
         if (parentCommentId != null) {
             CommunityComment parentComment = findByCommentId(parentCommentId);
             return CommunityPostConverter.toComment(request, findUser, findPost, parentComment);

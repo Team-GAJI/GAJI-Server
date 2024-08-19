@@ -18,7 +18,7 @@ import gaji.service.domain.post.service.CommunityPostBookMarkService;
 import gaji.service.domain.post.service.CommunityPostLikesService;
 import gaji.service.domain.post.service.CommunityPostQueryService;
 import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
-import gaji.service.domain.post.web.dto.PostRequestDTO;
+import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.global.converter.DateConverter;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +44,8 @@ public class CommunityPostConverter {
                 (type == PostTypeEnum.PROJECT) ? PostStatusEnum.RECRUITING : PostStatusEnum.BLOGING;
     }
 
-    public static CommunityPostResponseDTO.UploadPostDTO toUploadPostDTO(CommnuityPost post) {
-        return CommunityPostResponseDTO.UploadPostDTO
+    public static CommunityPostResponseDTO.UploadPostResponseDTO toUploadPostResponseDTO(CommnuityPost post) {
+        return CommunityPostResponseDTO.UploadPostResponseDTO
                 .builder()
                 .postId(post.getId())
                 .build();
@@ -65,7 +65,7 @@ public class CommunityPostConverter {
                 .build();
     }
 
-    public static CommnuityPost toPost(PostRequestDTO.UploadPostDTO request, User user) {
+    public static CommnuityPost toPost(CommunityPostRequestDTO.UploadPostRequestDTO request, User user) {
         return CommnuityPost.builder()
                 .user(user)
                 .title(request.getTitle())
@@ -77,7 +77,7 @@ public class CommunityPostConverter {
                 .build();
     }
 
-    public static CommunityComment toComment(PostRequestDTO.WriteCommentDTO request, User user, CommnuityPost post, CommunityComment parentComment) {
+    public static CommunityComment toComment(CommunityPostRequestDTO.WriteCommentRequestDTO request, User user, CommnuityPost post, CommunityComment parentComment) {
         return CommunityComment.builder()
                 .user(user)
                 .post(post)

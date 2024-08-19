@@ -86,13 +86,13 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("accessToken = {}", accessToken);
         log.info("refreshToken = {}", refreshToken);
 
-        // 리다이렉션 URL 생성
+        /*// 리다이렉션 URL 생성
         String targetUrl = UriComponentsBuilder.fromUriString(redirectionUrl)
                 .queryParam("access_token", accessToken)
                 .build().toUriString();
 
         // 리다이렉션 수행
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);*/
     }
 
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {

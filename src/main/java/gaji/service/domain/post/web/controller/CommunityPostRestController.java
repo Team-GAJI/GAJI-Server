@@ -14,7 +14,7 @@ import gaji.service.domain.post.service.CommunityPostCommandService;
 import gaji.service.domain.post.service.CommunityPostQueryService;
 import gaji.service.domain.post.web.dto.CommunityPostCommentResponseDTO;
 import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
-import gaji.service.domain.post.web.dto.PostRequestDTO;
+import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,11 +41,11 @@ public class CommunityPostRestController {
 
     @PostMapping
     @Operation(summary = "커뮤니티 게시글 업로드 API", description = "커뮤니티의 게시글을 업로드하는 API입니다. 게시글 유형과 제목, 본문 내용을 검증합니다.")
-    public BaseResponse<CommunityPostResponseDTO.UploadPostDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
-                                                                           @RequestBody @Valid PostRequestDTO.UploadPostDTO request) {
+    public BaseResponse<CommunityPostResponseDTO.UploadPostResponseDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                                   @RequestBody @Valid CommunityPostRequestDTO.UploadPostRequestDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         CommnuityPost newPost = communityPostCommandService.uploadPost(userId, request);
-        return BaseResponse.onSuccess(CommunityPostConverter.toUploadPostDTO(newPost));
+        return BaseResponse.onSuccess(CommunityPostConverter.toUploadPostResponseDTO(newPost));
     }
 
     @DeleteMapping("/{postId}")
@@ -106,13 +106,13 @@ public class CommunityPostRestController {
             @Parameter(name = "postId", description = "게시글 id"),
             @Parameter(name = "parentCommentId", description = "부모 댓글의 id, 대댓글 작성할 때 필요한 부모 댓글의 id입니다."),
     })
-    public BaseResponse<CommunityPostCommentResponseDTO.WriteCommentDTO> writeCommentOnCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
-                                                                                                     @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
-                                                                                                     @Min(value = 1, message = "parentCommentId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long parentCommentId,
-                                                                                                     @RequestBody @Valid PostRequestDTO.WriteCommentDTO request) {
+    public BaseResponse<CommunityPostCommentResponseDTO.WriteCommentResponseDTO> writeCommentOnCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                                                             @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
+                                                                                                             @Min(value = 1, message = "parentCommentId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long parentCommentId,
+                                                                                                             @RequestBody @Valid CommunityPostRequestDTO.WriteCommentRequestDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         CommunityComment newComment = communityPostCommandService.writeCommentOnCommunityPost(userId, postId, parentCommentId, request);
-        return BaseResponse.onSuccess(CommunityCommentConverter.toWriteCommentDTO(newComment));
+        return BaseResponse.onSuccess(CommunityCommentConverter.toWriteCommentResponseDTO(newComment));
     }
 
     @DeleteMapping("/comments/{commentId}")

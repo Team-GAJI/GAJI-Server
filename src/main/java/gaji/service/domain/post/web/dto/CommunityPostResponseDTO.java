@@ -18,7 +18,7 @@ public class CommunityPostResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UploadPostDTO {
+    public static class UploadPostResponseDTO {
         Long postId;
     }
 
