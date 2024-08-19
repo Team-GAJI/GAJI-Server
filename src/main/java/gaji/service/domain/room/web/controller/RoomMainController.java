@@ -27,17 +27,18 @@ public class RoomMainController {
     private final TokenProviderService tokenProviderService;
 
     @PostMapping("/assignments/{roomId}/{weeks}")
-    @Operation(summary = "스터디룸 과제 등록 API",description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 스터디에 참혀하고 있는 user인지 검증합니다.")
-    public BaseResponse<RoomResponseDto.AssignmentResponseDto> AssignmentController(
+    @Operation(summary = "스터디룸 과제 등록 API", description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 스터디에 참여하고 있는 user인지 검증합니다.")
+    public BaseResponse<RoomResponseDto.AssignmentResponseDto> createAssignments(
             @RequestBody @Valid RoomRequestDto.AssignmentDto requestDto,
             @PathVariable Long roomId,
             @PathVariable Integer weeks,
-            @RequestHeader("Authorization") String authorizationHeader){
+            @RequestHeader("Authorization") String authorizationHeader) {
 
-        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        Assignment assignment = roomCommandService.createAssignment(roomId, userId, weeks, requestDto);
-        RoomResponseDto.AssignmentResponseDto responseDto = RoomResponseDto.AssignmentResponseDto.of(assignment.getId());
-        return BaseResponse.onSuccess(responseDto);
+            Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+            List<Assignment> assignments = roomCommandService.createAssignment(roomId, userId, weeks, requestDto);
+            RoomResponseDto.AssignmentResponseDto responseDto = RoomResponseDto.AssignmentResponseDto.of(assignments);
+            return BaseResponse.onSuccess(responseDto);
+
     }
 
     @PostMapping("/event/{roomId}/{weeks}/period")
@@ -70,17 +71,16 @@ public class RoomMainController {
 
         return BaseResponse.onSuccess(responseDto);
     }
-
     @PostMapping("/main/assignment/{userAssignmentId}")
-    @Operation(summary = "주차별 과제 체크 박스 체크", description = "과제 체크 박스를 클릭하면 과제 완료 .")
-    public ResponseEntity<RoomResponseDto.AssignmentProgressResponse> toggleAssignmentCompletion(
+    @Operation(summary = "주차별 과제 체크 박스 체크", description = "과제 체크 박스를 클릭하면 과제 완료 상태를 토글합니다.")
+    public ResponseEntity<?> toggleAssignmentCompletion(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long userAssignmentId) {
-
-        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        RoomResponseDto.AssignmentProgressResponse response = roomCommandService.toggleAssignmentCompletion(userId, userAssignmentId);
-        return ResponseEntity.ok(response);
+            Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+            RoomResponseDto.AssignmentProgressResponse response = roomCommandService.toggleAssignmentCompletion(userId, userAssignmentId);
+            return ResponseEntity.ok(response);
     }
+
 
     // 수정 필요
     //특정 스터디룸의 모든 사용자의 진행 상황을 조회합니다
