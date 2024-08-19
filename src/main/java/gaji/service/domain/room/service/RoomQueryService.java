@@ -26,4 +26,6 @@ public interface RoomQueryService {
     RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId);
 
     RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId);
+
+    List<String> getConfirmedUserNicknames(Long noticeId);
 }

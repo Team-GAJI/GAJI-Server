@@ -4,10 +4,7 @@ package gaji.service.domain.room.service;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
-import gaji.service.domain.room.repository.RoomEventRepository;
-import gaji.service.domain.room.repository.RoomQueryRepository;
-import gaji.service.domain.room.repository.RoomRepository;
-import gaji.service.domain.room.repository.WeeklyUserProgressRepository;
+import gaji.service.domain.room.repository.*;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +25,7 @@ public class RoomQueryServiceImpl implements RoomQueryService {
     private final RoomRepository roomRepository;
     private final RoomQueryRepository roomQueryRepository;
     private final WeeklyUserProgressRepository weeklyUserProgressRepository;
+    private final NoticeConfirmationRepository noticeConfirmationRepository;
 
 //    @Override
 //    public RoomEvent findRoomEventById(Long roomId){
@@ -107,6 +105,11 @@ public Room findRoomById(Long roomId) {
     @Override
     public RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId){
         return roomQueryRepository.getRoomNotices(roomId);
+    }
+
+    @Override
+    public List<String> getConfirmedUserNicknames(Long noticeId) {
+        return noticeConfirmationRepository.findConfirmedUserNicknamesByNoticeId(noticeId);
     }
 }
 
