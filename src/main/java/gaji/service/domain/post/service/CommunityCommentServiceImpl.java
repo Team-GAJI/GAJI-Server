@@ -58,7 +58,12 @@ public class CommunityCommentServiceImpl implements CommunityCommentService {
     }
 
     @Override
-    public void validCommentOwner(Long userId, CommunityComment comment) {
+    public boolean isCommentWriter(Long userId, CommunityComment comment) {
+        return comment.getUser().getId().equals(userId);
+    }
+
+    @Override
+    public void validCommentWriter(Long userId, CommunityComment comment) {
         if (!comment.getUser().getId().equals(userId)) {
             throw new RestApiException(CommunityCommentErrorStatus._NOT_AUTHORIZED);
         }

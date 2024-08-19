@@ -88,7 +88,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         CommunityComment findComment = communityCommentService.findByCommentId(commentId);
 
         // 검증
-        communityCommentService.validCommentOwner(userId, findComment);
+        communityCommentService.validCommentWriter(userId, findComment);
 
         // 삭제
         communityCommentService.hardDeleteComment(findComment);
@@ -103,7 +103,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
         // 검증
-        communityPostQueryService.validPostOwner(userId, findPost);
+        communityPostQueryService.validPostWriter(userId, findPost);
 
         // 삭제
         hashtagService.deleteAllByEntityIdAndType(findPost.getId(), findPost.getType());
@@ -132,7 +132,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
         // 검증
-        communityPostQueryService.validPostOwner(findUser.getId(), findPost);
+        communityPostQueryService.validPostWriter(findUser.getId(), findPost);
 
         // 삭제
         postBookmarkRepository.deleteByUserAndPost(findUser, findPost);
@@ -164,7 +164,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
         // 검증
-        communityPostQueryService.validPostOwner(findUser.getId(), findPost);
+        communityPostQueryService.validPostWriter(findUser.getId(), findPost);
 
         // 삭제
         postLikesRepository.deleteByUserAndPost(findUser, findPost);

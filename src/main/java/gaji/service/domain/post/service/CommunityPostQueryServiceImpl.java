@@ -69,7 +69,12 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
     }
 
     @Override
-    public void validPostOwner(Long userId, CommnuityPost post) {
+    public boolean isPostWriter(Long userId, CommnuityPost post) {
+        return post.getUser().getId().equals(userId);
+    }
+
+    @Override
+    public void validPostWriter(Long userId, CommnuityPost post) {
         if (!post.getUser().getId().equals(userId)) {
             throw new RestApiException(CommunityPostErrorStatus._NOT_AUTHORIZED);
         }

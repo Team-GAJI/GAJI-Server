@@ -14,6 +14,7 @@ public interface CommunityCommentService {
     void hardDeleteComment(CommunityComment comment);
     CommunityComment findByCommentId(Long commentId);
     Slice<CommunityComment> getCommentListByPost(Long postId, Integer lastGroupNum, int page, int size);
-    void validCommentOwner(Long userId, CommunityComment comment);
+    boolean isCommentWriter(Long userId, CommunityComment comment);
+    void validCommentWriter(Long userId, CommunityComment comment);
 
 }
