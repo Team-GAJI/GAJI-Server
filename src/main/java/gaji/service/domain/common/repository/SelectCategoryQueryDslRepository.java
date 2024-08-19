@@ -7,6 +7,6 @@ import gaji.service.domain.enums.PostTypeEnum;
 import java.util.List;
 
 public interface SelectCategoryQueryDslRepository {
-    List<SelectCategory> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType);
+    SelectCategory findOneFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType);
     List<Long> findEntityIdListByCategoryAndPostType(Category category, PostTypeEnum postType);
 }
