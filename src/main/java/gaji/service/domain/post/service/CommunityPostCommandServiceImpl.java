@@ -16,7 +16,7 @@ import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.repository.CommunityPostBookmarkRepository;
 import gaji.service.domain.post.repository.CommunityPostJpaRepository;
 import gaji.service.domain.post.repository.CommunityPostLikesRepository;
-import gaji.service.domain.post.web.dto.PostRequestDTO;
+import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
 
 
     @Override
-    public CommnuityPost uploadPost(Long userId, PostRequestDTO.UploadPostDTO request) {
+    public CommnuityPost uploadPost(Long userId, CommunityPostRequestDTO.UploadPostRequestDTO request) {
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost post = CommunityPostConverter.toPost(request, findUser);
         CommnuityPost newPost = communityPostJpaRepository.save(post);
@@ -69,7 +69,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
     }
 
     @Override
-    public CommunityComment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, PostRequestDTO.WriteCommentDTO request) {
+    public CommunityComment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, CommunityPostRequestDTO.WriteCommentRequestDTO request) {
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 

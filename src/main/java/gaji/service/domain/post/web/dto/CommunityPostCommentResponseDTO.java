@@ -14,7 +14,7 @@ public class CommunityPostCommentResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class WriteCommentDTO {
+    public static class WriteCommentResponseDTO {
         private Long commentId;
     }
 

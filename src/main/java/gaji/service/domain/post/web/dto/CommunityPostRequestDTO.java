@@ -12,12 +12,12 @@ import lombok.RequiredArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostRequestDTO {
+public class CommunityPostRequestDTO {
 
     @Schema(description = "커뮤니티 게시글 저장 DTO")
     @Getter
     @RequiredArgsConstructor
-    public static class UploadPostDTO {
+    public static class UploadPostRequestDTO {
         @Schema(description = "게시글 제목")
         @NotBlank(message = "게시글 제목을 입력해주세요.")
         private final String title;
@@ -46,7 +46,7 @@ public class PostRequestDTO {
     @Schema(description = "커뮤니티 게시글 댓글 작성 DTO")
     @Getter
     @RequiredArgsConstructor
-    public static class WriteCommentDTO {
+    public static class WriteCommentRequestDTO {
         @Schema(description = "댓글 본문")
         @NotBlank(message = "댓글 본문을 입력해주세요.")
         private String body;
