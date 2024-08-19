@@ -24,7 +24,8 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
     private final CommunityPostBookmarkRepository postBookmarkRepository;
 
     @Override
-    public Slice<CommnuityPost> getPostList(Integer lastPopularityScore,
+    public Slice<CommnuityPost> getPostList(String keyword,
+                                   Integer lastPopularityScore,
                                    Long lastPostId,
                                    Integer lastLikeCnt,
                                    Integer lastHit,
@@ -35,7 +36,8 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
                                    int page,
                                    int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return communityPostJpaRepository.findAllFetchJoinWithUser(lastPopularityScore,
+        return communityPostJpaRepository.findAllFetchJoinWithUser(keyword,
+                lastPopularityScore,
                 lastPostId,
                 lastLikeCnt,
                 lastHit,
@@ -44,11 +46,6 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
                 categoryId,
                 sortType,
                 pageRequest);
-    }
-
-    @Override
-    public Slice<CommnuityPost> searchPostList() {
-        return null;
     }
 
     @Override

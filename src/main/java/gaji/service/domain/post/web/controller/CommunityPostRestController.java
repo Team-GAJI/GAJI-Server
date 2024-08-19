@@ -73,18 +73,19 @@ public class CommunityPostRestController {
     }
 
     @GetMapping("/preivew")
-    @Operation(summary = "커뮤니티 게시글 미리보기 목록 조회 API", description = "아직은 무한스크롤로 구현되어있지 않고, 모든 목록을 조회합니다.")
+    @Operation(summary = "커뮤니티 게시글 미리보기 목록 조회 API", description = "hot 게시글, 커뮤니티 게시글 미리보기 목록, 검색 API에 모두 사용 가능합니다.")
     @Parameters({
             @Parameter(name = "lastPopularityScore", description = "마지막으로 조회한 게시글의 인기 점수"),
             @Parameter(name = "lastPostId", description = "마지막으로 조회한 게시글의 id"),
             @Parameter(name = "lastLikeCnt", description = "마지막으로 조회한 게시글의 좋아요 수"),
             @Parameter(name = "lastHit", description = "마지막으로 조회한 게시글의 조회수"),
             @Parameter(name = "postType", description = "게시글의 유형(블로그, 프로젝트, 질문)"),
-            @Parameter(name = "categoryId", description = "카테고리(DEVELOP, AI, HW, ... 정책 공통 사항 참조)의 id"),
+            @Parameter(name = "categoryId", description = "카테고리의 id( /api/categories API로 조회해서 확인하시면 됩니다 )"),
             @Parameter(name = "sortType", description = "정렬 유형(hot, recent, like, hit)"),
             @Parameter(name = "filter", description = "게시글의 상태(모집중, 모집완료, 미완료질문, 해결완료)"),
     })
-    public BaseResponse<CommunityPostResponseDTO.PostPreviewListDTO> getPostPreivewList(@Min(value = 0, message = "lastPopularityScore는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastPopularityScore,
+    public BaseResponse<CommunityPostResponseDTO.PostPreviewListDTO> getPostPreivewList(@RequestParam(required = false) String keyword,
+                                                                                        @Min(value = 0, message = "lastPopularityScore는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastPopularityScore,
                                                                                         @Min(value = 1, message = "lastPostId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long lastPostId,
                                                                                         @Min(value = 0, message = "lastLikeCnt는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastLikeCnt,
                                                                                         @Min(value = 0, message = "lastHit은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastHit,
@@ -95,13 +96,8 @@ public class CommunityPostRestController {
                                                                                         @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                         @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
-        Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, categoryId, sortType, filter, page, size);
+        Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(keyword, lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, categoryId, sortType, filter, page, size);
         return BaseResponse.onSuccess(communityPostConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
-    }
-
-    @GetMapping("/search")
-    public BaseResponse<CommunityPostResponseDTO.PostPreviewListDTO> searchCommunityPostList() {
-        return null;
     }
 
     @PostMapping("/{postId}/comments")
