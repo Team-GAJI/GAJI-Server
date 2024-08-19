@@ -29,7 +29,6 @@ public class SelectCategoryQueryDslRepositoryImpl implements SelectCategoryQuery
                         selectCategory.entityId.eq(entityId),
                         selectCategory.type.eq(postType)
                 )
-                .orderBy(selectCategory.id.asc())
                 .fetchOne()
                 ;
     }
