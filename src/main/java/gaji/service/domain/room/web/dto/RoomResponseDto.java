@@ -193,7 +193,7 @@ public class RoomResponseDto {
     @Getter
     @Builder
     public static class UserProgressDTO {
-        private String name;
+        private String nickname;
         private Double progressPercentage;
     }
 

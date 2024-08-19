@@ -89,7 +89,7 @@ public Room findRoomById(Long roomId) {
 
         return projections.stream()
                 .map(projection -> RoomResponseDto.UserProgressDTO.builder()
-                        .name(projection.getName())
+                        .nickname(projection.getNickname())
                         .progressPercentage(projection.getProgressPercentage())
                         .build())
                 .collect(Collectors.toList());
