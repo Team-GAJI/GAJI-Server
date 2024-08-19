@@ -1,9 +1,13 @@
 package gaji.service.domain.post.converter;
 
 import gaji.service.domain.common.converter.HashtagConverter;
+import gaji.service.domain.common.entity.Category;
+import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.entity.SelectHashtag;
+import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.common.web.dto.HashtagResponseDTO;
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.entity.CommnuityPost;
@@ -22,12 +26,14 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 public class CommunityPostConverter {
     private final HashtagService hashtagService;
+    private final CategoryService categoryService;
     private final CommunityPostBookMarkService postBookMarkService;
     private final CommunityPostLikesService postLikesService;
     private final CommunityPostQueryService communityPostQueryService;
@@ -114,7 +120,7 @@ public class CommunityPostConverter {
     }
 
     public CommunityPostResponseDTO.PostPreviewListDTO toPostPreviewListDTO(List<CommnuityPost> postList, boolean hasNext) {
-        CommunityPostConverter postConverter = new CommunityPostConverter(hashtagService, postBookMarkService, postLikesService, communityPostQueryService);
+        CommunityPostConverter postConverter = new CommunityPostConverter(hashtagService, categoryService, postBookMarkService, postLikesService, communityPostQueryService);
         List<CommunityPostResponseDTO.PostPreviewDTO> postPreviewDTOList = postList.stream()
                 .map(postConverter::toPostPreviewDTO)
                 .collect(Collectors.toList());
@@ -128,12 +134,19 @@ public class CommunityPostConverter {
     public CommunityPostResponseDTO.PostDetailDTO toPostDetailDTO(CommnuityPost post, Long userId) {
         List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(post.getId(), post.getType());
         List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagNameAndIdDTOList = HashtagConverter.toHashtagNameAndIdDTOList(selectHashtagList);
+
+        // ofNullable 메서드로 NPE 방지
+        CategoryEnum category = Optional.ofNullable(categoryService.findOneFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType()))
+                .map(SelectCategory::getCategory)
+                .map(Category::getCategory)
+                .orElse(null);
+
         boolean isBookmarked = (userId == null) ? false : postBookMarkService.existsByUserAndPost(userId, post);
         boolean isLiked = (userId == null) ? false : postLikesService.existsByUserAndPost(userId, post);
         boolean isWriter = (userId == null) ? false : communityPostQueryService.isPostWriter(userId, post);
 
         return CommunityPostResponseDTO.PostDetailDTO.builder()
-//                .category()
+                .category(category)
                 .userId(post.getUser().getId())
                 .type(post.getType())
                 .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(post.getCreatedAt()), ""))
