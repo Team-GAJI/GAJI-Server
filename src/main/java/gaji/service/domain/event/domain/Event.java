@@ -6,15 +6,15 @@ import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@DynamicInsert
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-@SQLRestriction("deleted_at is null")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Event extends BaseEntity {
 
     @Id

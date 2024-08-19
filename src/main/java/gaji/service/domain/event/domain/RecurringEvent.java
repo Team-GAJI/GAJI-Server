@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-@SQLRestriction("deleted_at is null")
+//todo: 상속 받지 말고, 연관관계 매핑 진행
 public class RecurringEvent extends Event { // 반복 일정, Event를 상속받음
 
     // 반복 주기를 위한 필드
