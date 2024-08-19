@@ -1,8 +1,7 @@
 package gaji.service.domain.studyMate.service;
 
-import gaji.service.domain.room.repository.WeeklyUserProgressRepository;
-import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
+import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +18,12 @@ public class StudyMateQueryServiceImpl implements StudyMateQueryService {
         return studyMateRepository.findByUserIdAndRoomId(userId, roomId)
                 .orElseThrow(() -> new RestApiException(StudyMateErrorStatus._USER_NOT_IN_STUDYROOM));
 
+    }
+
+    @Override
+    public StudyMate findById(Long studyMateId){
+        return studyMateRepository.findById(studyMateId)
+                .orElseThrow(() -> new RestApiException(StudyMateErrorStatus._USER_NOT_IN_STUDYROOM));
     }
 
 }

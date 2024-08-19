@@ -1,22 +1,22 @@
 package gaji.service.domain.room.service;
 
-import gaji.service.domain.room.repository.*;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
-import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
-import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.NoticeConfirmation;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.RoomNotice;
+import gaji.service.domain.room.repository.*;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
+import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.studyMate.entity.Assignment;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.entity.UserAssignment;
-import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
+import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryServiceImpl;
 import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
@@ -159,17 +159,16 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public boolean toggleNoticeConfirmation(Long noticeId, Long userId) {
+    public boolean toggleNoticeConfirmation(Long roomId, Long noticeId, Long userId) {
         RoomNotice roomNotice = roomNoticeRepository.findById(noticeId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._NOTICE_NOT_FOUND));
 
-        StudyMate studyMate = studyMateRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(StudyMateErrorStatus._USER_NOT_IN_STUDYROOM));
+        StudyMate studyMate = studyMateRepository.findByRoomIdAndUserId(roomId,userId);
 
 
         NoticeConfirmation existingConfirmation = noticeConfirmationRepository
                 .findByRoomNoticeIdAndStudyMateId(noticeId, roomNotice.getStudyMate().getId());
-
+        System.out.println("공지사항 내용: " + existingConfirmation);
         if (existingConfirmation != null) {
             noticeConfirmationRepository.delete(existingConfirmation);
         } else {

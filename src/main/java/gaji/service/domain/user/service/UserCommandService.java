@@ -7,4 +7,6 @@ public interface UserCommandService {
     public User cancleUser(Long userId);
     public User updateUserNickname(Long userIdFromToken, Long userIdFromPathVariable, UserRequestDTO.UpdateNicknameDTO request);
     public void hardDeleteInactiveUsers();
+    void save(User user);
+
 }

@@ -1,7 +1,9 @@
 package gaji.service.domain.room.web.controller;
 
 import gaji.service.domain.room.converter.RoomConverter;
+import gaji.service.domain.room.entity.QNoticeConfirmation;
 import gaji.service.domain.room.entity.RoomNotice;
+import gaji.service.domain.room.repository.NoticeConfirmationRepository;
 import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
@@ -11,13 +13,13 @@ import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/api/studyRooms")
+@RequestMapping("/api/study-rooms")
 @RequiredArgsConstructor
+@RestController
 public class RoomNoticeController {
 
 
@@ -27,7 +29,7 @@ public class RoomNoticeController {
 
 
     @PostMapping("/notices/{roomId}")
-    @Operation(summary = "스터디룸 공지 등록 API",description = "스터디룸의 공지를 등록하는 API입니다. room의 id가 존재하는지, 작성자가 Reader인지 검증합니다.")
+    @Operation(summary = "스터디룸 공지 등록 API",description = "스터디룸의 공지를 등록하는 API입니다. room의 id가 존재하는지 검증합니다.")
     public BaseResponse<RoomResponseDto.RoomNoticeDto> NoticeController(
             @RequestBody @Valid RoomRequestDto.RoomNoticeDto requestDto,
             @RequestHeader("Authorization") String authorizationHeader,
@@ -41,12 +43,14 @@ public class RoomNoticeController {
 
     @GetMapping("/{roomId}/notices")
     @Operation(summary = "스터디룸 공지 목록 조회 API")
-    public ResponseEntity<List<RoomResponseDto.NoticeDto>> getNotices(
+    public BaseResponse<RoomResponseDto.NoticeDtoList> getNotices(
             @PathVariable Long roomId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "5") int size) {
         List<RoomResponseDto.NoticeDto> notices = roomQueryService.getNotices(roomId, page, size);
-        return ResponseEntity.ok(notices);
+        return BaseResponse.onSuccess(
+                new RoomResponseDto.NoticeDtoList(notices)
+        );
     }
 
 //    @GetMapping("/notice/{noticeId}")
@@ -59,17 +63,27 @@ public class RoomNoticeController {
 //    }
 
 
-    @PostMapping("/notice/{noticeId}/confirm/{userId}")
+    @PostMapping("/{roomId}notices/{noticeId}/confirm/{userId}")
     @Operation(summary = "스터디룸 공지 확인 버튼 누르기 API", description = "공지사항 확인 상태를 토글합니다.")
-    public ResponseEntity<Boolean> toggleNoticeConfirmation(
+    public BaseResponse<RoomResponseDto.IsConfirmedResponse> toggleNoticeConfirmation(
+            @PathVariable Long roomId,
             @PathVariable Long noticeId,
             @RequestHeader("Authorization") String authorizationHeader) {
 
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        boolean isConfirmed = roomCommandService.toggleNoticeConfirmation(noticeId,userId);
+        boolean isConfirmed = roomCommandService.toggleNoticeConfirmation(roomId,noticeId,userId);
 
-        return ResponseEntity.ok(isConfirmed);
+        return BaseResponse.onSuccess(
+                new RoomResponseDto.IsConfirmedResponse(isConfirmed)
+        );
     }
 
+    @GetMapping("/notices/{noticeId}/confirmed-users")
+    @Operation(summary = "스터디룸 공지 확인 버튼 누른 회원 조회 API", description = "공지사항 확인버튼을 누른 사람을 조회합니다..")
+
+    public BaseResponse<List<String>> getConfirmedUserNicknames(@PathVariable Long noticeId) {
+        List<String> confirmedNicknames = roomQueryService.getConfirmedUserNicknames(noticeId);
+        return BaseResponse.onSuccess(confirmedNicknames);
+    }
 
 }

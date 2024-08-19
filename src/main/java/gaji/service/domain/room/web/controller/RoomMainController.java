@@ -1,14 +1,11 @@
 package gaji.service.domain.room.web.controller;
 
-import gaji.service.domain.room.converter.RoomConverter;
 import gaji.service.domain.room.entity.RoomEvent;
-import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.entity.Assignment;
-import gaji.service.domain.studyMate.web.dto.ResponseDto;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/studyRooms")
+@RequestMapping("/api/study-rooms")
 public class RoomMainController {
 
     private final RoomCommandService roomCommandService;
