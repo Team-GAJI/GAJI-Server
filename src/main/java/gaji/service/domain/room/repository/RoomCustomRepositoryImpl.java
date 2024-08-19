@@ -7,7 +7,6 @@ import gaji.service.domain.room.entity.QRoom;
 import gaji.service.domain.studyMate.entity.QStudyMate;
 import gaji.service.domain.user.entity.User;
 import lombok.AllArgsConstructor;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -35,6 +34,7 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
                 .from(room)
                 .where(room.id.in(userRoomIds)
                         .and(room.studyEndDay.after(getCurrentDay()))
+                        .and(room.studyStartDay.before(getCurrentDay()).or(room.studyStartDay.goe(getCurrentDay())))  // 시작일이 현재 날짜 이전이거나 이후인 경우 포함
                         .and(getCursorCondition(cursorDate, cursorId)))
                 .orderBy(room.studyStartDay.desc(), room.id.asc())
                 .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인

@@ -2,16 +2,16 @@ package gaji.service.domain.recruit.converter;
 
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
-import gaji.service.domain.user.entity.User;
-import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.entity.StudyComment;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.entity.StudyMate;
+import gaji.service.domain.user.entity.User;
 import gaji.service.global.converter.DateConverter;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;

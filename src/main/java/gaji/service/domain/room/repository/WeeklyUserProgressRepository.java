@@ -1,7 +1,6 @@
 package gaji.service.domain.room.repository;
 
 import gaji.service.domain.room.entity.RoomEvent;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

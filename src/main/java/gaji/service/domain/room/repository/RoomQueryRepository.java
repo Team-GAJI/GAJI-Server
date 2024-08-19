@@ -91,8 +91,8 @@ public class RoomQueryRepository {
         String jpql = """
     SELECT NEW gaji.service.domain.room.web.dto.RoomResponseDto$RoomMainDto(
         r.name,
-        r.startDay,
-        r.endDay,
+        r.studyStartDay,
+        r.studyEndDay,
         r.recruitStartDay,
         r.recruitEndDay,
         CAST(FUNCTION('DATEDIFF', r.recruitEndDay, CURRENT_DATE) AS long),
@@ -101,7 +101,7 @@ public class RoomQueryRepository {
     FROM Room r
     LEFT JOIN r.studyApplicantList sa
     WHERE r.id = :roomId
-    GROUP BY r.id, r.name, r.startDay, r.endDay, r.recruitStartDay, r.recruitEndDay
+    GROUP BY r.id, r.name, r.studyStartDay, r.studyEndDay, r.recruitStartDay, r.recruitEndDay
 """;
 
         RoomResponseDto.RoomMainDto result = entityManager.createQuery(jpql, RoomResponseDto.RoomMainDto.class)

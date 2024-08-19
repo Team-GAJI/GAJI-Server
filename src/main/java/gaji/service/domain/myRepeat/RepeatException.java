@@ -1,6 +1,5 @@
 package gaji.service.domain.myRepeat;
 
-import gaji.service.domain.room.entity.RoomEvent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -2,7 +2,6 @@ package gaji.service.domain.studyMate.entity;
 
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.user.entity.User;
-import gaji.service.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.*;
 

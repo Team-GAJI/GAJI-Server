@@ -1,10 +1,8 @@
 package gaji.service.domain.roomBoard.web.dto;
 
 import gaji.service.global.converter.DateConverter;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -55,11 +53,14 @@ public class RoomPostResponseDto {
         Long infoPostId;
     }
 
+    @Builder
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
-    public static class TroublePostSummaryListDto {
-        private List<TroublePostSummaryDto> troublePostSummaryDtoList;
+    public static class toCreateRoomPostIdDTO {
+        Long roomPostId;
     }
+
 
     @Getter
     public static class TroublePostSummaryDto {
@@ -80,4 +81,115 @@ public class RoomPostResponseDto {
         }
     }
 
+    @Getter
+    public static class PostSummaryDto {
+        private final Long id;
+        private final String title;
+        private final String nickname;
+        private final String createdAt;
+        private final int viewCount;
+        private final int commentCount;
+
+        public PostSummaryDto(Long id, String title, String nickname, LocalDateTime createdAt, int viewCount, int commentCount) {
+            this.id = id;
+            this.title = title;
+            this.nickname = nickname;
+            this.createdAt = DateConverter.convertToRelativeTimeFormat(createdAt);
+            this.viewCount = viewCount;
+            this.commentCount = commentCount;
+        }
+    }
+
+    @Getter
+    public static class InfoPostSummaryDto {
+        private final Long id;
+        private final String title;
+        private final String nickname;
+        private final String createdAt;
+        private final int viewCount;
+        private final int commentCount;
+
+        public InfoPostSummaryDto(Long id, String title, String nickname, LocalDateTime createdAt, int viewCount, int commentCount) {
+            this.id = id;
+            this.title = title;
+            this.nickname = nickname;
+            this.createdAt = DateConverter.convertToRelativeTimeFormat(createdAt);
+            this.viewCount = viewCount;
+            this.commentCount = commentCount;
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class TroublePostDetailDTO {
+        private Long id;
+        private String title;
+        private String body;
+        private String authorName;
+        private LocalDateTime createdAt;
+        private int viewCount;
+        private int likeCount;
+        private int bookmarkCount;
+        private boolean isLiked;
+        private boolean isBookmarked;
+        private Page<CommentWithRepliesDTO> comments;
+    }
+
+    @Getter
+    @Setter
+    public static class CommentWithRepliesDTO {
+        private Long id;
+        private String authorName;
+        private String body;
+        private LocalDateTime createdAt;
+        private List<CommentDTO> replies;
+    }
+
+    @Getter
+    @Setter
+    public static class CommentDTO {
+        private Long id;
+        private String authorName;
+        private String body;
+        private LocalDateTime createdAt;
+    }
+
+    @Getter
+    @Setter
+    public static class RoomInfoPostDetailDTO {
+        private Long id;
+        private String title;
+        private String body;
+        private String authorName;
+        private LocalDateTime createdAt;
+        private int viewCount;
+        private int likeCount;
+        private int bookmarkCount;
+        private boolean isLiked;
+        private boolean isBookmarked;
+        private Page<CommentWithRepliesDTO> comments;
+    }
+
+    @Getter
+    @Setter
+    public static class RoomPostDetailDTO {
+        private Long id;
+        private String title;
+        private String body;
+        private String authorName;
+        private LocalDateTime createdAt;
+        private int viewCount;
+        private int likeCount;
+        private int bookmarkCount;
+        private boolean isLiked;
+        private boolean isBookmarked;
+        private Page<CommentWithRepliesDTO> comments;
+    }
 }
+
+
+
+
+
+
+
