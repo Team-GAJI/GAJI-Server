@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static gaji.service.domain.common.entity.QSelectHashtag.selectHashtag;
 import static gaji.service.domain.common.entity.QHashtag.hashtag;
+import static gaji.service.domain.common.entity.QSelectHashtag.selectHashtag;
 
 
 @Repository

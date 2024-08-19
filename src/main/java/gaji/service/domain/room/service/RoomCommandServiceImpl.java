@@ -1,22 +1,22 @@
 package gaji.service.domain.room.service;
 
-import gaji.service.domain.room.repository.*;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
-import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
-import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.NoticeConfirmation;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.RoomNotice;
+import gaji.service.domain.room.repository.*;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
+import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
 import gaji.service.domain.studyMate.entity.Assignment;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.entity.UserAssignment;
-import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
+import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryServiceImpl;
 import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;

@@ -1,8 +1,8 @@
 package gaji.service.domain.message.service;
 
 import gaji.service.domain.message.converter.MessageBodyConverter;
-import gaji.service.domain.message.entity.Message;
 import gaji.service.domain.message.converter.MessageConverter;
+import gaji.service.domain.message.entity.Message;
 import gaji.service.domain.message.entity.MessageBody;
 import gaji.service.domain.message.repository.MessageBodyRepository;
 import gaji.service.domain.message.repository.MessageRepository;
