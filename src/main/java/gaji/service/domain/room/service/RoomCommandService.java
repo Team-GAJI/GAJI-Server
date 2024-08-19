@@ -22,7 +22,7 @@ public interface RoomCommandService {
 
     RoomEvent setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto);
 
-    boolean toggleNoticeConfirmation(Long noticeId, Long userId);
+    boolean toggleNoticeConfirmation(Long roomId, Long noticeId, Long userId);
 
     void saveRoom(Room room);
 
