@@ -159,17 +159,16 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public boolean toggleNoticeConfirmation(Long noticeId, Long userId) {
+    public boolean toggleNoticeConfirmation(Long roomId, Long noticeId, Long userId) {
         RoomNotice roomNotice = roomNoticeRepository.findById(noticeId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._NOTICE_NOT_FOUND));
 
-        StudyMate studyMate = studyMateRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(StudyMateErrorStatus._USER_NOT_IN_STUDYROOM));
+        StudyMate studyMate = studyMateRepository.findByRoomIdAndUserId(roomId,userId);
 
 
         NoticeConfirmation existingConfirmation = noticeConfirmationRepository
                 .findByRoomNoticeIdAndStudyMateId(noticeId, roomNotice.getStudyMate().getId());
-
+        System.out.println("공지사항 내용: " + existingConfirmation);
         if (existingConfirmation != null) {
             noticeConfirmationRepository.delete(existingConfirmation);
         } else {

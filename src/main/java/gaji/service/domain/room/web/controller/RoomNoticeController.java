@@ -19,6 +19,7 @@ import java.util.List;
 
 @RequestMapping("/api/study-rooms")
 @RequiredArgsConstructor
+@RestController
 public class RoomNoticeController {
 
 
@@ -62,21 +63,24 @@ public class RoomNoticeController {
 //    }
 
 
-    @PostMapping("/notice/{noticeId}/confirm/{userId}")
+    @PostMapping("/{roomId}notices/{noticeId}/confirm/{userId}")
     @Operation(summary = "스터디룸 공지 확인 버튼 누르기 API", description = "공지사항 확인 상태를 토글합니다.")
     public BaseResponse<RoomResponseDto.IsConfirmedResponse> toggleNoticeConfirmation(
+            @PathVariable Long roomId,
             @PathVariable Long noticeId,
             @RequestHeader("Authorization") String authorizationHeader) {
 
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        boolean isConfirmed = roomCommandService.toggleNoticeConfirmation(noticeId,userId);
+        boolean isConfirmed = roomCommandService.toggleNoticeConfirmation(roomId,noticeId,userId);
 
         return BaseResponse.onSuccess(
                 new RoomResponseDto.IsConfirmedResponse(isConfirmed)
         );
     }
 
-    @GetMapping("/{noticeId}/confirmed-users")
+    @GetMapping("/notices/{noticeId}/confirmed-users")
+    @Operation(summary = "스터디룸 공지 확인 버튼 누른 회원 조회 API", description = "공지사항 확인버튼을 누른 사람을 조회합니다..")
+
     public BaseResponse<List<String>> getConfirmedUserNicknames(@PathVariable Long noticeId) {
         List<String> confirmedNicknames = roomQueryService.getConfirmedUserNicknames(noticeId);
         return BaseResponse.onSuccess(confirmedNicknames);
