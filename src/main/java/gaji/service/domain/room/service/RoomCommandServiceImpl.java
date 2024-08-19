@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -196,36 +197,34 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
     @Override
     public RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId) {
-        try {
-            UserAssignment userAssignment = userAssignmentRepository.findById(userAssignmentId)
-                    .orElseThrow(() -> new RestApiException(RoomErrorStatus._ASSIGNMENT_NOT_FOUND));
+        UserAssignment userAssignment = userAssignmentRepository.findById(userAssignmentId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ASSIGNMENT_NOT_FOUND));
 
-            User user = userQueryService.findUserById(userId);
-            RoomEvent roomEvent = userAssignment.getAssignment().getRoomEvent();
+        User user = userQueryService.findUserById(userId);
+        RoomEvent roomEvent = userAssignment.getAssignment().getRoomEvent();
 
-            // Toggle completion status
-            userAssignment.setComplete(!userAssignment.isComplete());
-            userAssignmentRepository.save(userAssignment);
+        // Toggle completion status
+        userAssignment.setComplete(!userAssignment.isComplete());
+        userAssignmentRepository.save(userAssignment);
 
-            // Calculate and save progress
-            WeeklyUserProgress progress = calculateAndSaveProgress(roomEvent, user);
+        // Calculate and save progress
+        WeeklyUserProgress progress = calculateAndSaveProgress(roomEvent, user);
 
-            // Prepare response
-            boolean isCompleted = progress.getProgressPercentage() >= 100.0;
-            LocalDate deadline = roomEvent.getEndTime();
+        // Prepare response
+        boolean isCompleted = progress.getProgressPercentage() >= 100.0;
+        LocalDate deadline = roomEvent.getEndTime();
+        long daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), deadline);
 
-            return RoomResponseDto.AssignmentProgressResponse.builder()
-                    .progressPercentage(progress.getProgressPercentage())
-                    .completedAssignments(progress.getCompletedAssignments())
-                    .totalAssignments(progress.getTotalAssignments())
-                    .isCompleted(isCompleted)
-                    .deadline(deadline)
-                    .build();
-        } catch (Exception e) {
-            log.error("Error in toggleAssignmentCompletion", e);
-            throw new RestApiException(RoomErrorStatus._INTERNAL_SERVER_ERROR);
-        }
+        return RoomResponseDto.AssignmentProgressResponse.builder()
+                .progressPercentage(progress.getProgressPercentage())
+                .completedAssignments(progress.getCompletedAssignments())
+                .totalAssignments(progress.getTotalAssignments())
+                .isCompleted(isCompleted)
+                .deadline(deadline)
+                .daysLeft(daysLeft)
+                .build();
     }
+
 
     @Override
     public WeeklyUserProgress calculateAndSaveProgress(RoomEvent roomEvent, User user) {
