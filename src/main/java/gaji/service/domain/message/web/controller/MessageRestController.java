@@ -1,7 +1,7 @@
 package gaji.service.domain.message.web.controller;
 
-import gaji.service.domain.message.entity.Message;
 import gaji.service.domain.message.converter.MessageConverter;
+import gaji.service.domain.message.entity.Message;
 import gaji.service.domain.message.service.MessageCommandService;
 import gaji.service.domain.message.service.MessageQueryService;
 import gaji.service.domain.message.web.dto.MessageRequestDTO;

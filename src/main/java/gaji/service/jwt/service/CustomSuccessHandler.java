@@ -9,7 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JWTUtil jwtUtil;
@@ -32,6 +33,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     @Value("${redirectionUrl}")
     private String redirectionUrl;
+
+    @Value("${nicknameRedirectionUrl}")
+    private String nicknameRedirectionUrl;
 
     public CustomSuccessHandler(JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper) {
         this.jwtUtil = jwtUtil;
@@ -42,17 +46,18 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
+
         String usernameId = customUserDetails.getName();
         String role = authentication.getAuthorities().stream()
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
                 .orElse("ROLE_USER");
 
-        String accessToken = jwtUtil.createJwt("access", usernameId, role, 600000L);
-        String refreshToken = jwtUtil.createJwt("refresh", usernameId, role, 86400000L);
+        String accessToken = jwtUtil.createJwt("access", usernameId, role, 600000000L);
+        String refreshToken = jwtUtil.createJwt("refresh", usernameId, role, 86400000000L);
 
         if (!refreshRepository.existsByUsername(usernameId)) {
-            addRefreshEntity(usernameId, refreshToken, 86400000L);
+            addRefreshEntity(usernameId, refreshToken, 86400000000L);
         }
 
 
@@ -62,7 +67,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true); // HTTPS에서만 사용
         refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(86400); // 24시간
+        refreshTokenCookie.setMaxAge(8640000); // 24시간
         response.addCookie(refreshTokenCookie);
 
 
@@ -79,10 +84,23 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(tokenResponse));
         response.setStatus(HttpStatus.OK.value());
-        //
+
+        // 토큰 로그로 남기기
+        log.info("accessToken = {}", accessToken);
+        log.info("refreshToken = {}", refreshToken);
+
+
+        String finalRedirectionUrl;
+        if (customUserDetails.isNewUser()) {
+            finalRedirectionUrl = this.nicknameRedirectionUrl;
+
+        } else {
+            finalRedirectionUrl = this.redirectionUrl;
+        }
+
 
         // 리다이렉션 URL 생성
-        String targetUrl = UriComponentsBuilder.fromUriString("https://genuine-valkyrie-e0010a.netlify.app/")
+        String targetUrl = UriComponentsBuilder.fromUriString(finalRedirectionUrl)
                 .queryParam("access_token", accessToken)
                 .build().toUriString();
 

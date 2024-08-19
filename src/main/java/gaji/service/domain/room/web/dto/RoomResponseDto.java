@@ -50,9 +50,7 @@ public class RoomResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RoomNoticeDto{
-        String title;
-        String body;
-        Long roomId;
+        Long noticeId;
     }
 
     @Builder
@@ -105,6 +103,12 @@ public class RoomResponseDto {
             private String title;
             private String body;
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class NoticeDtoList{
+        private List<NoticeDto> noticeDtoList;
     }
 
     @Builder
@@ -217,6 +221,12 @@ public class RoomResponseDto {
             this.createdAt = createdAt;
             this.viewCount = viewCount;
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class IsConfirmedResponse{
+        private Boolean isConfirmed;
     }
 
 

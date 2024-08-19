@@ -1,9 +1,6 @@
 package gaji.service.domain.room.entity;
 
 import gaji.service.domain.common.entity.BaseEntity;
-import gaji.service.domain.common.entity.SelectCategory;
-import gaji.service.domain.curriculum.Curriculum;
-import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
@@ -11,6 +8,7 @@ import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.studyMate.entity.Chat;
 import gaji.service.domain.studyMate.entity.StudyApplicant;
 import gaji.service.domain.studyMate.entity.StudyMate;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,14 +38,6 @@ public class Room extends BaseEntity {
 
 //    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
 //    private List<Assignment> assignmentList = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="curriculum_id" )
-    private Curriculum curriculum;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "way_id")
-    private Way way;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<VoiceChat> voiceChatList = new ArrayList<>();
@@ -83,6 +73,8 @@ public class Room extends BaseEntity {
     private int likes;
     //북마크수
     private int bookmarks;
+    //댓글수
+    private int commentCount;
 
     private RecruitPostTypeEnum recruitPostTypeEnum;
 
@@ -143,6 +135,26 @@ public class Room extends BaseEntity {
         this.views = 0;
         this.likes = 0;
         this.bookmarks = 0;
+        this.commentCount = 0;
         this.recruitPostTypeEnum = RecruitPostTypeEnum.RECRUITING;
+    }
+
+    public void increaseCommentCount() {
+        this.commentCount++;
+    }
+    public void increaseLike() {
+        this.likes++;
+    }
+
+    public void decreaseLike() {
+        this.likes--;
+    }
+
+    public void increaseBookmark() {
+        this.bookmarks++;
+    }
+
+    public void decreaseBookmark() {
+        this.bookmarks--;
     }
 }

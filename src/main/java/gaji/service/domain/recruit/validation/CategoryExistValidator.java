@@ -8,11 +8,9 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @RequiredArgsConstructor
-public class CategoryExistValidator implements ConstraintValidator<ExistCategory, List<CategoryEnum>> {
+public class CategoryExistValidator implements ConstraintValidator<ExistCategory, CategoryEnum> {
 
     @Override
     public void initialize(ExistCategory constraintAnnotation) {
@@ -20,13 +18,12 @@ public class CategoryExistValidator implements ConstraintValidator<ExistCategory
     }
 
     @Override
-    public boolean isValid(List<CategoryEnum> values, ConstraintValidatorContext context) {
-        if (values == null) {
+    public boolean isValid(CategoryEnum value, ConstraintValidatorContext context) {
+        if (value == null) {
             return true;
         }
 
-        boolean isValid = values.stream()
-                .allMatch(this::isEnumValueValid);
+        boolean isValid = isEnumValueValid(value);
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
