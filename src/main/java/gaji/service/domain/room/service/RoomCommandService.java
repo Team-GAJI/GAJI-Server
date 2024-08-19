@@ -30,6 +30,7 @@ public interface RoomCommandService {
 
     void saveRoom(Room room);
 
+
     RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId);
 
     WeeklyUserProgress calculateAndSaveProgress(RoomEvent roomEvent, User user);

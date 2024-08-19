@@ -36,9 +36,12 @@ public class RoomMainController {
 
             Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
             List<Assignment> assignments = roomCommandService.createAssignment(roomId, userId, weeks, requestDto);
-            RoomResponseDto.AssignmentResponseDto responseDto = RoomResponseDto.AssignmentResponseDto.of(assignments);
-            return BaseResponse.onSuccess(responseDto);
 
+            // RoomEvent 가져오기
+            RoomEvent roomEvent = roomQueryService.findRoomEventByRoomIdAndWeeks(roomId, weeks);
+
+            RoomResponseDto.AssignmentResponseDto responseDto = RoomResponseDto.AssignmentResponseDto.of(assignments, roomEvent);
+            return BaseResponse.onSuccess(responseDto);
     }
 
     @PostMapping("/event/{roomId}/{weeks}/period")
