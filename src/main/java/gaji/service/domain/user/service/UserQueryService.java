@@ -17,4 +17,6 @@ public interface UserQueryService {
     Slice<Tuple> getUserRoomList(Long userId, LocalDate cursorDate, Long cursorId, RoomTypeEnum type, int size);
     User getUserDetail(Long userId);
     Slice<Tuple> getUserPostList(Long userId, LocalDateTime cursorDateTime, PostTypeEnum type, int size);
+
+    User findByUsernameId(String usernameId);
 }
