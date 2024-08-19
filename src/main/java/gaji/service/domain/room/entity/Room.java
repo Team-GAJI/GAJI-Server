@@ -1,7 +1,6 @@
 package gaji.service.domain.room.entity;
 
 import gaji.service.domain.common.entity.BaseEntity;
-import gaji.service.domain.curriculum.Curriculum;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;

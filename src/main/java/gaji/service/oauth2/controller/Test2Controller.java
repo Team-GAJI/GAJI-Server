@@ -1,6 +1,5 @@
 package gaji.service.oauth2.controller;
 
-import gaji.service.domain.enums.Role;
 import gaji.service.domain.enums.ServiceRole;
 import gaji.service.jwt.filter.JWTUtil;
 import gaji.service.jwt.service.CustomSuccessHandler;
