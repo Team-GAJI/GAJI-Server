@@ -20,7 +20,7 @@ public class SelectCategoryQueryDslRepositoryImpl implements SelectCategoryQuery
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<SelectCategory> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
+    public SelectCategory findOneFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
         return jpaQueryFactory
                 .selectFrom(selectCategory)
                 .join(selectCategory.category, category1)
@@ -30,7 +30,8 @@ public class SelectCategoryQueryDslRepositoryImpl implements SelectCategoryQuery
                         selectCategory.type.eq(postType)
                 )
                 .orderBy(selectCategory.id.asc())
-                .fetch();
+                .fetchOne()
+                ;
     }
 
     @Override
