@@ -25,11 +25,26 @@ public class WeeklyUserProgress {
 
     private Double progressPercentage;
 
-    // 총 과제 수
     private Integer totalAssignments;
 
-    // 완료한 과제 수
     private Integer completedAssignments;
+
+    public static WeeklyUserProgress createInitialProgress(User user, RoomEvent roomEvent, int totalAssignments) {
+        return WeeklyUserProgress.builder()
+                .user(user)
+                .roomEvent(roomEvent)
+                .progressPercentage(0.0)
+                .totalAssignments(totalAssignments)
+                .completedAssignments(0)
+                .build();
+    }
+
+    public void updateProgress(int completedAssignments) {
+        this.completedAssignments = completedAssignments;
+        this.progressPercentage = totalAssignments > 0
+                ? ((double) completedAssignments / totalAssignments) * 100
+                : 0.0;
+    }
 
     public static WeeklyUserProgress createEmpty() {
         return new WeeklyUserProgress();

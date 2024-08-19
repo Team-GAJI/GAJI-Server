@@ -5,8 +5,6 @@ import gaji.service.domain.studyMate.entity.StudyMate;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

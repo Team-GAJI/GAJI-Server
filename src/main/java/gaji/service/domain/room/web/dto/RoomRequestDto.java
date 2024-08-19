@@ -2,7 +2,10 @@ package gaji.service.domain.room.web.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,11 +23,6 @@ public class RoomRequestDto {
     @AllArgsConstructor
     @Builder
     public static class AssignmentDto {
-
-        @Schema(description = "주차")
-        @NotNull(message = "주차를 입력해주세요.")
-        @Min(value = 1, message = "유효하지 않은 형식의 주차입니다.")
-        private Integer weeks;
 
         @Schema(description = "과제 입력")
         @NotEmpty(message = "1개 이상의 과제를 입력해주세요.")
