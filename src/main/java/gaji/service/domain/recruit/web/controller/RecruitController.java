@@ -39,6 +39,16 @@ public class RecruitController {
         );
     }
 
+    @DeleteMapping("/{roomId}")
+    @Operation(summary = "스터디 삭제 API", description = "스터디를 삭제하는 API입니다. 스터디와 관련된 북마크, 좋아요, 댓글 내역을 모두 삭제합니다.")
+    public BaseResponse deleteStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        recruitCommandService.deleteStudy(userId, roomId);
+        return BaseResponse.onSuccess(null);
+    }
+
     @GetMapping("/{roomId}")
     @Operation(summary = "스터디 정보 상세 조회 API", description = "스터디 상세 정보를 조회하는 API입니다.")
     public BaseResponse<RecruitResponseDTO.studyDetailResponseDTO> getStudyDetail(@PathVariable Long roomId) {

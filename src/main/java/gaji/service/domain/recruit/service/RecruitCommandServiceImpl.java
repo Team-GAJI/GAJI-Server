@@ -47,6 +47,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
     private final MaterialCommandService materialCommandService;
     private final RecruitPostLikesRepository recruitPostLikesRepository;
     private final RecruitPostBookmarkRepository recruitPostBookmarkRepository;
+    private final StudyCommentCommandService studyCommentCommandService;
 
     private static final String DEFAULT_THUMBNAIL_URL = "https://gaji-bucket.s3.ap-northeast-2.amazonaws.com/study/gaji.png";
 
@@ -107,6 +108,21 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         }
 
         return code.toString();
+    }
+
+    @Override
+    @Transactional
+    public void deleteStudy(Long userId, Long roomId) {
+        Room room = roomQueryService.findRoomById(roomId);
+
+        if (!room.getUser().getId().equals(userId)) {
+            throw new RestApiException(StudyMateErrorStatus._ONLY_LEADER_POSSIBLE);
+        }
+
+        studyCommentCommandService.deleteByRoom(room);
+        categoryService.deleteByEntityIdAndType(roomId, PostTypeEnum.ROOM);
+
+        roomCommandService.deleteRoom(room);
     }
 
     @Override
