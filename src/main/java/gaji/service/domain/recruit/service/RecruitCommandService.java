@@ -24,4 +24,6 @@ public interface RecruitCommandService {
     void leaveStudy(Long userId, Long roomId);
 
     void kickStudy(Long userId, Long roomId, Long targetId);
+
+    RecruitResponseDTO.RecruitCompleteResponseDTO recruitComplete(Long userId, Long roomId);
 }

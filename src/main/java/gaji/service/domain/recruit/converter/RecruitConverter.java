@@ -190,4 +190,10 @@ public class RecruitConverter {
                 .roomId(roomId)
                 .build();
     }
+
+    public static RecruitResponseDTO.RecruitCompleteResponseDTO toRecruitCompleteResponseDTO(Long roomId) {
+        return RecruitResponseDTO.RecruitCompleteResponseDTO.builder()
+                .roomId(roomId)
+                .build();
+    }
 }

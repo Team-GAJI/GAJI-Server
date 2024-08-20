@@ -214,5 +214,16 @@ public class RecruitController {
         recruitCommandService.kickStudy(userId, roomId, targetId);
         return BaseResponse.onSuccess(null);
     }
+
+    @PutMapping("/complete-recruit/{roomId}")
+    @Operation(summary = "스터디 모집 완료 API", description = "스터디 모집 상태를 완료로 바꾸는 API 입니다.")
+    public BaseResponse<RecruitResponseDTO.RecruitCompleteResponseDTO> recruitComplete(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        return BaseResponse.onSuccess(
+                recruitCommandService.recruitComplete(userId, roomId)
+        );
+    }
 }
 
