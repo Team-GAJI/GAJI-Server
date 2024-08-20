@@ -1,6 +1,5 @@
 package gaji.service.domain.user.web.dto;
 
-import gaji.service.domain.enums.PostTypeEnum;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

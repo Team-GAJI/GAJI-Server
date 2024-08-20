@@ -62,4 +62,9 @@ public class UserCommandServiceImpl implements UserCommandService{
                 .minusDays(UserDeletePeriod.ONE_MONTH.getDays());
         userRepository.deleteAllByInactiveTimeBefore(cutoffDate);
     }
+
+    @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
 }

@@ -1,9 +1,6 @@
 package gaji.service.domain.room.service;
 
 import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
-
-import java.util.List;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +18,13 @@ public interface RoomQueryService {
     RoomResponseDto.NoticeDto getNoticeDetail(Long roomId, Long noticeId);
 
     @Transactional(readOnly = true)
-    RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomEventId);
+    RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomId, Integer weeks);
 
-    @Transactional(readOnly = true)
-    List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomEventId);
+    List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomId, Integer weeks);
 
     RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId);
 
     RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId);
+
+    List<String> getConfirmedUserNicknames(Long noticeId);
 }

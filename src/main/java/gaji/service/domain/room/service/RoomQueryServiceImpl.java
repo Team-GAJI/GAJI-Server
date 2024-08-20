@@ -3,16 +3,12 @@ package gaji.service.domain.room.service;
 
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
-import gaji.service.domain.room.repository.RoomQueryRepository;
 import gaji.service.domain.room.entity.RoomEvent;
-import gaji.service.domain.room.repository.RoomEventRepository;
-import gaji.service.domain.room.repository.RoomRepository;
+import gaji.service.domain.room.repository.*;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
-import gaji.service.domain.room.repository.WeeklyUserProgressRepository;
 import gaji.service.global.exception.RestApiException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -30,8 +26,10 @@ public class RoomQueryServiceImpl implements RoomQueryService {
     private final RoomRepository roomRepository;
     private final RoomQueryRepository roomQueryRepository;
     private final WeeklyUserProgressRepository weeklyUserProgressRepository;
+    private final NoticeConfirmationRepository noticeConfirmationRepository;
+    private final WebInvocationPrivilegeEvaluator privilegeEvaluator;
 
-//    @Override
+    //    @Override
 //    public RoomEvent findRoomEventById(Long roomId){
 //        return roomEventRepository.findRoomEventById(roomId)
 //                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
@@ -74,8 +72,8 @@ public Room findRoomById(Long roomId) {
 
     @Override
     @Transactional(readOnly = true)
-    public RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomEventId) {
-        RoomEvent roomEvent = roomEventRepository.findById(roomEventId)
+    public RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomId, Integer weeks) {
+        RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId, weeks)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
 
         return RoomResponseDto.WeeklyStudyInfoDTO.builder()
@@ -87,13 +85,16 @@ public Room findRoomById(Long roomId) {
     }
 
     @Override
-    public List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomEventId) {
-        List<WeeklyUserProgressRepository.UserProgressProjection> projections =
-                weeklyUserProgressRepository.findProgressByRoomEventId(roomEventId);
+    public List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomId, Integer weeks) {
+    RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId, weeks)
+            .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
+
+    List<WeeklyUserProgressRepository.UserProgressProjection> projections =
+                weeklyUserProgressRepository.findProgressByRoomEventId(roomEvent.getId());
 
         return projections.stream()
                 .map(projection -> RoomResponseDto.UserProgressDTO.builder()
-                        .name(projection.getName())
+                        .nickname(projection.getNickname())
                         .progressPercentage(projection.getProgressPercentage())
                         .build())
                 .collect(Collectors.toList());
@@ -109,6 +110,11 @@ public Room findRoomById(Long roomId) {
     @Override
     public RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId){
         return roomQueryRepository.getRoomNotices(roomId);
+    }
+
+    @Override
+    public List<String> getConfirmedUserNicknames(Long noticeId) {
+        return noticeConfirmationRepository.findConfirmedUserNicknamesByNoticeId(noticeId);
     }
 }
 

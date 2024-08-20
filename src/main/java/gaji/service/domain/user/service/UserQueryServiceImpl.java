@@ -4,7 +4,7 @@ import com.querydsl.core.Tuple;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.RoomTypeEnum;
 import gaji.service.domain.enums.UserActive;
-import gaji.service.domain.post.repository.PostJpaRepository;
+import gaji.service.domain.post.repository.CommunityPostJpaRepository;
 import gaji.service.domain.room.repository.RoomCustomRepository;
 import gaji.service.domain.user.code.UserErrorStatus;
 import gaji.service.domain.user.entity.User;
@@ -26,7 +26,7 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     private final UserRepository userRepository;
     private final RoomCustomRepository roomCustomRepository;
-    private final PostJpaRepository postJpaRepository;
+    private final CommunityPostJpaRepository communityPostJpaRepository;
 
     @Override
     public boolean existUserById(Long userId) {
@@ -35,7 +35,7 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     @Override
     public User findUserById(Long userId) {
-        User user = userRepository.findById(userId)
+        User user =userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
 
         if (user.getStatus().equals(UserActive.IN_ACTIVE)) {
@@ -82,8 +82,13 @@ public class UserQueryServiceImpl implements UserQueryService {
 
         PageRequest pageRequest = PageRequest.of(0, size);
 
-        Slice<Tuple> postList = postJpaRepository.findAllPostsByUser(user, cursorDateTime, pageRequest, type);
+        Slice<Tuple> postList = communityPostJpaRepository.findAllPostsByUser(user, cursorDateTime, pageRequest, type);
 
         return postList;
+    }
+
+    @Override
+    public User findByUsernameId(String usernameId) {
+        return userRepository.findByUsernameId(usernameId);
     }
 }

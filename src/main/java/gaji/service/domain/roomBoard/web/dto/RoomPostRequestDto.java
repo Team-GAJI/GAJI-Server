@@ -34,6 +34,7 @@ public class RoomPostRequestDto {
         @NotBlank(message = "게시글 본문을 입력해주세요.")
         private final String body;
     }
+
     @Schema(description = " 게시글 댓글 작성 DTO")
     @Getter
     @RequiredArgsConstructor

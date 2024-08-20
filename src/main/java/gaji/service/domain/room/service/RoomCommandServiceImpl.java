@@ -1,34 +1,37 @@
 package gaji.service.domain.room.service;
 
-import gaji.service.domain.room.repository.*;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
-import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
-import gaji.service.domain.user.entity.User;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.NoticeConfirmation;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.RoomNotice;
+import gaji.service.domain.room.repository.*;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
+import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.entity.Assignment;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.entity.UserAssignment;
-import gaji.service.domain.studyMate.code.StudyMateErrorStatus;
+import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryServiceImpl;
 import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class RoomCommandServiceImpl implements RoomCommandService {
 
     private final AssignmentRepository assignmentRepository;
@@ -47,28 +50,25 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
     //과제생성1
     @Override
-    public Assignment createAssignment(Long roomId, Long userId, RoomRequestDto.AssignmentDto requestDto){
-//        // 현재 로그인한 사용자의 정보를 가져옵니다. 추후 주석 해제
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//        User currentUser = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new RestApiException(PostErrorStatus._USER_NOT_FOUND));
+    public List<Assignment> createAssignment(Long roomId, Long userId, Integer weeks, RoomRequestDto.AssignmentDto requestDto) {
+        RoomEvent roomEvent = roomQueryService.findRoomEventByRoomIdAndWeeks(roomId, weeks);
+        List<Assignment> savedAssignments = new ArrayList<>();
 
+        for (String body : requestDto.getBodyList()) {
+            Assignment assignment = Assignment.builder()
+                    .roomEvent(roomEvent)
+                    .body(body)
+                    .build();
 
-        RoomEvent roomEvent = roomQueryService.findRoomEventByRoomIdAndWeeks(roomId, requestDto.getWeeks());
+            Assignment savedAssignment = assignmentRepository.save(assignment);
+            savedAssignments.add(savedAssignment);
 
-        // List<String>을 단일 String으로 변환
-        String bodyContent = String.join(", ", requestDto.getBodyList());
+            createUserAssignmentsForStudyMembers(savedAssignment);
+        }
 
+        updateWeeklyUserProgressForNewAssignments(savedAssignments);
 
-        Assignment assignment = Assignment.builder()
-                .roomEvent(roomEvent)
-                .body(bodyContent)
-                .build();
-
-        Assignment savedAssignment = assignmentRepository.save(assignment);
-
-        createUserAssignmentsForStudyMembers(savedAssignment);
-        return savedAssignment;
+        return savedAssignments;
     }
 
     @Override
@@ -89,11 +89,13 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     // 과제 생성할 때 user에게 할당해주는 메서드
     @Override
     public void createUserAssignmentsForStudyMembers(Assignment assignment) {
-
         List<StudyMate> studyMates = studyMateRepository.findByRoom(assignment.getRoomEvent().getRoom());
+
         for (StudyMate studyMate : studyMates) {
+            User user = studyMate.getUser();
+
             UserAssignment userAssignment = UserAssignment.builder()
-                    .user(studyMate.getUser())
+                    .user(user)
                     .assignment(assignment)
                     .isComplete(false)
                     .build();
@@ -105,7 +107,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     public RoomEvent setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
-        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(roomId, user.getId());
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(user.getId(),roomId);
 
         if (!studyMate.getRole().equals(Role.READER)) {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
@@ -133,7 +135,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     public RoomEvent setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
-        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(roomId, user.getId());
+        StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(user.getId(),roomId);
 
 
         if (!studyMate.getRole().equals(Role.READER)) {
@@ -159,17 +161,16 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public boolean toggleNoticeConfirmation(Long noticeId, Long userId) {
+    public boolean toggleNoticeConfirmation(Long roomId, Long noticeId, Long userId) {
         RoomNotice roomNotice = roomNoticeRepository.findById(noticeId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._NOTICE_NOT_FOUND));
 
-        StudyMate studyMate = studyMateRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(StudyMateErrorStatus._USER_NOT_IN_STUDYROOM));
+        StudyMate studyMate = studyMateRepository.findByRoomIdAndUserId(roomId,userId);
 
 
         NoticeConfirmation existingConfirmation = noticeConfirmationRepository
                 .findByRoomNoticeIdAndStudyMateId(noticeId, roomNotice.getStudyMate().getId());
-
+        System.out.println("공지사항 내용: " + existingConfirmation);
         if (existingConfirmation != null) {
             noticeConfirmationRepository.delete(existingConfirmation);
         } else {
@@ -194,7 +195,6 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
 
 
-    @Transactional
     @Override
     public RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId) {
         UserAssignment userAssignment = userAssignmentRepository.findById(userAssignmentId)
@@ -204,19 +204,16 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         RoomEvent roomEvent = userAssignment.getAssignment().getRoomEvent();
 
         // Toggle completion status
-        if(!userAssignment.isComplete()) {
-            userAssignment.setComplete(true);
-            userAssignmentRepository.save(userAssignment);
-        }else{
-            userAssignment.setComplete(false);
-            userAssignmentRepository.save(userAssignment);
-        }
+        userAssignment.setComplete(!userAssignment.isComplete());
+        userAssignmentRepository.save(userAssignment);
+
         // Calculate and save progress
         WeeklyUserProgress progress = calculateAndSaveProgress(roomEvent, user);
 
         // Prepare response
         boolean isCompleted = progress.getProgressPercentage() >= 100.0;
         LocalDate deadline = roomEvent.getEndTime();
+        long daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), deadline);
 
         return RoomResponseDto.AssignmentProgressResponse.builder()
                 .progressPercentage(progress.getProgressPercentage())
@@ -224,8 +221,10 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                 .totalAssignments(progress.getTotalAssignments())
                 .isCompleted(isCompleted)
                 .deadline(deadline)
+                .daysLeft(daysLeft)
                 .build();
     }
+
 
     @Override
     public WeeklyUserProgress calculateAndSaveProgress(RoomEvent roomEvent, User user) {
@@ -255,5 +254,39 @@ public class RoomCommandServiceImpl implements RoomCommandService {
 
         return weeklyUserProgressRepository.save(progress);
     }
+    private void updateWeeklyUserProgressForNewAssignment(Assignment assignment) {
+        RoomEvent roomEvent = assignment.getRoomEvent();
+        List<StudyMate> studyMates = studyMateRepository.findByRoom(roomEvent.getRoom());
 
+        for (StudyMate studyMate : studyMates) {
+            User user = studyMate.getUser();
+            WeeklyUserProgress progress = weeklyUserProgressRepository
+                    .findByRoomEventAndUser(roomEvent, user)
+                    .orElseGet(() -> WeeklyUserProgress.createInitialProgress(user, roomEvent, 0));
+
+            progress.updateProgress(progress.getCompletedAssignments());
+            weeklyUserProgressRepository.save(progress);
+        }
+    }
+
+    private void updateWeeklyUserProgressForNewAssignments(List<Assignment> assignments) {
+        if (assignments.isEmpty()) {
+            return;
+        }
+
+        RoomEvent roomEvent = assignments.get(0).getRoomEvent();
+        List<StudyMate> studyMates = studyMateRepository.findByRoom(roomEvent.getRoom());
+
+        for (StudyMate studyMate : studyMates) {
+            User user = studyMate.getUser();
+            WeeklyUserProgress progress = weeklyUserProgressRepository
+                    .findByRoomEventAndUser(roomEvent, user)
+                    .orElseGet(() -> WeeklyUserProgress.createInitialProgress(user, roomEvent, 0));
+
+            int totalAssignments = progress.getTotalAssignments() + assignments.size();
+            progress.setTotalAssignments(totalAssignments);
+            progress.updateProgress(progress.getCompletedAssignments());
+            weeklyUserProgressRepository.save(progress);
+        }
+    }
 }

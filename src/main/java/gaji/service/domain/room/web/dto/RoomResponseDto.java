@@ -1,27 +1,81 @@
 package gaji.service.domain.room.web.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import gaji.service.domain.room.entity.RoomEvent;
+import gaji.service.domain.studyMate.entity.Assignment;
+import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoomResponseDto {
 
     @Getter
+    @Setter
     @Builder
     public static class AssignmentResponseDto {
-        private Long assignmentId;
+        private List<Long> assignmentIds;
+        private LocalDate deadline;
+        private Long daysLeft;
 
-        public static AssignmentResponseDto of(Long assignmentId) {
+        public static AssignmentResponseDto of(List<Assignment> assignments, RoomEvent roomEvent) {
+            List<Long> ids = assignments.stream()
+                    .map(Assignment::getId)
+                    .collect(Collectors.toList());
+
             return AssignmentResponseDto.builder()
-                    .assignmentId(assignmentId)
+                    .assignmentIds(ids)
+                    .deadline(roomEvent.getEndTime())
+                    .daysLeft(calculateDaysLeft(roomEvent.getEndTime()))
                     .build();
         }
     }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class AssignmentProgressResponse {
+        @JsonProperty("progressPercentage")
+        private Double progressPercentage;
+
+        @JsonProperty("completedAssignments")
+        private Integer completedAssignments;
+
+        @JsonProperty("totalAssignments")
+        private Integer totalAssignments;
+
+        @JsonProperty("isCompleted")
+        private Boolean isCompleted;
+
+        @JsonProperty("deadline")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate deadline;
+
+
+        @JsonProperty("daysLeft")
+        private Long daysLeft;
+
+        public static AssignmentProgressResponse of(WeeklyUserProgress progress, RoomEvent roomEvent) {
+            return AssignmentProgressResponse.builder()
+                    .progressPercentage(progress.getProgressPercentage())
+                    .completedAssignments(progress.getCompletedAssignments())
+                    .totalAssignments(progress.getTotalAssignments())
+                    .isCompleted(progress.getProgressPercentage() >= 100.0)
+                    .deadline(roomEvent.getEndTime())
+                    .daysLeft(calculateDaysLeft(roomEvent.getEndTime()))
+                    .build();
+        }
+    }
+
+    public static long calculateDaysLeft(LocalDate deadline) {
+        return ChronoUnit.DAYS.between(LocalDate.now(), deadline);
+    }
+
 
     @Getter
     @Builder
@@ -39,7 +93,7 @@ public class RoomResponseDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AssignmentDto{
+    public static class AssignmentDto {
         Long id;
         Integer weeks;
         String body;
@@ -49,10 +103,8 @@ public class RoomResponseDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class RoomNoticeDto{
-        String title;
-        String body;
-        Long roomId;
+    public static class RoomNoticeDto {
+        Long noticeId;
     }
 
     @Builder
@@ -67,7 +119,6 @@ public class RoomResponseDto {
         private Long daysLeftForRecruit;
         private Long applicantCount;
 
-        // 수정된 생성자
         public RoomMainDto(String name, LocalDate startDay, LocalDate endDay,
                            LocalDate recruitStartDay, LocalDate recruitEndDay,
                            Long daysLeftForRecruit, Long applicantCount) {
@@ -77,16 +128,9 @@ public class RoomResponseDto {
             this.recruitStartDay = recruitStartDay;
             this.recruitEndDay = recruitEndDay;
             this.applicantCount = applicantCount;
-
-            if(daysLeftForRecruit < 0 ){
-                this.daysLeftForRecruit = 0L;
-            }else{
-                this.daysLeftForRecruit = daysLeftForRecruit;
-            }
-
+            this.daysLeftForRecruit = Math.max(daysLeftForRecruit, 0L);
         }
     }
-
 
     @Builder
     @Getter
@@ -107,6 +151,12 @@ public class RoomResponseDto {
         }
     }
 
+    @Getter
+    @AllArgsConstructor
+    public static class NoticeDtoList {
+        private List<NoticeDto> noticeDtoList;
+    }
+
     @Builder
     @Getter
     @NoArgsConstructor
@@ -121,7 +171,6 @@ public class RoomResponseDto {
         private Integer viewCount;
         private String timeSincePosted;
 
-        // 이 생성자를 추가합니다
         public NoticeDto(Long id, String authorName, String title, String body, Long confirmCount, LocalDateTime createdAt, Integer viewCount) {
             this.id = id;
             this.authorName = authorName;
@@ -143,35 +192,8 @@ public class RoomResponseDto {
 
     @Getter
     @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class AssignmentProgressResponse {
-        private Double progressPercentage;
-        private Integer completedAssignments;
-        private Integer totalAssignments;
-        private Boolean isCompleted;
-        private LocalDate deadline;
-
-        // Custom method to check if the deadline has passed
-        public boolean isDeadlinePassed() {
-            return LocalDate.now().isAfter(deadline);
-        }
-
-        // Custom method to get remaining days until deadline
-        public long getRemainingDays() {
-            return LocalDate.now().until(deadline).getDays();
-        }
-
-        // Custom method to get a formatted string of progress
-        public String getFormattedProgress() {
-            return String.format("%.1f%%", progressPercentage);
-        }
-    }
-
-    @Getter
-    @Builder
     public static class UserProgressDTO {
-        private String name;
+        private String nickname;
         private Double progressPercentage;
     }
 
@@ -191,8 +213,6 @@ public class RoomResponseDto {
         private LocalDate endDate;
     }
 
-
-    // 스터디룸 메인 게시판 글 불러오기
     @Builder
     @Getter
     @NoArgsConstructor
@@ -207,7 +227,6 @@ public class RoomResponseDto {
         private Integer viewCount;
         private String timeSincePosted;
 
-        // 이 생성자를 추가합니다
         public RoomMainNoticeDto(Long id, String authorName, String title, String body, Long confirmCount, LocalDateTime createdAt, Integer viewCount) {
             this.id = id;
             this.authorName = authorName;
@@ -219,6 +238,9 @@ public class RoomResponseDto {
         }
     }
 
-
-
+    @Getter
+    @AllArgsConstructor
+    public static class IsConfirmedResponse {
+        private Boolean isConfirmed;
+    }
 }

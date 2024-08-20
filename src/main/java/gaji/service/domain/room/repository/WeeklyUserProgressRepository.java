@@ -1,7 +1,6 @@
 package gaji.service.domain.room.repository;
 
 import gaji.service.domain.room.entity.RoomEvent;
-import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.studyMate.entity.WeeklyUserProgress;
 import gaji.service.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,12 +15,12 @@ import java.util.Optional;
 public interface WeeklyUserProgressRepository extends JpaRepository<WeeklyUserProgress, Long> {
     Optional<WeeklyUserProgress> findByRoomEventAndUser(RoomEvent roomEvent, User user);
 
-    @Query("SELECT w.user.name as name, w.progressPercentage as progressPercentage " +
+    @Query("SELECT w.user.nickname as nickname, w.progressPercentage as progressPercentage " +
             "FROM WeeklyUserProgress w WHERE w.roomEvent.id = :roomEventId")
     List<UserProgressProjection> findProgressByRoomEventId(@Param("roomEventId") Long roomEventId);
 
     interface UserProgressProjection {
-        String getName();
+        String getNickname();
         Double getProgressPercentage();
     }
 }
