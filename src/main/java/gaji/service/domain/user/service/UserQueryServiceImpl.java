@@ -3,6 +3,7 @@ package gaji.service.domain.user.service;
 import com.querydsl.core.Tuple;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.RoomTypeEnum;
+import gaji.service.domain.enums.UserActive;
 import gaji.service.domain.post.repository.PostJpaRepository;
 import gaji.service.domain.room.repository.RoomCustomRepository;
 import gaji.service.domain.user.code.UserErrorStatus;
@@ -34,8 +35,14 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     @Override
     public User findUserById(Long userId) {
-        return userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
+
+        if (user.getStatus().equals(UserActive.IN_ACTIVE)) {
+            throw new RestApiException(UserErrorStatus._USER_IS_INACTIVE_);
+        }
+
+        return user;
     }
 
     @Override
