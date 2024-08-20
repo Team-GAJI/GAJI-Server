@@ -27,7 +27,7 @@ public class UserRestController {
     private final UserQueryService userQueryService;
     private final TokenProviderService tokenProviderService;
 
-    @PutMapping("/")
+    @PutMapping()
     public BaseResponse<UserResponseDTO.CancleResultDTO> cancle(@RequestHeader("Authorization") String authorizationHeader) {
 
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
