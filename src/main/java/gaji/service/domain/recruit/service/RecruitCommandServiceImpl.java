@@ -4,6 +4,7 @@ import gaji.service.domain.common.converter.CategoryConverter;
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.service.CategoryService;
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
@@ -82,14 +83,15 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
         roomCommandService.saveRoom(room);
 
-        if (request.getCategoryId() == null) {
-            throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
-        }
+       // if (request.getCategoryId() == null) {
+       //     throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
+       // }
 
-        Long categoryId = request.getCategoryId();
-        Category category = categoryService.findByCategoryId(categoryId);
+        //Long categoryId = request.getCategoryId();
+        //Category category = categoryService.findByCategoryId(categoryId);
+        Category category = categoryService.findAllByCategory(CategoryEnum.fromValue(request.getCategory())).get(0);
 
-        SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
+                SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
         categoryService.saveSelectCategory(selectCategory);
 
         return RecruitConverter.toResponseDTO(room);
