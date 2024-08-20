@@ -142,7 +142,7 @@ public class CommunityPostConverter {
                 .title(post.getTitle())
                 .hashtagList(hashtagNameAndIdDTOList)
                 .bookMarkStatus(isBookmarked)
-                .likedStatus(isLiked)
+                .likeStatus(isLiked)
                 .body(post.getBody())
                 .category(selectCategory.getCategory().getCategory().getValue())
                 .build();
