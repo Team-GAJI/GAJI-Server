@@ -1,5 +1,7 @@
 package gaji.service.domain.post.web.controller;
 
+import gaji.service.domain.common.entity.SelectCategory;
+import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.SortType;
@@ -38,6 +40,8 @@ public class CommunityPostRestController {
     private final TokenProviderService tokenProviderService;
     private final CommunityPostConverter communityPostConverter;
 
+    private final CategoryService categoryService;
+
     @PostMapping
     @Operation(summary = "커뮤니티 게시글 업로드 API", description = "커뮤니티의 게시글을 업로드하는 API입니다. 게시글 유형과 제목, 본문 내용을 검증합니다.")
     public BaseResponse<CommunityPostResponseDTO.UploadPostDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
@@ -68,7 +72,8 @@ public class CommunityPostRestController {
                                                                               @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
         Long userId = (authorizationHeader == null) ? null : tokenProviderService.getUserIdFromToken(authorizationHeader);
         CommnuityPost post = communityPostQueryService.getPostDetail(postId);
-        return BaseResponse.onSuccess(communityPostConverter.toPostDetailDTO(post, userId));
+        SelectCategory category = categoryService.findByEntityIdAndType(post.getId(), post.getType());
+        return BaseResponse.onSuccess(communityPostConverter.toPostDetailDTO(post, userId, category));
     }
 
     @GetMapping("/preivew")
