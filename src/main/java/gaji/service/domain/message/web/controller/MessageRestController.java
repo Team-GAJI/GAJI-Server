@@ -7,6 +7,7 @@ import gaji.service.domain.message.service.MessageQueryService;
 import gaji.service.domain.message.web.dto.MessageRequestDTO;
 import gaji.service.domain.message.web.dto.MessageResponseDTO;
 import gaji.service.global.base.BaseResponse;
+import gaji.service.jwt.service.TokenProviderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,13 @@ import java.util.List;
 public class MessageRestController {
     private final MessageCommandService messageCommandService;
     private final MessageQueryService messageQueryService;
+    private final TokenProviderService tokenProviderService;
 
     @PostMapping("/{otherId}")
-    public BaseResponse<MessageResponseDTO.CreateResultDTO> create(Long myId/*하드 코딩용 추후 수정.*/,
-                                                                   //@RequestHeader("Authorization") String token,
+    public BaseResponse<MessageResponseDTO.CreateResultDTO> create(@RequestHeader("Authorization") String authorizationHeader,
                                                                    @PathVariable Long otherId,
                                                                    @RequestBody @Valid MessageRequestDTO.CreateMessageDTO request) {
-        //Long myId = getUserIdFromToken(token);
+        Long myId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         List<Message> messageList = messageCommandService.createMessage(myId, otherId, request);
         return BaseResponse.onSuccess(MessageConverter.toCreateResultDTO(messageList));
     }
