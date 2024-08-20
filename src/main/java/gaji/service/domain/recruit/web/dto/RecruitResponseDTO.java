@@ -26,6 +26,14 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class UpdateRoomResponseDTO {
+        Long roomId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class studyDetailResponseDTO {
         // 유저 관련
         Long writerId;

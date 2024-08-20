@@ -4,6 +4,7 @@ import gaji.service.domain.common.entity.BaseEntity;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
+import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.studyMate.entity.Chat;
 import gaji.service.domain.studyMate.entity.StudyApplicant;
@@ -156,5 +157,19 @@ public class Room extends BaseEntity {
 
     public void decreaseBookmark() {
         this.bookmarks--;
+    }
+
+    public void update(RecruitRequestDTO.RoomContentDTO request, String thumbnailUrl, String inviteCode, int peopleMaximum) {
+        this.name = request.getName();
+        this.description = request.getDescription();
+        this.thumbnailUrl = thumbnailUrl;
+        this.recruitStartDay = request.getRecruitStartDay();
+        this.recruitEndDay = request.getRecruitEndDay();
+        this.studyStartDay = request.getStudyStartDay();
+        this.studyEndDay = request.getStudyEndDay();
+        this.isPrivate = request.isPrivate();
+        this.inviteCode = inviteCode;
+        this.peopleLimited = request.isPeopleLimited();
+        this.peopleMaximum = peopleMaximum;
     }
 }

@@ -31,11 +31,25 @@ public class RecruitController {
     @PostMapping("")
     @Operation(summary = "스터디 모집 게시글 생성 API", description = "스터디 모집 게시글을 생성하는 API입니다.")
     public BaseResponse<RecruitResponseDTO.CreateRoomResponseDTO> createRoom(
-            @RequestBody @Valid RecruitRequestDTO.CreateRoomDTO request,
+            @RequestBody @Valid RecruitRequestDTO.RoomContentDTO request,
             @RequestHeader("Authorization") String authorizationHeader) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         return BaseResponse.onSuccess(
                 recruitCommandService.createRoom(request, userId)
+        );
+    }
+
+    @PutMapping("/{roomId}")
+    @Operation(summary = "스터디 수정 API", description = "스터디를 수정하는 API입니다.")
+    public BaseResponse<RecruitResponseDTO.UpdateRoomResponseDTO> updateRoom(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody @Valid RecruitRequestDTO.RoomContentDTO request,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+
+
+        return BaseResponse.onSuccess(
+                recruitCommandService.updateRoom(request, userId, roomId)
         );
     }
 

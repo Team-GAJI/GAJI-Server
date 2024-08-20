@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -53,7 +54,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
     @Override
     @Transactional
-    public RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId) {
+    public RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.RoomContentDTO request, Long userId) {
 
         String inviteCode = null;
         int peopleMaximum = 0;
@@ -72,14 +73,46 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         StudyMate studyMate = RecruitConverter.toStudyMate(user, room, Role.READER);
         studyMateCommandService.saveStudyMate(studyMate);
 
-        if (request.getMaterialList() != null && !request.getMaterialList().isEmpty()){
-            Material material;
-            for (String MaterialUrl : request.getMaterialList()) {
-                material = RecruitConverter.toMaterial(MaterialUrl, room);
-                room.addMaterial(material);
-                materialCommandService.saveMaterial(material);
-            }
+        addMaterial(request.getMaterialList(), room);
+        roomCommandService.saveRoom(room);
+
+        if (request.getCategoryId() == null) {
+            throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
         }
+
+        Category category = categoryService.findByCategoryId(request.getCategoryId());
+
+        SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
+        categoryService.saveSelectCategory(selectCategory);
+
+        return RecruitConverter.toCreateRoomResponseDTO(room);
+    }
+
+    @Override
+    @Transactional
+    public RecruitResponseDTO.UpdateRoomResponseDTO updateRoom(RecruitRequestDTO.RoomContentDTO request, Long userId, Long roomId) {
+        Room room = roomQueryService.findRoomById(roomId);
+
+        if (!room.getUser().getId().equals(userId)) {
+            throw new RestApiException(StudyMateErrorStatus._ONLY_LEADER_POSSIBLE);
+        }
+
+        String inviteCode = null;
+        int peopleMaximum = 0;
+
+        if (request.isPrivate()) {
+            inviteCode = generateInviteCode();
+        }
+
+        if (request.isPeopleLimited()) {
+            peopleMaximum = request.getPeopleMaximum();
+        }
+
+        room.update(request, request.getThumbnailUrl(), inviteCode, peopleMaximum);
+        ;
+
+        materialCommandService.deleteAllByRoom(room);
+        addMaterial(request.getMaterialList(), room);
 
         roomCommandService.saveRoom(room);
 
@@ -87,13 +120,29 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
             throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
         }
 
-        Long categoryId = request.getCategoryId();
-        Category category = categoryService.findByCategoryId(categoryId);
+        SelectCategory findCategory = categoryService.findByEntityIdAndType(roomId, PostTypeEnum.ROOM);
 
-        SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
-        categoryService.saveSelectCategory(selectCategory);
+        if (!findCategory.getCategory().getId().equals(request.getCategoryId())) {
+            categoryService.deleteByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
 
-        return RecruitConverter.toResponseDTO(room);
+            Category category = categoryService.findByCategoryId(request.getCategoryId());
+
+            SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
+            categoryService.saveSelectCategory(selectCategory);
+        }
+
+        return RecruitConverter.toUpdateRoomResponseDTO(room);
+    }
+
+    private void addMaterial(List<String> materialList, Room room) {
+        if (materialList != null && !materialList.isEmpty()){
+            Material material;
+            for (String MaterialUrl : materialList) {
+                material = RecruitConverter.toMaterial(MaterialUrl, room);
+                room.addMaterial(material);
+                materialCommandService.saveMaterial(material);
+            }
+        }
     }
 
     private String generateInviteCode() {
