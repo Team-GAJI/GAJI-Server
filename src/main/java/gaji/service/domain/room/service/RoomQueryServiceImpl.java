@@ -72,8 +72,8 @@ public Room findRoomById(Long roomId) {
 
     @Override
     @Transactional(readOnly = true)
-    public RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomEventId) {
-        RoomEvent roomEvent = roomEventRepository.findById(roomEventId)
+    public RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomId, Integer weeks) {
+        RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId, weeks)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
 
         return RoomResponseDto.WeeklyStudyInfoDTO.builder()
@@ -88,6 +88,7 @@ public Room findRoomById(Long roomId) {
     public List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomId, Integer weeks) {
     RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId, weeks)
             .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
+
     List<WeeklyUserProgressRepository.UserProgressProjection> projections =
                 weeklyUserProgressRepository.findProgressByRoomEventId(roomEvent.getId());
 
