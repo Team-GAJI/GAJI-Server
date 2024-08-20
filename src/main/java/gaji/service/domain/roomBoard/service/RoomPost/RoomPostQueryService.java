@@ -13,7 +13,8 @@ public interface RoomPostQueryService {
 
 //    List<RoomPostResponseDto.TroublePostSummaryDto> getPaginatedTroublePosts(Long boardId, int page, int size);
 
-    List<RoomPostResponseDto.PostSummaryDto> getNextPosts(Long boardId, Long lastPostId, int size);
+
+    List<RoomPostResponseDto.PostSummaryDto> getNextPosts(Long roomId, Long lastPostId, int size);
 
     RoomPost findPostById(Long PostId);
 

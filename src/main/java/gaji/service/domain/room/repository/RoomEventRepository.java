@@ -15,6 +15,4 @@ public interface RoomEventRepository extends JpaRepository<RoomEvent,Long> {
     Optional<RoomEvent> findRoomEventById(Long roomId);
 
     List<RoomEvent> findByRoom(Room room);
-
-    int countByRoomId(Long roomId);
 }
