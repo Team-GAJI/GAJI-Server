@@ -7,7 +7,10 @@ import gaji.service.domain.room.entity.Room;
 public interface StudyCommentCommandService {
 
     RecruitResponseDTO.WriteCommentResponseDTO writeComment(
-            Long userId, Long roomId, Long parentCommentId, RecruitRequestDTO.WriteCommentDTO request);
+            Long userId, Long roomId, Long parentCommentId, RecruitRequestDTO.CommentContentDTO request);
+
+    RecruitResponseDTO.UpdateCommentResponseDTO updateComment(
+            Long userId, Long commentId, RecruitRequestDTO.CommentContentDTO request);
 
     void deleteComment(Long userId, Long commentId);
 

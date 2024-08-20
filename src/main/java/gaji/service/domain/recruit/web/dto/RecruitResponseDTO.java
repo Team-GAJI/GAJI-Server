@@ -111,6 +111,14 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class UpdateCommentResponseDTO {
+        Long commentId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PreviewResponseDTO {
         Long roomId;
         String imageUrl;

@@ -120,7 +120,7 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static StudyComment toComment(RecruitRequestDTO.WriteCommentDTO request, User user, Room room, StudyComment parentComment) {
+    public static StudyComment toComment(RecruitRequestDTO.CommentContentDTO request, User user, Room room, StudyComment parentComment) {
         return StudyComment.builder()
                 .user(user)
                 .room(room)
@@ -131,6 +131,12 @@ public class RecruitConverter {
 
     public static RecruitResponseDTO.WriteCommentResponseDTO toWriteCommentDTO(StudyComment comment) {
         return RecruitResponseDTO.WriteCommentResponseDTO.builder()
+                .commentId(comment.getId())
+                .build();
+    }
+
+    public static RecruitResponseDTO.UpdateCommentResponseDTO toUpdateCommentDTO(StudyComment comment) {
+        return RecruitResponseDTO.UpdateCommentResponseDTO.builder()
                 .commentId(comment.getId())
                 .build();
     }

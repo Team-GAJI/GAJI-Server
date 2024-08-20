@@ -26,7 +26,7 @@ public class StudyCommentCommandServiceImpl implements StudyCommentCommandServic
     private final RoomQueryService roomQueryService;
 
     @Override
-    public RecruitResponseDTO.WriteCommentResponseDTO writeComment(Long userId, Long roomId, Long parentCommentId, RecruitRequestDTO.WriteCommentDTO request) {
+    public RecruitResponseDTO.WriteCommentResponseDTO writeComment(Long userId, Long roomId, Long parentCommentId, RecruitRequestDTO.CommentContentDTO request) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
 
@@ -34,6 +34,21 @@ public class StudyCommentCommandServiceImpl implements StudyCommentCommandServic
         studyCommentRepository.save(comment);
         room.increaseCommentCount();
         return RecruitConverter.toWriteCommentDTO(comment);
+    }
+
+    @Override
+    public RecruitResponseDTO.UpdateCommentResponseDTO updateComment(Long userId, Long commentId, RecruitRequestDTO.CommentContentDTO request) {
+
+        StudyComment comment = studyCommentRepository.findById(commentId).orElseThrow(() -> new RestApiException(RecruitErrorStatus._COMMENT_NOT_FOUND));
+
+        if (!(comment.getUser().getId().equals(userId))) {
+            throw new RestApiException(RecruitErrorStatus._COMMENT_NOT_OWNER);
+        }
+
+        comment.update(request.getBody());
+
+        studyCommentRepository.save(comment);
+        return RecruitConverter.toUpdateCommentDTO(comment);
     }
 
     @Override
@@ -51,7 +66,7 @@ public class StudyCommentCommandServiceImpl implements StudyCommentCommandServic
     }
 
     private StudyComment createComment(
-            RecruitRequestDTO.WriteCommentDTO request, User user, Room room, Long parentCommentId) {
+            RecruitRequestDTO.CommentContentDTO request, User user, Room room, Long parentCommentId) {
         if (parentCommentId != null) {
             StudyComment parentComment = studyCommentRepository.findById(parentCommentId).
                     orElseThrow(()->new RestApiException(RecruitErrorStatus._COMMENT_NOT_FOUND));

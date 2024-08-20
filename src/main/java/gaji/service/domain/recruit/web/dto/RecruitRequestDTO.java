@@ -80,7 +80,7 @@ public class RecruitRequestDTO {
     @Schema(description = "스터디 댓글 작성 DTO")
     @Getter
     @RequiredArgsConstructor
-    public static class WriteCommentDTO {
+    public static class CommentContentDTO {
         @Schema(description = "댓글 내용")
         @NotBlank(message = "댓글 내용을 입력해주세요.")
         private String body;
