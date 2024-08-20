@@ -35,6 +35,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     private final RoomCommandService roomCommandService;
     private final CategoryService categoryService;
     private final RecruitRepository recruitRepository;
+    private final RecruitCommandService recruitCommandService;
 
     @Override
     @Transactional
@@ -42,6 +43,8 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
 
         Room room = roomQueryService.findRoomById(roomId);
         User user = userQueryService.findUserById(room.getUser().getId());
+        boolean likeStatus = recruitCommandService.userLikeStatus(room, user);
+        boolean bookmarkStatus = recruitCommandService.userBookmarkStatus(room, user);
 
         room.addView();
         roomCommandService.saveRoom(room);
@@ -51,7 +54,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
 
         CategoryEnum category = RecruitConverter.toCategory(selectCategory);
 
-        return RecruitConverter.toStudyDetailDTO(user, room, category);
+        return RecruitConverter.toStudyDetailDTO(user, room, category, likeStatus, bookmarkStatus);
     }
 
     @Override
