@@ -96,10 +96,12 @@ public class RoomMainController {
         return ResponseEntity.ok(progressList);
     }
 
-    @GetMapping("/events/{roomEventId}/weekly-info")
+    @GetMapping("/events/{roomId}/{weeks}/weekly-info")
     @Operation(summary = "주차별 스터디 정보", description = "특정 주차의 스터디 정보를 조회합니다.")
-    public ResponseEntity<RoomResponseDto.WeeklyStudyInfoDTO> getWeeklyStudyInfo(@PathVariable Long roomEventId) {
-        RoomResponseDto.WeeklyStudyInfoDTO weeklyInfo = roomQueryService.getWeeklyStudyInfo(roomEventId);
+    public ResponseEntity<RoomResponseDto.WeeklyStudyInfoDTO> getWeeklyStudyInfo(
+            @PathVariable Long roomId,
+            @PathVariable Integer weeks) {
+        RoomResponseDto.WeeklyStudyInfoDTO weeklyInfo = roomQueryService.getWeeklyStudyInfo(roomId, weeks);
         return ResponseEntity.ok(weeklyInfo);
     }
 

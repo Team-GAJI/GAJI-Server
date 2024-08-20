@@ -18,7 +18,7 @@ public interface RoomQueryService {
     RoomResponseDto.NoticeDto getNoticeDetail(Long roomId, Long noticeId);
 
     @Transactional(readOnly = true)
-    RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomEventId);
+    RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomId, Integer weeks);
 
     List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomId, Integer weeks);
 
