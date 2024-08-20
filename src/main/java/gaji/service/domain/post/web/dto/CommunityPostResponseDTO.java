@@ -79,6 +79,7 @@ public class CommunityPostResponseDTO {
         private boolean isBookMarked;
         private boolean isLiked;
         private String body;
+        private String category;
         private List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagList = new ArrayList<>();
     }
 

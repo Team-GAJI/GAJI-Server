@@ -21,5 +21,6 @@ public interface CategoryService {
     void saveAllSelectCategory(List<SelectCategory> selectCategoryList);
 
     SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type);
+
 }
 
