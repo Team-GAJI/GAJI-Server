@@ -5,13 +5,14 @@ import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
+import gaji.service.domain.studyMate.entity.StudyApplicant;
+import gaji.service.domain.user.entity.User;
 import gaji.service.domain.recruit.entity.StudyComment;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.entity.StudyMate;
-import gaji.service.domain.user.entity.User;
 import gaji.service.global.converter.DateConverter;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
@@ -58,11 +59,11 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static StudyMate toStudyMate(User user, Room room) {
+    public static StudyMate toStudyMate(User user, Room room, Role role) {
         return StudyMate.builder()
                 .user(user)
                 .room(room)
-                .role(Role.READER)
+                .role(role)
                 .build();
     }
 
@@ -161,7 +162,7 @@ public class RecruitConverter {
                 .recruitStatus(room.getRecruitPostTypeEnum())
                 .applicant(room.getStudyApplicantList().size())
                 .name(room.getName())
-                .deadLine(ChronoUnit.DAYS.between(room.getRecruitEndDay(), LocalDate.now()))
+                .deadLine(ChronoUnit.DAYS.between(LocalDate.now(), room.getRecruitEndDay()))
                 .description(room.getDescription())
                 .createdAt(DateConverter.convertToRelativeTimeFormat(room.getCreatedAt()))
                 .recruitMaxCount(room.getPeopleMaximum())
@@ -170,5 +171,11 @@ public class RecruitConverter {
 
     public static List<RecruitResponseDTO.PreviewResponseDTO> toPreviewDTOLIST(List<Room> roomList) {
         return roomList.stream().map(RecruitConverter::toPreviewDTO).collect(Collectors.toList());
+    }
+
+    public static RecruitResponseDTO.JoinStudyResponseDTO toJoinStudyResponseDTO(Long roomId) {
+        return RecruitResponseDTO.JoinStudyResponseDTO.builder()
+                .roomId(roomId)
+                .build();
     }
 }
