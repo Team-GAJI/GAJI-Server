@@ -1,5 +1,6 @@
 package gaji.service.domain.post.service;
 
+import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
@@ -40,13 +41,20 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
                                    int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
+
+        Long categoryId=null;
+        if(category!=null)
+        {
+            categoryId=categoryService.findAllByCategory(CategoryEnum.fromValue(category)).get(0).getId();
+        }
+
         return communityPostJpaRepository.findAllFetchJoinWithUser(lastPopularityScore,
                 lastPostId,
                 lastLikeCnt,
                 lastHit,
                 postType,
                 postStatus,
-                categoryService.findAllByCategory(CategoryEnum.fromValue(category)).get(0).getId(),
+                categoryId,
                 sortType,
                 pageRequest);
     }
