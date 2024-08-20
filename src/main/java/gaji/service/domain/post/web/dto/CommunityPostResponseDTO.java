@@ -73,6 +73,8 @@ public class CommunityPostResponseDTO {
         private PostTypeEnum type;
         private String createdAt;
         private int hit;
+        private int likeCnt;
+        private int bookmarkCnt;
         private int commentCnt;
         private String userNickname;
         private String title;

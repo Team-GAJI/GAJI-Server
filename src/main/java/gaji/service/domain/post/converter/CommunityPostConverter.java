@@ -135,6 +135,8 @@ public class CommunityPostConverter {
                 .type(post.getType())
                 .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(post.getCreatedAt()), ""))
                 .hit(post.getHit())
+                .likeCnt(post.getLikeCnt())
+                .bookmarkCnt(post.getBookmarkCnt())
                 .commentCnt(post.getCommentCnt())
                 .userNickname(post.getUser().getNickname())
                 .title(post.getTitle())
