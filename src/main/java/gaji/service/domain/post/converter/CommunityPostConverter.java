@@ -141,8 +141,8 @@ public class CommunityPostConverter {
                 .userNickname(post.getUser().getNickname())
                 .title(post.getTitle())
                 .hashtagList(hashtagNameAndIdDTOList)
-                .isBookMarked(isBookmarked)
-                .isLiked(isLiked)
+                .bookMarkStatus(isBookmarked)
+                .likedStatus(isLiked)
                 .body(post.getBody())
                 .category(selectCategory.getCategory().getCategory().getValue())
                 .build();
