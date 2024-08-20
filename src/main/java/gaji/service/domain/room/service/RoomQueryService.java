@@ -3,6 +3,7 @@ package gaji.service.domain.room.service;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.domain.user.entity.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

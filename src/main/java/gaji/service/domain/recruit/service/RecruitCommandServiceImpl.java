@@ -220,4 +220,14 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
             studyMateCommandService.deleteByUserAndRoom(target, room);
         }
     }
+
+    @Override
+    public boolean userLikeStatus(Room room, User user) {
+        return recruitPostLikesRepository.existsByUserAndRoom(user, room);
+    }
+
+    @Override
+    public boolean userBookmarkStatus(Room room, User user){
+        return recruitPostBookmarkRepository.existsByUserAndRoom(user, room);
+    }
 }
