@@ -110,7 +110,6 @@ public class RoomResponseDto {
     @Builder
     @Getter
     @NoArgsConstructor
-    @AllArgsConstructor
     public static class RoomMainDto {
         private String name;
         private LocalDate startDay;
@@ -119,7 +118,6 @@ public class RoomResponseDto {
         private LocalDate recruitEndDay;
         private Long daysLeftForRecruit;
         private Long applicantCount;
-        private int weekCount;
 
         public RoomMainDto(String name, LocalDate startDay, LocalDate endDay,
                            LocalDate recruitStartDay, LocalDate recruitEndDay,
@@ -132,12 +130,6 @@ public class RoomResponseDto {
             this.applicantCount = applicantCount;
             this.daysLeftForRecruit = Math.max(daysLeftForRecruit, 0L);
         }
-
-        public RoomMainDto setWeekCount(int weekCount){
-            this.weekCount=weekCount;
-            return this;
-        }
-
     }
 
     @Builder
