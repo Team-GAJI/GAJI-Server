@@ -6,7 +6,6 @@ import gaji.service.jwt.filter.JWTUtil;
 import gaji.service.jwt.rpository.RefreshRepository;
 import gaji.service.jwt.service.CustomSuccessHandler;
 import gaji.service.oauth2.service.CustomOAuth2UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +20,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity

@@ -14,6 +14,7 @@ public interface StudyMateRepository extends JpaRepository<StudyMate, Long> {
     Optional<StudyMate> findByUserIdAndRoomId(Long userId, Long roomId);
 
     List<StudyMate> findByRoom(Room room);
+    StudyMate findByRoomIdAndUserId(Long roomId, Long userId);
 
     boolean existsByUserAndRoom(User user, Room room);
 
