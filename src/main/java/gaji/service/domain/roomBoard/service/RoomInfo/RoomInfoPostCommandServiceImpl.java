@@ -51,11 +51,11 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
 
         // 스터디룸 게시판 확인 또는 생성
-        RoomBoard roomBoard = roomBoardRepository.findByRoomId(roomId)
+        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_INFORMATION_POST)
                 .orElseGet(() -> {
                     RoomBoard newRoomBoard = RoomBoard.builder()
                             .room(room)
-                            .roomPostType(RoomPostType.ROOM_TROUBLE_POST)
+                            .roomPostType(RoomPostType.ROOM_INFORMATION_POST)
                             .name(room.getName())
                             .build();
                     return roomBoardRepository.save(newRoomBoard);
