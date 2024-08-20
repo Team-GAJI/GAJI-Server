@@ -7,6 +7,8 @@ public interface RecruitCommandService {
 
     RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId);
 
+    void deleteStudy(Long userId, Long roomId);
+
     RecruitResponseDTO.StudyLikesIdResponseDTO likeStudy(Long userId, Long roomId);
 
     void unLikeStudy(Long userId, Long roomId);

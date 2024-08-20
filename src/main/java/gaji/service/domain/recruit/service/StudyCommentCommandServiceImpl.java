@@ -65,4 +65,8 @@ public class StudyCommentCommandServiceImpl implements StudyCommentCommandServic
     }
 
 
+    @Override
+    public void deleteByRoom(Room room) {
+        studyCommentRepository.deleteAllByRoom(room);
+    }
 }
