@@ -89,11 +89,23 @@ public class RecruitController {
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId,
             @RequestParam(required = false) @Min(value = 1, message = "parentCommentId는 1 이상 이어야 합니다.") Long parentCommentId,
-            @RequestBody @Valid RecruitRequestDTO.WriteCommentDTO request) {
+            @RequestBody @Valid RecruitRequestDTO.CommentContentDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         RecruitResponseDTO.WriteCommentResponseDTO responseDTO =
                 studyCommentCommandService.writeComment(userId, roomId, parentCommentId, request);
         return BaseResponse.onSuccess(responseDTO);
+    }
+
+    @PutMapping("/comments/{commentId}")
+    @Operation(summary = "스터디 댓글 수정 API", description = "스터디 댓글을 수정하는 API입니다.")
+    public BaseResponse<RecruitResponseDTO.UpdateCommentResponseDTO> updateComment(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "commentId는 1 이상 이어야 합니다.") Long commentId,
+            @RequestBody @Valid RecruitRequestDTO.CommentContentDTO request) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        return BaseResponse.onSuccess(
+                studyCommentCommandService.updateComment(userId, commentId, request)
+        );
     }
 
     @DeleteMapping("/comments/{commentId}")
