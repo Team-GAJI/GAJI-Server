@@ -9,9 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -35,6 +34,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Value("${redirectionUrl}")
     private String redirectionUrl;
 
+    @Value("${nicknameRedirectionUrl}")
+    private String nicknameRedirectionUrl;
+
     public CustomSuccessHandler(JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper) {
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
@@ -44,6 +46,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
+
         String usernameId = customUserDetails.getName();
         String role = authentication.getAuthorities().stream()
                 .findFirst()
@@ -57,8 +60,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             addRefreshEntity(usernameId, refreshToken, 86400000000L);
         }
 
-
-
         // Refresh 토큰을 HttpOnly 쿠키로 설정
         Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
@@ -69,7 +70,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 
         // 1. 헤더로 보낼 경우
-//        response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader("Authorization", "Bearer " + accessToken);
 
 
 
@@ -86,8 +87,13 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("accessToken = {}", accessToken);
         log.info("refreshToken = {}", refreshToken);
 
-        // 리다이렉션 URL 생성
-        String targetUrl = UriComponentsBuilder.fromUriString(redirectionUrl)
+
+        String finalRedirectionUrl = customUserDetails.isNewUser() ? this.nicknameRedirectionUrl : this.redirectionUrl;
+
+
+
+//        // 리다이렉션 URL 생성
+        String targetUrl = UriComponentsBuilder.fromUriString(finalRedirectionUrl)
                 .queryParam("access_token", accessToken)
                 .build().toUriString();
 

@@ -79,4 +79,9 @@ public class UserQueryServiceImpl implements UserQueryService {
 
         return postList;
     }
+
+    @Override
+    public User findByUsernameId(String usernameId) {
+        return userRepository.findByUsernameId(usernameId);
+    }
 }
