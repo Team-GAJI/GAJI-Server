@@ -14,7 +14,7 @@ public enum CategoryEnum {
     AI("인공지능"),
     HW("하드웨어"),
     SECURITY("보안"),
-    NETWORK("클라우드-네트워크"),
+    NETWORK("네트워크-클라우드"),
     LANGUAGE("어학"),
     DESIGN("디자인"),
     BUSINESS("비즈니스"),
@@ -37,5 +37,14 @@ public enum CategoryEnum {
         }
         log.error("CategoryEnum.from() exception occur param: {}", param);
         throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
+    }
+
+    public static CategoryEnum fromValue(String value) {
+        for (CategoryEnum category : CategoryEnum.values()) {
+            if (category.value.equals(value)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Unknown category: " + value);
     }
 }
