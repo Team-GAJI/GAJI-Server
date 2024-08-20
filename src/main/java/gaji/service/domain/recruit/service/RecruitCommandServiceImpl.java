@@ -120,14 +120,11 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
             throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
         }
 
-        SelectCategory findCategory = categoryService.findByEntityIdAndType(roomId, PostTypeEnum.ROOM);
+        SelectCategory selectCategory = categoryService.findByEntityIdAndType(roomId, PostTypeEnum.ROOM);
 
-        if (!findCategory.getCategory().getId().equals(request.getCategoryId())) {
-            categoryService.deleteByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
-
+        if (!selectCategory.getCategory().getId().equals(request.getCategoryId())) {
             Category category = categoryService.findByCategoryId(request.getCategoryId());
-
-            SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
+            selectCategory.updateCategory(category);
             categoryService.saveSelectCategory(selectCategory);
         }
 
