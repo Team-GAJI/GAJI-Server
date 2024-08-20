@@ -15,7 +15,9 @@ public enum UserErrorStatus implements BaseErrorCodeInterface {
     //nickname 관련 Error
     _NICKNAME_IS_SAME_(HttpStatus.BAD_REQUEST, "USER_4002", "전과 동일한 닉네임으로 수정할 수 없습니다."),
     _USER_IS_NOT_SAME_(HttpStatus.BAD_REQUEST, "USER_4003", "다른 회원의 닉네임을 수정할 수 없습니다."),
-    ;
+
+    //status 관련 Error
+    _USER_IS_INACTIVE_(HttpStatus.BAD_REQUEST, "USER_4004", "탈퇴한 사용자입니다.");
 
     private final HttpStatus httpStatus;
     private final boolean isSuccess = false;
