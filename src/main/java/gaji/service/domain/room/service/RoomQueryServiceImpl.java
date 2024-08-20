@@ -105,7 +105,7 @@ public Room findRoomById(Long roomId) {
     public RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId) {
 
         RoomResponseDto.RoomMainDto mainStudyRoom = roomQueryRepository.getMainStudyRoom(roomId);
-        return mainStudyRoom;
+        return mainStudyRoom.setWeekCount(roomEventRepository.countByRoomId(roomId));
     }
 
     @Override
