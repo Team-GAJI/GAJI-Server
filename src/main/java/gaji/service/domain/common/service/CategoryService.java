@@ -22,5 +22,7 @@ public interface CategoryService {
 
     SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type);
 
+    List<Category> findAllByCategory(CategoryEnum category);
+
 }
 

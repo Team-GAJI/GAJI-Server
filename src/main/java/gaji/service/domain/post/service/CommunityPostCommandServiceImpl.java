@@ -60,10 +60,10 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         // SelectCategory 저장
         if (request.getCategory() != null) {
             String categoryValue = request.getCategory();
-            //Category findCateogry = categoryService.findByCategoryId(categoryId);
-            Category findCateogry = categoryService.findByCategory(CategoryEnum.fromValue(categoryValue));
+            //Category findCategry = categoryService.findByCategoryId(categoryId);
+            Category findCategory = categoryService.findAllByCategory(CategoryEnum.fromValue(categoryValue)).get(0);
 
-            SelectCategory selectCategory = CategoryConverter.toSelectCategory(findCateogry, newPost.getId(), newPost.getType());
+            SelectCategory selectCategory = CategoryConverter.toSelectCategory(findCategory, newPost.getId(), newPost.getType());
             categoryService.saveSelectCategory(selectCategory);
         }
 
