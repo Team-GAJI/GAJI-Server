@@ -15,7 +15,7 @@ public interface CommunityPostQueryService {
                             Integer lastLikeCnt,
                             Integer lastHit,
                             PostTypeEnum postType,
-                            Long categoryId,
+                            String category,
                             SortType sortType,
                             PostStatusEnum filter,
                             int page,

@@ -93,13 +93,13 @@ public class CommunityPostRestController {
                                                                                         @Min(value = 0, message = "lastLikeCnt는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastLikeCnt,
                                                                                         @Min(value = 0, message = "lastHit은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastHit,
                                                                                         @RequestParam(required = false) PostTypeEnum postType,
-                                                                                        @RequestParam(required = false) Long categoryId,
+                                                                                        @RequestParam(required = false) String category,
                                                                                         @RequestParam(required = false, defaultValue = "recent") SortType sortType,
                                                                                         @RequestParam(required = false) PostStatusEnum filter,
                                                                                         @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                         @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
-        Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, categoryId, sortType, filter, page, size);
+        Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, category, sortType, filter, page, size);
         return BaseResponse.onSuccess(communityPostConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
     }
 

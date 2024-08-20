@@ -60,18 +60,18 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     @Override
     @Transactional(readOnly = true)
     public RecruitResponseDTO.PreviewListResponseDTO getPreviewList(
-            Long categoryId, PreviewFilter filter, SortType sort, String query, Long value, int pageSize) {
+            String category, PreviewFilter filter, SortType sort, String query, Long value, int pageSize) {
 
-        CategoryEnum category = null;
-        if (categoryId != null) {
-            category = categoryService.findByCategoryId(categoryId).getCategory();
-        }
+        //CategoryEnum category = null;
+        //if (categoryid != null) {
+        //    category = categoryService.findByCategoryId(categoryId).getCategory();
+        //}
 
         validateQuery(query);
 
         Pageable pageable = PageRequest.of(0, pageSize);
 
-        return recruitRepository.findByCategoryOrderBySortType(category, filter, sort, query, value, pageable);
+        return recruitRepository.findByCategoryOrderBySortType(CategoryEnum.fromValue(category), filter, sort, query, value, pageable);
     }
 
     @Override

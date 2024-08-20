@@ -1,5 +1,7 @@
 package gaji.service.domain.post.service;
 
+import gaji.service.domain.common.service.CategoryService;
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.SortType;
@@ -23,25 +25,28 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
     private final CommunityPostLikesRepository postLikesRepository;
     private final CommunityPostBookmarkRepository postBookmarkRepository;
 
+    private final CategoryService categoryService;
+
     @Override
     public Slice<CommnuityPost> getPostList(Integer lastPopularityScore,
                                    Long lastPostId,
                                    Integer lastLikeCnt,
                                    Integer lastHit,
                                    PostTypeEnum postType,
-                                   Long categoryId,
+                                   String category,
                                    SortType sortType,
                                    PostStatusEnum postStatus,
                                    int page,
                                    int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
+
         return communityPostJpaRepository.findAllFetchJoinWithUser(lastPopularityScore,
                 lastPostId,
                 lastLikeCnt,
                 lastHit,
                 postType,
                 postStatus,
-                categoryId,
+                categoryService.findAllByCategory(CategoryEnum.fromValue(category)).get(0).getId(),
                 sortType,
                 pageRequest);
     }
