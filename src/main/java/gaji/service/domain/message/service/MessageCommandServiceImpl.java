@@ -7,10 +7,8 @@ import gaji.service.domain.message.entity.MessageBody;
 import gaji.service.domain.message.repository.MessageBodyRepository;
 import gaji.service.domain.message.repository.MessageRepository;
 import gaji.service.domain.message.web.dto.MessageRequestDTO;
-import gaji.service.domain.user.code.UserErrorStatus;
 import gaji.service.domain.user.entity.User;
-import gaji.service.domain.user.repository.UserRepository;
-import gaji.service.global.exception.RestApiException;
+import gaji.service.domain.user.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageCommandServiceImpl implements MessageCommandService{
 
-    private final UserRepository userRepository;
+    private final UserQueryService userQueryService;
     private final MessageRepository messageRepository;
     private final MessageBodyRepository messageBodyRepository;
 
@@ -31,10 +29,8 @@ public class MessageCommandServiceImpl implements MessageCommandService{
     @Transactional
     public List<Message> createMessage(Long myId, Long otherId, MessageRequestDTO.CreateMessageDTO request) {
 
-        User mine = userRepository.findById(myId)
-                .orElseThrow(()-> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
-        User other = userRepository.findById(otherId)
-                .orElseThrow(()-> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
+        User mine = userQueryService.findUserById(myId);
+        User other = userQueryService.findUserById(otherId);
 
         Message sendMessage = MessageConverter.toSendMessage(mine,other);
         Message receiveMessage = MessageConverter.toReceiveMessage(mine, other);
