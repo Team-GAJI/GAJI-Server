@@ -75,13 +75,13 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 
         // 2. body에 담아서 보낼 경우 Access 토큰을 JSON 응답으로 전송
-//        Map<String, String> tokenResponse = new HashMap<>();
-//        tokenResponse.put("access_token", accessToken);
-//
-//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//        response.setCharacterEncoding("UTF-8");
-//        response.getWriter().write(objectMapper.writeValueAsString(tokenResponse));
-//        response.setStatus(HttpStatus.OK.value());
+        Map<String, String> tokenResponse = new HashMap<>();
+        tokenResponse.put("access_token", accessToken);
+
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(objectMapper.writeValueAsString(tokenResponse));
+        response.setStatus(HttpStatus.OK.value());
 
         // 토큰 로그로 남기기
         log.info("accessToken = {}", accessToken);
@@ -93,12 +93,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 
 //        // 리다이렉션 URL 생성
-//        String targetUrl = UriComponentsBuilder.fromUriString(finalRedirectionUrl)
-//                .queryParam("access_token", accessToken)
-//                .build().toUriString();
+        String targetUrl = UriComponentsBuilder.fromUriString(finalRedirectionUrl)
+                .queryParam("access_token", accessToken)
+                .build().toUriString();
 
         // 리다이렉션 수행
-        getRedirectStrategy().sendRedirect(request, response, finalRedirectionUrl);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {
