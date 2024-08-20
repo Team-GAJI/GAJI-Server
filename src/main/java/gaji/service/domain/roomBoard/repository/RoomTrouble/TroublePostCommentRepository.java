@@ -27,4 +27,5 @@ public interface TroublePostCommentRepository extends JpaRepository<TroublePostC
             "AND c.isReply = false " +
             "ORDER BY c.createdAt ASC, c.id ASC")
     Page<TroublePostComment> findOldestComments(@Param("postId") Long postId, Pageable pageable);
+
 }

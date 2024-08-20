@@ -166,10 +166,8 @@ public class RoomTroublePostController {
             @PathVariable @Parameter(description = "게시판 ID") Long roomId,
             @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
             @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
-
         List<RoomPostResponseDto.TroublePostSummaryDto> posts;
         posts = roomTroublePostQueryService.getNextTroublePosts(roomId, lastPostId, size);
-
         return BaseResponse.onSuccess(posts);
     }
 

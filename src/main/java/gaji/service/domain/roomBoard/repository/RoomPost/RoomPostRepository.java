@@ -30,4 +30,5 @@ public interface RoomPostRepository extends JpaRepository<RoomPost, Long> {
             "ELSE (SELECT MAX(r.createdAt) FROM RoomPost r WHERE r.roomBoard.id = :boardId) " +
             "END")
     Optional<LocalDateTime> findCreatedAtByIdOrEarliest(@Param("boardId") Long boardId, @Param("postId") Long postId);
+
 }

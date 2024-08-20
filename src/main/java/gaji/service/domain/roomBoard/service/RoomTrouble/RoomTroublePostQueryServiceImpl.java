@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,12 +44,19 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
 
     @Override
     public List<RoomPostResponseDto.TroublePostSummaryDto> getNextTroublePosts(Long roomId, Long lastPostId, int size) {
-        Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_TROUBLE_POST)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._ROOM_BOARD_NOT_FOUND));
-        System.out.println("스터디룸 id: " + roomId);
-        System.out.println("스터디 boardId : " + roomBoard.getId());
-        return roomTroublePostRepository.findTroublePostSummariesForInfiniteScroll(roomBoard.getId(), lastPostId,pageable);
+
+        LocalDateTime lastCreatedAt;
+        if (lastPostId == 0) {
+            lastCreatedAt = LocalDateTime.now();
+        } else {
+            lastCreatedAt = roomTroublePostRepository.findCreatedAtByIdOrEarliest(roomBoard.getId(), lastPostId)
+                    .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        }
+
+        Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt", "id"));
+        return roomTroublePostRepository.findTroublePostSummariesForInfiniteScroll(roomBoard.getId(), lastCreatedAt, pageable);
     }
 
 
