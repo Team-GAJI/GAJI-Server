@@ -87,17 +87,21 @@ public class RoomMainController {
 
     // 수정 필요
     //특정 스터디룸의 모든 사용자의 진행 상황을 조회합니다
-    @GetMapping("/{roomEventId}/progress")
+    @GetMapping("/{roomId}/{weeks}/progress")
     @Operation(summary = "주차별 과제 진행율", description = "특정 스터디룸의 모든 사용자의 진행 상황을 조회합니다.")
-    public ResponseEntity<List<RoomResponseDto.UserProgressDTO>> getStudyMateProgress(@PathVariable Long roomEventId) {
-        List<RoomResponseDto.UserProgressDTO> progressList = roomQueryService.getUserProgressByRoomEventId(roomEventId);
+    public ResponseEntity<List<RoomResponseDto.UserProgressDTO>> getStudyMateProgress(
+            @PathVariable Long roomId,
+            @PathVariable Integer weeks) {
+        List<RoomResponseDto.UserProgressDTO> progressList = roomQueryService.getUserProgressByRoomEventId(roomId, weeks);
         return ResponseEntity.ok(progressList);
     }
 
-    @GetMapping("/events/{roomEventId}/weekly-info")
+    @GetMapping("/events/{roomId}/{weeks}/weekly-info")
     @Operation(summary = "주차별 스터디 정보", description = "특정 주차의 스터디 정보를 조회합니다.")
-    public ResponseEntity<RoomResponseDto.WeeklyStudyInfoDTO> getWeeklyStudyInfo(@PathVariable Long roomEventId) {
-        RoomResponseDto.WeeklyStudyInfoDTO weeklyInfo = roomQueryService.getWeeklyStudyInfo(roomEventId);
+    public ResponseEntity<RoomResponseDto.WeeklyStudyInfoDTO> getWeeklyStudyInfo(
+            @PathVariable Long roomId,
+            @PathVariable Integer weeks) {
+        RoomResponseDto.WeeklyStudyInfoDTO weeklyInfo = roomQueryService.getWeeklyStudyInfo(roomId, weeks);
         return ResponseEntity.ok(weeklyInfo);
     }
 
