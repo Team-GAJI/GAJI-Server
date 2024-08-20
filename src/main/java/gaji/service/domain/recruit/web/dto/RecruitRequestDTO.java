@@ -20,7 +20,7 @@ public class RecruitRequestDTO {
     @Schema(description = "스터디 생성 DTO")
     @Getter
     @RequiredArgsConstructor
-    public static class CreateRoomDTO {
+    public static class RoomContentDTO {
 
         @Schema(description = "스터디 이름")
         @Size(max = 20, message = "스터디 명은 20자 이내로 입력해주세요.")

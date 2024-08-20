@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Component
 public class RecruitConverter {
 
-    public static Room toRoom(RecruitRequestDTO.CreateRoomDTO request, User user, String thumbnailUrl, String inviteCode, int peopleMaximum) {
+    public static Room toRoom(RecruitRequestDTO.RoomContentDTO request, User user, String thumbnailUrl, String inviteCode, int peopleMaximum) {
         return Room.builder()
                 .user(user)
                 .name(request.getName())
@@ -42,8 +42,14 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.CreateRoomResponseDTO toResponseDTO(Room room) {
+    public static RecruitResponseDTO.CreateRoomResponseDTO toCreateRoomResponseDTO(Room room) {
         return RecruitResponseDTO.CreateRoomResponseDTO.builder()
+                .roomId(room.getId())
+                .build();
+    }
+
+    public static RecruitResponseDTO.UpdateRoomResponseDTO toUpdateRoomResponseDTO(Room room) {
+        return RecruitResponseDTO.UpdateRoomResponseDTO.builder()
                 .roomId(room.getId())
                 .build();
     }
