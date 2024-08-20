@@ -1,8 +1,11 @@
 package gaji.service.domain.roomBoard.service.RoomTrouble;
 
+import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
+import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.RoomTroublePost;
 import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
+import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomTrouble.RoomTroublePostRepository;
 import gaji.service.domain.roomBoard.repository.RoomTrouble.TroublePostCommentRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
@@ -24,6 +27,7 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
     private final TroublePostCommentRepository troublePostCommentRepository;
     private final RoomTroublePostRepository roomTroublePostRepository;
     private final StudyMateQueryService studyMateQueryService;
+    private final RoomBoardRepository roomBoardRepository;
 
     @Override
     public TroublePostComment findCommentByCommentId(Long commentId){
@@ -38,9 +42,13 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
     }
 
     @Override
-    public List<RoomPostResponseDto.TroublePostSummaryDto> getNextTroublePosts(Long boardId, Long lastPostId, int size) {
+    public List<RoomPostResponseDto.TroublePostSummaryDto> getNextTroublePosts(Long roomId, Long lastPostId, int size) {
         Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return roomTroublePostRepository.findTroublePostSummariesForInfiniteScroll(boardId, lastPostId,pageable);
+        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_TROUBLE_POST)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._ROOM_BOARD_NOT_FOUND));
+        System.out.println("스터디룸 id: " + roomId);
+        System.out.println("스터디 boardId : " + roomBoard.getId());
+        return roomTroublePostRepository.findTroublePostSummariesForInfiniteScroll(roomBoard.getId(), lastPostId,pageable);
     }
 
 
