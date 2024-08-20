@@ -14,11 +14,12 @@ public enum CategoryEnum {
     AI("인공지능"),
     HW("하드웨어"),
     SECURITY("보안"),
-    NETWORK("클라우드 네트워크"),
+    NETWORK("클라우드-네트워크"),
     LANGUAGE("어학"),
     DESIGN("디자인"),
     BUSINESS("비즈니스"),
-    BOOK("독서 모임");
+    BOOK("독서"),
+    ETC("기타");
 
     @JsonValue
     private final String value;
