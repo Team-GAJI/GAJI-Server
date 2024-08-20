@@ -8,6 +8,7 @@ import gaji.service.domain.room.repository.*;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -26,8 +27,9 @@ public class RoomQueryServiceImpl implements RoomQueryService {
     private final RoomQueryRepository roomQueryRepository;
     private final WeeklyUserProgressRepository weeklyUserProgressRepository;
     private final NoticeConfirmationRepository noticeConfirmationRepository;
+    private final WebInvocationPrivilegeEvaluator privilegeEvaluator;
 
-//    @Override
+    //    @Override
 //    public RoomEvent findRoomEventById(Long roomId){
 //        return roomEventRepository.findRoomEventById(roomId)
 //                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
@@ -83,9 +85,11 @@ public Room findRoomById(Long roomId) {
     }
 
     @Override
-    public List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomEventId) {
-        List<WeeklyUserProgressRepository.UserProgressProjection> projections =
-                weeklyUserProgressRepository.findProgressByRoomEventId(roomEventId);
+    public List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomId, Integer weeks) {
+    RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId, weeks)
+            .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
+    List<WeeklyUserProgressRepository.UserProgressProjection> projections =
+                weeklyUserProgressRepository.findProgressByRoomEventId(roomEvent.getId());
 
         return projections.stream()
                 .map(projection -> RoomResponseDto.UserProgressDTO.builder()
