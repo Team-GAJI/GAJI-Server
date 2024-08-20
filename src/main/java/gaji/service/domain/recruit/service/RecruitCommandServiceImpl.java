@@ -5,6 +5,7 @@ import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
@@ -281,5 +282,23 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
             }
             studyMateCommandService.deleteByUserAndRoom(target, room);
         }
+    }
+
+    @Override
+    public RecruitResponseDTO.RecruitCompleteResponseDTO recruitComplete(Long userId, Long roomId) {
+        Room room = roomQueryService.findRoomById(roomId);
+
+        if (room.getRecruitPostTypeEnum().equals(RecruitPostTypeEnum.RECRUITMENT_COMPLETED)) {
+            throw new RestApiException(RecruitErrorStatus._RECRUIT_POST_ALREADY_COMPLETE);
+        }
+
+        if (!room.getUser().getId().equals(userId)) {
+            throw new RestApiException(StudyMateErrorStatus._ONLY_LEADER_POSSIBLE);
+        }
+
+        room.updateRecruitStatus(RecruitPostTypeEnum.RECRUITMENT_COMPLETED);
+        roomCommandService.saveRoom(room);
+
+        return RecruitConverter.toRecruitCompleteResponseDTO(roomId);
     }
 }

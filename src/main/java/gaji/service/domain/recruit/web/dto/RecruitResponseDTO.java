@@ -168,4 +168,12 @@ public class RecruitResponseDTO {
     public static class JoinStudyResponseDTO {
         Long roomId;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RecruitCompleteResponseDTO {
+        Long roomId;
+    }
 }

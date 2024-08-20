@@ -172,4 +172,8 @@ public class Room extends BaseEntity {
         this.peopleLimited = request.isPeopleLimited();
         this.peopleMaximum = peopleMaximum;
     }
+
+    public void updateRecruitStatus(RecruitPostTypeEnum recruitType) {
+        this.recruitPostTypeEnum = recruitType;
+    }
 }
