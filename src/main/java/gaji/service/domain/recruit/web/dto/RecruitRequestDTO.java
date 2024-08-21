@@ -2,7 +2,7 @@ package gaji.service.domain.recruit.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gaji.service.domain.recruit.annotation.ExistCategory;
+import gaji.service.domain.common.annotation.ExistsCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -72,7 +72,7 @@ public class RecruitRequestDTO {
         private int peopleMaximum;
 
         @Schema(description = "카테고리")
-        @ExistCategory
+        @ExistsCategory
         private String category;
     }
 
