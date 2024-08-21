@@ -26,6 +26,8 @@ public interface RoomCommandService {
 
     RoomEvent setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto);
 
+    RoomEvent updateRoomEvent(Long eventId, RoomRequestDto.RoomEventUpdateDTO updateDTO);
+
     boolean toggleNoticeConfirmation(Long roomId, Long noticeId, Long userId);
 
     void saveRoom(Room room);

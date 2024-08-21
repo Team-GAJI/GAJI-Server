@@ -49,4 +49,10 @@ public class RoomEvent {
 
     private boolean isPublic;
 
+    public void updateEvent(LocalDate startTime, LocalDate endTime, String description) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.description = description;
+    }
+
 }

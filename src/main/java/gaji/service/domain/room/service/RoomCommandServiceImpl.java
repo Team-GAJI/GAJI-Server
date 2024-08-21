@@ -163,6 +163,16 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
+    public RoomEvent updateRoomEvent(Long eventId, RoomRequestDto.RoomEventUpdateDTO updateDTO) {
+        RoomEvent roomEvent = roomEventRepository.findById(eventId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
+
+        roomEvent.updateEvent(updateDTO.getStartTime(), updateDTO.getEndTime(), updateDTO.getDescription());
+
+        return roomEventRepository.save(roomEvent);
+    }
+
+    @Override
     public boolean toggleNoticeConfirmation(Long roomId, Long noticeId, Long userId) {
         RoomNotice roomNotice = roomNoticeRepository.findById(noticeId)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._NOTICE_NOT_FOUND));
