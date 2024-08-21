@@ -49,18 +49,25 @@ public class UserQueryServiceImpl implements UserQueryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
 
-        cursorDate = cursorDate == null ? LocalDate.now() : cursorDate;
-        cursorId = cursorId == null ? 0 : cursorId;
-
         PageRequest pageRequest = PageRequest.of(0, size);
 
         Slice<Tuple> roomList;
 
         if(type == RoomTypeEnum.ONGOING) {
-            roomList = roomCustomRepository.findAllOngoingRoomsByUser(user, cursorDate, cursorId, pageRequest);
+            if(cursorId != null || cursorDate != null) {
+                roomList = roomCustomRepository.findAllOngoingRoomsByUser(user, cursorDate, cursorId, pageRequest);
+            }
+            else {
+                roomList = roomCustomRepository.findAllOngoingRoomsByUser(user, pageRequest);
+            }
         }
         else{
-            roomList = roomCustomRepository.findAllEndedRoomsByUser(user, cursorDate, cursorId, pageRequest);
+            if(cursorId != null || cursorDate != null) {
+                roomList = roomCustomRepository.findAllEndedRoomsByUser(user, cursorDate, cursorId, pageRequest);
+            }
+            else {
+                roomList = roomCustomRepository.findAllEndedRoomsByUser(user, pageRequest);
+            }
         }
 
         return roomList;

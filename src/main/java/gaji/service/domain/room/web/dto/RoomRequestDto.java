@@ -6,10 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -65,5 +62,20 @@ public class RoomRequestDto {
         @Size(max = 200)
         private String description;
     }
+
+    @Getter
+    @Setter
+    public static class RoomEventUpdateDTO {
+        private LocalDate startTime;
+        private LocalDate endTime;
+        private String description;
+    }
+
+    @Getter
+    @Setter
+    public static class AssignmentUpdateDTO {
+        private String description;
+    }
+
 
 }

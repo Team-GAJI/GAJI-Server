@@ -15,7 +15,27 @@ public class RoomPostResponseDto {
     public static class CreateRoomPostDTO {
         Long postId;
     }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class MainPostSummaryDto {
+        private Long id;
+        private String title;
+        private String body;
+        private String userNickname;
+        private LocalDateTime createdAt;
+        private int viewCount;
+        private String timeSincePosted;
 
+        public MainPostSummaryDto(Long id, String title, String body, String userNickname, LocalDateTime createdAt, int viewCount) {
+            this.id = id;
+            this.title = title;
+            this.body = body;
+            this.userNickname = userNickname;
+            this.createdAt = createdAt;
+            this.viewCount = viewCount;
+        }
+    }
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
@@ -82,6 +102,7 @@ public class RoomPostResponseDto {
     }
 
     @Getter
+    @Setter
     public static class PostSummaryDto {
         private final Long id;
         private final String title;
