@@ -26,6 +26,7 @@ public class RoomBoard {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    //추후 삭제합시다. RoomPostType으로 한정된 게시판을 관리한다면 필요 없을거같습니다.
     private String name;
 
     @Enumerated(EnumType.STRING)
