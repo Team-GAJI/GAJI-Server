@@ -25,11 +25,11 @@ public class CommunityPostCommentResponseDTO {
     public static class PostCommentDTO {
         private Long commentId;
         private Long userId;
-        private String username;
-        private String body;
+        private String userNickName;
+        private String commentBody;
         private Integer groupNum;
         private int depth;
-        private String createdAt;
+        private String commentWriteDate;
         private boolean isWriter;
         private String profileImageUrl;
     }

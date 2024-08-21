@@ -26,12 +26,12 @@ public class CommunityCommentConverter {
         return CommunityPostCommentResponseDTO.PostCommentDTO.builder()
                 .commentId(comment.getId())
                 .userId(comment.getUser().getId())
-                .username(comment.getUser().getName())
-                .body(comment.getBody())
+                .userNickName(comment.getUser().getName())
+                .commentBody(comment.getBody())
                 .groupNum(comment.getGroupNum())
                 .depth(comment.getDepth())
                 .isWriter(isWriter)
-                .createdAt(DateConverter.convertToRelativeTimeFormat(comment.getCreatedAt())+" 작성")
+                .commentWriteDate(DateConverter.convertToRelativeTimeFormat(comment.getCreatedAt())+" 작성")
                 .profileImageUrl(comment.getUser().getProfileImagePth())
                 .build();
     }
