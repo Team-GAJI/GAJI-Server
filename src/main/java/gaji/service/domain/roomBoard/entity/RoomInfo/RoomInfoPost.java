@@ -85,4 +85,7 @@ public class RoomInfoPost extends BaseEntity {
 
     }
 
+    public void increaseViewCnt() {
+        this.viewCount++;
+    }
 }
