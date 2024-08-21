@@ -31,6 +31,7 @@ public class CommunityPostCommentResponseDTO {
         private int depth;
         private String createdAt;
         private boolean isWriter;
+        private String profileImageUrl;
     }
 
     @Builder
