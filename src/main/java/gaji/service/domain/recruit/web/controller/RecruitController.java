@@ -175,7 +175,7 @@ public class RecruitController {
     @GetMapping("/preview-default")
     @Operation(summary = "스터디 미리보기 목록 조회 기본 페이지 API", description = "스터디 목록 조회 기본 페이지입니다.")
     public BaseResponse<RecruitResponseDTO.DefaultPreviewListResponseDTO> getDefaultPreviewList(
-            @RequestParam(defaultValue = "0") @Min(value = 1, message = "nextCategoryId는 1이상 이어야 합니다.") int nextCategoryId,
+            @RequestParam(defaultValue = "1") @Min(value = 1, message = "nextCategoryId는 1이상 이어야 합니다.") int nextCategoryId,
             @RequestParam(defaultValue = "true") boolean isFirst,
             @RequestParam(value = "page", defaultValue = "5") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize) {
 
