@@ -2,6 +2,7 @@ package gaji.service.domain.recruit.service;
 
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.service.CategoryService;
+import gaji.service.domain.common.web.dto.CategoryResponseDTO;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.PreviewFilter;
@@ -23,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -35,6 +35,7 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     private final RoomCommandService roomCommandService;
     private final CategoryService categoryService;
     private final RecruitRepository recruitRepository;
+    private final RecruitCommandService recruitCommandService;
 
     @Override
     @Transactional
@@ -42,6 +43,8 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
 
         Room room = roomQueryService.findRoomById(roomId);
         User user = userQueryService.findUserById(room.getUser().getId());
+        boolean likeStatus = recruitCommandService.userLikeStatus(room, user);
+        boolean bookmarkStatus = recruitCommandService.userBookmarkStatus(room, user);
 
         room.addView();
         roomCommandService.saveRoom(room);
@@ -51,13 +54,23 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
 
         CategoryEnum category = RecruitConverter.toCategory(selectCategory);
 
-        return RecruitConverter.toStudyDetailDTO(user, room, category);
+        return RecruitConverter.toStudyDetailDTO(user, room, category, likeStatus, bookmarkStatus);
     }
 
     @Override
     @Transactional(readOnly = true)
     public RecruitResponseDTO.PreviewListResponseDTO getPreviewList(
-            CategoryEnum category, PreviewFilter filter, SortType sort, String query, Long value, int pageSize) {
+            String categoryValue, PreviewFilter filter, SortType sort, String query, Long value, int pageSize) {
+
+        //CategoryEnum category = null;
+        //if (categoryid != null) {
+        //    category = categoryService.findByCategoryId(categoryId).getCategory();
+        //}
+        CategoryEnum category = null;
+        if (categoryValue != null) {
+            category = CategoryEnum.fromValue(categoryValue);
+        }
+
 
         validateQuery(query);
 
@@ -67,22 +80,30 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     }
 
     @Override
-    public RecruitResponseDTO.DefaultPreviewListResponseDTO getDefaultPreview(boolean isFirst, Integer nextCategoryIndex, int pageSize) {
+    public RecruitResponseDTO.DefaultPreviewListResponseDTO getDefaultPreview(boolean isFirst, int nextCategoryId, int pageSize) {
         Pageable pageable = PageRequest.of(0, pageSize);
         List<RecruitResponseDTO.DefaultPreviewDTO> defaultPreviewList = new ArrayList<>();
+        List<CategoryResponseDTO.BaseDTO> categoryList = categoryService.findAllCategory();
 
-        List<CategoryEnum> categoryList = new ArrayList<>(Arrays.asList(CategoryEnum.values()));
-        int count;
+        boolean hasNext = true;
+        int count = 0;
+        int getPreviewCount;
 
         if (isFirst) {
-            nextCategoryIndex = 0;
-            count = 4;
+            nextCategoryId = 0;
+            getPreviewCount = 4;
         } else {
-            count = nextCategoryIndex + 1;
+            nextCategoryId--;
+            getPreviewCount = 1;
         }
 
-        for (int i = nextCategoryIndex; i < count; i++) {
-            CategoryEnum category = categoryList.get(i);
+        while (count < getPreviewCount) {
+            if (categoryList.size() <= nextCategoryId) {
+                hasNext = false;
+                break;
+            }
+
+            CategoryEnum category = categoryList.get(nextCategoryId++).getCategory();
 
             RecruitResponseDTO.DefaultPreviewDTO previewList =
                     recruitRepository.findByCategory(category, pageable);
@@ -90,13 +111,25 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
             if (previewList.getPreviewList() == null || previewList.getPreviewList().isEmpty()) {
                 continue;
             }
-
+            count++;
             defaultPreviewList.add(previewList);
         }
 
+        if (hasNext) {
+            RecruitResponseDTO.DefaultPreviewDTO previewList =
+                    recruitRepository.findByCategory(categoryList.get(nextCategoryId).getCategory(), PageRequest.of(0, 1));
+
+            if (previewList.getPreviewList().isEmpty()) {
+                hasNext = false;
+                nextCategoryId = -1;
+            }
+        }
+
+
         return RecruitResponseDTO.DefaultPreviewListResponseDTO.builder()
                 .defaultPreviewList(defaultPreviewList)
-                .nextIndex(count)
+                .nextCategoryId(++nextCategoryId)
+                .hasNext(hasNext)
                 .build();
     }
 

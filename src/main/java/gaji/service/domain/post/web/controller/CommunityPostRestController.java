@@ -1,5 +1,7 @@
 package gaji.service.domain.post.web.controller;
 
+import gaji.service.domain.common.entity.SelectCategory;
+import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.SortType;
@@ -39,6 +41,8 @@ public class CommunityPostRestController {
     private final CommunityPostConverter communityPostConverter;
     private final CommunityCommentConverter communityCommentConverter;
 
+    private final CategoryService categoryService;
+
     @PostMapping
     @Operation(summary = "커뮤니티 게시글 업로드 API", description = "커뮤니티의 게시글을 업로드하는 API입니다. 게시글 유형과 제목, 본문 내용을 검증합니다.")
     public BaseResponse<CommunityPostResponseDTO.UploadPostResponseDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
@@ -69,7 +73,8 @@ public class CommunityPostRestController {
                                                                               @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
         Long userId = (authorizationHeader == null) ? null : tokenProviderService.getUserIdFromToken(authorizationHeader);
         CommnuityPost post = communityPostQueryService.getPostDetail(postId);
-        return BaseResponse.onSuccess(communityPostConverter.toPostDetailDTO(post, userId));
+        SelectCategory category = categoryService.findByEntityIdAndType(post.getId(), post.getType());
+        return BaseResponse.onSuccess(communityPostConverter.toPostDetailDTO(post, userId, category));
     }
 
     @GetMapping("/preivew")
@@ -90,13 +95,13 @@ public class CommunityPostRestController {
                                                                                         @Min(value = 0, message = "lastLikeCnt는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastLikeCnt,
                                                                                         @Min(value = 0, message = "lastHit은 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastHit,
                                                                                         @RequestParam(required = false) PostTypeEnum postType,
-                                                                                        @RequestParam(required = false) Long categoryId,
+                                                                                        @RequestParam(required = false) String category,
                                                                                         @RequestParam(required = false, defaultValue = "recent") SortType sortType,
                                                                                         @RequestParam(required = false) PostStatusEnum filter,
                                                                                         @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                         @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
-        Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(keyword, lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, categoryId, sortType, filter, page, size);
+        Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, category, sortType, filter, page, size);
         return BaseResponse.onSuccess(communityPostConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
     }
 

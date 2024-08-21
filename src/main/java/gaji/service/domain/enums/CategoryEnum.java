@@ -17,8 +17,9 @@ public enum CategoryEnum {
     NETWORK("네트워크-클라우드"),
     LANGUAGE("어학"),
     DESIGN("디자인"),
-    BUSINESS("비즈니스(pm)"),
-    BOOK("독서 모임");
+    BUSINESS("비즈니스"),
+    BOOK("독서"),
+    ETC("기타");
 
     @JsonValue
     private final String value;
@@ -36,5 +37,14 @@ public enum CategoryEnum {
         }
         log.error("CategoryEnum.from() exception occur param: {}", param);
         throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
+    }
+
+    public static CategoryEnum fromValue(String value) {
+        for (CategoryEnum category : CategoryEnum.values()) {
+            if (category.value.equals(value)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Unknown category: " + value);
     }
 }

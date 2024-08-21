@@ -40,7 +40,7 @@ public class CommunityPostRequestDTO {
 
         @Schema(description = "카테고리의 id")
         // TODO: 카테고리 존재 여부 검증 애노테이션 적용
-        private final Long categoryId;
+        private final String category;
     }
 
     @Schema(description = "커뮤니티 게시글 댓글 작성 DTO")

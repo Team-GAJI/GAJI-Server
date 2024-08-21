@@ -1,6 +1,5 @@
 package gaji.service.jwt.filter;
 
-import gaji.service.domain.enums.Role;
 import gaji.service.domain.enums.ServiceRole;
 import gaji.service.oauth2.dto.CustomOAuth2User;
 import gaji.service.oauth2.dto.OAuthUserDTO;
