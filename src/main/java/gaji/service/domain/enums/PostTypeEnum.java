@@ -28,7 +28,7 @@ public enum PostTypeEnum {
             }
         }
         log.error("PostTypeEnum.from() exception occur param: {}", param);
-        throw new RestApiException(CommunityPostErrorStatus._INVALID_POST_TYPE);
+        return null;
     }
 
 }

@@ -41,8 +41,8 @@ public class CommunityPostConverter {
                 (type == PostTypeEnum.PROJECT) ? PostStatusEnum.RECRUITING : PostStatusEnum.BLOGING;
     }
 
-    public static CommunityPostResponseDTO.UploadPostResponseDTO toUploadPostResponseDTO(CommnuityPost post) {
-        return CommunityPostResponseDTO.UploadPostResponseDTO
+    public static CommunityPostResponseDTO.PostIdResponseDTO toPostIdResponseDTO(CommnuityPost post) {
+        return CommunityPostResponseDTO.PostIdResponseDTO
                 .builder()
                 .postId(post.getId())
                 .build();
@@ -63,14 +63,15 @@ public class CommunityPostConverter {
     }
 
     public static CommnuityPost toPost(CommunityPostRequestDTO.UploadPostRequestDTO request, User user) {
+        PostTypeEnum postTypeEnum = PostTypeEnum.from(request.getType());
+
         return CommnuityPost.builder()
                 .user(user)
                 .title(request.getTitle())
                 .body(request.getBody())
-                .thumbnailUrl(/*(request.getThumbnailUrl() == null) ? Post.getDefaultThumbnailUrl() : request.getThumbnailUrl()*/
-                        request.getThumbnailUrl())
-                .type(request.getType())
-                .status(getInitialPostStatus(request.getType()))
+                .thumbnailUrl(request.getThumbnailUrl())
+                .type(postTypeEnum)
+                .status(getInitialPostStatus(postTypeEnum))
                 .build();
     }
 
