@@ -7,8 +7,10 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.repository.*;
+import gaji.service.domain.room.web.controller.RoomMainController;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
 import gaji.service.domain.studyMate.entity.Assignment;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.entity.UserAssignment;
@@ -47,6 +49,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final RoomQueryRepository roomQueryRepository;
     private final RoomRepository roomRepository;
     private final WeeklyUserProgressRepository weeklyUserProgressRepository;
+    private final RoomMainController roomMainController;
 
     //과제생성1
     @Override
@@ -84,6 +87,20 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                 .build();
         return roomNoticeRepository.save(notice);
 
+    }
+
+    @Override
+    public RoomNotice roomNotice(Long noticeId, Long userId, String newBody) {
+        User user = userQueryService.findUserById(userId);
+        RoomNotice roomNotice = roomQueryService.findRoomNoticeById(noticeId);
+
+        if(roomNotice.getStudyMate().getUser().equals(user)){
+            roomNotice.updateBody(newBody);
+        }else{
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_UPDATE_AUTH);
+        }
+
+        return roomNotice;
     }
 
     // 과제 생성할 때 user에게 할당해주는 메서드

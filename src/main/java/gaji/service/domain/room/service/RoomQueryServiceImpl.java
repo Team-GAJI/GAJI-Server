@@ -4,6 +4,7 @@ package gaji.service.domain.room.service;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
+import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.repository.*;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.global.converter.DateConverter;
@@ -52,6 +53,13 @@ public Room findRoomById(Long roomId) {
         return roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId, weeks)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
     }
+
+    @Override
+    public RoomNotice findRoomNoticeById(Long noticeId) {
+        return roomNoticeRepository.findById(noticeId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._NOTICE_NOT_FOUND));
+    }
+
 
 //    @Override
 //    public List<RoomResponseDto.NoticeDto> getNotices(Long roomId, int page, int size) {
@@ -125,5 +133,6 @@ public Room findRoomById(Long roomId) {
     public List<String> getConfirmedUserNicknames(Long noticeId) {
         return noticeConfirmationRepository.findConfirmedUserNicknamesByNoticeId(noticeId);
     }
+
 }
 

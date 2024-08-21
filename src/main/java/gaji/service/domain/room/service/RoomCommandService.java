@@ -13,6 +13,8 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 
 public interface RoomCommandService {
+    RoomNotice roomNotice(Long noticeId, Long userId, String newBody);
+
     @Transactional
     void createUserAssignmentsForStudyMembers(Assignment assignment);
 
