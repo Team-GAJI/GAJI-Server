@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @Entity
 @DynamicInsert
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "dtype")
 public class Event extends BaseEntity {
 
     @Id
@@ -36,7 +38,7 @@ public class Event extends BaseEntity {
     private LocalDateTime endDateTime;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
-    private Boolean isCompleted; // 이벤트 완료 여부
+    private Boolean isCompleted = false; // 이벤트 완료 여부
 
     // 기본 일정인지 반복 일정인지 구분하기 위한 필드
     @Column(nullable = false, columnDefinition = "boolean default false")

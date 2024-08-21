@@ -125,21 +125,15 @@ public class EventServiceImpl implements EventService{
         //Event가 내 것인지 확인하기
         checkMyEvent(event, userId);
 
-        // Event 수정
-        if(request.isRecurringStatus()){
-            //todo: 반복 이벤트로 수정
-
-
-            //RecurringEvent 생성
-            return recurringEventRepository.save(
-                    new RecurringEvent(userCommandService.findById(userId), request.getContent(), request.getStartTime(), request.getEndTime())
-            ).getId();
+        if (!event.isRecurring() && request.isRecurringStatus()) { // 일반 일정을 반복일정으로 바꾸는 경우
+            recurringEventRepository.save(
+                    new RecurringEvent(userCommandService.findById(userId), request.getContent(), request.getStartTime(), request.getEndTime()));
         }
 
-        //반복 이벤트 수정 시
-        if(event.isRecurring()){
-            return recurringEventRepository.findById(eventId).get().updateRecurringEvent(request).getId();
+        if (event.isRecurring()) { //반복일정을 바꿔주는 경우
+
         }
+
         event.updateEvent(request);
 
         return event.getId();

@@ -2,6 +2,7 @@ package gaji.service.domain.event.domain;
 
 import gaji.service.domain.event.dto.request.EventInfoRequest;
 import gaji.service.domain.user.entity.User;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
+@DiscriminatorValue("RecurringEvent")
 //todo: 상속 받지 말고, 연관관계 매핑 진행
 public class RecurringEvent extends Event { // 반복 일정, Event를 상속받음
 
