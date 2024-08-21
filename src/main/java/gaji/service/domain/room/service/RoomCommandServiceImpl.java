@@ -113,7 +113,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
         }
 
-        RoomEvent roomEvent = roomEventRepository.findRoomEventById(roomId)
+        RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId,weeks)
                 .orElse(RoomEvent.builder().room(room).user(user).build());
 
         RoomEvent updatedRoomEvent = RoomEvent.builder()
@@ -131,6 +131,8 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return roomEventRepository.save(updatedRoomEvent);
     }
 
+
+
     @Override
     public RoomEvent setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto) {
         User user = userQueryService.findUserById(userId);
@@ -142,7 +144,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
         }
 
-        RoomEvent roomEvent = roomEventRepository.findRoomEventById(roomId)
+        RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId,weeks)
                 .orElse(RoomEvent.builder().room(room).user(user).build());
 
         RoomEvent updatedRoomEvent = RoomEvent.builder()
