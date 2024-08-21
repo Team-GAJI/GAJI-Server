@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CategoryExistValidator implements ConstraintValidator<ExistCategory, CategoryEnum> {
+public class CategoryExistValidator implements ConstraintValidator<ExistCategory, String> {
 
     @Override
     public void initialize(ExistCategory constraintAnnotation) {
@@ -18,8 +18,8 @@ public class CategoryExistValidator implements ConstraintValidator<ExistCategory
     }
 
     @Override
-    public boolean isValid(CategoryEnum value, ConstraintValidatorContext context) {
-        if (value == null) {
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null || value.isBlank()) {
             return true;
         }
 
@@ -33,9 +33,9 @@ public class CategoryExistValidator implements ConstraintValidator<ExistCategory
         return isValid;
     }
 
-    private boolean isEnumValueValid(CategoryEnum value) {
+    private boolean isEnumValueValid(String value) {
         for (CategoryEnum category : CategoryEnum.values()) {
-            if (category == value) {
+            if (category.getValue().equals(value)) {
                 return true;
             }
         }

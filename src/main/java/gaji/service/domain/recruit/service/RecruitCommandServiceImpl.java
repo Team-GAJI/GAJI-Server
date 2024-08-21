@@ -52,8 +52,6 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
     private final RecruitPostBookmarkRepository recruitPostBookmarkRepository;
     private final StudyCommentCommandService studyCommentCommandService;
 
-    private static final String DEFAULT_THUMBNAIL_URL = "https://gaji-bucket.s3.ap-northeast-2.amazonaws.com/study/gaji.png";
-
     @Override
     @Transactional
     public RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.RoomContentDTO request, Long userId) {
@@ -78,16 +76,12 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         addMaterial(request.getMaterialList(), room);
         roomCommandService.saveRoom(room);
 
-//        if (request.getCategoryId() == null) {
-//            throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
-//        }
-//
-//        Category category = categoryService.findByCategoryId(request.getCategoryId());
+        if (request.getCategory() != null && !request.getCategory().isBlank()) {
+            Category category = categoryService.findByCategory(CategoryEnum.fromValue(request.getCategory()));
 
-        Category category = categoryService.findAllByCategory(CategoryEnum.fromValue(request.getCategory())).get(0);
-
-        SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
-        categoryService.saveSelectCategory(selectCategory);
+            SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
+            categoryService.saveSelectCategory(selectCategory);
+        }
 
         return RecruitConverter.toCreateRoomResponseDTO(room);
     }
@@ -120,21 +114,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
         roomCommandService.saveRoom(room);
 
-       // if (request.getCategoryId() == null) {
-       //     throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
-       // }
-
-//        SelectCategory selectCategory = categoryService.findByEntityIdAndType(roomId, PostTypeEnum.ROOM);
-//
-//        if (!selectCategory.getCategory().getId().equals(request.getCategoryId())) {
-//            Category category = categoryService.findByCategoryId(request.getCategoryId());
-//            selectCategory.updateCategory(category);
-//            categoryService.saveSelectCategory(selectCategory);
-//        }
-
-        //Long categoryId = request.getCategoryId();
-        //Category category = categoryService.findByCategoryId(categoryId);
-        Category category = categoryService.findAllByCategory(CategoryEnum.fromValue(request.getCategory())).get(0);
+        Category category = categoryService.findByCategory(CategoryEnum.fromValue(request.getCategory()));
 
         SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
         categoryService.saveSelectCategory(selectCategory);

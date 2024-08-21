@@ -9,4 +9,6 @@ public interface SelectCategoryRepository extends JpaRepository<SelectCategory, 
     SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type);
 
     void deleteByEntityIdAndType(Long entityId, PostTypeEnum type);
+
+    boolean existsByEntityIdAndType(Long entityId, PostTypeEnum type);
 }
