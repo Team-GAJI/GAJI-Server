@@ -89,5 +89,8 @@ public class RoomPost extends BaseEntity {
         this. bookmarkCount = Math.max(0, this.bookmarkCount - 1);
 
     }
+    public void increaseViewCnt() {
+        this.viewCount++;
+    }
 
 }
