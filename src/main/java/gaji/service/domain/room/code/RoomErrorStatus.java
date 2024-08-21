@@ -27,7 +27,7 @@ public enum RoomErrorStatus implements BaseErrorCodeInterface {
     _NOTICE_NOT_FOUND(HttpStatus.BAD_REQUEST, "ROOM_4007"," 공지사항울 찾을 수 없습니다."),
 
 
-    _ASSIGNMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "ASSIGNMENT_4001"," 공지사항울 찾을 수 없습니다."),
+    _ASSIGNMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "ASSIGNMENT_4001"," 과제를 찾을 수 없습니다."),
     _INTERNAL_SERVER_ERROR(HttpStatus.BAD_REQUEST, "SERVER_4001"," 에러");
 
 
