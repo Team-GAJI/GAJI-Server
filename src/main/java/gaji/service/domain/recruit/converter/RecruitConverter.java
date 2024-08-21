@@ -100,7 +100,7 @@ public class RecruitConverter {
 
     private static RecruitResponseDTO.CommentResponseDTO toCommentResponseDTO(StudyComment comment) {
         return RecruitResponseDTO.CommentResponseDTO.builder()
-                .userImage(comment.getUser().getProfileImagePth())
+                .profileImageUrl(comment.getUser().getProfileImagePth())
                 .userNickName(comment.getUser().getNickname())
                 .commentOrder(comment.getCommentOrder())
                 .depth(comment.getDepth())
