@@ -1,9 +1,13 @@
 package gaji.service.domain.post.converter;
 
 import gaji.service.domain.common.converter.HashtagConverter;
+import gaji.service.domain.common.entity.Category;
+import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.entity.SelectHashtag;
+import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.common.web.dto.HashtagResponseDTO;
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.entity.CommnuityPost;
@@ -12,8 +16,9 @@ import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.service.CommunityPostBookMarkService;
 import gaji.service.domain.post.service.CommunityPostLikesService;
+import gaji.service.domain.post.service.CommunityPostQueryService;
 import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
-import gaji.service.domain.post.web.dto.PostRequestDTO;
+import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.global.converter.DateConverter;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +26,17 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 public class CommunityPostConverter {
     private final HashtagService hashtagService;
+    private final CategoryService categoryService;
     private final CommunityPostBookMarkService postBookMarkService;
     private final CommunityPostLikesService postLikesService;
+    private final CommunityPostQueryService communityPostQueryService;
 
     // 초기 PostStatus 지정
     public static PostStatusEnum getInitialPostStatus(PostTypeEnum type) {
@@ -36,8 +44,8 @@ public class CommunityPostConverter {
                 (type == PostTypeEnum.PROJECT) ? PostStatusEnum.RECRUITING : PostStatusEnum.BLOGING;
     }
 
-    public static CommunityPostResponseDTO.UploadPostDTO toUploadPostDTO(CommnuityPost post) {
-        return CommunityPostResponseDTO.UploadPostDTO
+    public static CommunityPostResponseDTO.UploadPostResponseDTO toUploadPostResponseDTO(CommnuityPost post) {
+        return CommunityPostResponseDTO.UploadPostResponseDTO
                 .builder()
                 .postId(post.getId())
                 .build();
@@ -57,7 +65,7 @@ public class CommunityPostConverter {
                 .build();
     }
 
-    public static CommnuityPost toPost(PostRequestDTO.UploadPostDTO request, User user) {
+    public static CommnuityPost toPost(CommunityPostRequestDTO.UploadPostRequestDTO request, User user) {
         return CommnuityPost.builder()
                 .user(user)
                 .title(request.getTitle())
@@ -69,7 +77,7 @@ public class CommunityPostConverter {
                 .build();
     }
 
-    public static CommunityComment toComment(PostRequestDTO.WriteCommentDTO request, User user, CommnuityPost post, CommunityComment parentComment) {
+    public static CommunityComment toComment(CommunityPostRequestDTO.WriteCommentRequestDTO request, User user, CommnuityPost post, CommunityComment parentComment) {
         return CommunityComment.builder()
                 .user(user)
                 .post(post)
@@ -107,12 +115,13 @@ public class CommunityPostConverter {
                 .uploadTime(DateConverter.convertToRelativeTimeFormat(post.getCreatedAt()))
                 .hit(post.getHit())
                 .popularityScore(post.getPopularityScore())
+                .status(post.getStatus())
                 .hashtagList(hashtagList)
                 .build();
     }
 
     public CommunityPostResponseDTO.PostPreviewListDTO toPostPreviewListDTO(List<CommnuityPost> postList, boolean hasNext) {
-        CommunityPostConverter postConverter = new CommunityPostConverter(hashtagService, postBookMarkService, postLikesService);
+        CommunityPostConverter postConverter = new CommunityPostConverter(hashtagService, categoryService, postBookMarkService, postLikesService, communityPostQueryService);
         List<CommunityPostResponseDTO.PostPreviewDTO> postPreviewDTOList = postList.stream()
                 .map(postConverter::toPostPreviewDTO)
                 .collect(Collectors.toList());
@@ -123,24 +132,37 @@ public class CommunityPostConverter {
                 .build();
     }
 
-    public CommunityPostResponseDTO.PostDetailDTO toPostDetailDTO(CommnuityPost post, Long userId) {
+    public CommunityPostResponseDTO.PostDetailDTO toPostDetailDTO(CommnuityPost post, Long userId, SelectCategory selectCategory) {
         List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(post.getId(), post.getType());
         List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagNameAndIdDTOList = HashtagConverter.toHashtagNameAndIdDTOList(selectHashtagList);
+
+        // ofNullable 메서드로 NPE 방지
+        /*CategoryEnum category = Optional.ofNullable(categoryService.findOneFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType()))
+                .map(SelectCategory::getCategory)
+                .map(Category::getCategory)
+                .orElse(null);*/
+
         boolean isBookmarked = (userId == null) ? false : postBookMarkService.existsByUserAndPost(userId, post);
         boolean isLiked = (userId == null) ? false : postLikesService.existsByUserAndPost(userId, post);
+        boolean isWriter = (userId == null) ? false : communityPostQueryService.isPostWriter(userId, post);
 
         return CommunityPostResponseDTO.PostDetailDTO.builder()
                 .userId(post.getUser().getId())
                 .type(post.getType())
                 .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(post.getCreatedAt()), ""))
                 .hit(post.getHit())
+                .likeCnt(post.getLikeCnt())
+                .bookmarkCnt(post.getBookmarkCnt())
                 .commentCnt(post.getCommentCnt())
                 .userNickname(post.getUser().getNickname())
                 .title(post.getTitle())
                 .hashtagList(hashtagNameAndIdDTOList)
-                .isBookMarked(isBookmarked)
-                .isLiked(isLiked)
+                .isWriter(isWriter)
+                .bookMarkStatus(isBookmarked)
+                .likeStatus(isLiked)
                 .body(post.getBody())
+                .status(post.getStatus())
+                .category(selectCategory.getCategory().getCategory().getValue())
                 .build();
     }
 }

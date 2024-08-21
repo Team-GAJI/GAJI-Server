@@ -72,9 +72,9 @@ public class RecruitRequestDTO {
         @Min(value = 1, message = "최대 인원은 1이상 이어야 합니다.")
         private int peopleMaximum;
 
-        @Schema(description = "카테고리의 id")
-        @Min(value = 1, message = "id는 1이상 이어야 합니다.")
-        private Long categoryId;
+        //@Schema(description = "카테고리의 id")
+        //@Min(value = 1, message = "id는 1이상 이어야 합니다.")
+        private String category;
     }
 
     @Schema(description = "스터디 댓글 작성 DTO")

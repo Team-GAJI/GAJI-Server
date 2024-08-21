@@ -51,7 +51,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
 
         // 스터디룸 게시판 확인 또는 생성
-        RoomBoard roomBoard = roomBoardRepository.findByRoomId(roomId)
+        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId,RoomPostType.ROOM_POST)
                 .orElseGet(() -> {
                     RoomBoard newRoomBoard = RoomBoard.builder()
                             .room(room)

@@ -39,6 +39,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByCategory(category);
     }
 
+    //todo: 나중에 카테고리 DB에 통일 하면 지워야함
+    @Override
+    public List<Category> findAllByCategory(CategoryEnum category) {
+        return categoryRepository.findAllByCategory(category);
+    }
+
     @Override
     public Category findByCategoryId(Long categoryId) {
         return categoryRepository.findById(categoryId)
@@ -61,8 +67,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<SelectCategory> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
-        return selectCategoryRepository.findAllFetchJoinWithCategoryByEntityIdAndPostType(entityId, postType);
+    public SelectCategory findOneFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
+        return selectCategoryRepository.findOneFetchJoinWithCategoryByEntityIdAndPostType(entityId, postType);
     }
 
     @Override
