@@ -100,12 +100,12 @@ public class RecruitConverter {
 
     private static RecruitResponseDTO.CommentResponseDTO toCommentResponseDTO(StudyComment comment) {
         return RecruitResponseDTO.CommentResponseDTO.builder()
-                .userImage(comment.getUser().getProfileImagePth())
+                .profileImageUrl(comment.getUser().getProfileImagePth())
                 .userNickName(comment.getUser().getNickname())
                 .commentOrder(comment.getCommentOrder())
                 .depth(comment.getDepth())
                 .commentId(comment.getId())
-                .commentWriteDate(DateConverter.convertWriteTimeFormat(LocalDate.from(comment.getCreatedAt()), " 작성"))
+                .commentWriteDate(DateConverter.convertToRelativeTimeFormat(comment.getCreatedAt())+" 작성")
                 .commentBody(comment.getBody())
                 .build();
     }

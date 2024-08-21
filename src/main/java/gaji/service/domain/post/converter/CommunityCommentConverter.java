@@ -26,12 +26,13 @@ public class CommunityCommentConverter {
         return CommunityPostCommentResponseDTO.PostCommentDTO.builder()
                 .commentId(comment.getId())
                 .userId(comment.getUser().getId())
-                .username(comment.getUser().getName())
-                .body(comment.getBody())
+                .userNickName(comment.getUser().getName())
+                .commentBody(comment.getBody())
                 .groupNum(comment.getGroupNum())
                 .depth(comment.getDepth())
                 .isWriter(isWriter)
-                .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(comment.getCreatedAt()), " 작성"))
+                .commentWriteDate(DateConverter.convertToRelativeTimeFormat(comment.getCreatedAt())+" 작성")
+                .profileImageUrl(comment.getUser().getProfileImagePth())
                 .build();
     }
 
@@ -39,7 +40,7 @@ public class CommunityCommentConverter {
         List<CommunityPostCommentResponseDTO.PostCommentDTO> postCommentDTOList = new ArrayList<>();
 
         for (CommunityComment communityComment : commentList) {
-            boolean isWriter = (userId == null) ? false : communityCommentService.isCommentWriter(userId, communityComment);
+            boolean isWriter = userId != null && communityCommentService.isCommentWriter(userId, communityComment);
             postCommentDTOList.add(CommunityCommentConverter.toPostCommentDTO(communityComment, isWriter));
         }
 
