@@ -8,6 +8,7 @@ import gaji.service.domain.common.repository.SelectCategoryRepository;
 import gaji.service.domain.common.web.dto.CategoryResponseDTO;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.room.entity.Room;
 import gaji.service.global.exception.RestApiException;
 import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> findAllByCategory(CategoryEnum category) {
         return categoryRepository.findAllByCategory(category);
+    }
+
+    @Override
+    public boolean existsByEntityIdAndType(Long entityId, PostTypeEnum type) {
+        return selectCategoryRepository.existsByEntityIdAndType(entityId, type);
     }
 
     @Override
@@ -86,5 +92,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type) {
         return selectCategoryRepository.findByEntityIdAndType(entityId, type);
+    }
+
+    @Override
+    public void deleteByEntityIdAndType(Long entityId, PostTypeEnum type) {
+        selectCategoryRepository.deleteByEntityIdAndType(entityId, type);
     }
 }

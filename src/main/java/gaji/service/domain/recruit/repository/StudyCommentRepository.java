@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StudyCommentRepository extends JpaRepository<StudyComment, Long>, StudyCommentCustomRepository {
 
     int countByRoom(Room room);
+
+    void deleteAllByRoom(Room room);
 }
