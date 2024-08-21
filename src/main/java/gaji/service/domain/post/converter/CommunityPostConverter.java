@@ -115,6 +115,7 @@ public class CommunityPostConverter {
                 .uploadTime(DateConverter.convertToRelativeTimeFormat(post.getCreatedAt()))
                 .hit(post.getHit())
                 .popularityScore(post.getPopularityScore())
+                .status(post.getStatus())
                 .hashtagList(hashtagList)
                 .build();
     }
@@ -136,17 +137,16 @@ public class CommunityPostConverter {
         List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagNameAndIdDTOList = HashtagConverter.toHashtagNameAndIdDTOList(selectHashtagList);
 
         // ofNullable 메서드로 NPE 방지
-        CategoryEnum category = Optional.ofNullable(categoryService.findOneFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType()))
+        /*CategoryEnum category = Optional.ofNullable(categoryService.findOneFetchJoinWithCategoryByEntityIdAndPostType(post.getId(), post.getType()))
                 .map(SelectCategory::getCategory)
                 .map(Category::getCategory)
-                .orElse(null);
+                .orElse(null);*/
 
         boolean isBookmarked = (userId == null) ? false : postBookMarkService.existsByUserAndPost(userId, post);
         boolean isLiked = (userId == null) ? false : postLikesService.existsByUserAndPost(userId, post);
         boolean isWriter = (userId == null) ? false : communityPostQueryService.isPostWriter(userId, post);
 
         return CommunityPostResponseDTO.PostDetailDTO.builder()
-                .category(category)
                 .userId(post.getUser().getId())
                 .type(post.getType())
                 .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(post.getCreatedAt()), ""))
@@ -157,9 +157,11 @@ public class CommunityPostConverter {
                 .userNickname(post.getUser().getNickname())
                 .title(post.getTitle())
                 .hashtagList(hashtagNameAndIdDTOList)
+                .isWriter(isWriter)
                 .bookMarkStatus(isBookmarked)
                 .likeStatus(isLiked)
                 .body(post.getBody())
+                .status(post.getStatus())
                 .category(selectCategory.getCategory().getCategory().getValue())
                 .build();
     }

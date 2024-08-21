@@ -1,6 +1,5 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
@@ -49,7 +48,8 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
             categoryId=categoryService.findAllByCategory(CategoryEnum.fromValue(category)).get(0).getId();
         }
 
-        return communityPostJpaRepository.findAllFetchJoinWithUser(lastPopularityScore,
+        return communityPostJpaRepository.findAllFetchJoinWithUser(keyword,
+                lastPopularityScore,
                 lastPostId,
                 lastLikeCnt,
                 lastHit,
