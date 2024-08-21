@@ -28,6 +28,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import static gaji.service.domain.room.converter.RoomConverter.toRoomEventIdDto;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -163,13 +165,14 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public RoomEvent updateRoomEvent(Long roomId,Integer weeks, RoomRequestDto.RoomEventUpdateDTO updateDTO) {
+    public RoomEvent updateRoomEvent(Long roomId, Integer weeks, RoomRequestDto.RoomEventUpdateDTO updateDTO) {
         RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId,weeks)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
 
         roomEvent.updateEvent(updateDTO.getStartTime(), updateDTO.getEndTime(), updateDTO.getDescription());
+        roomEventRepository.save(roomEvent);
 
-        return roomEventRepository.save(roomEvent);
+        return roomEvent;
     }
 
     @Override

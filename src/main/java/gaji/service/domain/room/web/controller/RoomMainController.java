@@ -1,5 +1,6 @@
 package gaji.service.domain.room.web.controller;
 
+import gaji.service.domain.room.converter.RoomConverter;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
@@ -80,12 +81,12 @@ public class RoomMainController {
 
     @PutMapping("/event/{weeks}/{roomId}/update")
     @Operation(summary = "주차별 스터디 일정 수정 API", description = "Update the start time, end time, and description of a room event")
-    public BaseResponse<RoomEvent> updateRoomEvent(
+    public BaseResponse<RoomResponseDto.roomEventIdDto> updateRoomEvent(
             @PathVariable Long roomId,
             @PathVariable Integer weeks,
             @RequestBody RoomRequestDto.RoomEventUpdateDTO updateDTO) {
         RoomEvent updatedEvent = roomCommandService.updateRoomEvent(roomId,weeks, updateDTO);
-        return BaseResponse.onSuccess(updatedEvent);
+        return BaseResponse.onSuccess(RoomConverter.toRoomEventIdDto(updatedEvent));
     }
 
     @PostMapping("/main/assignment/{userAssignmentId}")
