@@ -5,6 +5,7 @@ import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.web.dto.CategoryResponseDTO;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.room.entity.Room;
 
 import java.util.List;
 
@@ -22,7 +23,10 @@ public interface CategoryService {
 
     SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type);
 
+    void deleteByEntityIdAndType(Long entityId, PostTypeEnum type);
+
     List<Category> findAllByCategory(CategoryEnum category);
 
+    boolean existsByEntityIdAndType(Long entityId, PostTypeEnum type);
 }
 

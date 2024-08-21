@@ -20,7 +20,7 @@ public class RecruitRequestDTO {
     @Schema(description = "스터디 생성 DTO")
     @Getter
     @RequiredArgsConstructor
-    public static class CreateRoomDTO {
+    public static class RoomContentDTO {
 
         @Schema(description = "스터디 이름")
         @Size(max = 20, message = "스터디 명은 20자 이내로 입력해주세요.")
@@ -72,15 +72,15 @@ public class RecruitRequestDTO {
         @Min(value = 1, message = "최대 인원은 1이상 이어야 합니다.")
         private int peopleMaximum;
 
-        //@Schema(description = "카테고리의 id")
-        //@Min(value = 1, message = "id는 1이상 이어야 합니다.")
+        @Schema(description = "카테고리")
+        @ExistCategory
         private String category;
     }
 
     @Schema(description = "스터디 댓글 작성 DTO")
     @Getter
     @RequiredArgsConstructor
-    public static class WriteCommentDTO {
+    public static class CommentContentDTO {
         @Schema(description = "댓글 내용")
         @NotBlank(message = "댓글 내용을 입력해주세요.")
         private String body;

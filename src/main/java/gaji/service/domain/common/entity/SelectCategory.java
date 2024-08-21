@@ -30,4 +30,8 @@ public class SelectCategory extends BaseEntity {
         this.entityId = entityId;
         this.type = type;
     }
+
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
 }

@@ -7,4 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SelectCategoryRepository extends JpaRepository<SelectCategory, Long>, SelectCategoryQueryDslRepository {
 
     SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type);
+
+    void deleteByEntityIdAndType(Long entityId, PostTypeEnum type);
+
+    boolean existsByEntityIdAndType(Long entityId, PostTypeEnum type);
 }
