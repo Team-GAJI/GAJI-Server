@@ -78,13 +78,14 @@ public class RoomMainController {
         return BaseResponse.onSuccess(responseDto);
     }
 
-    @PutMapping("/{eventId}")
-    @Operation(summary = "Update Room Event", description = "Update the start time, end time, and description of a room event")
-    public ResponseEntity<BaseResponse<RoomEvent>> updateRoomEvent(
-            @PathVariable Long eventId,
+    @PutMapping("/event/{weeks}/{roomId}/update")
+    @Operation(summary = "주차별 스터디 일정 수정 API", description = "Update the start time, end time, and description of a room event")
+    public BaseResponse<RoomEvent> updateRoomEvent(
+            @PathVariable Long roomId,
+            @PathVariable Integer weeks,
             @RequestBody RoomRequestDto.RoomEventUpdateDTO updateDTO) {
-        RoomEvent updatedEvent = roomCommandService.updateRoomEvent(eventId, updateDTO);
-        return ResponseEntity.ok(BaseResponse.onSuccess(updatedEvent));
+        RoomEvent updatedEvent = roomCommandService.updateRoomEvent(roomId,weeks, updateDTO);
+        return BaseResponse.onSuccess(updatedEvent);
     }
 
     @PostMapping("/main/assignment/{userAssignmentId}")

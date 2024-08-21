@@ -163,8 +163,8 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public RoomEvent updateRoomEvent(Long eventId, RoomRequestDto.RoomEventUpdateDTO updateDTO) {
-        RoomEvent roomEvent = roomEventRepository.findById(eventId)
+    public RoomEvent updateRoomEvent(Long roomId,Integer weeks, RoomRequestDto.RoomEventUpdateDTO updateDTO) {
+        RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId,weeks)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
 
         roomEvent.updateEvent(updateDTO.getStartTime(), updateDTO.getEndTime(), updateDTO.getDescription());

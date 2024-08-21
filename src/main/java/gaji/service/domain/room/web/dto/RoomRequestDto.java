@@ -65,7 +65,7 @@ public class RoomRequestDto {
 
     @Getter
     @Setter
-    public class RoomEventUpdateDTO {
+    public static class RoomEventUpdateDTO {
         private LocalDate startTime;
         private LocalDate endTime;
         private String description;
