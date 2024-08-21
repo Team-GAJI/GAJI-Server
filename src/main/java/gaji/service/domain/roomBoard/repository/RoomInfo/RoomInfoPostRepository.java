@@ -30,12 +30,4 @@ public interface RoomInfoPostRepository extends JpaRepository<RoomInfoPost, Long
             "ELSE (SELECT MAX(r.createdAt) FROM RoomInfoPost r WHERE r.roomBoard.id = :boardId) " +
             "END")
     Optional<LocalDateTime> findCreatedAtByIdOrEarliest(@Param("boardId") Long boardId, @Param("postId") Long postId);
-
-    @Query("SELECT new gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto$PostSummaryDto(" +
-            "rp.id, rp.title, rp.body, rp.studyMate.user.nickname, rp.createdAt, rp.viewCount) " +
-            "FROM RoomPost rp " +
-            "WHERE rp.roomBoard.id = :boardId " +
-            "ORDER BY rp.createdAt DESC")
-    List<RoomPostResponseDto.PostSummaryDto> findLatestPostsSummary(@Param("boardId") Long boardId, Pageable pageable);
-
 }

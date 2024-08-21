@@ -1,6 +1,5 @@
 package gaji.service.domain.recruit.service;
 
-import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PreviewFilter;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;

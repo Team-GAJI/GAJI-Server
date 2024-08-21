@@ -27,7 +27,6 @@ import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.global.exception.RestApiException;
-import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
