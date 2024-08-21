@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 
 public interface CommunityPostQueryDslRepository {
 
-    Slice<CommnuityPost> findAllFetchJoinWithUser(Integer lastPopularityScore,
+    Slice<CommnuityPost> findAllFetchJoinWithUser(String keyword,
+                                         Integer lastPopularityScore,
                                          Long lastPostId,
                                          Integer lastLikeCnt,
                                          Integer lastHit,

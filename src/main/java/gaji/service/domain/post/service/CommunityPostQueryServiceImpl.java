@@ -1,6 +1,5 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
@@ -29,7 +28,8 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
     private final CategoryService categoryService;
 
     @Override
-    public Slice<CommnuityPost> getPostList(Integer lastPopularityScore,
+    public Slice<CommnuityPost> getPostList(String keyword,
+                                   Integer lastPopularityScore,
                                    Long lastPostId,
                                    Integer lastLikeCnt,
                                    Integer lastHit,
@@ -48,7 +48,8 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
             categoryId=categoryService.findAllByCategory(CategoryEnum.fromValue(category)).get(0).getId();
         }
 
-        return communityPostJpaRepository.findAllFetchJoinWithUser(lastPopularityScore,
+        return communityPostJpaRepository.findAllFetchJoinWithUser(keyword,
+                lastPopularityScore,
                 lastPostId,
                 lastLikeCnt,
                 lastHit,
@@ -57,11 +58,6 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
                 categoryId,
                 sortType,
                 pageRequest);
-    }
-
-    @Override
-    public Slice<CommnuityPost> searchPostList() {
-        return null;
     }
 
     @Override
@@ -82,7 +78,12 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
     }
 
     @Override
-    public void validPostOwner(Long userId, CommnuityPost post) {
+    public boolean isPostWriter(Long userId, CommnuityPost post) {
+        return post.getUser().getId().equals(userId);
+    }
+
+    @Override
+    public void validPostWriter(Long userId, CommnuityPost post) {
         if (!post.getUser().getId().equals(userId)) {
             throw new RestApiException(CommunityPostErrorStatus._NOT_AUTHORIZED);
         }
