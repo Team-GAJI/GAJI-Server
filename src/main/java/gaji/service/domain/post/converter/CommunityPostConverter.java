@@ -1,13 +1,11 @@
 package gaji.service.domain.post.converter;
 
 import gaji.service.domain.common.converter.HashtagConverter;
-import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.entity.SelectHashtag;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.common.web.dto.HashtagResponseDTO;
-import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.entity.CommnuityPost;
@@ -17,8 +15,8 @@ import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.service.CommunityPostBookMarkService;
 import gaji.service.domain.post.service.CommunityPostLikesService;
 import gaji.service.domain.post.service.CommunityPostQueryService;
-import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
 import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
+import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.global.converter.DateConverter;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +24,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
