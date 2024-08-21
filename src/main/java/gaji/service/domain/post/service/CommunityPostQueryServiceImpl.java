@@ -1,6 +1,5 @@
 package gaji.service.domain.post.service;
 
-import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
