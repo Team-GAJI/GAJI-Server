@@ -20,8 +20,6 @@ public interface RoomQueryService {
 //
 //    List<RoomResponseDto.NoticeDto> getNextNotices(Long roomId, Long lastNoticeId, int size);
 
-    RoomNotice findRoomNoticeById(Long noticeId);
-
     List<RoomResponseDto.NoticeDto> getNextNotices(Long roomId, Long lastNoticeId, int size);
 
     @Transactional(readOnly = true)
@@ -34,4 +32,6 @@ public interface RoomQueryService {
     RoomResponseDto.MainRoomNoticeDto getMainRoomNotice(Long roomId);
 
     List<String> getConfirmedUserNicknames(Long noticeId);
+
+    RoomNotice findRoomNoticeById(Long noticeId);
 }

@@ -6,7 +6,6 @@ import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
-import gaji.service.domain.studyMate.entity.Assignment;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,32 +40,6 @@ public class RoomNoticeController {
 
         return BaseResponse.onSuccess(RoomConverter.toRoomNoticeDto(roomNotice));
     }
-
-    @PutMapping("/notice/{noticeId}/update")
-    @Operation(summary = "공지사항 수정 API")
-    public BaseResponse<RoomResponseDto.NoticeIdDto> updateNotice(
-            @PathVariable Long noticeId,
-            @RequestHeader("Authorization") String authorization,
-            @RequestBody RoomRequestDto.AssignmentUpdateDTO request
-    ) {
-        Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        RoomNotice notice = roomCommandService.updateRoomNotice(noticeId,userId,request.getDescription());
-        return BaseResponse.onSuccess(RoomConverter.tonoticeIdDto(notice));
-    }
-
-    @DeleteMapping("/notice/{noticeId}/delete")
-    @Operation(summary = "공지사항 삭제 API")
-    public BaseResponse<String> deleteNotice(
-            @PathVariable Long noticeId,
-            @RequestHeader("Authorization") String authorization,
-            @RequestBody RoomRequestDto.AssignmentUpdateDTO request
-    ) {
-        Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        roomCommandService.deleteRoomNotice(noticeId,userId,request.getDescription());
-        return BaseResponse.onSuccess("delete complete");
-    }
-
-
 
     @GetMapping("/{roomId}/notices")
     @Operation(summary = "스터디룸 공지 무한 스크롤 조회", description = "공지를 무한 스크롤 방식으로 조회합니다.")
@@ -111,6 +84,29 @@ public class RoomNoticeController {
     public BaseResponse<List<String>> getConfirmedUserNicknames(@PathVariable Long noticeId) {
         List<String> confirmedNicknames = roomQueryService.getConfirmedUserNicknames(noticeId);
         return BaseResponse.onSuccess(confirmedNicknames);
+    }
+
+    @PutMapping("/notice/{noticeId}/update")
+    @Operation(summary = "공지사항 수정 API")
+    public BaseResponse<RoomResponseDto.NoticeIdDto> updateNotice(
+            @PathVariable Long noticeId,
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody RoomRequestDto.AssignmentUpdateDTO request
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        RoomNotice notice = roomCommandService.updateRoomNotice(noticeId,userId,request.getDescription());
+        return BaseResponse.onSuccess(RoomConverter.toNoticeIdDto(notice));
+    }
+
+    @DeleteMapping("/notice/{noticeId}/delete")
+    @Operation(summary = "공지사항 삭제 API")
+    public BaseResponse<String> deleteNotice(
+            @PathVariable Long noticeId,
+            @RequestHeader("Authorization") String authorization
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomCommandService.deleteRoomNotice(noticeId,userId);
+        return BaseResponse.onSuccess("delete complete");
     }
 
 }

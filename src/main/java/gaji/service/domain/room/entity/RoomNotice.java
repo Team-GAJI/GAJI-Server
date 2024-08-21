@@ -43,11 +43,6 @@ public class RoomNotice {
         this.confirmCount = 0;
         this.createdAt = LocalDateTime.now();
     }
-    public void updateBody(String body) {
-        this.body = body;
-    }
-
-
     public void incrementConfirmCount() {
         this.confirmCount++;
     }
@@ -56,5 +51,8 @@ public class RoomNotice {
         if (this.confirmCount > 0) {
             this.confirmCount--;
         }
+    }
+    public void updateBody(String body) {
+        this.body = body;
     }
 }

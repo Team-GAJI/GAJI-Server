@@ -31,4 +31,13 @@ public class Assignment {
         this.body = body;
     }
 
+    public void addUserAssignment(UserAssignment userAssignment) {
+        this.userAssignmentList.add(userAssignment);
+        userAssignment.setAssignment(this);
+    }
+
+    public void removeUserAssignment(UserAssignment userAssignment) {
+        this.userAssignmentList.remove(userAssignment);
+        userAssignment.setAssignment(null);
+    }
 }

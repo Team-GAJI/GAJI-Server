@@ -13,18 +13,14 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 
 public interface RoomCommandService {
-
-    RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto);
-
-    RoomNotice updateRoomNotice(Long noticeId, Long userId, String newBody);
-
-    RoomNotice deleteRoomNotice(Long noticeId, Long userId, String newBody);
-
     @Transactional
     void createUserAssignmentsForStudyMembers(Assignment assignment);
 
     //과제생성1
     List<Assignment> createAssignment(Long roomId, Long userId, Integer weeks, RoomRequestDto.AssignmentDto requestDto);
+
+    @Transactional
+    RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto);
 
     Assignment updateAssignment(Long assignmentId, String newBody);
 
@@ -45,4 +41,8 @@ public interface RoomCommandService {
     RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId);
 
     WeeklyUserProgress calculateAndSaveProgress(RoomEvent roomEvent, User user);
+
+    void deleteRoomNotice(Long noticeId, Long userId);
+
+    RoomNotice updateRoomNotice(Long noticeId, Long userId, String description);
 }
