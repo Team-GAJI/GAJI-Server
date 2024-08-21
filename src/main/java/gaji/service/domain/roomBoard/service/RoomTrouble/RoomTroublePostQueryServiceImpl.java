@@ -15,6 +15,7 @@ import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -62,12 +63,13 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
 
 
     @Override
+    @Transactional
     public RoomPostResponseDto.TroublePostDetailDTO getPostDetail(Long postId, Long userId, int page, int size) {
         RoomTroublePost post = roomTroublePostRepository.findById(postId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
 
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, post.getRoomBoard().getRoom().getId());
-
+        post.increaseViewCnt();
         RoomPostResponseDto.TroublePostDetailDTO dto = new RoomPostResponseDto.TroublePostDetailDTO();
         dto.setId(post.getId());
         dto.setTitle(post.getTitle());
