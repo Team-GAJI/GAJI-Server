@@ -71,4 +71,11 @@ public class RoomRequestDto {
         private String description;
     }
 
+    @Getter
+    @Setter
+    public static class AssignmentUpdateDTO {
+        private String description;
+    }
+
+
 }

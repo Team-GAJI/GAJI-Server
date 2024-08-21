@@ -89,6 +89,21 @@ public class RoomMainController {
         return BaseResponse.onSuccess(RoomConverter.toRoomEventIdDto(updatedEvent));
     }
 
+    @PutMapping("/event/{assignmentId}/update")
+    @Operation(summary = "주차별 스터디 과제 수정 API")
+    public BaseResponse<RoomResponseDto.AssignmentIdDto> updateAssignment(
+            @PathVariable Long assignmentId,
+            @RequestBody RoomRequestDto.AssignmentUpdateDTO request) {
+        Assignment updatedAssignment = roomCommandService.updateAssignment(assignmentId, request.getDescription());
+        return BaseResponse.onSuccess(RoomConverter.toAssignmentIdDto(updatedAssignment));
+    }
+
+    @DeleteMapping("/{assignmentId}")
+    public BaseResponse<String> deleteAssignment(@PathVariable Long assignmentId) {
+        roomCommandService.deleteAssignment(assignmentId);
+        return BaseResponse.onSuccess("delete Complete");
+    }
+
     @PostMapping("/main/assignment/{userAssignmentId}")
     @Operation(summary = "주차별 과제 체크 박스 체크", description = "과제 체크 박스를 클릭하면 과제 완료 상태를 토글합니다.")
     public ResponseEntity<?> toggleAssignmentCompletion(

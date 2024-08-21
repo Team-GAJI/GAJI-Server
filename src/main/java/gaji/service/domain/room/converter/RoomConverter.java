@@ -25,4 +25,11 @@ public class RoomConverter {
                 .roomEventId(roomEvent.getId())
                 .build();
     }
+
+
+    public static RoomResponseDto.AssignmentIdDto toAssignmentIdDto(Assignment assignment) {
+        return RoomResponseDto.AssignmentIdDto.builder()
+                .assignmentId(assignment.getId())
+                .build();
+    }
 }
