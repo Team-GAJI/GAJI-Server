@@ -92,8 +92,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 
 
-//        // 리다이렉션 URL 생성
-        String targetUrl = UriComponentsBuilder.fromUriString(finalRedirectionUrl)
+        // 리다이렉션 URL 생성
+        /*String targetUrl = UriComponentsBuilder.fromUriString(finalRedirectionUrl)
                 .queryParam("access_token", accessToken)
                 .build().toUriString();
 

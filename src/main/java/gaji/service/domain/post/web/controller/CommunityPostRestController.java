@@ -85,7 +85,7 @@ public class CommunityPostRestController {
             @Parameter(name = "lastLikeCnt", description = "마지막으로 조회한 게시글의 좋아요 수"),
             @Parameter(name = "lastHit", description = "마지막으로 조회한 게시글의 조회수"),
             @Parameter(name = "postType", description = "게시글의 유형(블로그, 프로젝트, 질문)"),
-            @Parameter(name = "categoryId", description = "카테고리의 id( /api/categories API로 조회해서 확인하시면 됩니다 )"),
+            @Parameter(name = "category", description = "카테고리"),
             @Parameter(name = "sortType", description = "정렬 유형(hot, recent, like, hit)"),
             @Parameter(name = "filter", description = "게시글의 상태(모집중, 모집완료, 미완료질문, 해결완료)"),
     })
@@ -101,7 +101,7 @@ public class CommunityPostRestController {
                                                                                         @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                         @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
-        Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, category, sortType, filter, page, size);
+        Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(keyword, lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, category, sortType, filter, page, size);
         return BaseResponse.onSuccess(communityPostConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
     }
 

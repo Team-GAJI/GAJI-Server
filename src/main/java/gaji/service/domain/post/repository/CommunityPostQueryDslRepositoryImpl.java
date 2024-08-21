@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static gaji.service.domain.common.entity.QSelectCategory.selectCategory;
 import static gaji.service.domain.common.entity.QSelectHashtag.selectHashtag;
 import static gaji.service.domain.post.entity.QCommnuityPost.commnuityPost;
 import static gaji.service.domain.user.entity.QUser.user;
@@ -48,6 +49,8 @@ public class CommunityPostQueryDslRepositoryImpl implements CommunityPostQueryDs
         List<CommnuityPost> postList = jpaQueryFactory.
                 selectFrom(commnuityPost)
                 .leftJoin(commnuityPost.user, user)
+                .join(selectCategory)
+                .on(joinSelectCategory(commnuityPost.id, commnuityPost.type))
 //                .join(selectHashtag) // TODO: 연관관계가 맺어져 있지 않아도 조인 가능, 추후 리팩토링 고려
 //                .on(joinSelectHashtag(commnuityPost.id, commnuityPost.type))
                 .fetchJoin()
@@ -134,6 +137,11 @@ public class CommunityPostQueryDslRepositoryImpl implements CommunityPostQueryDs
     private BooleanExpression joinSelectHashtag(NumberPath<Long> entityId, EnumPath<PostTypeEnum> postType) {
         return selectHashtag.entityId.eq(entityId)
                 .and(selectHashtag.type.eq(postType));
+    }
+
+    private BooleanExpression joinSelectCategory(NumberPath<Long> entityId, EnumPath<PostTypeEnum> postType) {
+        return selectCategory.entityId.eq(entityId)
+                .and(selectCategory.type.eq(postType));
     }
 
     private <T> Slice<T> checkLastPage(Pageable pageable, List<T> postList) {
