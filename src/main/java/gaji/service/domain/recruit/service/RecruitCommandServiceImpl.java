@@ -76,12 +76,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         addMaterial(request.getMaterialList(), room);
         roomCommandService.saveRoom(room);
 
-        if (request.getCategory() != null && !request.getCategory().isBlank()) {
-            Category category = categoryService.findByCategory(CategoryEnum.fromValue(request.getCategory()));
-
-            SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
-            categoryService.saveSelectCategory(selectCategory);
-        }
+        addCategory(request.getCategory(), room);
 
         return RecruitConverter.toCreateRoomResponseDTO(room);
     }
@@ -114,12 +109,25 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
         roomCommandService.saveRoom(room);
 
-        Category category = categoryService.findByCategory(CategoryEnum.fromValue(request.getCategory()));
-
-        SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
-        categoryService.saveSelectCategory(selectCategory);
+        if (categoryService.existsByEntityIdAndType(roomId, PostTypeEnum.ROOM)) {
+            SelectCategory existCategory = categoryService.findByEntityIdAndType(roomId, PostTypeEnum.ROOM);
+            if (!existCategory.getCategory().getCategory().getValue().equals(request.getCategory())) {
+                categoryService.deleteByEntityIdAndType(roomId, PostTypeEnum.ROOM);
+                addCategory(request.getCategory(), room);
+            }
+        } else {
+            addCategory(request.getCategory(), room);
+        } 
 
         return RecruitConverter.toUpdateRoomResponseDTO(room);
+    }
+
+    private void addCategory(String category, Room room) {
+        if (category != null && !category.isBlank()) {
+            Category newCategory = categoryService.findByCategory(CategoryEnum.fromValue(category));
+            SelectCategory selectCategory = CategoryConverter.toSelectCategory(newCategory, room.getId(), PostTypeEnum.ROOM);
+            categoryService.saveSelectCategory(selectCategory);
+        }
     }
 
     private void addMaterial(List<String> materialList, Room room) {
