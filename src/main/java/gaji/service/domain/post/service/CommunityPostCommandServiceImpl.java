@@ -17,7 +17,7 @@ import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.repository.CommunityPostBookmarkRepository;
 import gaji.service.domain.post.repository.CommunityPostJpaRepository;
 import gaji.service.domain.post.repository.CommunityPostLikesRepository;
-import gaji.service.domain.post.web.dto.PostRequestDTO;
+import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
 
 
     @Override
-    public CommnuityPost uploadPost(Long userId, PostRequestDTO.UploadPostDTO request) {
+    public CommnuityPost uploadPost(Long userId, CommunityPostRequestDTO.UploadPostRequestDTO request) {
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost post = CommunityPostConverter.toPost(request, findUser);
         CommnuityPost newPost = communityPostJpaRepository.save(post);
@@ -71,7 +71,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
     }
 
     @Override
-    public CommunityComment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, PostRequestDTO.WriteCommentDTO request) {
+    public CommunityComment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, CommunityPostRequestDTO.WriteCommentRequestDTO request) {
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
@@ -90,7 +90,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         CommunityComment findComment = communityCommentService.findByCommentId(commentId);
 
         // 검증
-        communityCommentService.validCommentOwner(userId, findComment);
+        communityCommentService.validCommentWriter(userId, findComment);
 
         // 삭제
         communityCommentService.hardDeleteComment(findComment);
@@ -105,7 +105,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
         // 검증
-        communityPostQueryService.validPostOwner(userId, findPost);
+        communityPostQueryService.validPostWriter(userId, findPost);
 
         // 삭제
         hashtagService.deleteAllByEntityIdAndType(findPost.getId(), findPost.getType());
@@ -134,7 +134,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
         // 검증
-        communityPostQueryService.validPostOwner(findUser.getId(), findPost);
+        communityPostQueryService.validPostWriter(findUser.getId(), findPost);
 
         // 삭제
         postBookmarkRepository.deleteByUserAndPost(findUser, findPost);
@@ -166,7 +166,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
         // 검증
-        communityPostQueryService.validPostOwner(findUser.getId(), findPost);
+        communityPostQueryService.validPostWriter(findUser.getId(), findPost);
 
         // 삭제
         postLikesRepository.deleteByUserAndPost(findUser, findPost);

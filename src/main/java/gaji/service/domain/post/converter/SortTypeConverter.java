@@ -10,7 +10,6 @@ public class SortTypeConverter implements Converter<String, SortType> {
 
     @Override
     public SortType convert(String param) {
-        if (!StringUtils.hasText(param)) throw new RestApiException(GlobalErrorStatus._SORT_TYPE_NOT_VALID);
         return SortType.from(param);
     }
 }
