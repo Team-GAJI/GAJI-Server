@@ -224,8 +224,10 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         roomRepository.save(room);
     }
 
-
-
+    @Override
+    public void deleteRoom(Room room) {
+        roomRepository.delete(room);
+    }
     @Override
     public RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId) {
         UserAssignment userAssignment = userAssignmentRepository.findById(userAssignmentId)
