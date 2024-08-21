@@ -1,6 +1,7 @@
 package gaji.service.domain.post.converter;
 
 import gaji.service.domain.common.converter.HashtagConverter;
+import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.entity.SelectHashtag;
 import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.common.web.dto.HashtagResponseDTO;
@@ -123,7 +124,7 @@ public class CommunityPostConverter {
                 .build();
     }
 
-    public CommunityPostResponseDTO.PostDetailDTO toPostDetailDTO(CommnuityPost post, Long userId) {
+    public CommunityPostResponseDTO.PostDetailDTO toPostDetailDTO(CommnuityPost post, Long userId, SelectCategory selectCategory) {
         List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(post.getId(), post.getType());
         List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagNameAndIdDTOList = HashtagConverter.toHashtagNameAndIdDTOList(selectHashtagList);
         boolean isBookmarked = (userId == null) ? false : postBookMarkService.existsByUserAndPost(userId, post);
@@ -134,13 +135,16 @@ public class CommunityPostConverter {
                 .type(post.getType())
                 .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(post.getCreatedAt()), ""))
                 .hit(post.getHit())
+                .likeCnt(post.getLikeCnt())
+                .bookmarkCnt(post.getBookmarkCnt())
                 .commentCnt(post.getCommentCnt())
                 .userNickname(post.getUser().getNickname())
                 .title(post.getTitle())
                 .hashtagList(hashtagNameAndIdDTOList)
-                .isBookMarked(isBookmarked)
-                .isLiked(isLiked)
+                .bookMarkStatus(isBookmarked)
+                .likeStatus(isLiked)
                 .body(post.getBody())
+                .category(selectCategory.getCategory().getCategory().getValue())
                 .build();
     }
 }
