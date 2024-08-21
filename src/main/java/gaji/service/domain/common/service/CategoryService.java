@@ -22,7 +22,10 @@ public interface CategoryService {
 
     SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type);
 
+    void deleteByEntityIdAndType(Long entityId, PostTypeEnum type);
+
     List<Category> findAllByCategory(CategoryEnum category);
 
+    boolean existsByEntityIdAndType(Long entityId, PostTypeEnum type);
 }
 

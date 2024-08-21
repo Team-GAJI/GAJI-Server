@@ -24,7 +24,20 @@ public class Assignment {
     @Column(length = 30)
     private String body;
 
-    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<UserAssignment> userAssignmentList = new ArrayList<>();
 
+    public void updateBody(String body) {
+        this.body = body;
+    }
+
+    public void addUserAssignment(UserAssignment userAssignment) {
+        this.userAssignmentList.add(userAssignment);
+        userAssignment.setAssignment(this);
+    }
+
+    public void removeUserAssignment(UserAssignment userAssignment) {
+        this.userAssignmentList.remove(userAssignment);
+        userAssignment.setAssignment(null);
+    }
 }

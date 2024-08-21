@@ -46,6 +46,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public boolean existsByEntityIdAndType(Long entityId, PostTypeEnum type) {
+        return selectCategoryRepository.existsByEntityIdAndType(entityId, type);
+    }
+
+    @Override
     public Category findByCategoryId(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RestApiException(GlobalErrorStatus._INVALID_CATEGORY));
@@ -86,5 +91,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public SelectCategory findByEntityIdAndType(Long entityId, PostTypeEnum type) {
         return selectCategoryRepository.findByEntityIdAndType(entityId, type);
+    }
+
+    @Override
+    public void deleteByEntityIdAndType(Long entityId, PostTypeEnum type) {
+        selectCategoryRepository.deleteByEntityIdAndType(entityId, type);
     }
 }

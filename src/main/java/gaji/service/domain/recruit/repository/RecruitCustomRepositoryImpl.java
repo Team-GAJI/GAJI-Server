@@ -28,10 +28,9 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository{
             CategoryEnum category, PreviewFilter filter, SortType sortType, String query, Long value, Pageable pageable) {
         List<Room> results = queryFactory
                 .selectFrom(room)
-                .join(selectCategory).on(selectCategory.entityId.eq(room.id)
-                        .and(selectCategory.type.eq(PostTypeEnum.ROOM))
-                        .and(categoryEq(category)))
-                .where(lastStudyValue(sortType, value), checkFilter(filter), searchPost(query))
+                .leftJoin(selectCategory).on(selectCategory.entityId.eq(room.id)
+                        .and(selectCategory.type.eq(PostTypeEnum.ROOM)))
+                .where(categoryEq(category), lastStudyValue(sortType, value), checkFilter(filter), searchPost(query))
                 .orderBy(getOrderSpecifier(sortType))
                 .limit(pageable.getPageSize() + 1)
                 .fetch();

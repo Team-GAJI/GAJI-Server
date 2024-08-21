@@ -1,10 +1,13 @@
 package gaji.service.domain.room.web.controller;
 
+import gaji.service.domain.room.converter.RoomConverter;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.domain.roomBoard.service.RoomPost.RoomPostQueryService;
+import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.Assignment;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
@@ -25,6 +28,7 @@ public class RoomMainController {
     private final RoomCommandService roomCommandService;
     private final RoomQueryService roomQueryService;
     private final TokenProviderService tokenProviderService;
+    private final RoomPostQueryService roomPostQueryService;
 
     @PostMapping("/assignments/{roomId}/{weeks}")
     @Operation(summary = "스터디룸 과제 등록 API", description = "스터디룸의 과제를 등록하는 API입니다. room의 id가 존재하는지, 스터디에 참여하고 있는 user인지 검증합니다.")
@@ -74,6 +78,32 @@ public class RoomMainController {
 
         return BaseResponse.onSuccess(responseDto);
     }
+
+    @PutMapping("/event/{weeks}/{roomId}/update")
+    @Operation(summary = "주차별 스터디 일정 수정 API", description = "Update the start time, end time, and description of a room event")
+    public BaseResponse<RoomResponseDto.roomEventIdDto> updateRoomEvent(
+            @PathVariable Long roomId,
+            @PathVariable Integer weeks,
+            @RequestBody RoomRequestDto.RoomEventUpdateDTO updateDTO) {
+        RoomEvent updatedEvent = roomCommandService.updateRoomEvent(roomId,weeks, updateDTO);
+        return BaseResponse.onSuccess(RoomConverter.toRoomEventIdDto(updatedEvent));
+    }
+
+    @PutMapping("/event/{assignmentId}/update")
+    @Operation(summary = "주차별 스터디 과제 수정 API")
+    public BaseResponse<RoomResponseDto.AssignmentIdDto> updateAssignment(
+            @PathVariable Long assignmentId,
+            @RequestBody RoomRequestDto.AssignmentUpdateDTO request) {
+        Assignment updatedAssignment = roomCommandService.updateAssignment(assignmentId, request.getDescription());
+        return BaseResponse.onSuccess(RoomConverter.toAssignmentIdDto(updatedAssignment));
+    }
+
+    @DeleteMapping("/{assignmentId}")
+    public BaseResponse<String> deleteAssignment(@PathVariable Long assignmentId) {
+        roomCommandService.deleteAssignment(assignmentId);
+        return BaseResponse.onSuccess("delete Complete");
+    }
+
     @PostMapping("/main/assignment/{userAssignmentId}")
     @Operation(summary = "주차별 과제 체크 박스 체크", description = "과제 체크 박스를 클릭하면 과제 완료 상태를 토글합니다.")
     public ResponseEntity<?> toggleAssignmentCompletion(
@@ -111,10 +141,18 @@ public class RoomMainController {
         return BaseResponse.onSuccess(roomQueryService.getMainStudyRoom(roomId));
     }
 
-    @GetMapping("/roomPost/{roomId}")
+    @GetMapping("/home/notice/{roomId}")
     @Operation(summary = "스터디룸 main 화면 공지사항 정보 조회 API")
     public BaseResponse<RoomResponseDto.MainRoomNoticeDto> GetMainRoomNoticeController(@PathVariable Long roomId){
         return BaseResponse.onSuccess(roomQueryService.getMainRoomNotice(roomId));
     }
+
+    @GetMapping("/home/post/{roomId}")
+    @Operation(summary = "스터디룸 main 화면 게시글 최신순 3개 조회 API")
+    public BaseResponse<List<RoomPostResponseDto.MainPostSummaryDto>> getMainPostController(@PathVariable Long roomId){
+        return BaseResponse.onSuccess(roomPostQueryService.getLatestPosts(roomId));
+    }
+
+
 
 }

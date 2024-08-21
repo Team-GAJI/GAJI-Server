@@ -12,6 +12,7 @@ import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
+import gaji.service.global.converter.DateConverter;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -35,6 +36,22 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     @Override
     public List<RoomPostResponseDto.PostListDto> getTop3RecentPosts(Long roomId) {
         return roomPostQueryRepository.findTop3RecentPostsWithUserInfo(roomId);
+    }
+
+    @Override
+    public List<RoomPostResponseDto.MainPostSummaryDto> getLatestPosts(Long roomId) {
+        Pageable pageable = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdAt"));
+        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_POST)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._ROOM_BOARD_NOT_FOUND));
+
+        List<RoomPostResponseDto.MainPostSummaryDto> posts = roomPostRepository.findLatestPostsSummary(roomBoard.getId(), pageable);
+
+        LocalDateTime now = LocalDateTime.now();
+        for (RoomPostResponseDto.MainPostSummaryDto post : posts) {
+            post.setTimeSincePosted(DateConverter.convertToRelativeTimeFormat(post.getCreatedAt()));
+        }
+
+        return posts;
     }
 
     @Override

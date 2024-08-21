@@ -22,10 +22,13 @@ public class UserAssignment {
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
-    //완료여부
     private boolean isComplete;
 
     public void setComplete(boolean isComplete) {
         this.isComplete = isComplete;
+    }
+
+    public void setAssignment(Assignment assignment) {
+        this.assignment = assignment;
     }
 }

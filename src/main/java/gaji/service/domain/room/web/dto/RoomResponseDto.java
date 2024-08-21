@@ -243,4 +243,22 @@ public class RoomResponseDto {
     public static class IsConfirmedResponse {
         private Boolean isConfirmed;
     }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    @RequiredArgsConstructor
+    public static class roomEventIdDto {
+        private Long roomEventId;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    @RequiredArgsConstructor
+    public static class AssignmentIdDto {
+        private Long assignmentId;
+    }
 }

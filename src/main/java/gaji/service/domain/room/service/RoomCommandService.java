@@ -22,14 +22,21 @@ public interface RoomCommandService {
     @Transactional
     RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto);
 
+    Assignment updateAssignment(Long assignmentId, String newBody);
+
+    void deleteAssignment(Long assignmentId);
+
     RoomEvent setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto);
 
     RoomEvent setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto);
+
+    RoomEvent updateRoomEvent(Long roomId, Integer weeks, RoomRequestDto.RoomEventUpdateDTO updateDTO);
 
     boolean toggleNoticeConfirmation(Long roomId, Long noticeId, Long userId);
 
     void saveRoom(Room room);
 
+    void deleteRoom(Room room);
 
     RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId);
 

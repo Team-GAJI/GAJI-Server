@@ -158,7 +158,7 @@ public class CommunityPostQueryDslRepositoryImpl implements CommunityPostQueryDs
     private OrderSpecifier orderBySortType(SortType sortTypeCond) {
         return switch (sortTypeCond) {
             case HOT -> commnuityPost.popularityScore.desc(); // HOT: 인기점수 내림차순
-            case LIKE -> commnuityPost.createdAt.desc(); // LIKE: 좋아요 내림차순
+            case LIKE -> commnuityPost.likeCnt.desc(); // LIKE: 좋아요 내림차순
             case HIT -> commnuityPost.hit.desc(); // HIT: 조회수 내림차순
             default -> commnuityPost.createdAt.desc(); // null or RECENT: 최신순(생성일자 내림차순)
         };

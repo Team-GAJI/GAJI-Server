@@ -6,6 +6,7 @@ import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.code.RecruitErrorStatus;
 import gaji.service.domain.recruit.converter.RecruitConverter;
@@ -27,12 +28,12 @@ import gaji.service.domain.studyMate.service.StudyMateQueryService;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
 import gaji.service.global.exception.RestApiException;
-import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -48,12 +49,11 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
     private final MaterialCommandService materialCommandService;
     private final RecruitPostLikesRepository recruitPostLikesRepository;
     private final RecruitPostBookmarkRepository recruitPostBookmarkRepository;
-
-    private static final String DEFAULT_THUMBNAIL_URL = "https://gaji-bucket.s3.ap-northeast-2.amazonaws.com/study/gaji.png";
+    private final StudyCommentCommandService studyCommentCommandService;
 
     @Override
     @Transactional
-    public RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId) {
+    public RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.RoomContentDTO request, Long userId) {
 
         String inviteCode = null;
         int peopleMaximum = 0;
@@ -72,29 +72,64 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         StudyMate studyMate = RecruitConverter.toStudyMate(user, room, Role.READER);
         studyMateCommandService.saveStudyMate(studyMate);
 
-        if (request.getMaterialList() != null && !request.getMaterialList().isEmpty()){
+        addMaterial(request.getMaterialList(), room);
+        roomCommandService.saveRoom(room);
+
+        if (request.getCategory() != null && !request.getCategory().isBlank()) {
+            Category category = categoryService.findByCategory(CategoryEnum.fromValue(request.getCategory()));
+
+            SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
+            categoryService.saveSelectCategory(selectCategory);
+        }
+
+        return RecruitConverter.toCreateRoomResponseDTO(room);
+    }
+
+    @Override
+    @Transactional
+    public RecruitResponseDTO.UpdateRoomResponseDTO updateRoom(RecruitRequestDTO.RoomContentDTO request, Long userId, Long roomId) {
+        Room room = roomQueryService.findRoomById(roomId);
+
+        if (!room.getUser().getId().equals(userId)) {
+            throw new RestApiException(StudyMateErrorStatus._ONLY_LEADER_POSSIBLE);
+        }
+
+        String inviteCode = null;
+        int peopleMaximum = 0;
+
+        if (request.isPrivate()) {
+            inviteCode = generateInviteCode();
+        }
+
+        if (request.isPeopleLimited()) {
+            peopleMaximum = request.getPeopleMaximum();
+        }
+
+        room.update(request, request.getThumbnailUrl(), inviteCode, peopleMaximum);
+        ;
+
+        materialCommandService.deleteAllByRoom(room);
+        addMaterial(request.getMaterialList(), room);
+
+        roomCommandService.saveRoom(room);
+
+        Category category = categoryService.findByCategory(CategoryEnum.fromValue(request.getCategory()));
+
+        SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
+        categoryService.saveSelectCategory(selectCategory);
+
+        return RecruitConverter.toUpdateRoomResponseDTO(room);
+    }
+
+    private void addMaterial(List<String> materialList, Room room) {
+        if (materialList != null && !materialList.isEmpty()){
             Material material;
-            for (String MaterialUrl : request.getMaterialList()) {
+            for (String MaterialUrl : materialList) {
                 material = RecruitConverter.toMaterial(MaterialUrl, room);
                 room.addMaterial(material);
                 materialCommandService.saveMaterial(material);
             }
         }
-
-        roomCommandService.saveRoom(room);
-
-       // if (request.getCategoryId() == null) {
-       //     throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
-       // }
-
-        //Long categoryId = request.getCategoryId();
-        //Category category = categoryService.findByCategoryId(categoryId);
-        Category category = categoryService.findAllByCategory(CategoryEnum.fromValue(request.getCategory())).get(0);
-
-                SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
-        categoryService.saveSelectCategory(selectCategory);
-
-        return RecruitConverter.toResponseDTO(room);
     }
 
     private String generateInviteCode() {
@@ -109,6 +144,21 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         }
 
         return code.toString();
+    }
+
+    @Override
+    @Transactional
+    public void deleteStudy(Long userId, Long roomId) {
+        Room room = roomQueryService.findRoomById(roomId);
+
+        if (!room.getUser().getId().equals(userId)) {
+            throw new RestApiException(StudyMateErrorStatus._ONLY_LEADER_POSSIBLE);
+        }
+
+        studyCommentCommandService.deleteByRoom(room);
+        categoryService.deleteByEntityIdAndType(roomId, PostTypeEnum.ROOM);
+
+        roomCommandService.deleteRoom(room);
     }
 
     @Override
@@ -221,6 +271,25 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
             }
             studyMateCommandService.deleteByUserAndRoom(target, room);
         }
+    }
+
+    @Override
+    @Transactional
+    public RecruitResponseDTO.RecruitCompleteResponseDTO recruitComplete(Long userId, Long roomId) {
+        Room room = roomQueryService.findRoomById(roomId);
+
+        if (room.getRecruitPostTypeEnum().equals(RecruitPostTypeEnum.RECRUITMENT_COMPLETED)) {
+            throw new RestApiException(RecruitErrorStatus._RECRUIT_POST_ALREADY_COMPLETE);
+        }
+
+        if (!room.getUser().getId().equals(userId)) {
+            throw new RestApiException(StudyMateErrorStatus._ONLY_LEADER_POSSIBLE);
+        }
+
+        room.updateRecruitStatus(RecruitPostTypeEnum.RECRUITMENT_COMPLETED);
+        roomCommandService.saveRoom(room);
+
+        return RecruitConverter.toRecruitCompleteResponseDTO(roomId);
     }
 
     @Override
