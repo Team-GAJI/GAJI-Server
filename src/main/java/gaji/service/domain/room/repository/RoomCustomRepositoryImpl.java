@@ -33,7 +33,7 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
         List<Tuple> ongoingRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl, room.studyStartDay)
                 .from(room)
                 .where(room.id.in(userRoomIds)
-                        .and(room.studyEndDay.after(getCurrentDay()))
+                        .and(room.studyEndDay.after(getCurrentDay().minusDays(1)))
                         .and(getCursorCondition(cursorDate, cursorId)))
                 .orderBy(room.studyStartDay.desc(), room.id.asc())
                 .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인
@@ -52,7 +52,7 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
         List<Tuple> ongoingRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl, room.studyStartDay)
                 .from(room)
                 .where(room.id.in(userRoomIds)
-                        .and(room.studyEndDay.after(getCurrentDay())))
+                        .and(room.studyEndDay.after(getCurrentDay().minusDays(1))))
                 .orderBy(room.studyStartDay.desc(), room.id.asc())
                 .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인
                 .fetch();
