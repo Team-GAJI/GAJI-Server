@@ -4,6 +4,7 @@ import gaji.service.domain.common.converter.CategoryConverter;
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.service.CategoryService;
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.enums.Role;
@@ -77,11 +78,13 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         addMaterial(request.getMaterialList(), room);
         roomCommandService.saveRoom(room);
 
-        if (request.getCategoryId() == null) {
-            throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
-        }
+//        if (request.getCategoryId() == null) {
+//            throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
+//        }
+//
+//        Category category = categoryService.findByCategoryId(request.getCategoryId());
 
-        Category category = categoryService.findByCategoryId(request.getCategoryId());
+        Category category = categoryService.findAllByCategory(CategoryEnum.fromValue(request.getCategory())).get(0);
 
         SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
         categoryService.saveSelectCategory(selectCategory);
@@ -117,17 +120,24 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
         roomCommandService.saveRoom(room);
 
-        if (request.getCategoryId() == null) {
-            throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
-        }
+       // if (request.getCategoryId() == null) {
+       //     throw new RestApiException(GlobalErrorStatus._INVALID_CATEGORY);
+       // }
 
-        SelectCategory selectCategory = categoryService.findByEntityIdAndType(roomId, PostTypeEnum.ROOM);
+//        SelectCategory selectCategory = categoryService.findByEntityIdAndType(roomId, PostTypeEnum.ROOM);
+//
+//        if (!selectCategory.getCategory().getId().equals(request.getCategoryId())) {
+//            Category category = categoryService.findByCategoryId(request.getCategoryId());
+//            selectCategory.updateCategory(category);
+//            categoryService.saveSelectCategory(selectCategory);
+//        }
 
-        if (!selectCategory.getCategory().getId().equals(request.getCategoryId())) {
-            Category category = categoryService.findByCategoryId(request.getCategoryId());
-            selectCategory.updateCategory(category);
-            categoryService.saveSelectCategory(selectCategory);
-        }
+        //Long categoryId = request.getCategoryId();
+        //Category category = categoryService.findByCategoryId(categoryId);
+        Category category = categoryService.findAllByCategory(CategoryEnum.fromValue(request.getCategory())).get(0);
+
+        SelectCategory selectCategory = CategoryConverter.toSelectCategory(category, room.getId(), PostTypeEnum.ROOM);
+        categoryService.saveSelectCategory(selectCategory);
 
         return RecruitConverter.toUpdateRoomResponseDTO(room);
     }
@@ -285,6 +295,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
     }
 
     @Override
+    @Transactional
     public RecruitResponseDTO.RecruitCompleteResponseDTO recruitComplete(Long userId, Long roomId) {
         Room room = roomQueryService.findRoomById(roomId);
 
@@ -300,5 +311,15 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
         roomCommandService.saveRoom(room);
 
         return RecruitConverter.toRecruitCompleteResponseDTO(roomId);
+    }
+
+    @Override
+    public boolean userLikeStatus(Room room, User user) {
+        return recruitPostLikesRepository.existsByUserAndRoom(user, room);
+    }
+
+    @Override
+    public boolean userBookmarkStatus(Room room, User user){
+        return recruitPostBookmarkRepository.existsByUserAndRoom(user, room);
     }
 }

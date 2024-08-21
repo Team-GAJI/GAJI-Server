@@ -46,8 +46,10 @@ public class RecruitResponseDTO {
         RecruitPostTypeEnum recruitPostTypeEnum;
         CategoryEnum studyCategory;
         int views;
-        int likes;
-        int bookmarks;
+        int likeCnt;
+        int bookmarkCnt;
+        Boolean likeStatus;
+        Boolean bookmarkStatus;
 
         LocalDate recruitStartTime;
         LocalDate recruitEndTime;

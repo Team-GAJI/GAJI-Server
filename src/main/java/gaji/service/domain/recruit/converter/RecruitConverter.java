@@ -73,7 +73,7 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.studyDetailResponseDTO toStudyDetailDTO(User user, Room room, CategoryEnum category) {
+    public static RecruitResponseDTO.studyDetailResponseDTO toStudyDetailDTO(User user, Room room, CategoryEnum category, boolean likeStatus, boolean bookmarkStatus) {
         return RecruitResponseDTO.studyDetailResponseDTO.builder()
                 .userNickName(user.getNickname())
                 .userActive(user.getStatus())
@@ -85,8 +85,10 @@ public class RecruitConverter {
                 .recruitPostTypeEnum(room.getRecruitPostTypeEnum())
                 .studyCategory(category)
                 .views(room.getViews())
-                .likes(room.getLikes())
-                .bookmarks(room.getBookmarks())
+                .likeCnt(room.getLikes())
+                .bookmarkCnt(room.getBookmarks())
+                .likeStatus(likeStatus)
+                .bookmarkStatus(bookmarkStatus)
 
                 .recruitStartTime(room.getRecruitStartDay())
                 .recruitEndTime(room.getRecruitEndDay())

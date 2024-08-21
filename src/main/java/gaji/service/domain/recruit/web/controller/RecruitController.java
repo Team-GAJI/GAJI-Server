@@ -161,14 +161,14 @@ public class RecruitController {
     @GetMapping("/preview")
     @Operation(summary = "스터디 모집 게시글 미리보기 목록 조회 API", description = "모집 게시글 목록을 조회하는 API 입니다.")
     public BaseResponse<RecruitResponseDTO.PreviewListResponseDTO> getPreviewList(
-            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) String category,
             @RequestParam(required = false) PreviewFilter filter,
             @RequestParam(defaultValue = "recent") SortType sort,
             @RequestParam(required = false) String query,
             @RequestParam(required = false) @Min(value = 0, message = "lastValue는 0 이상 입니다.") Long lastValue,
             @RequestParam(value = "page", defaultValue = "20") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize) {
 
-        RecruitResponseDTO.PreviewListResponseDTO responseDTO = recruitQueryService.getPreviewList(categoryId, filter, sort, query, lastValue, pageSize);
+        RecruitResponseDTO.PreviewListResponseDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, query, lastValue, pageSize);
         return BaseResponse.onSuccess(responseDTO);
     }
 
