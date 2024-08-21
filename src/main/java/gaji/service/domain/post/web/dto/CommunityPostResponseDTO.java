@@ -1,7 +1,6 @@
 package gaji.service.domain.post.web.dto;
 
 import gaji.service.domain.common.web.dto.HashtagResponseDTO;
-import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import lombok.AllArgsConstructor;
