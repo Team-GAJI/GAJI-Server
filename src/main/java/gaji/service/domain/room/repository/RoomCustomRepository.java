@@ -9,5 +9,7 @@ import java.time.LocalDate;
 
 public interface RoomCustomRepository {
     public Slice<Tuple> findAllOngoingRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Pageable pageable);
+    public Slice<Tuple> findAllOngoingRoomsByUser(User user, Pageable pageable);
     public Slice<Tuple> findAllEndedRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Pageable pageable);
+    public Slice<Tuple> findAllEndedRoomsByUser(User user, Pageable pageable);
 }

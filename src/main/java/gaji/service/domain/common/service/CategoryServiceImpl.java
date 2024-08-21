@@ -8,7 +8,6 @@ import gaji.service.domain.common.repository.SelectCategoryRepository;
 import gaji.service.domain.common.web.dto.CategoryResponseDTO;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
-import gaji.service.domain.room.entity.Room;
 import gaji.service.global.exception.RestApiException;
 import gaji.service.global.exception.code.status.GlobalErrorStatus;
 import lombok.RequiredArgsConstructor;
