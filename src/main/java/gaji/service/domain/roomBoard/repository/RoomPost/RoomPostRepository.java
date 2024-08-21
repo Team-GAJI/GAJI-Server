@@ -8,17 +8,27 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RoomPostRepository extends JpaRepository<RoomPost, Long> {
     @Query("SELECT new gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto$PostSummaryDto(" +
             "r.id, r.title, r.studyMate.user.nickname, r.createdAt, r.viewCount, SIZE(r.postCommentList)) " +
             "FROM RoomPost r " +
-            "WHERE r.roomBoard.id = :boardId AND r.id < :lastPostId " +
-            "ORDER BY r.createdAt DESC")
+            "WHERE r.roomBoard.id = :boardId AND r.createdAt <= :lastCreatedAt " +
+            "ORDER BY r.createdAt DESC, r.id DESC")
     List<PostSummaryDto> findPostSummariesForInfiniteScroll(
             @Param("boardId") Long boardId,
-            @Param("lastPostId") Long lastPostId,
+            @Param("lastCreatedAt") LocalDateTime lastCreatedAt,
             Pageable pageable);
+
+    @Query("SELECT CASE " +
+            "WHEN EXISTS (SELECT 1 FROM RoomPost r WHERE r.roomBoard.id = :boardId AND r.id = :postId) " +
+            "THEN (SELECT r.createdAt FROM RoomPost r WHERE r.roomBoard.id = :boardId AND r.id = :postId) " +
+            "ELSE (SELECT MAX(r.createdAt) FROM RoomPost r WHERE r.roomBoard.id = :boardId) " +
+            "END")
+    Optional<LocalDateTime> findCreatedAtByIdOrEarliest(@Param("boardId") Long boardId, @Param("postId") Long postId);
+
 }

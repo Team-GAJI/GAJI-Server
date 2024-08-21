@@ -1,6 +1,5 @@
 package gaji.service.domain.recruit.web.dto;
 
-
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.RecruitPostTypeEnum;
 import gaji.service.domain.enums.UserActive;
@@ -39,8 +38,10 @@ public class RecruitResponseDTO {
         RecruitPostTypeEnum recruitPostTypeEnum;
         CategoryEnum studyCategory;
         int views;
-        int likes;
-        int bookmarks;
+        int likeCnt;
+        int bookmarkCnt;
+        Boolean likeStatus;
+        Boolean bookmarkStatus;
 
         LocalDate recruitStartTime;
         LocalDate recruitEndTime;
@@ -142,6 +143,15 @@ public class RecruitResponseDTO {
     @AllArgsConstructor
     public static class DefaultPreviewListResponseDTO {
         List<DefaultPreviewDTO> defaultPreviewList;
-        int nextIndex;
+        boolean hasNext;
+        int nextCategoryId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class JoinStudyResponseDTO {
+        Long roomId;
     }
 }

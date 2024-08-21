@@ -39,6 +39,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByCategory(category);
     }
 
+    //todo: 나중에 카테고리 DB에 통일 하면 지워야함
+    @Override
+    public List<Category> findAllByCategory(CategoryEnum category) {
+        return categoryRepository.findAllByCategory(category);
+    }
+
     @Override
     public Category findByCategoryId(Long categoryId) {
         return categoryRepository.findById(categoryId)

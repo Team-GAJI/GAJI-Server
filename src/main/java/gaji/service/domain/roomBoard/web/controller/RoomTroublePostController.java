@@ -15,9 +15,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -162,17 +159,15 @@ public class RoomTroublePostController {
         return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(replyComment));
     }
 
-    @GetMapping("/{boardId}/trouble")
+    @GetMapping("/{roomId}/trouble/list")
     @Operation(summary = "트러블 슈팅 게시글 무한 스크롤 조회", description = "트러블 슈팅 게시글을 무한 스크롤 방식으로 조회합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
     public BaseResponse<List<RoomPostResponseDto.TroublePostSummaryDto>> getNextTroublePosts(
-            @PathVariable @Parameter(description = "게시판 ID") Long boardId,
+            @PathVariable @Parameter(description = "게시판 ID") Long roomId,
             @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
             @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
-
-        List<RoomPostResponseDto.TroublePostSummaryDto> posts =
-                roomTroublePostQueryService.getNextTroublePosts(boardId, lastPostId, size);
-
+        List<RoomPostResponseDto.TroublePostSummaryDto> posts;
+        posts = roomTroublePostQueryService.getNextTroublePosts(roomId, lastPostId, size);
         return BaseResponse.onSuccess(posts);
     }
 
