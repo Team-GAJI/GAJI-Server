@@ -7,7 +7,11 @@ import gaji.service.domain.user.entity.User;
 
 public interface RecruitCommandService {
 
-    RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.CreateRoomDTO request, Long userId);
+    RecruitResponseDTO.CreateRoomResponseDTO createRoom(RecruitRequestDTO.RoomContentDTO request, Long userId);
+
+    RecruitResponseDTO.UpdateRoomResponseDTO updateRoom(RecruitRequestDTO.RoomContentDTO request, Long userId, Long roomId);
+
+    void deleteStudy(Long userId, Long roomId);
 
     RecruitResponseDTO.StudyLikesIdResponseDTO likeStudy(Long userId, Long roomId);
 
@@ -23,6 +27,7 @@ public interface RecruitCommandService {
 
     void kickStudy(Long userId, Long roomId, Long targetId);
 
+    RecruitResponseDTO.RecruitCompleteResponseDTO recruitComplete(Long userId, Long roomId);
     boolean userLikeStatus(Room room, User user);
     boolean userBookmarkStatus(Room room, User user);
 }

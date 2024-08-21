@@ -36,6 +36,7 @@ public interface RoomCommandService {
 
     void saveRoom(Room room);
 
+    void deleteRoom(Room room);
 
     RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId);
 
