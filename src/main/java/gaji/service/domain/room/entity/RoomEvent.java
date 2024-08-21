@@ -49,13 +49,4 @@ public class RoomEvent {
 
     private boolean isPublic;
 
-
-
-
-
-
-
-
-
-
 }
