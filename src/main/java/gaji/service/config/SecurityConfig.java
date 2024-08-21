@@ -33,7 +33,8 @@ public class SecurityConfig {
     private static final String[] AUTH_WHITELIST = {
             "/oauth2/**", "/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
             "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html", "/reissue", "/", "/my",
-            "/api/**"
+            "/api/**", "/genuine-valkyrie-e0010a.netlify.app/**" +
+            "/gaji.life/**"
     };
 
     @Bean
