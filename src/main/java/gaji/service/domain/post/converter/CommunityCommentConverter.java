@@ -31,7 +31,8 @@ public class CommunityCommentConverter {
                 .groupNum(comment.getGroupNum())
                 .depth(comment.getDepth())
                 .isWriter(isWriter)
-                .createdAt(DateConverter.convertWriteTimeFormat(LocalDate.from(comment.getCreatedAt()), " 작성"))
+                .createdAt(DateConverter.convertToRelativeTimeFormat(comment.getCreatedAt())+" 작성")
+                .profileImageUrl(comment.getUser().getProfileImagePth())
                 .build();
     }
 
