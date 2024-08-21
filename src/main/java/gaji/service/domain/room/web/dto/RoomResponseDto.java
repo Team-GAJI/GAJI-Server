@@ -261,4 +261,13 @@ public class RoomResponseDto {
     public static class AssignmentIdDto {
         private Long assignmentId;
     }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    @RequiredArgsConstructor
+    public static class NoticeIdDto {
+        private Long noticeId;
+    }
 }

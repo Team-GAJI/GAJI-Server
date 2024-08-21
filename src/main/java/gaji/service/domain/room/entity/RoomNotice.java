@@ -52,4 +52,7 @@ public class RoomNotice {
             this.confirmCount--;
         }
     }
+    public void updateBody(String body) {
+        this.body = body;
+    }
 }

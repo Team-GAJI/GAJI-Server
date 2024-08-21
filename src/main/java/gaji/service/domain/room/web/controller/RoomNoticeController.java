@@ -86,4 +86,27 @@ public class RoomNoticeController {
         return BaseResponse.onSuccess(confirmedNicknames);
     }
 
+    @PutMapping("/notice/{noticeId}/update")
+    @Operation(summary = "공지사항 수정 API")
+    public BaseResponse<RoomResponseDto.NoticeIdDto> updateNotice(
+            @PathVariable Long noticeId,
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody RoomRequestDto.AssignmentUpdateDTO request
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        RoomNotice notice = roomCommandService.updateRoomNotice(noticeId,userId,request.getDescription());
+        return BaseResponse.onSuccess(RoomConverter.toNoticeIdDto(notice));
+    }
+
+    @DeleteMapping("/notice/{noticeId}/delete")
+    @Operation(summary = "공지사항 삭제 API")
+    public BaseResponse<String> deleteNotice(
+            @PathVariable Long noticeId,
+            @RequestHeader("Authorization") String authorization
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomCommandService.deleteRoomNotice(noticeId,userId);
+        return BaseResponse.onSuccess("delete complete");
+    }
+
 }
