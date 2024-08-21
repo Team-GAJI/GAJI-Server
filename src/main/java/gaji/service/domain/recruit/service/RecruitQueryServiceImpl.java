@@ -49,10 +49,16 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
         room.addView();
         roomCommandService.saveRoom(room);
 
-        SelectCategory selectCategory =
-                categoryService.findByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
+        CategoryEnum category;
+        if (categoryService.existsByEntityIdAndType(roomId, PostTypeEnum.ROOM)) {
+            SelectCategory selectCategory =
+                    categoryService.findByEntityIdAndType(room.getId(), PostTypeEnum.ROOM);
 
-        CategoryEnum category = RecruitConverter.toCategory(selectCategory);
+            category = RecruitConverter.toCategory(selectCategory);
+        } else {
+            category = null;
+        }
+
 
         return RecruitConverter.toStudyDetailDTO(user, room, category, likeStatus, bookmarkStatus);
     }
@@ -62,15 +68,10 @@ public class RecruitQueryServiceImpl implements RecruitQueryService {
     public RecruitResponseDTO.PreviewListResponseDTO getPreviewList(
             String categoryValue, PreviewFilter filter, SortType sort, String query, Long value, int pageSize) {
 
-        //CategoryEnum category = null;
-        //if (categoryid != null) {
-        //    category = categoryService.findByCategoryId(categoryId).getCategory();
-        //}
         CategoryEnum category = null;
         if (categoryValue != null) {
             category = CategoryEnum.fromValue(categoryValue);
         }
-
 
         validateQuery(query);
 

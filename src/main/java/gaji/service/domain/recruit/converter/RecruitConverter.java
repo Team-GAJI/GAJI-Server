@@ -5,14 +5,13 @@ import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.Role;
 import gaji.service.domain.recruit.entity.RecruitPostBookmark;
 import gaji.service.domain.recruit.entity.RecruitPostLikes;
-import gaji.service.domain.studyMate.entity.StudyApplicant;
-import gaji.service.domain.user.entity.User;
 import gaji.service.domain.recruit.entity.StudyComment;
 import gaji.service.domain.recruit.web.dto.RecruitRequestDTO;
 import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.domain.room.entity.Material;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.studyMate.entity.StudyMate;
+import gaji.service.domain.user.entity.User;
 import gaji.service.global.converter.DateConverter;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 @Component
 public class RecruitConverter {
 
-    public static Room toRoom(RecruitRequestDTO.CreateRoomDTO request, User user, String thumbnailUrl, String inviteCode, int peopleMaximum) {
+    public static Room toRoom(RecruitRequestDTO.RoomContentDTO request, User user, String thumbnailUrl, String inviteCode, int peopleMaximum) {
         return Room.builder()
                 .user(user)
                 .name(request.getName())
@@ -42,8 +41,14 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static RecruitResponseDTO.CreateRoomResponseDTO toResponseDTO(Room room) {
+    public static RecruitResponseDTO.CreateRoomResponseDTO toCreateRoomResponseDTO(Room room) {
         return RecruitResponseDTO.CreateRoomResponseDTO.builder()
+                .roomId(room.getId())
+                .build();
+    }
+
+    public static RecruitResponseDTO.UpdateRoomResponseDTO toUpdateRoomResponseDTO(Room room) {
+        return RecruitResponseDTO.UpdateRoomResponseDTO.builder()
                 .roomId(room.getId())
                 .build();
     }
@@ -116,7 +121,7 @@ public class RecruitConverter {
                 .build();
     }
 
-    public static StudyComment toComment(RecruitRequestDTO.WriteCommentDTO request, User user, Room room, StudyComment parentComment) {
+    public static StudyComment toComment(RecruitRequestDTO.CommentContentDTO request, User user, Room room, StudyComment parentComment) {
         return StudyComment.builder()
                 .user(user)
                 .room(room)
@@ -127,6 +132,12 @@ public class RecruitConverter {
 
     public static RecruitResponseDTO.WriteCommentResponseDTO toWriteCommentDTO(StudyComment comment) {
         return RecruitResponseDTO.WriteCommentResponseDTO.builder()
+                .commentId(comment.getId())
+                .build();
+    }
+
+    public static RecruitResponseDTO.UpdateCommentResponseDTO toUpdateCommentDTO(StudyComment comment) {
+        return RecruitResponseDTO.UpdateCommentResponseDTO.builder()
                 .commentId(comment.getId())
                 .build();
     }
@@ -177,6 +188,12 @@ public class RecruitConverter {
 
     public static RecruitResponseDTO.JoinStudyResponseDTO toJoinStudyResponseDTO(Long roomId) {
         return RecruitResponseDTO.JoinStudyResponseDTO.builder()
+                .roomId(roomId)
+                .build();
+    }
+
+    public static RecruitResponseDTO.RecruitCompleteResponseDTO toRecruitCompleteResponseDTO(Long roomId) {
+        return RecruitResponseDTO.RecruitCompleteResponseDTO.builder()
                 .roomId(roomId)
                 .build();
     }

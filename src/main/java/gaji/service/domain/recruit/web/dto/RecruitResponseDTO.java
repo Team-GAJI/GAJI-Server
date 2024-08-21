@@ -26,6 +26,14 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class UpdateRoomResponseDTO {
+        Long roomId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class studyDetailResponseDTO {
         // 유저 관련
         Long writerId;
@@ -105,6 +113,14 @@ public class RecruitResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class UpdateCommentResponseDTO {
+        Long commentId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PreviewResponseDTO {
         Long roomId;
         String imageUrl;
@@ -152,6 +168,14 @@ public class RecruitResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class JoinStudyResponseDTO {
+        Long roomId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RecruitCompleteResponseDTO {
         Long roomId;
     }
 }

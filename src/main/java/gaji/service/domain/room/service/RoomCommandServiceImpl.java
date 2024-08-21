@@ -102,6 +102,24 @@ public class RoomCommandServiceImpl implements RoomCommandService {
             userAssignmentRepository.save(userAssignment);
         }
     }
+    @Override
+    public Assignment updateAssignment(Long assignmentId, String newBody) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ASSIGNMENT_NOT_FOUND));
+
+        assignment.updateBody(newBody);
+
+        return assignment;
+    }
+
+    @Override
+    public void deleteAssignment(Long assignmentId) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ASSIGNMENT_NOT_FOUND));
+
+        // UserAssignment들은 CascadeType.ALL과 orphanRemoval = true 설정으로 인해 자동으로 삭제됩니다.
+        assignmentRepository.delete(assignment);
+    }
 
     @Override
     public RoomEvent setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto) {
@@ -113,7 +131,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
         }
 
-        RoomEvent roomEvent = roomEventRepository.findRoomEventById(roomId)
+        RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId,weeks)
                 .orElse(RoomEvent.builder().room(room).user(user).build());
 
         RoomEvent updatedRoomEvent = RoomEvent.builder()
@@ -131,6 +149,8 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return roomEventRepository.save(updatedRoomEvent);
     }
 
+
+
     @Override
     public RoomEvent setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto) {
         User user = userQueryService.findUserById(userId);
@@ -142,7 +162,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
             throw new RestApiException(RoomErrorStatus._USER_NOT_READER_IN_ROOM);
         }
 
-        RoomEvent roomEvent = roomEventRepository.findRoomEventById(roomId)
+        RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId,weeks)
                 .orElse(RoomEvent.builder().room(room).user(user).build());
 
         RoomEvent updatedRoomEvent = RoomEvent.builder()
@@ -158,6 +178,17 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                 .build();
 
         return roomEventRepository.save(updatedRoomEvent);
+    }
+
+    @Override
+    public RoomEvent updateRoomEvent(Long roomId, Integer weeks, RoomRequestDto.RoomEventUpdateDTO updateDTO) {
+        RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId,weeks)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
+
+        roomEvent.updateEvent(updateDTO.getStartTime(), updateDTO.getEndTime(), updateDTO.getDescription());
+        roomEventRepository.save(roomEvent);
+
+        return roomEvent;
     }
 
     @Override
@@ -193,8 +224,10 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         roomRepository.save(room);
     }
 
-
-
+    @Override
+    public void deleteRoom(Room room) {
+        roomRepository.delete(room);
+    }
     @Override
     public RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId) {
         UserAssignment userAssignment = userAssignmentRepository.findById(userAssignmentId)

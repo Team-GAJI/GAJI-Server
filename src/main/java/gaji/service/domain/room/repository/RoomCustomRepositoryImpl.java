@@ -33,8 +33,7 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
         List<Tuple> ongoingRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl, room.studyStartDay)
                 .from(room)
                 .where(room.id.in(userRoomIds)
-                        .and(room.studyEndDay.after(getCurrentDay()))
-                        .and(room.studyStartDay.before(getCurrentDay()).or(room.studyStartDay.goe(getCurrentDay())))  // 시작일이 현재 날짜 이전이거나 이후인 경우 포함
+                        .and(room.studyEndDay.after(getCurrentDay().minusDays(1)))
                         .and(getCursorCondition(cursorDate, cursorId)))
                 .orderBy(room.studyStartDay.desc(), room.id.asc())
                 .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인
@@ -43,13 +42,7 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
         return checkLastPage(pageable, ongoingRooms);
     }
 
-
-    public Slice<Tuple> findAllEndedRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Pageable pageable) {
-        LocalDate now = LocalDate.now();
-
-        BooleanExpression cursorCondition = (room.studyStartDay.eq(cursorDate).and(room.id.gt(cursorId)))
-                .or(room.studyStartDay.lt(cursorDate));
-
+    public Slice<Tuple> findAllOngoingRoomsByUser(User user, Pageable pageable) {
         List<Long> userRoomIds = jpaQueryFactory
                 .select(studyMate.room.id)
                 .from(studyMate)
@@ -59,13 +52,50 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
         List<Tuple> ongoingRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl, room.studyStartDay)
                 .from(room)
                 .where(room.id.in(userRoomIds)
+                        .and(room.studyEndDay.after(getCurrentDay().minusDays(1))))
+                .orderBy(room.studyStartDay.desc(), room.id.asc())
+                .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인
+                .fetch();
+
+        return checkLastPage(pageable, ongoingRooms);
+    }
+
+
+    public Slice<Tuple> findAllEndedRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Pageable pageable) {
+        List<Long> userRoomIds = jpaQueryFactory
+                .select(studyMate.room.id)
+                .from(studyMate)
+                .where(studyMate.user.eq(user))
+                .fetch();
+
+        List<Tuple> endedRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl, room.studyStartDay)
+                .from(room)
+                .where(room.id.in(userRoomIds)
                         .and(room.studyEndDay.before(getCurrentDay()))
                         .and(getCursorCondition(cursorDate, cursorId)))
                 .orderBy(room.studyStartDay.desc(), room.id.asc())
                 .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인
                 .fetch();
 
-        return checkLastPage(pageable, ongoingRooms);
+        return checkLastPage(pageable, endedRooms);
+    }
+
+    public Slice<Tuple> findAllEndedRoomsByUser(User user, Pageable pageable) {
+        List<Long> userRoomIds = jpaQueryFactory
+                .select(studyMate.room.id)
+                .from(studyMate)
+                .where(studyMate.user.eq(user))
+                .fetch();
+
+        List<Tuple> endedRooms = jpaQueryFactory.select(room.id, room.name, room.description, room.thumbnailUrl, room.studyStartDay)
+                .from(room)
+                .where(room.id.in(userRoomIds)
+                        .and(room.studyEndDay.before(getCurrentDay())))
+                .orderBy(room.studyStartDay.desc(), room.id.asc())
+                .limit(pageable.getPageSize()+1) // size보다 1개 더 가져와서 다음 페이지 여부 확인
+                .fetch();
+
+        return checkLastPage(pageable, endedRooms);
     }
 
 
