@@ -1,6 +1,7 @@
 package gaji.service.domain.studyMate.entity;
 
 import gaji.service.domain.room.entity.RoomEvent;
+import gaji.service.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,19 +26,19 @@ public class Assignment {
     private String body;
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserAssignment> userAssignmentList = new ArrayList<>();
+    private final List<UserAssignment> userAssignmentList = new ArrayList<>();
 
     public void updateBody(String body) {
         this.body = body;
     }
 
     public void addUserAssignment(UserAssignment userAssignment) {
-        userAssignmentList.add(userAssignment);
+        this.userAssignmentList.add(userAssignment);
         userAssignment.setAssignment(this);
     }
 
     public void removeUserAssignment(UserAssignment userAssignment) {
-        userAssignmentList.remove(userAssignment);
+        this.userAssignmentList.remove(userAssignment);
         userAssignment.setAssignment(null);
     }
 }

@@ -22,6 +22,10 @@ public interface RoomCommandService {
     @Transactional
     RoomNotice createNotice(Long roomId, Long userId, RoomRequestDto.RoomNoticeDto requestDto);
 
+    Assignment updateAssignment(Long assignmentId, String newBody);
+
+    void deleteAssignment(Long assignmentId);
+
     RoomEvent setStudyPeriod(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyPeriodDto requestDto);
 
     RoomEvent setStudyDescription(Long roomId, Integer weeks, Long userId, RoomRequestDto.StudyDescriptionDto requestDto);
