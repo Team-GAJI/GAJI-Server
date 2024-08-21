@@ -147,31 +147,20 @@ public class RoomPostController {
         return BaseResponse.onSuccess( "북마크가 성공적으로 삭제되었습니다.");
     }
 
-//    @GetMapping("/{roomId}/post/list")
-//    @Operation(summary = "게시글 무한 스크롤 조회", description = "게시글을 무한 스크롤 방식으로 조회합니다.")
-//    @ApiResponse(responseCode = "200", description = "조회 성공")
-//    public BaseResponse<List<RoomPostResponseDto.PostSummaryDto>> getNextPosts(
-//            @PathVariable @Parameter(description = "스터디룸 ID") Long roomId,
-//            @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
-//            @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
-//
-//        List<RoomPostResponseDto.PostSummaryDto> posts =
-//                roomPostQueryService.getNextPosts(roomId, lastPostId, size);
-//
-//        return BaseResponse.onSuccess(posts);
-//    }
-
-    @GetMapping("/{roomId}/post/list")
+    @GetMapping("/{boardId}/post")
     @Operation(summary = "게시글 무한 스크롤 조회", description = "게시글을 무한 스크롤 방식으로 조회합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
     public BaseResponse<List<RoomPostResponseDto.PostSummaryDto>> getNextPosts(
-            @PathVariable @Parameter(description = "스터디룸 ID") Long roomId,
+            @PathVariable @Parameter(description = "게시판 ID") Long boardId,
             @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
             @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
+
         List<RoomPostResponseDto.PostSummaryDto> posts =
-                roomPostQueryService.getNextPosts(roomId, lastPostId, size);
+                roomPostQueryService.getNextPosts(boardId, lastPostId, size);
+
         return BaseResponse.onSuccess(posts);
     }
+
     @PostMapping("/post/comments/{commentId}/replies")
     @Operation(summary = "게시글 댓글의 답글 작성 API")
     public BaseResponse<RoomPostResponseDto.toWriteCommentDto> addReply(

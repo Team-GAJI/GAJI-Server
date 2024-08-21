@@ -1,11 +1,8 @@
 package gaji.service.domain.roomBoard.service.RoomPost;
 
-import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
-import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
-import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.PostCommentRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostQueryRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
@@ -17,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +26,6 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     private final RoomPostRepository roomPostRepository;
     private final PostCommentRepository postCommentRepository;
     private final StudyMateQueryService studyMateQueryService;
-    private final RoomBoardRepository roomBoardRepository;
 
     @Override
     public List<RoomPostResponseDto.PostListDto> getTop3RecentPosts(Long roomId) {
@@ -38,21 +33,11 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     }
 
     @Override
-    public List<RoomPostResponseDto.PostSummaryDto> getNextPosts(Long roomId, Long lastPostId, int size) {
-        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_POST)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._ROOM_BOARD_NOT_FOUND));
-
-        LocalDateTime lastCreatedAt;
-        if (lastPostId == 0) {
-            lastCreatedAt = LocalDateTime.now();
-        } else {
-            lastCreatedAt = roomPostRepository.findCreatedAtByIdOrEarliest(roomBoard.getId(), lastPostId)
-                    .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
-        }
-
-        Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt", "id"));
-        return roomPostRepository.findPostSummariesForInfiniteScroll(roomBoard.getId(), lastCreatedAt, pageable);
+    public List<RoomPostResponseDto.PostSummaryDto> getNextPosts(Long boardId, Long lastPostId, int size) {
+        Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return roomPostRepository.findPostSummariesForInfiniteScroll(boardId, lastPostId,pageable);
     }
+
     @Override
     public RoomPost findPostById(Long PostId){
         return roomPostRepository.findById(PostId)
