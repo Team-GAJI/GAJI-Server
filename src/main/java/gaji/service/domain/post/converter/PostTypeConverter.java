@@ -10,7 +10,6 @@ public class PostTypeConverter implements Converter<String, PostTypeEnum> {
 
     @Override
     public PostTypeEnum convert(String param) {
-        if (!StringUtils.hasText(param)) throw new RestApiException(CommunityPostErrorStatus._INVALID_POST_TYPE);
         return PostTypeEnum.from(param);
     }
 }
