@@ -40,7 +40,7 @@ public class CommunityCommentConverter {
         List<CommunityPostCommentResponseDTO.PostCommentDTO> postCommentDTOList = new ArrayList<>();
 
         for (CommunityComment communityComment : commentList) {
-            boolean isWriter = (userId == null) ? false : communityCommentService.isCommentWriter(userId, communityComment);
+            boolean isWriter = userId != null && communityCommentService.isCommentWriter(userId, communityComment);
             postCommentDTOList.add(CommunityCommentConverter.toPostCommentDTO(communityComment, isWriter));
         }
 
