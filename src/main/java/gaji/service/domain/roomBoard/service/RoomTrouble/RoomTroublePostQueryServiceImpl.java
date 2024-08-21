@@ -104,9 +104,9 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
     private RoomPostResponseDto.CommentWithRepliesDTO convertToCommentWithRepliesDTO(TroublePostComment comment) {
         RoomPostResponseDto.CommentWithRepliesDTO dto = new RoomPostResponseDto.CommentWithRepliesDTO();
         dto.setId(comment.getId());
-        dto.setAuthorName(comment.getUser().getName());
-        dto.setBody(comment.getBody());
-        dto.setCreatedAt(comment.getCreatedAt());
+        dto.setUserNickName(comment.getUser().getName());
+        dto.setCommentBody(comment.getBody());
+        dto.setCommentWriteDate(comment.getCreatedAt());
         dto.setReplies(comment.getReplies().stream()
                 .sorted(Comparator.comparing(TroublePostComment::getCreatedAt))
                 .map(this::convertToCommentDTO)
@@ -117,9 +117,9 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
     private RoomPostResponseDto.CommentDTO convertToCommentDTO(TroublePostComment reply) {
         RoomPostResponseDto.CommentDTO dto = new RoomPostResponseDto.CommentDTO();
         dto.setId(reply.getId());
-        dto.setAuthorName(reply.getUser().getName());
-        dto.setBody(reply.getBody());
-        dto.setCreatedAt(reply.getCreatedAt());
+        dto.setUserNickName(reply.getUser().getName());
+        dto.setCommentBody(reply.getBody());
+        dto.setCommentWriteDate(reply.getCreatedAt());
         return dto;
     }
 }
