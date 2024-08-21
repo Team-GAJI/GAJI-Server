@@ -14,7 +14,7 @@ public class CommunityPostCommentResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class WriteCommentDTO {
+    public static class WriteCommentResponseDTO {
         private Long commentId;
     }
 
@@ -30,6 +30,7 @@ public class CommunityPostCommentResponseDTO {
         private Integer groupNum;
         private int depth;
         private String createdAt;
+        private boolean isWriter;
     }
 
     @Builder

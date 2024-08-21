@@ -73,8 +73,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<SelectCategory> findAllFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
-        return selectCategoryRepository.findAllFetchJoinWithCategoryByEntityIdAndPostType(entityId, postType);
+    public SelectCategory findOneFetchJoinWithCategoryByEntityIdAndPostType(Long entityId, PostTypeEnum postType) {
+        return selectCategoryRepository.findOneFetchJoinWithCategoryByEntityIdAndPostType(entityId, postType);
     }
 
     @Override
