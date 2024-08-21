@@ -103,6 +103,21 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return roomNotice;
     }
 
+    @Override
+    public RoomNotice deleteRoomNotice(Long noticeId, Long userId, String newBody) {
+        User user = userQueryService.findUserById(userId);
+        RoomNotice roomNotice = roomQueryService.findRoomNoticeById(noticeId);
+
+        if(roomNotice.getStudyMate().getUser().equals(user)){
+            roomNoticeRepository.delete(roomNotice);
+        }else{
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_DELETE_AUTH);
+        }
+
+        return roomNotice;
+    }
+
+
     // 과제 생성할 때 user에게 할당해주는 메서드
     @Override
     public void createUserAssignmentsForStudyMembers(Assignment assignment) {
