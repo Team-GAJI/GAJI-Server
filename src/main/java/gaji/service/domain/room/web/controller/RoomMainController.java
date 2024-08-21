@@ -77,6 +77,16 @@ public class RoomMainController {
 
         return BaseResponse.onSuccess(responseDto);
     }
+
+    @PutMapping("/{eventId}")
+    @Operation(summary = "Update Room Event", description = "Update the start time, end time, and description of a room event")
+    public ResponseEntity<BaseResponse<RoomEvent>> updateRoomEvent(
+            @PathVariable Long eventId,
+            @RequestBody RoomRequestDto.RoomEventUpdateDTO updateDTO) {
+        RoomEvent updatedEvent = roomCommandService.updateRoomEvent(eventId, updateDTO);
+        return ResponseEntity.ok(BaseResponse.onSuccess(updatedEvent));
+    }
+
     @PostMapping("/main/assignment/{userAssignmentId}")
     @Operation(summary = "주차별 과제 체크 박스 체크", description = "과제 체크 박스를 클릭하면 과제 완료 상태를 토글합니다.")
     public ResponseEntity<?> toggleAssignmentCompletion(
@@ -125,6 +135,7 @@ public class RoomMainController {
     public BaseResponse<List<RoomPostResponseDto.MainPostSummaryDto>> getMainPostController(@PathVariable Long roomId){
         return BaseResponse.onSuccess(roomPostQueryService.getLatestPosts(roomId));
     }
+
 
 
 }
