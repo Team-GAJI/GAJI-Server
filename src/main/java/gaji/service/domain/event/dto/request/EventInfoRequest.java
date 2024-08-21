@@ -22,7 +22,7 @@ public class EventInfoRequest {
     private LocalDateTime endTime;
 
     // 일정이 반복되는지 여부
-    private boolean isRecurring;
+    private boolean recurringStatus;
 
     // 반복 주기 (DAILY, WEEKLY, MONTHLY, YEARLY)
     // private RecurrenceType recurrenceType;
