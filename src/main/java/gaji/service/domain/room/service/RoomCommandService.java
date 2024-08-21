@@ -18,6 +18,8 @@ public interface RoomCommandService {
 
     RoomNotice updateRoomNotice(Long noticeId, Long userId, String newBody);
 
+    RoomNotice deleteRoomNotice(Long noticeId, Long userId, String newBody);
+
     @Transactional
     void createUserAssignmentsForStudyMembers(Assignment assignment);
 

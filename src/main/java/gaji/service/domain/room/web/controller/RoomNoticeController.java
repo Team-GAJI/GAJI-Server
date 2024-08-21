@@ -43,8 +43,8 @@ public class RoomNoticeController {
     }
 
     @PutMapping("/notice/{noticeId}/update")
-    @Operation(summary = "주차별 스터디 과제 수정 API")
-    public BaseResponse<RoomResponseDto.NoticeIdDto> updateAssignment(
+    @Operation(summary = "공지사항 수정 API")
+    public BaseResponse<RoomResponseDto.NoticeIdDto> updateNotice(
             @PathVariable Long noticeId,
             @RequestHeader("Authorization") String authorization,
             @RequestBody RoomRequestDto.AssignmentUpdateDTO request
@@ -53,6 +53,19 @@ public class RoomNoticeController {
         RoomNotice notice = roomCommandService.updateRoomNotice(noticeId,userId,request.getDescription());
         return BaseResponse.onSuccess(RoomConverter.tonoticeIdDto(notice));
     }
+
+    @DeleteMapping("/notice/{noticeId}/delete")
+    @Operation(summary = "공지사항 삭제 API")
+    public BaseResponse<String> deleteNotice(
+            @PathVariable Long noticeId,
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody RoomRequestDto.AssignmentUpdateDTO request
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        roomCommandService.deleteRoomNotice(noticeId,userId,request.getDescription());
+        return BaseResponse.onSuccess("delete complete");
+    }
+
 
 
     @GetMapping("/{roomId}/notices")
