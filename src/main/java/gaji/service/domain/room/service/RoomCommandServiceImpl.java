@@ -90,7 +90,7 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     }
 
     @Override
-    public RoomNotice roomNotice(Long noticeId, Long userId, String newBody) {
+    public RoomNotice updateRoomNotice(Long noticeId, Long userId, String newBody) {
         User user = userQueryService.findUserById(userId);
         RoomNotice roomNotice = roomQueryService.findRoomNoticeById(noticeId);
 
