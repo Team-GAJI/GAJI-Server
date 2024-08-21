@@ -54,13 +54,6 @@ public Room findRoomById(Long roomId) {
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
     }
 
-    @Override
-    public RoomNotice findRoomNoticeById(Long noticeId) {
-        return roomNoticeRepository.findById(noticeId)
-                .orElseThrow(() -> new RestApiException(RoomErrorStatus._NOTICE_NOT_FOUND));
-    }
-
-
 //    @Override
 //    public List<RoomResponseDto.NoticeDto> getNotices(Long roomId, int page, int size) {
 //        return roomQueryRepository.getNotices(roomId, page, size);
@@ -134,5 +127,10 @@ public Room findRoomById(Long roomId) {
         return noticeConfirmationRepository.findConfirmedUserNicknamesByNoticeId(noticeId);
     }
 
+    @Override
+    public RoomNotice findRoomNoticeById(Long noticeId) {
+        return roomNoticeRepository.findById(noticeId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._NOTICE_NOT_FOUND));
+    }
 }
 

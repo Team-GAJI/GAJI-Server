@@ -7,7 +7,6 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.entity.RoomNotice;
 import gaji.service.domain.room.repository.*;
-import gaji.service.domain.room.web.controller.RoomMainController;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
@@ -49,7 +48,6 @@ public class RoomCommandServiceImpl implements RoomCommandService {
     private final RoomQueryRepository roomQueryRepository;
     private final RoomRepository roomRepository;
     private final WeeklyUserProgressRepository weeklyUserProgressRepository;
-    private final RoomMainController roomMainController;
 
     //과제생성1
     @Override
@@ -88,35 +86,6 @@ public class RoomCommandServiceImpl implements RoomCommandService {
         return roomNoticeRepository.save(notice);
 
     }
-
-    @Override
-    public RoomNotice updateRoomNotice(Long noticeId, Long userId, String newBody) {
-        User user = userQueryService.findUserById(userId);
-        RoomNotice roomNotice = roomQueryService.findRoomNoticeById(noticeId);
-
-        if(roomNotice.getStudyMate().getUser().equals(user)){
-            roomNotice.updateBody(newBody);
-        }else{
-            throw new RestApiException(RoomPostErrorStatus._USER_NOT_UPDATE_AUTH);
-        }
-
-        return roomNotice;
-    }
-
-    @Override
-    public RoomNotice deleteRoomNotice(Long noticeId, Long userId, String newBody) {
-        User user = userQueryService.findUserById(userId);
-        RoomNotice roomNotice = roomQueryService.findRoomNoticeById(noticeId);
-
-        if(roomNotice.getStudyMate().getUser().equals(user)){
-            roomNoticeRepository.delete(roomNotice);
-        }else{
-            throw new RestApiException(RoomPostErrorStatus._USER_NOT_DELETE_AUTH);
-        }
-
-        return roomNotice;
-    }
-
 
     // 과제 생성할 때 user에게 할당해주는 메서드
     @Override
@@ -353,5 +322,31 @@ public class RoomCommandServiceImpl implements RoomCommandService {
             progress.updateProgress(progress.getCompletedAssignments());
             weeklyUserProgressRepository.save(progress);
         }
+    }
+
+    @Override
+    public void deleteRoomNotice(Long noticeId, Long userId) {
+        User user = userQueryService.findUserById(userId);
+        RoomNotice roomNotice = roomQueryService.findRoomNoticeById(noticeId);
+
+        if(roomNotice.getStudyMate().getUser().equals(user)){
+            roomNoticeRepository.delete(roomNotice);
+        }else{
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_DELETE_AUTH);
+        }
+    }
+
+    @Override
+    public RoomNotice updateRoomNotice(Long noticeId, Long userId, String description) {
+        User user = userQueryService.findUserById(userId);
+        RoomNotice roomNotice = roomQueryService.findRoomNoticeById(noticeId);
+
+        if(roomNotice.getStudyMate().getUser().equals(user)){
+            roomNotice.updateBody(description);
+        }else{
+            throw new RestApiException(RoomPostErrorStatus._USER_NOT_UPDATE_AUTH);
+        }
+
+        return roomNotice;
     }
 }

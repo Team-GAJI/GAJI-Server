@@ -33,7 +33,8 @@ public class RoomConverter {
                 .build();
     }
 
-    public static RoomResponseDto.NoticeIdDto tonoticeIdDto(RoomNotice roomNotice) {
+
+    public static RoomResponseDto.NoticeIdDto toNoticeIdDto(RoomNotice roomNotice) {
         return RoomResponseDto.NoticeIdDto.builder()
                 .noticeId(roomNotice.getId())
                 .build();
