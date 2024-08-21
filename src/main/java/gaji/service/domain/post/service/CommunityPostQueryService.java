@@ -10,19 +10,20 @@ import org.springframework.data.domain.Slice;
 public interface CommunityPostQueryService {
 
     CommnuityPost findPostByPostId(Long postId);
-    Slice<CommnuityPost> getPostList(Integer lastPopularityScore,
+    Slice<CommnuityPost> getPostList(String keyword,
+                            Integer lastPopularityScore,
                             Long lastPostId,
                             Integer lastLikeCnt,
                             Integer lastHit,
                             PostTypeEnum postType,
-                            Long categoryId,
+                            String category,
                             SortType sortType,
                             PostStatusEnum filter,
                             int page,
                             int size);
-    Slice<CommnuityPost> searchPostList();
     CommnuityPost getPostDetail(Long postId);
-    void validPostOwner(Long userId, CommnuityPost post);
+    boolean isPostWriter(Long userId, CommnuityPost post);
+    void validPostWriter(Long userId, CommnuityPost post);
     void validExistsPostLikes(Long userId, CommnuityPost post);
     void validExistsPostBookmark(Long userId, CommnuityPost post);
 }

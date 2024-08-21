@@ -60,8 +60,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             addRefreshEntity(usernameId, refreshToken, 86400000000L);
         }
 
-
-
         // Refresh 토큰을 HttpOnly 쿠키로 설정
         Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
@@ -72,7 +70,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 
         // 1. 헤더로 보낼 경우
-//        response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader("Authorization", "Bearer " + accessToken);
 
 
 
@@ -90,13 +88,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("refreshToken = {}", refreshToken);
 
 
-        String finalRedirectionUrl;
-        if (customUserDetails.isNewUser()) {
-            finalRedirectionUrl = this.nicknameRedirectionUrl;
+        String finalRedirectionUrl = customUserDetails.isNewUser() ? this.nicknameRedirectionUrl : this.redirectionUrl;
 
-        } else {
-            finalRedirectionUrl = this.redirectionUrl;
-        }
 
 
         // 리다이렉션 URL 생성
