@@ -1,6 +1,7 @@
 package gaji.service.domain.roomBoard.repository.RoomPost;
 
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
+import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto.PostSummaryDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,4 +32,12 @@ public interface RoomPostRepository extends JpaRepository<RoomPost, Long> {
             "END")
     Optional<LocalDateTime> findCreatedAtByIdOrEarliest(@Param("boardId") Long boardId, @Param("postId") Long postId);
 
+
+
+    @Query("SELECT new gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto$MainPostSummaryDto(" +
+            "rp.id, rp.title, rp.body, rp.studyMate.user.nickname, rp.createdAt, rp.viewCount) " +
+            "FROM RoomPost rp " +
+            "WHERE rp.roomBoard.id = :boardId " +
+            "ORDER BY rp.createdAt DESC")
+    List<RoomPostResponseDto.MainPostSummaryDto> findLatestPostsSummary(@Param("boardId") Long boardId, Pageable pageable);
 }
