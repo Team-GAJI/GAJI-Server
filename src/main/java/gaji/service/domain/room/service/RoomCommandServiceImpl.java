@@ -28,8 +28,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import static gaji.service.domain.room.converter.RoomConverter.toRoomEventIdDto;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -103,6 +101,24 @@ public class RoomCommandServiceImpl implements RoomCommandService {
                     .build();
             userAssignmentRepository.save(userAssignment);
         }
+    }
+    @Override
+    public Assignment updateAssignment(Long assignmentId, String newBody) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ASSIGNMENT_NOT_FOUND));
+
+        assignment.updateBody(newBody);
+
+        return assignment;
+    }
+
+    @Override
+    public void deleteAssignment(Long assignmentId) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ASSIGNMENT_NOT_FOUND));
+
+        // UserAssignment들은 CascadeType.ALL과 orphanRemoval = true 설정으로 인해 자동으로 삭제됩니다.
+        assignmentRepository.delete(assignment);
     }
 
     @Override
