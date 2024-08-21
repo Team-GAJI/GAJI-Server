@@ -6,12 +6,17 @@ import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.repository.*;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.global.converter.DateConverter;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,8 +31,10 @@ public class RoomQueryServiceImpl implements RoomQueryService {
     private final RoomQueryRepository roomQueryRepository;
     private final WeeklyUserProgressRepository weeklyUserProgressRepository;
     private final NoticeConfirmationRepository noticeConfirmationRepository;
+    private final WebInvocationPrivilegeEvaluator privilegeEvaluator;
+    private final RoomNoticeRepository roomNoticeRepository;
 
-//    @Override
+    //    @Override
 //    public RoomEvent findRoomEventById(Long roomId){
 //        return roomEventRepository.findRoomEventById(roomId)
 //                .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
@@ -46,32 +53,36 @@ public Room findRoomById(Long roomId) {
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
     }
 
-    @Override
-    public List<RoomResponseDto.NoticeDto> getNotices(Long roomId, int page, int size) {
-        return roomQueryRepository.getNotices(roomId, page, size);
-    }
+//    @Override
+//    public List<RoomResponseDto.NoticeDto> getNotices(Long roomId, int page, int size) {
+//        return roomQueryRepository.getNotices(roomId, page, size);
+//    }
 
     @Override
-    @Transactional(readOnly = false) // readOnly = false로 설정
-    public RoomResponseDto.NoticeDto getNoticeDetail(Long roomId, Long noticeId) {
-        RoomResponseDto.NoticeDto notice = roomQueryRepository.getNotices(roomId, 1, Integer.MAX_VALUE).stream()
-                .filter(n -> n.getId().equals(noticeId))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Notice not found"));
+    public List<RoomResponseDto.NoticeDto> getNextNotices(Long roomId, Long lastNoticeId, int size) {
+        LocalDateTime lastCreatedAt;
+        if (lastNoticeId == 0) {
+            lastCreatedAt = LocalDateTime.now();
+        } else {
+            lastCreatedAt = roomNoticeRepository.findCreatedAtByIdOrEarliest(roomId, lastNoticeId)
+                    .orElseThrow(() -> new RestApiException(RoomErrorStatus._NOTICE_NOT_FOUND));
+        }
 
-        // viewCount 증가
-        roomQueryRepository.incrementViewCount (noticeId);
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt", "id");
+        Pageable pageable = PageRequest.of(0, size, sort);
 
-        // 증가된 viewCount를 반영하기 위해 notice 객체 업데이트
-        notice.setViewCount(notice.getViewCount() + 1);
+        List<RoomResponseDto.NoticeDto> notices = roomNoticeRepository.findNoticeSummariesForInfiniteScroll(roomId, lastCreatedAt, pageable);
 
-        return notice;
+        LocalDateTime now = LocalDateTime.now();
+        for (RoomResponseDto.NoticeDto notice : notices) {
+            notice.setTimeSincePosted(DateConverter.convertToRelativeTimeFormat(notice.getCreatedAt()));
+        }
+        return notices;
     }
-
     @Override
     @Transactional(readOnly = true)
-    public RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomEventId) {
-        RoomEvent roomEvent = roomEventRepository.findById(roomEventId)
+    public RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomId, Integer weeks) {
+        RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId, weeks)
                 .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
 
         return RoomResponseDto.WeeklyStudyInfoDTO.builder()
@@ -83,13 +94,16 @@ public Room findRoomById(Long roomId) {
     }
 
     @Override
-    public List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomEventId) {
-        List<WeeklyUserProgressRepository.UserProgressProjection> projections =
-                weeklyUserProgressRepository.findProgressByRoomEventId(roomEventId);
+    public List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomId, Integer weeks) {
+    RoomEvent roomEvent = roomEventRepository.findRoomEventByRoomIdAndWeeks(roomId, weeks)
+            .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_EVENT_NOT_FOUND));
+
+    List<WeeklyUserProgressRepository.UserProgressProjection> projections =
+                weeklyUserProgressRepository.findProgressByRoomEventId(roomEvent.getId());
 
         return projections.stream()
                 .map(projection -> RoomResponseDto.UserProgressDTO.builder()
-                        .name(projection.getName())
+                        .nickname(projection.getNickname())
                         .progressPercentage(projection.getProgressPercentage())
                         .build())
                 .collect(Collectors.toList());

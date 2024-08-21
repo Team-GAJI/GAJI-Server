@@ -29,7 +29,7 @@ public class RecruitController {
     private final StudyCommentQueryService studyCommentQueryService;
 
     @PostMapping("")
-    @Operation(summary = "스터디 모집 게시글 생성 성성 API", description = "스터디 모집 게시글을 생성하는 API입니다.")
+    @Operation(summary = "스터디 모집 게시글 생성 API", description = "스터디 모집 게시글을 생성하는 API입니다.")
     public BaseResponse<RecruitResponseDTO.CreateRoomResponseDTO> createRoom(
             @RequestBody @Valid RecruitRequestDTO.CreateRoomDTO request,
             @RequestHeader("Authorization") String authorizationHeader) {
@@ -96,7 +96,7 @@ public class RecruitController {
     @Operation(summary = "스터디 모집 게시글 좋아요 취소 API", description = "스터디 모집 게시글 좋아요 취소하는 API 입니다.")
     public BaseResponse unLikeStudy(
             @RequestHeader("Authorization") String authorizationHeader,
-            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.")  Long roomId) {
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         recruitCommandService.unLikeStudy(userId, roomId);
         return BaseResponse.onSuccess(null);
@@ -116,7 +116,7 @@ public class RecruitController {
     @Operation(summary = "스터디 모집 게시글 북마크 취소 API", description = "스터디 모집 게시글 북마크 취소하는 API 입니다.")
     public BaseResponse unBookmarkStudy(
             @RequestHeader("Authorization") String authorizationHeader,
-            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.")  Long roomId) {
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         recruitCommandService.unBookmarkStudy(userId, roomId);
         return BaseResponse.onSuccess(null);
@@ -125,12 +125,12 @@ public class RecruitController {
     @GetMapping("/preview")
     @Operation(summary = "스터디 모집 게시글 미리보기 목록 조회 API", description = "모집 게시글 목록을 조회하는 API 입니다.")
     public BaseResponse<RecruitResponseDTO.PreviewListResponseDTO> getPreviewList(
-            @RequestParam(required = false) CategoryEnum category,
+            @RequestParam(required = false) String category,
             @RequestParam(required = false) PreviewFilter filter,
             @RequestParam(defaultValue = "recent") SortType sort,
             @RequestParam(required = false) String query,
             @RequestParam(required = false) @Min(value = 0, message = "lastValue는 0 이상 입니다.") Long lastValue,
-            @RequestParam(value = "page", defaultValue = "20") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize){
+            @RequestParam(value = "page", defaultValue = "20") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize) {
 
         RecruitResponseDTO.PreviewListResponseDTO responseDTO = recruitQueryService.getPreviewList(category, filter, sort, query, lastValue, pageSize);
         return BaseResponse.onSuccess(responseDTO);
@@ -139,12 +139,44 @@ public class RecruitController {
     @GetMapping("/preview-default")
     @Operation(summary = "스터디 미리보기 목록 조회 기본 페이지 API", description = "스터디 목록 조회 기본 페이지입니다.")
     public BaseResponse<RecruitResponseDTO.DefaultPreviewListResponseDTO> getDefaultPreviewList(
-            @RequestParam(defaultValue = "0") @Min(value = 0, message = "index는 0 이상 이어야 합니다.") Integer nextCategoryIndex,
+            @RequestParam(defaultValue = "0") @Min(value = 1, message = "nextCategoryId는 1이상 이어야 합니다.") int nextCategoryId,
             @RequestParam(defaultValue = "true") boolean isFirst,
             @RequestParam(value = "page", defaultValue = "5") @Min(value = 1, message = "pageSize는 0보다 커야 합니다.") int pageSize) {
 
-        RecruitResponseDTO.DefaultPreviewListResponseDTO responseDTO = recruitQueryService.getDefaultPreview(isFirst, nextCategoryIndex, pageSize);
+        RecruitResponseDTO.DefaultPreviewListResponseDTO responseDTO = recruitQueryService.getDefaultPreview(isFirst, nextCategoryId, pageSize);
         return BaseResponse.onSuccess(responseDTO);
+    }
+
+    @PostMapping("/{roomId}")
+    @Operation(summary = "스터디 가지기 API", description = "스터디에 참여하는 API 입니다.")
+    public BaseResponse<RecruitResponseDTO.JoinStudyResponseDTO> joinStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        return BaseResponse.onSuccess(
+                recruitCommandService.joinStudy(userId, roomId)
+        );
+    }
+
+    @DeleteMapping("/{roomId}/leave")
+    @Operation(summary = "스터디 나가기 API", description = "스터디에서 나가는 API 입니다.")
+    public BaseResponse leaveStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        recruitCommandService.leaveStudy(userId, roomId);
+        return BaseResponse.onSuccess(null);
+    }
+
+    @DeleteMapping("/{roomId}/kick/{targetId}")
+    @Operation(summary = "스터디 내보내기 API", description = "스터디에서 내보내는 API 입니다.")
+    public BaseResponse kickStudy(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable @Min(value = 1, message = "roomId는 1 이상 이어야 합니다.") Long roomId,
+            @PathVariable @Min(value = 1, message = "targetId 1 이상 이어야 합니다.") Long targetId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        recruitCommandService.kickStudy(userId, roomId, targetId);
+        return BaseResponse.onSuccess(null);
     }
 }
 

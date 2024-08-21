@@ -146,17 +146,15 @@ public class RoomInfoPostController {
         return BaseResponse.onSuccess( "북마크가 성공적으로 삭제되었습니다.");
     }
 
-    @GetMapping("/{boardId}/info")
+    @GetMapping("/{roomId}/info/list")
     @Operation(summary = "게시글 무한 스크롤 조회", description = "게시글을 무한 스크롤 방식으로 조회합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
-    public BaseResponse<List<RoomPostResponseDto.InfoPostSummaryDto>> getNextTroublePosts(
-            @PathVariable @Parameter(description = "게시판 ID") Long boardId,
+    public BaseResponse<List<RoomPostResponseDto.InfoPostSummaryDto>> getNextInfoPosts(
+            @PathVariable @Parameter(description = "스터디룸 ID") Long roomId,
             @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
             @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
-
         List<RoomPostResponseDto.InfoPostSummaryDto> posts =
-                roomInfoPostQueryService.getNextPosts(boardId, lastPostId, size);
-
+                roomInfoPostQueryService.getNextPosts(roomId, lastPostId, size);
         return BaseResponse.onSuccess(posts);
     }
 

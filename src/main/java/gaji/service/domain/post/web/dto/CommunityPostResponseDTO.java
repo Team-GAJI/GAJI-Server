@@ -1,6 +1,8 @@
 package gaji.service.domain.post.web.dto;
 
 import gaji.service.domain.common.web.dto.HashtagResponseDTO;
+import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +19,7 @@ public class CommunityPostResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UploadPostDTO {
+    public static class UploadPostResponseDTO {
         Long postId;
     }
 
@@ -52,6 +54,7 @@ public class CommunityPostResponseDTO {
         private String uploadTime;
         private int hit;
         private int popularityScore;
+        private PostStatusEnum status;
         private List<String> hashtagList = new ArrayList<>();
     }
 
@@ -73,12 +76,17 @@ public class CommunityPostResponseDTO {
         private PostTypeEnum type;
         private String createdAt;
         private int hit;
+        private int likeCnt;
+        private int bookmarkCnt;
         private int commentCnt;
         private String userNickname;
         private String title;
-        private boolean isBookMarked;
-        private boolean isLiked;
+        private boolean isWriter; // 게시글을 조회한 사람이 작성자가 맞는지
+        private boolean bookMarkStatus;
+        private boolean likeStatus;
         private String body;
+        private String category;
+        private PostStatusEnum status;
         private List<HashtagResponseDTO.HashtagNameAndIdDTO> hashtagList = new ArrayList<>();
     }
 

@@ -13,15 +13,18 @@ public interface RoomQueryService {
 
     RoomEvent findRoomEventByRoomIdAndWeeks(Long roomId, Integer weeks);
 
-    List<RoomResponseDto.NoticeDto> getNotices(Long roomId, int page, int size);
+//    List<RoomResponseDto.NoticeDto> getNotices(Long roomId, int page, int size);
+//
+//    RoomResponseDto.NoticeDto getNoticeDetail(Long roomId, Long noticeId);
+//
+//    List<RoomResponseDto.NoticeDto> getNextNotices(Long roomId, Long lastNoticeId, int size);
 
-    RoomResponseDto.NoticeDto getNoticeDetail(Long roomId, Long noticeId);
+    List<RoomResponseDto.NoticeDto> getNextNotices(Long roomId, Long lastNoticeId, int size);
 
     @Transactional(readOnly = true)
-    RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomEventId);
+    RoomResponseDto.WeeklyStudyInfoDTO getWeeklyStudyInfo(Long roomId, Integer weeks);
 
-    @Transactional(readOnly = true)
-    List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomEventId);
+    List<RoomResponseDto.UserProgressDTO> getUserProgressByRoomEventId(Long roomId, Integer weeks);
 
     RoomResponseDto.RoomMainDto getMainStudyRoom(Long roomId);
 

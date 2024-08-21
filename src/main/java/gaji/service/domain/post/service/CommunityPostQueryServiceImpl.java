@@ -1,5 +1,7 @@
 package gaji.service.domain.post.service;
 
+import gaji.service.domain.common.service.CategoryService;
+import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.SortType;
@@ -23,19 +25,31 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
     private final CommunityPostLikesRepository postLikesRepository;
     private final CommunityPostBookmarkRepository postBookmarkRepository;
 
+    private final CategoryService categoryService;
+
     @Override
-    public Slice<CommnuityPost> getPostList(Integer lastPopularityScore,
+    public Slice<CommnuityPost> getPostList(String keyword,
+                                   Integer lastPopularityScore,
                                    Long lastPostId,
                                    Integer lastLikeCnt,
                                    Integer lastHit,
                                    PostTypeEnum postType,
-                                   Long categoryId,
+                                   String category,
                                    SortType sortType,
                                    PostStatusEnum postStatus,
                                    int page,
                                    int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return communityPostJpaRepository.findAllFetchJoinWithUser(lastPopularityScore,
+
+
+        Long categoryId=null;
+        if(category!=null)
+        {
+            categoryId=categoryService.findAllByCategory(CategoryEnum.fromValue(category)).get(0).getId();
+        }
+
+        return communityPostJpaRepository.findAllFetchJoinWithUser(keyword,
+                lastPopularityScore,
                 lastPostId,
                 lastLikeCnt,
                 lastHit,
@@ -44,11 +58,6 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
                 categoryId,
                 sortType,
                 pageRequest);
-    }
-
-    @Override
-    public Slice<CommnuityPost> searchPostList() {
-        return null;
     }
 
     @Override
@@ -69,7 +78,12 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
     }
 
     @Override
-    public void validPostOwner(Long userId, CommnuityPost post) {
+    public boolean isPostWriter(Long userId, CommnuityPost post) {
+        return post.getUser().getId().equals(userId);
+    }
+
+    @Override
+    public void validPostWriter(Long userId, CommnuityPost post) {
         if (!post.getUser().getId().equals(userId)) {
             throw new RestApiException(CommunityPostErrorStatus._NOT_AUTHORIZED);
         }
