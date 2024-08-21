@@ -22,7 +22,13 @@ public class CategoryExistsValidator implements ConstraintValidator<ExistsCatego
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        boolean isValid = categoryService.existsByCategory(CategoryEnum.from(value));
+        boolean isValid;
+
+        if (value == null || value.isBlank()) {
+            return true;
+        }
+
+        isValid = categoryService.existsByCategory(CategoryEnum.from(value));
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();

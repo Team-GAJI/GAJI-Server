@@ -32,4 +32,11 @@ public class RoomConverter {
                 .assignmentId(assignment.getId())
                 .build();
     }
+
+
+    public static RoomResponseDto.NoticeIdDto toNoticeIdDto(RoomNotice roomNotice) {
+        return RoomResponseDto.NoticeIdDto.builder()
+                .noticeId(roomNotice.getId())
+                .build();
+    }
 }
