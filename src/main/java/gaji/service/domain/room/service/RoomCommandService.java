@@ -41,4 +41,8 @@ public interface RoomCommandService {
     RoomResponseDto.AssignmentProgressResponse toggleAssignmentCompletion(Long userId, Long userAssignmentId);
 
     WeeklyUserProgress calculateAndSaveProgress(RoomEvent roomEvent, User user);
+
+    void deleteRoomNotice(Long noticeId, Long userId);
+
+    RoomNotice updateRoomNotice(Long noticeId, Long userId, String description);
 }
