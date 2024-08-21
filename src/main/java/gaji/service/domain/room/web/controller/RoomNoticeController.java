@@ -6,6 +6,7 @@ import gaji.service.domain.room.service.RoomCommandService;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.room.web.dto.RoomRequestDto;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.domain.studyMate.entity.Assignment;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +41,19 @@ public class RoomNoticeController {
 
         return BaseResponse.onSuccess(RoomConverter.toRoomNoticeDto(roomNotice));
     }
+
+    @PutMapping("/notice/{noticeId}/update")
+    @Operation(summary = "주차별 스터디 과제 수정 API")
+    public BaseResponse<RoomResponseDto.NoticeIdDto> updateAssignment(
+            @PathVariable Long noticeId,
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody RoomRequestDto.AssignmentUpdateDTO request
+    ) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorization);
+        RoomNotice notice = roomCommandService.updateRoomNotice(noticeId,userId,request.getDescription());
+        return BaseResponse.onSuccess(RoomConverter.tonoticeIdDto(notice));
+    }
+
 
     @GetMapping("/{roomId}/notices")
     @Operation(summary = "스터디룸 공지 무한 스크롤 조회", description = "공지를 무한 스크롤 방식으로 조회합니다.")
