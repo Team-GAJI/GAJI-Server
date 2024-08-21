@@ -7,6 +7,7 @@ import gaji.service.jwt.rpository.RefreshRepository;
 import gaji.service.jwt.service.CustomSuccessHandler;
 import gaji.service.oauth2.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,11 +31,15 @@ public class SecurityConfig {
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+
+    @Value("${nicknameRedirectionUrl}")
+    private String frontUrl;
+
     private static final String[] AUTH_WHITELIST = {
             "/oauth2/**", "/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
             "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html", "/reissue", "/", "/my",
-            "/api/**", "/genuine-valkyrie-e0010a.netlify.app/**" +
-            "/gaji.life/**"
+            "/api/**", "/genuine-valkyrie-e0010a.netlify.app/**",
+            "/gaji.life/**", "/vote/**"
     };
 
     @Bean
@@ -59,8 +64,11 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
+
+
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://3.35.119.128"));
+        configuration.setAllowedOrigins(Arrays.asList(frontUrl, "http://3.35.119.128"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie"));
