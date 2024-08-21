@@ -10,7 +10,6 @@ public class PostStatusConverter implements Converter<String, PostStatusEnum> {
 
     @Override
     public PostStatusEnum convert(String param) {
-        if (!StringUtils.hasText(param)) throw new RestApiException(CommunityPostErrorStatus._INVALID_POST_STATUS);
         return PostStatusEnum.from(param);
     }
 }
