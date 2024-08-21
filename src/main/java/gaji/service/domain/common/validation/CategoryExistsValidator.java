@@ -22,7 +22,6 @@ public class CategoryExistsValidator implements ConstraintValidator<ExistsCatego
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        // TODO: 유효하지 않은 카테고리값 들어왔을 때
         boolean isValid = categoryService.existsByCategory(CategoryEnum.from(value));
 
         if (!isValid) {
