@@ -64,7 +64,7 @@ public class RecruitResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CommentResponseDTO {
-        String userImage;
+        String profileImageUrl;
         String userNickName;
         Integer commentOrder;
         int depth;
