@@ -67,7 +67,7 @@ public class SecurityConfig {
 
 
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://genuine-valkyrie-e0010a.netlify.app/","http://gaji.run", "http://3.35.119.128"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://genuine-valkyrie-e0010a.netlify.app/","https://gaji.run", "http://3.35.119.128", "http://192.168.100.94:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie"));
