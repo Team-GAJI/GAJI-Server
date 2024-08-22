@@ -32,7 +32,7 @@ public class CommunityPostRequestDTO {
 
         @Schema(description = "게시글 유형(프로젝트 모집, 질문, 블로그)")
         @ExistPostType
-        private final PostTypeEnum type;
+        private final String type;
 
         @Schema(description = "해시태그 리스트")
         @CheckHashtagBlank
@@ -42,6 +42,25 @@ public class CommunityPostRequestDTO {
         @Schema(description = "카테고리")
         @ExistsCategory
         private final String category;
+    }
+
+    @Schema(description = "커뮤니티 게시글 수정 DTO")
+    @Getter
+    public static class EditPostRequestDTO {
+        @Schema(description = "게시글 제목")
+        private String title;
+
+        @Schema(description = "게시글 본문")
+        private String body;
+
+        @Schema(description = "카테고리")
+        @ExistsCategory
+        private String category;
+
+        @Schema(description = "해시태그 리스트")
+        @CheckHashtagBlank
+        @CheckHashtagLength
+        private final List<String> hashtagList = new ArrayList<>();
     }
 
     @Schema(description = "커뮤니티 게시글 댓글 작성 DTO")

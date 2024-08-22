@@ -45,11 +45,21 @@ public class CommunityPostRestController {
 
     @PostMapping
     @Operation(summary = "커뮤니티 게시글 업로드 API", description = "커뮤니티의 게시글을 업로드하는 API입니다. 게시글 유형과 제목, 본문 내용을 검증합니다.")
-    public BaseResponse<CommunityPostResponseDTO.UploadPostResponseDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
-                                                                                   @RequestBody @Valid CommunityPostRequestDTO.UploadPostRequestDTO request) {
+    public BaseResponse<CommunityPostResponseDTO.PostIdResponseDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                               @RequestBody @Valid CommunityPostRequestDTO.UploadPostRequestDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
         CommnuityPost newPost = communityPostCommandService.uploadPost(userId, request);
-        return BaseResponse.onSuccess(CommunityPostConverter.toUploadPostResponseDTO(newPost));
+        return BaseResponse.onSuccess(CommunityPostConverter.toPostIdResponseDTO(newPost));
+    }
+
+    @PutMapping("/{postId}")
+    @Operation(summary = "커뮤니티 게시글 수정 API", description = "커뮤니티 게시글을 수정 API입니다.")
+    public BaseResponse<CommunityPostResponseDTO.PostIdResponseDTO> editPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                             @RequestBody @Valid CommunityPostRequestDTO.EditPostRequestDTO request,
+                                                                             @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        CommnuityPost editedCommnuityPost = communityPostCommandService.editPost(userId, postId, request);
+        return BaseResponse.onSuccess(CommunityPostConverter.toPostIdResponseDTO(editedCommnuityPost));
     }
 
     @DeleteMapping("/{postId}")

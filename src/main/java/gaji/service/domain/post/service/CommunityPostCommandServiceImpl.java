@@ -9,6 +9,7 @@ import gaji.service.domain.common.entity.SelectHashtag;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.post.converter.CommunityPostConverter;
 import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.post.entity.CommunityComment;
@@ -53,7 +54,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
             List<String> hashtagStringList = request.getHashtagList();
             List<Hashtag> hashtagEntityList = hashtagService.createHashtagEntityList(hashtagStringList);
 
-            List<SelectHashtag> selectHashtagList = HashtagConverter.toSelectHashtagList(hashtagEntityList, post.getId(), request.getType());
+            List<SelectHashtag> selectHashtagList = HashtagConverter.toSelectHashtagList(hashtagEntityList, post.getId(), PostTypeEnum.from(request.getType()));
             hashtagService.saveAllSelectHashtag(selectHashtagList);
         }
 
@@ -68,6 +69,19 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         }
 
         return newPost;
+    }
+
+    @Override
+    public CommnuityPost editPost(Long userId, Long postId, CommunityPostRequestDTO.EditPostRequestDTO request) {
+        // 조회
+        CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
+
+        // 작성자 검증
+        communityPostQueryService.validPostWriter(userId, findPost);
+
+
+
+        return null;
     }
 
     @Override

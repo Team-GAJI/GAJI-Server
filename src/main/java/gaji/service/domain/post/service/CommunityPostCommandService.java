@@ -9,6 +9,7 @@ import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
 public interface CommunityPostCommandService {
 
     CommnuityPost uploadPost(Long userId, CommunityPostRequestDTO.UploadPostRequestDTO request);
+    CommnuityPost editPost(Long userId, Long postId, CommunityPostRequestDTO.EditPostRequestDTO request);
     CommunityComment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, CommunityPostRequestDTO.WriteCommentRequestDTO request);
     void hardDeleteComment(Long userId, Long commentId);
     void hardDeleteCommunityPost(Long userId, Long postId);
