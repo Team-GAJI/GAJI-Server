@@ -78,7 +78,7 @@ public class UserRestController {
     public BaseResponse<UserResponseDTO.GetUserDetailDTO> getUserDetail(@RequestHeader(value = "Authorization", required = false) String authorizationHeader,
                                                                         @PathVariable("userId") Long userId) {
 
-        User user = userQueryService.getUserDetail(userId);
+        User user = userQueryService.findUserById(userId);
         return BaseResponse.onSuccess(UserConverter.toGetUserDetailDTO(user));
     }
 
