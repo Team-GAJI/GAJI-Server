@@ -1,21 +1,26 @@
 package gaji.service.domain.room.service;
 
 
+import com.querydsl.core.Tuple;
+import gaji.service.domain.enums.RoomTypeEnum;
 import gaji.service.domain.room.code.RoomErrorStatus;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.repository.*;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.domain.user.entity.User;
 import gaji.service.global.converter.DateConverter;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +34,7 @@ public class RoomQueryServiceImpl implements RoomQueryService {
     private final RoomEventRepository roomEventRepository;
     private final RoomRepository roomRepository;
     private final RoomQueryRepository roomQueryRepository;
+    private final RoomCustomRepository roomCustomRepository;
     private final WeeklyUserProgressRepository weeklyUserProgressRepository;
     private final NoticeConfirmationRepository noticeConfirmationRepository;
     private final WebInvocationPrivilegeEvaluator privilegeEvaluator;
@@ -46,6 +52,20 @@ public Room findRoomById(Long roomId) {
             .orElseThrow(() -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
 
 }
+    // TODO: 사용자와 스터디룸 타입에 따라 모든 스터디룸을 반환
+    @Override
+    public Slice<Tuple> getRoomByUserAndType(User user, LocalDate cursorDate, Long cursorId, Pageable pageable, RoomTypeEnum type) {
+        Slice<Tuple> roomList;
+
+        if(type == RoomTypeEnum.ONGOING) {
+            roomList = roomCustomRepository.findAllOngoingRoomsByUser(user, cursorDate, cursorId, pageable);
+        }
+        else{
+            roomList = roomCustomRepository.findAllEndedRoomsByUser(user, cursorDate, cursorId, pageable);
+        }
+
+        return roomList;
+    }
 
     @Override
     public RoomEvent findRoomEventByRoomIdAndWeeks(Long roomId, Integer weeks) {

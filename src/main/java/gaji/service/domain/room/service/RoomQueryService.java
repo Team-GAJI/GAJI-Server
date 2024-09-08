@@ -1,15 +1,23 @@
 package gaji.service.domain.room.service;
 
+import com.querydsl.core.Tuple;
+import gaji.service.domain.enums.RoomTypeEnum;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.entity.RoomEvent;
 import gaji.service.domain.room.web.dto.RoomResponseDto;
+import gaji.service.domain.user.entity.User;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface RoomQueryService {
 
     Room findRoomById(Long roomId);
+
+    Slice<Tuple> getRoomByUserAndType(User user, LocalDate cursorDate, Long cursorId, Pageable pageable, RoomTypeEnum type);
 
     RoomEvent findRoomEventByRoomIdAndWeeks(Long roomId, Integer weeks);
 
