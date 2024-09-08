@@ -1,5 +1,6 @@
 package gaji.service.domain.post.service;
 
+import com.querydsl.core.Tuple;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
@@ -10,12 +11,16 @@ import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.post.repository.CommunityPostBookmarkRepository;
 import gaji.service.domain.post.repository.CommunityPostJpaRepository;
 import gaji.service.domain.post.repository.CommunityPostLikesRepository;
+import gaji.service.domain.user.entity.User;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +63,14 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
                 categoryId,
                 sortType,
                 pageRequest);
+    }
+
+    // TODO: 사용자와 게시글 타입에 따라 모든 게시글을 반환
+    @Override
+    public Slice<Tuple> getAllPostByUserAndType(User user, LocalDateTime cursorDateTime, Pageable pageable, PostTypeEnum type) {
+        Slice<Tuple> postList = communityPostJpaRepository.findAllPostsByUser(user, cursorDateTime, pageable, type);
+
+        return postList;
     }
 
     @Override
