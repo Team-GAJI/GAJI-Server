@@ -44,13 +44,14 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final RoomPostLikesRepository roomPostLikesRepository;
     private final RoomPostBookmarkRepository roomPostBookmarkRepository;
 
+    // TODO: 게시글 생성
     @Override
-    public RoomPostResponseDto.toCreateRoomPostIdDTO createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
+    public RoomPost createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
 
-        // 스터디룸 게시판 확인 또는 생성
+        // 스터디룸 게시판 확인 또는 생성(중복여부 판단)
         RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId,RoomPostType.ROOM_POST)
                 .orElseGet(() -> {
                     RoomBoard newRoomBoard = RoomBoard.builder()
@@ -63,9 +64,9 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
 
         // RoomPost 생성 및 저장
         RoomPost roomPost = RoomPostConverter.toRoomPost(requestDto, studyMate, roomBoard);
-        roomPostRepository.save(roomPost);
+        saveRoomPost(roomPost);
 
-        return RoomPostConverter.postIdDto(roomPost.getId());
+        return roomPost;
     }
 
     @Override
@@ -239,5 +240,26 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         parentComment.addReply(reply);
         return postCommentRepository.save(reply);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // roomPost 저장
+    @Override
+    public void saveRoomPost(RoomPost roomPost){
+        roomPostRepository.save(roomPost);
+    }
+
 
 }
