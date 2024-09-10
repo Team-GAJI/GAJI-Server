@@ -69,15 +69,19 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         return roomPost;
     }
 
+    // TODO: 게시글 수정
     @Override
     public void updatePost(Long postId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
-        RoomPost post = roomPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
 
+        // roomPost 조회 및 에러처리
+        RoomPost post = findRoomPostById(postId);
+
+        // 작성자와 수정자가 일치하는지 검사
         if (!post.isAuthor(userId)) {
             throw new RestApiException(RoomPostErrorStatus._USER_NOT_UPDATE_AUTH);
         }
 
+        //업데이트
         post.update(requestDto.getTitle(), requestDto.getBody());
     }
 
@@ -261,5 +265,12 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         roomPostRepository.save(roomPost);
     }
 
-
+    // roomPost 조회
+    @Override
+    public RoomPost findRoomPostById(Long roomPostId){
+        // roomPost 조회 및 에러처리
+        RoomPost post = roomPostRepository.findById(roomPostId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+         return post;
+    }
 }
