@@ -15,6 +15,7 @@ import gaji.service.domain.roomBoard.repository.RoomPost.PostCommentRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostBookmarkRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostLikesRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
+import gaji.service.domain.roomBoard.service.postCommon.PostCommonCommandService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
@@ -43,6 +44,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final RoomPostQueryService roomPostQueryService;
     private final RoomPostLikesRepository roomPostLikesRepository;
     private final RoomPostBookmarkRepository roomPostBookmarkRepository;
+    private final PostCommonCommandService postCommonCommandService;
 
     // TODO: 게시글 생성
     @Override
@@ -74,7 +76,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     public void updatePost(Long postId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
 
         // roomPost 조회 및 에러처리
-        RoomPost post = findRoomPostById(postId);
+        RoomPost post = roomPostQueryService.findRoomPostById(postId);
 
         // 작성자와 수정자가 일치하는지 검사
         if (!post.isAuthor(userId)) {
@@ -90,7 +92,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     @Override
     public void deletePost(Long postId, Long userId) {
         // roomPost 조회
-        RoomPost post = findRoomPostById(postId);
+        RoomPost post = roomPostQueryService.findRoomPostById(postId);
 
         // 작성자와 삭제하려는 사람이 일치하는지 검사
         if (!post.isAuthor(userId)) {
@@ -102,19 +104,26 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     }
 
 
+    // TODO: 게시글에 댓글 달기
     @Override
-    public RoomPostResponseDto.toWriteCommentDto writeCommentOnPost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+    public PostComment writeCommentOnPost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+        //user 조회
         User user = userQueryService.findUserById(userId);
+
+        //RoomPost 조회
         RoomPost roomPost = roomPostQueryService.findPostById(postId);
 
+        // dto를 엔터티로 변환
         PostComment postComment = PostComment.builder()
                 .user(user)
                 .roomPost(roomPost)
                 .body(request.getBody())
                 .build();
-        postCommentRepository.save(postComment);
 
-        return RoomPostConverter.toWritePostCommentDto(postComment);
+        // 댓글 저장
+        postCommonCommandService.savePostComment(postComment);
+
+        return postComment;
     }
 
     @Override
@@ -270,12 +279,4 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         roomPostRepository.save(roomPost);
     }
 
-    // roomPost 조회
-    @Override
-    public RoomPost findRoomPostById(Long roomPostId){
-        // roomPost 조회 및 에러처리
-        RoomPost post = roomPostRepository.findById(roomPostId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
-         return post;
-    }
 }

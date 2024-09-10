@@ -151,4 +151,13 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
         return dto;
     }
 
+    // roomPost 조회
+    @Override
+    public RoomPost findRoomPostById(Long roomPostId){
+        // roomPost 조회 및 에러처리
+        RoomPost post = roomPostRepository.findById(roomPostId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        return post;
+    }
+
 }
