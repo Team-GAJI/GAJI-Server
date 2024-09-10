@@ -1,11 +1,12 @@
 package gaji.service.domain.roomBoard.service.RoomPost;
 
 import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 
 public interface RoomPostCommandService {
-    RoomPostResponseDto.toCreateRoomPostIdDTO createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto);
+    RoomPost createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto);
     void updatePost(Long postId, Long userId, RoomPostRequestDto.RoomPostDto requestDto);
 
     void deletePost(Long postId, Long userId);
@@ -25,4 +26,7 @@ public interface RoomPostCommandService {
     void removeBookmark(Long postId, Long userId, Long roomId);
 
     PostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request);
+
+    // roomPost 저장
+    void saveRoomPost(RoomPost roomPost);
 }
