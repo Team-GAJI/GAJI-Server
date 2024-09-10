@@ -20,8 +20,6 @@ public interface RoomPostQueryService {
 
     RoomPost findPostById(Long PostId);
 
-    PostComment findCommentByCommentId(Long commentId);
-
     PostComment findPostCommentById(Long troublePostId);
 
     RoomPostResponseDto.RoomPostDetailDTO getPostDetail(Long postId, Long userId, int page, int size);
