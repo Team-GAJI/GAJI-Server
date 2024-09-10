@@ -78,12 +78,6 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     }
 
     @Override
-    public PostComment findCommentByCommentId(Long commentId){
-        return postCommentRepository.findById(commentId)
-                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._NOT_FOUND_COMMENT));
-    }
-
-    @Override
     public PostComment findPostCommentById(Long troublePostId) {
         return postCommentRepository.findById(troublePostId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));

@@ -97,7 +97,10 @@ public class RoomPostController {
             @RequestBody RoomPostRequestDto.RoomTroubleCommentDto requestDto,
             @PathVariable Long commentId
     ) {
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
+
+        // 댓글 업데이트
         roomPostCommandService.updateComment(commentId, userId,requestDto);
         return BaseResponse.onSuccess( "댓글이 성공적으로 업데이트되었습니다.");
     }

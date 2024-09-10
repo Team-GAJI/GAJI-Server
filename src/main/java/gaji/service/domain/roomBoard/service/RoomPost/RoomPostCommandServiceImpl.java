@@ -16,6 +16,7 @@ import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostBookmarkReposit
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostLikesRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.service.postCommon.PostCommonCommandService;
+import gaji.service.domain.roomBoard.service.postCommon.PostCommonQueryService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
@@ -45,6 +46,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final RoomPostLikesRepository roomPostLikesRepository;
     private final RoomPostBookmarkRepository roomPostBookmarkRepository;
     private final PostCommonCommandService postCommonCommandService;
+    private final PostCommonQueryService postCommonQueryService;
 
     // TODO: 게시글 생성
     @Override
@@ -126,13 +128,18 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         return postComment;
     }
 
+    // TODO: 댓글 업데이트
     @Override
     public void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto) {
-        PostComment comment = roomPostQueryService.findCommentByCommentId(commentId);
+        //댓글 조회
+        PostComment comment = postCommonQueryService.findCommentByCommentId(commentId);
+
+        // 작성자와 수정자가 같은지 검증
         if (!comment.isAuthor(userId)){
             throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_UPDATE_AUTH);
         }
 
+        // 댓글 업데이트
         comment.updateComment(requestDto.getBody());
     }
 
