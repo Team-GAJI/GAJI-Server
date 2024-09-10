@@ -29,4 +29,7 @@ public interface RoomPostCommandService {
 
     // roomPost 저장
     void saveRoomPost(RoomPost roomPost);
+
+    // roomPost 조회
+    RoomPost findRoomPostById(Long roomPostId);
 }
