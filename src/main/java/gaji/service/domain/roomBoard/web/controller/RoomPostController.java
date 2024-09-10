@@ -80,9 +80,14 @@ public class RoomPostController {
             @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto,
             @PathVariable Long postId
     ){
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        RoomPostResponseDto.toWriteCommentDto newComment = roomPostCommandService.writeCommentOnPost(userId, postId, requestDto);
-        return BaseResponse.onSuccess(newComment);
+
+        //게시글 삭제
+        PostComment postComment = roomPostCommandService.writeCommentOnPost(userId, postId, requestDto);
+
+        // 댓글 Id 반환
+        return BaseResponse.onSuccess(new RoomPostResponseDto.toWriteCommentDto(postComment.getId()));
     }
 
     @PutMapping("/post/comments/{commentId}")

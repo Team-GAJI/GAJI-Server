@@ -50,6 +50,7 @@ public class RoomPostResponseDto {
         private String profileImageUrl;
     }
 
+    // 트러블슈팅 게시글 id DTO
     @Builder
     @Getter
     @NoArgsConstructor
@@ -57,6 +58,9 @@ public class RoomPostResponseDto {
     public static class toCreateRoomTroublePostIdDTO {
         Long troublePostId;
     }
+
+
+    // 댓글Id DTO
     @Builder
     @Getter
     @NoArgsConstructor

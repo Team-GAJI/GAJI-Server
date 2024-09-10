@@ -27,4 +27,7 @@ public interface RoomPostQueryService {
     RoomPostResponseDto.RoomPostDetailDTO getPostDetail(Long postId, Long userId, int page, int size);
 
     Page<RoomPostResponseDto.CommentWithRepliesDTO> getCommentsWithReplies(Long postId, Pageable pageable);
+
+    // roomPost 조회
+    RoomPost findRoomPostById(Long roomPostId);
 }

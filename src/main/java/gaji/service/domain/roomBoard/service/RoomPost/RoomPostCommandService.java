@@ -11,7 +11,7 @@ public interface RoomPostCommandService {
 
     void deletePost(Long postId, Long userId);
 
-    RoomPostResponseDto.toWriteCommentDto writeCommentOnPost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request);
+    PostComment writeCommentOnPost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request);
 
     void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto);
 
@@ -29,7 +29,4 @@ public interface RoomPostCommandService {
 
     // roomPost 저장
     void saveRoomPost(RoomPost roomPost);
-
-    // roomPost 조회
-    RoomPost findRoomPostById(Long roomPostId);
 }
