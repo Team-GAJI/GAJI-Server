@@ -86,13 +86,18 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     }
 
 
+    // TODO: 게시글 삭제
     @Override
     public void deletePost(Long postId, Long userId) {
-        RoomPost post = roomPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        // roomPost 조회
+        RoomPost post = findRoomPostById(postId);
+
+        // 작성자와 삭제하려는 사람이 일치하는지 검사
         if (!post.isAuthor(userId)) {
             throw new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND);
         }
+
+        // 삭제
         roomPostRepository.delete(post);
     }
 

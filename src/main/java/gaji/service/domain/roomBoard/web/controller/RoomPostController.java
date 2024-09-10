@@ -36,7 +36,10 @@ public class RoomPostController {
             @PathVariable("roomId") Long roomId,
             @RequestBody RoomPostRequestDto.RoomPostDto requestDto
     ){
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
+
+        // 게시글 생성
         RoomPost roomPost = roomPostCommandService.createRoomPost(roomId, userId, requestDto);
         return BaseResponse.onSuccess(new RoomPostResponseDto.toCreateRoomPostIdDTO(roomPost.getId()));
     }
@@ -48,7 +51,10 @@ public class RoomPostController {
             @RequestBody RoomPostRequestDto.RoomPostDto requestDto,
             @PathVariable Long postId
     ) {
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
+
+        //게시글 업데이트
         roomPostCommandService.updatePost(postId, userId,requestDto);
         return BaseResponse.onSuccess( "게시글이 성공적으로 업데이트되었습니다.");
     }
@@ -59,7 +65,10 @@ public class RoomPostController {
             @RequestHeader("Authorization") String authorization,
             @PathVariable Long postId
     ) {
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
+
+        //게시글 삭제
         roomPostCommandService.deletePost(postId, userId);
         return BaseResponse.onSuccess( "게시글이 성공적으로 삭제되었습니다.");
     }
