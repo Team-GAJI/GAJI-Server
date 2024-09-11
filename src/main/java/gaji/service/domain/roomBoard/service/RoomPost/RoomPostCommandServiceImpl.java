@@ -175,10 +175,10 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
 
         // 해당 게시글 좋아요 조회
-        Optional<RoomPostLikes> likeOptional = findLikesByUserIdAndRoomId(post, studyMate);
+        RoomPostLikes like = findLikesByUserIdAndRoomId(post, studyMate);
 
-        // 이미 좋아요면 에러 ㅂ라생
-        if (likeOptional.isPresent()) {
+        // 이미 좋아요면 에러 처리
+        if (like != null) {
             throw new RestApiException(RoomPostErrorStatus._POST_ALREADY_LIKED);
         }
 
@@ -193,21 +193,25 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
 
         //좋아요 리스트 저장
         saveRoomPostLikes(newLike);
-
     }
 
+    // TODO: 좋아요 취소 기능
     @Override
     public void removeLike(Long postId, Long userId, Long roomId) {
-        RoomPost post = roomPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        // 게시글 찾기
+        RoomPost post = roomPostQueryService.findPostById(postId);
+
+        // user 가 해당 스터디에 참여하고 있는지 검사
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
 
-        RoomPostLikes like = roomPostLikesRepository
-                .findByRoomPostAndStudyMate(post, studyMate)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus. _POST_LIKE_NOT_FOUND));
+        // 좋아요 찾기
+        RoomPostLikes like = findLikesByUserIdAndRoomId(post, studyMate);
 
+        // 게시글의 좋아요 리스트에서 제거
         post.removeLike(like);
-        roomPostLikesRepository.delete(like);
+
+        // 게시글 삭제
+        deleteRoomPostLikes(like);
     }
 
     @Override
@@ -286,13 +290,21 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     }
     // TODO: 좋아요 리스트 조회
     @Override
-    public Optional<RoomPostLikes> findLikesByUserIdAndRoomId(RoomPost post, StudyMate studyMate){
-        return roomPostLikesRepository.findByRoomPostAndStudyMate(post, studyMate);
+    public RoomPostLikes findLikesByUserIdAndRoomId(RoomPost post, StudyMate studyMate){
+        return roomPostLikesRepository.findByRoomPostAndStudyMate(post, studyMate)
+        .orElseThrow(() -> new RestApiException(RoomPostErrorStatus. _POST_LIKE_NOT_FOUND));
+
     }
 
     // TODO: 게시글 좋아요 저장
     public void saveRoomPostLikes(RoomPostLikes newLike){
         roomPostLikesRepository.save(newLike);
+    }
+
+    // TODO: 게시글 좋아요 리스트에서 해당 좋아요 제거
+    public void deleteRoomPostLikes(RoomPostLikes like){
+        roomPostLikesRepository.delete(like);
+
     }
 
 }
