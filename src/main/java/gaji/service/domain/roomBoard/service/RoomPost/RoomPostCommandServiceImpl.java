@@ -136,10 +136,10 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         // 작성자와 수정자가 같은지 검증
         if (!comment.isAuthor(userId)){
             throw new RestApiException(RoomPostErrorStatus._USER_NOT_COMMENT_UPDATE_AUTH);
+        }else {
+            // 댓글 업데이트
+            comment.updateComment(requestDto.getBody());
         }
-
-        // 댓글 업데이트
-        comment.updateComment(requestDto.getBody());
     }
 
     // TODO : 댓글 삭제 기능
@@ -180,7 +180,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         // 이미 좋아요면 에러 처리
         if (like != null) {
             throw new RestApiException(RoomPostErrorStatus._POST_ALREADY_LIKED);
-        }
+        }else{
 
         // 새로운 좋아요 생성
         RoomPostLikes newLike = RoomPostLikes.builder()
@@ -193,6 +193,8 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
 
         //좋아요 리스트 저장
         saveRoomPostLikes(newLike);
+
+        }
     }
 
     // TODO: 좋아요 취소 기능
@@ -214,61 +216,79 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         deleteRoomPostLikes(like);
     }
 
+    //TODO: 북마크 추가 기능
     @Override
     public void addBookmark(Long postId, Long userId, Long roomId) {
-        RoomPost post = roomPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+
+        // post 조회
+        RoomPost post = roomPostQueryService.findPostById(postId);
+
+        // 스터디룸에 참여하고 있는 유저 검증
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
 
-        if (roomPostBookmarkRepository.findByRoomPostAndStudyMate(post, studyMate).isPresent()) {
+        // 북마크 상태 점검.
+        if (roomPostQueryService.findRoomPostBookmarkByRoomPostAndStudyMate(post, studyMate) != null) {
             throw new RestApiException(RoomPostErrorStatus._POST_ALREADY_BOOKMARKED);
+        }else {
+
+            // 북마크 생성
+            RoomPostBookmark newBookmark = RoomPostBookmark.builder()
+                    .roomPost(post)
+                    .studyMate(studyMate)
+                    .build();
+            post.addBookmark(newBookmark);
+
+            // 북마크 추가
+            saveRoomPostBookmark(newBookmark);
         }
-
-        RoomPostBookmark newBookmark = RoomPostBookmark.builder()
-                .roomPost(post)
-                .studyMate(studyMate)
-                .build();
-        post.addBookmark(newBookmark);
-        roomPostBookmarkRepository.save(newBookmark);
-
     }
 
     @Override
     public void removeBookmark(Long postId, Long userId, Long roomId) {
-        RoomPost post = roomPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        // post 조회
+        RoomPost post = roomPostQueryService.findPostById(postId);
+
+        // 스터디룸에 참여하고 있는 유저 검증
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
 
-        RoomPostBookmark bookmark = roomPostBookmarkRepository
-                .findByRoomPostAndStudyMate(post, studyMate)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_BOOKMARKED_NOT_FOUND));
+        // bookmark 조회
+        RoomPostBookmark bookmark = roomPostQueryService.findRoomPostBookmarkByRoomPostAndStudyMate(post, studyMate);
 
+        //roomPost에서 북마크 제거
         post.removeBookmark(bookmark);
-        roomPostBookmarkRepository.delete(bookmark);
+
+        // bookmark 삭제
+        deleteRoomPostBookmark(bookmark);
     }
 
+    // TODO: 답글 달기
     @Override
     public PostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request) {
-        PostComment parentComment = postCommentRepository.findById(commentId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+        // 댓글 조회
+        PostComment parentComment = roomPostQueryService.findPostCommentById(commentId);
 
+        // 만약 조회한 댓글이 댓글인지 답글인지 검증
         if (parentComment.isReply()) {
             throw new IllegalStateException("답글에는 답글을 달 수 없습니다.");
+        } else {
+
+            // 회원 조회
+            User user = userQueryService.findUserById(userId);
+
+            // 답글 생성
+            PostComment reply = PostComment.builder()
+                    .user(user)
+                    .roomPost(parentComment.getRoomPost())
+                    .body(request.getBody())
+                    .isReply(true)
+                    .parentComment(parentComment)
+                    .build();
+
+            // 댓글에 답글 추가
+            parentComment.addReply(reply);
+            return postCommentRepository.save(reply);
         }
-
-        User user = userQueryService.findUserById(userId);
-        PostComment reply = PostComment.builder()
-                .user(user)
-                .roomPost(parentComment.getRoomPost())
-                .body(request.getBody())
-                .isReply(true)
-                .parentComment(parentComment)
-                .build();
-
-        parentComment.addReply(reply);
-        return postCommentRepository.save(reply);
     }
-
 
 
 
@@ -307,4 +327,13 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
 
     }
 
+    // TODO: 북마크 저장
+    public void saveRoomPostBookmark(RoomPostBookmark roomPostBookmark){
+        roomPostBookmarkRepository.save(roomPostBookmark);
+    }
+
+    // TODO: 북마크 삭제
+    public void deleteRoomPostBookmark(RoomPostBookmark roomPostBookmark){
+        roomPostBookmarkRepository.delete(roomPostBookmark);
+    }
 }

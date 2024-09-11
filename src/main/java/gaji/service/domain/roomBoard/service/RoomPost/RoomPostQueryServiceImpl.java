@@ -5,8 +5,10 @@ import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPostBookmark;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.PostCommentRepository;
+import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostBookmarkRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostQueryRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
@@ -33,6 +35,7 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     private final PostCommentRepository postCommentRepository;
     private final StudyMateQueryService studyMateQueryService;
     private final RoomBoardRepository roomBoardRepository;
+    private final RoomPostBookmarkRepository roomPostBookmarkRepository;
 
     @Override
     public List<RoomPostResponseDto.PostListDto> getTop3RecentPosts(Long roomId) {
@@ -77,6 +80,14 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     public RoomPost findPostById(Long PostId){
         return roomPostRepository.findById(PostId)
                 .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._POST_NOT_FOUND));
+    }
+
+    // TODO: id로 roomPost 북마크 조회
+    @Override
+    public RoomPostBookmark findRoomPostBookmarkByRoomPostAndStudyMate(RoomPost post, StudyMate studyMate){
+        return roomPostBookmarkRepository.findByRoomPostAndStudyMate(post, studyMate)
+                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._POST_BOOKMARKED_NOT_FOUND));
+
     }
 
     @Override
