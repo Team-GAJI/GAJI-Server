@@ -35,5 +35,5 @@ public interface RoomPostCommandService {
     void saveRoomPost(RoomPost roomPost);
 
     // TODO:
-    Optional<RoomPostLikes> findLikesByUserIdAndRoomId(RoomPost post, StudyMate studyMate);
+    RoomPostLikes findLikesByUserIdAndRoomId(RoomPost post, StudyMate studyMate);
 }
