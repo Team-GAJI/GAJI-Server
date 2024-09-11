@@ -13,9 +13,6 @@ import java.util.List;
 public interface RoomPostQueryService {
     List<RoomPostResponseDto.PostListDto> getTop3RecentPosts(Long roomId);
 
-//    List<RoomPostResponseDto.TroublePostSummaryDto> getPaginatedTroublePosts(Long boardId, int page, int size);
-
-
     List<RoomPostResponseDto.MainPostSummaryDto> getLatestPosts(Long boardId);
 
     List<RoomPostResponseDto.PostSummaryDto> getNextPosts(Long roomId, Long lastPostId, int size);
@@ -31,6 +28,5 @@ public interface RoomPostQueryService {
 
     Page<RoomPostResponseDto.CommentWithRepliesDTO> getCommentsWithReplies(Long postId, Pageable pageable);
 
-    // roomPost 조회
     RoomPost findRoomPostById(Long roomPostId);
 }
