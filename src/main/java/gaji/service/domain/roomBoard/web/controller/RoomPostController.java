@@ -111,6 +111,7 @@ public class RoomPostController {
             @RequestHeader("Authorization") String authorization,
             @PathVariable Long commentId
     ) {
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomPostCommandService.deleteComment(commentId, userId);
         return BaseResponse.onSuccess( "댓글이 성공적으로 삭제되었습니다.");
@@ -123,6 +124,7 @@ public class RoomPostController {
             @PathVariable Long postId,
             @PathVariable Long roomId
     ) {
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomPostCommandService.addLike(postId, userId, roomId);
         return BaseResponse.onSuccess("LIKE");
@@ -135,6 +137,7 @@ public class RoomPostController {
             @PathVariable Long postId,
             @PathVariable Long roomId
     ) {
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomPostCommandService.removeLike(postId, userId, roomId);
         return BaseResponse.onSuccess("UNLIKE");
@@ -147,6 +150,7 @@ public class RoomPostController {
             @PathVariable Long roomId,
             @PathVariable Long postId
     ) {
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomPostCommandService.addBookmark(postId, userId, roomId);
         return BaseResponse.onSuccess( "북마크가 성공적으로 업데이트 되었습니다.");
@@ -159,6 +163,7 @@ public class RoomPostController {
             @PathVariable Long roomId,
             @PathVariable Long postId
     ) {
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         roomPostCommandService.removeBookmark(postId, userId, roomId);
         return BaseResponse.onSuccess( "북마크가 성공적으로 삭제되었습니다.");
@@ -196,8 +201,13 @@ public class RoomPostController {
             @PathVariable Long commentId,
             @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto
     ) {
+        // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
+
+        // 저장한 답글
         PostComment replyComment = roomPostCommandService.addReply(commentId, userId, requestDto);
+
+        // 답글의 id를 반환
         return BaseResponse.onSuccess(RoomPostConverter.toWritePostCommentDto(replyComment));
     }
 
