@@ -71,6 +71,8 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
         Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt", "id"));
         return roomPostRepository.findPostSummariesForInfiniteScroll(roomBoard.getId(), lastCreatedAt, pageable);
     }
+
+    // TODO: id 로 roomPost 찾기
     @Override
     public RoomPost findPostById(Long PostId){
         return roomPostRepository.findById(PostId)
