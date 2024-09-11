@@ -18,7 +18,6 @@ import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.service.postCommon.PostCommonCommandService;
 import gaji.service.domain.roomBoard.service.postCommon.PostCommonQueryService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
-import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
@@ -166,28 +165,35 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     }
 
 
-
+    // TODO: 게시글 좋아요
     @Override
     public void addLike(Long postId, Long userId, Long roomId) {
-        RoomPost post = roomPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        // 게시글 찾기
+        RoomPost post = roomPostQueryService.findPostById(postId);
+
+        // user 가 해당 스터디에 참여하고 있는지 검사
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
 
-        Optional<RoomPostLikes> likeOptional = roomPostLikesRepository
-                .findByRoomPostAndStudyMate(post, studyMate)
-                ;
+        // 해당 게시글 좋아요 조회
+        Optional<RoomPostLikes> likeOptional = findLikesByUserIdAndRoomId(post, studyMate);
 
+        // 이미 좋아요면 에러 ㅂ라생
         if (likeOptional.isPresent()) {
             throw new RestApiException(RoomPostErrorStatus._POST_ALREADY_LIKED);
         }
 
+        // 새로운 좋아요 생성
         RoomPostLikes newLike = RoomPostLikes.builder()
                 .roomPost(post)
                 .studyMate(studyMate)
                 .build();
 
+        // 게시글에 좋아요 추가
         post.addLike(newLike);
-        roomPostLikesRepository.save(newLike);
+
+        //좋아요 리스트 저장
+        saveRoomPostLikes(newLike);
+
     }
 
     @Override
@@ -273,10 +279,20 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
 
 
 
-    // roomPost 저장
+    // TODO: 게시글 저장
     @Override
     public void saveRoomPost(RoomPost roomPost){
         roomPostRepository.save(roomPost);
+    }
+    // TODO: 좋아요 리스트 조회
+    @Override
+    public Optional<RoomPostLikes> findLikesByUserIdAndRoomId(RoomPost post, StudyMate studyMate){
+        return roomPostLikesRepository.findByRoomPostAndStudyMate(post, studyMate);
+    }
+
+    // TODO: 게시글 좋아요 저장
+    public void saveRoomPostLikes(RoomPostLikes newLike){
+        roomPostLikesRepository.save(newLike);
     }
 
 }
