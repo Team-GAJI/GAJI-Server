@@ -90,6 +90,7 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
 
     }
 
+    // TODO: 게시글 댓글 조회
     @Override
     public PostComment findPostCommentById(Long troublePostId) {
         return postCommentRepository.findById(troublePostId)

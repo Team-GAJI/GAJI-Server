@@ -31,9 +31,7 @@ public interface RoomPostCommandService {
 
     PostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request);
 
-    // roomPost 저장
     void saveRoomPost(RoomPost roomPost);
 
-    // TODO:
     RoomPostLikes findLikesByUserIdAndRoomId(RoomPost post, StudyMate studyMate);
 }

@@ -113,6 +113,8 @@ public class RoomPostController {
     ) {
         // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
+
+        // 게시글 댓글 삭제
         roomPostCommandService.deleteComment(commentId, userId);
         return BaseResponse.onSuccess( "댓글이 성공적으로 삭제되었습니다.");
     }
@@ -126,8 +128,10 @@ public class RoomPostController {
     ) {
         // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
+
+        // 게시글 좋아요
         roomPostCommandService.addLike(postId, userId, roomId);
-        return BaseResponse.onSuccess("LIKE");
+        return BaseResponse.onSuccess("좋아요가 추가되었습니다.");
     }
 
     @DeleteMapping("/post/{roomId}/posts/{postId}/unlike")
@@ -139,8 +143,10 @@ public class RoomPostController {
     ) {
         // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
+
+        // 좋아요 취소
         roomPostCommandService.removeLike(postId, userId, roomId);
-        return BaseResponse.onSuccess("UNLIKE");
+        return BaseResponse.onSuccess("좋아요가 취소되었습니다.");
     }
 
     @PostMapping("/post/{roomId}/{postId}/bookmark-add")
@@ -152,6 +158,8 @@ public class RoomPostController {
     ) {
         // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
+
+        //북마크 추가
         roomPostCommandService.addBookmark(postId, userId, roomId);
         return BaseResponse.onSuccess( "북마크가 성공적으로 업데이트 되었습니다.");
     }
@@ -165,23 +173,12 @@ public class RoomPostController {
     ) {
         // 토큰에서 userId 추출
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
+
+        //북마크 제거
         roomPostCommandService.removeBookmark(postId, userId, roomId);
         return BaseResponse.onSuccess( "북마크가 성공적으로 삭제되었습니다.");
     }
 
-//    @GetMapping("/{roomId}/post/list")
-//    @Operation(summary = "게시글 무한 스크롤 조회", description = "게시글을 무한 스크롤 방식으로 조회합니다.")
-//    @ApiResponse(responseCode = "200", description = "조회 성공")
-//    public BaseResponse<List<RoomPostResponseDto.PostSummaryDto>> getNextPosts(
-//            @PathVariable @Parameter(description = "스터디룸 ID") Long roomId,
-//            @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
-//            @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
-//
-//        List<RoomPostResponseDto.PostSummaryDto> posts =
-//                roomPostQueryService.getNextPosts(roomId, lastPostId, size);
-//
-//        return BaseResponse.onSuccess(posts);
-//    }
 
     @GetMapping("/{roomId}/post/list")
     @Operation(summary = "게시글 무한 스크롤 조회", description = "게시글을 무한 스크롤 방식으로 조회합니다.")
@@ -190,10 +187,14 @@ public class RoomPostController {
             @PathVariable @Parameter(description = "스터디룸 ID") Long roomId,
             @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
             @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
+
+
+        // 게시글 조회
         List<RoomPostResponseDto.PostSummaryDto> posts =
                 roomPostQueryService.getNextPosts(roomId, lastPostId, size);
         return BaseResponse.onSuccess(posts);
     }
+
     @PostMapping("/post/comments/{commentId}/replies")
     @Operation(summary = "게시글 댓글의 답글 작성 API")
     public BaseResponse<RoomPostResponseDto.toWriteCommentDto> addReply(
