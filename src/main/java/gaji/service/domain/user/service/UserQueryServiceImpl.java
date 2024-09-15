@@ -9,8 +9,10 @@ import gaji.service.domain.post.service.CommunityPostQueryService;
 import gaji.service.domain.room.repository.RoomCustomRepository;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.user.code.UserErrorStatus;
+import gaji.service.domain.user.converter.UserConverter;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.repository.UserRepository;
+import gaji.service.domain.user.web.dto.UserResponseDTO;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -53,7 +55,7 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     // TODO: 사용자의 모든 스터디룸을 반환
     @Override
-    public Slice<Tuple> getUserRoomList(Long userId, LocalDate cursorDate, Long cursorId, RoomTypeEnum type, int size) {
+    public UserResponseDTO.GetRoomListDTO getUserRoomList(Long userId, LocalDate cursorDate, Long cursorId, RoomTypeEnum type, int size) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorStatus._USER_NOT_FOUND));
 
@@ -63,12 +65,13 @@ public class UserQueryServiceImpl implements UserQueryService {
 
         PageRequest pageRequest = PageRequest.of(0, size);
 
-        return roomQueryService.getRoomByUserAndType(user, cursorDate, cursorId, pageRequest, type);
+        Slice<Tuple> userRoomList = roomQueryService.getRoomByUserAndType(user, cursorDate, cursorId, pageRequest, type);
+        return UserConverter.toGetRoomListDTO(userRoomList);
     }
 
     // TODO: 선택한 타입에 해당하는 사용자의 게시글을 반환
     @Override
-    public Slice<Tuple> getUserPostList(Long userId, LocalDateTime cursorDateTime, PostTypeEnum type, int size) {
+    public UserResponseDTO.GetPostListDTO getUserPostList(Long userId, LocalDateTime cursorDateTime, PostTypeEnum type, int size) {
         User user = findUserById(userId);
 
         // 커서값을 입력했다면 커서 설정
@@ -77,7 +80,18 @@ public class UserQueryServiceImpl implements UserQueryService {
 
         PageRequest pageRequest = PageRequest.of(0, size);
 
-        return communityPostQueryService.getAllPostByUserAndType(user, cursorDateTime, pageRequest, type);
+        Slice<Tuple> userPostList = communityPostQueryService.getAllPostByUserAndType(user, cursorDateTime, pageRequest, type);
+
+        return UserConverter.toGetPostListDTO(userPostList, type);
+    }
+
+    // TODO: 사용자의 세부 정보를 반환
+    @Override
+    public UserResponseDTO.GetUserDetailDTO getUserDetail(Long userId) {
+
+        User user = findUserById(userId);
+
+        return UserConverter.toGetUserDetailDTO(user);
     }
 
     @Override

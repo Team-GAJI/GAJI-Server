@@ -33,8 +33,8 @@ public class UserRestController {
     public BaseResponse<UserResponseDTO.CancleResultDTO> cancle(@RequestHeader("Authorization") String authorizationHeader) {
 
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        User user = userCommandService.cancleUser(userId);
-        return BaseResponse.onSuccess(UserConverter.toCancleResultDTO(user));
+
+        return BaseResponse.onSuccess(userCommandService.cancleUser(userId));
     }
 
 
@@ -44,10 +44,9 @@ public class UserRestController {
                                                                                 @PathVariable("userId") Long userIdFromPathVariable,
                                                                                 @RequestBody @Valid UserRequestDTO.UpdateNicknameDTO request) {
 
-
         Long userIdFromToken = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        User user = userCommandService.updateUserNickname(userIdFromToken, userIdFromPathVariable, request);
-        return BaseResponse.onSuccess(UserConverter.toUpdateNicknameResultDTO(user));
+
+        return BaseResponse.onSuccess(userCommandService.updateUserNickname(userIdFromToken, userIdFromPathVariable, request));
     }
 
     @GetMapping("/rooms")
@@ -57,9 +56,10 @@ public class UserRestController {
                                                                       @RequestParam(value = "cursorId",required = false) Long cursorId,
                                                                       @RequestParam("type") RoomTypeEnum type,
                                                                       @RequestParam(defaultValue = "10") int size) {
+
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        Slice<Tuple> userRoomList = userQueryService.getUserRoomList(userId, cursorDate, cursorId, type, size);
-        return BaseResponse.onSuccess(UserConverter.toGetRoomListDTO(userRoomList));
+
+        return BaseResponse.onSuccess(userQueryService.getUserRoomList(userId, cursorDate, cursorId, type, size));
     }
 
     @GetMapping("/rooms/{userId}")
@@ -69,8 +69,8 @@ public class UserRestController {
                                                                         @RequestParam(value = "cursorId",required = false) Long cursorId,
                                                                         @RequestParam("type") RoomTypeEnum type,
                                                                         @RequestParam(defaultValue = "10") int size) {
-        Slice<Tuple> userRoomList = userQueryService.getUserRoomList(userId, cursorDate, cursorId, type, size);
-        return BaseResponse.onSuccess(UserConverter.toGetRoomListDTO(userRoomList));
+
+        return BaseResponse.onSuccess(userQueryService.getUserRoomList(userId, cursorDate, cursorId, type, size));
     }
 
     @GetMapping("/{userId}")
@@ -78,8 +78,7 @@ public class UserRestController {
     public BaseResponse<UserResponseDTO.GetUserDetailDTO> getUserDetail(@RequestHeader(value = "Authorization", required = false) String authorizationHeader,
                                                                         @PathVariable("userId") Long userId) {
 
-        User user = userQueryService.findUserById(userId);
-        return BaseResponse.onSuccess(UserConverter.toGetUserDetailDTO(user));
+        return BaseResponse.onSuccess(userQueryService.getUserDetail(userId));
     }
 
     @GetMapping("/posts/{userId}")
@@ -88,8 +87,8 @@ public class UserRestController {
                                                                         @RequestParam(value = "cursorDate",required = false) LocalDateTime cursorDateTime,
                                                                         @RequestParam(value = "type", required = false) PostTypeEnum type,
                                                                         @RequestParam(defaultValue = "10") int size) {
-        Slice<Tuple> userPostList = userQueryService.getUserPostList(userId, cursorDateTime, type, size);
-        return BaseResponse.onSuccess(UserConverter.toGetPostListDTO(userPostList, type));
+
+        return BaseResponse.onSuccess(userQueryService.getUserPostList(userId, cursorDateTime, type, size));
     }
 }
 

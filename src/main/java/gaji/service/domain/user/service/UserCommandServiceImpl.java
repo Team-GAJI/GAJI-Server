@@ -2,10 +2,12 @@ package gaji.service.domain.user.service;
 
 import gaji.service.domain.enums.UserActive;
 import gaji.service.domain.user.code.UserErrorStatus;
+import gaji.service.domain.user.converter.UserConverter;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.enums.UserDeletePeriod;
 import gaji.service.domain.user.repository.UserRepository;
 import gaji.service.domain.user.web.dto.UserRequestDTO;
+import gaji.service.domain.user.web.dto.UserResponseDTO;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,10 +25,10 @@ public class UserCommandServiceImpl implements UserCommandService{
     // TODO: 사용자를 상태를 업데이트
     @Override
     @Transactional
-    public User cancleUser(Long userId) {
+    public UserResponseDTO.CancleResultDTO cancleUser(Long userId) {
         User user = updateUserStatus(userId, UserActive.IN_ACTIVE);
 
-        return user;
+        return UserConverter.toCancleResultDTO(user);
     }
 
     public User updateUserStatus(Long userId, UserActive status) {
@@ -39,7 +41,7 @@ public class UserCommandServiceImpl implements UserCommandService{
     // TODO: 사용자의 닉네임을 업데이트
     @Override
     @Transactional
-    public User updateUserNickname(Long userIdFromToken, Long userIdFromPathVariable, UserRequestDTO.UpdateNicknameDTO request) {
+    public UserResponseDTO.UpdateNicknameResultDTO updateUserNickname(Long userIdFromToken, Long userIdFromPathVariable, UserRequestDTO.UpdateNicknameDTO request) {
         User user = userQueryService.findUserById(userIdFromToken);
 
         // 닉네임을 변경하는 사용자가 본인인지 검증
@@ -56,7 +58,7 @@ public class UserCommandServiceImpl implements UserCommandService{
 
         user.updateNickname(newNickname);
 
-        return user;
+        return UserConverter.toUpdateNicknameResultDTO(user);
     }
 
     // TODO: 비활성화 상태인 사용자를 DB에서 삭제
