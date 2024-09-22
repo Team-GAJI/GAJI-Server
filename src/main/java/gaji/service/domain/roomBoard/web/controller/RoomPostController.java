@@ -84,10 +84,10 @@ public class RoomPostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
 
         //게시글 삭제
-        PostComment postComment = roomPostCommandService.writeCommentOnPost(userId, postId, requestDto);
+        RoomPostResponseDto.toWriteCommentDto postCommentId = roomPostCommandService.writeCommentOnPost(userId, postId, requestDto);
 
         // 댓글 Id 반환
-        return BaseResponse.onSuccess(new RoomPostResponseDto.toWriteCommentDto(postComment.getId()));
+        return BaseResponse.onSuccess(postCommentId);
     }
 
     @PutMapping("/post/comments/{commentId}")
@@ -187,8 +187,8 @@ public class RoomPostController {
             @PathVariable @Parameter(description = "스터디룸 ID") Long roomId,
             @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
             @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
-        List<RoomPostResponseDto.PostSummaryDto> posts = roomPostQueryService.getNextPosts(roomId, lastPostId, size);
-        return BaseResponse.onSuccess(posts);
+        List<RoomPostResponseDto.PostSummaryDto> postSummaryDtoList = roomPostQueryService.getNextPosts(roomId, lastPostId, size);
+        return BaseResponse.onSuccess(postSummaryDtoList);
     }
 
     @PostMapping("/post/comments/{commentId}/replies")
@@ -202,10 +202,10 @@ public class RoomPostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
 
         // 저장한 답글
-        PostComment replyComment = roomPostCommandService.addReply(commentId, userId, requestDto);
+        RoomPostResponseDto.toWriteCommentDto replyComment = roomPostCommandService.addReply(commentId, userId, requestDto);
 
         // 답글의 id를 반환
-        return BaseResponse.onSuccess(RoomPostConverter.toWritePostCommentDto(replyComment));
+        return BaseResponse.onSuccess(RoomPostConverter.toWritePostCommentDto(replyComment.getCommentId()));
     }
 
     @GetMapping("/post/{postId}detail")

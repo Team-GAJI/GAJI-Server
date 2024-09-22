@@ -4,6 +4,7 @@ import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
+import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
@@ -111,7 +112,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
 
     // TODO: 게시글에 댓글 달기
     @Override
-    public PostComment writeCommentOnPost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+    public RoomPostResponseDto.toWriteCommentDto writeCommentOnPost(Long userId, Long postId, RoomPostRequestDto.RoomTroubleCommentDto request) {
         //user 조회
         User user = userQueryService.findUserById(userId);
 
@@ -128,7 +129,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
         // 댓글 저장
         postCommonCommandService.savePostComment(postComment);
 
-        return postComment;
+        return new RoomPostResponseDto.toWriteCommentDto(postComment.getId());
     }
 
     // TODO: 댓글 업데이트
@@ -267,7 +268,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
 
     // TODO: 답글 달기
     @Override
-    public PostComment addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request) {
+    public RoomPostResponseDto.toWriteCommentDto addReply(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto request) {
         // 댓글 조회
         PostComment parentComment = roomPostQueryService.findPostCommentById(commentId);
 
@@ -290,7 +291,8 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
 
             // 댓글에 답글 추가
             parentComment.addReply(reply);
-            return postCommentRepository.save(reply);
+            postCommentRepository.save(reply);
+            return RoomPostConverter.toWritePostCommentDto(reply.getId());
         }
     }
 

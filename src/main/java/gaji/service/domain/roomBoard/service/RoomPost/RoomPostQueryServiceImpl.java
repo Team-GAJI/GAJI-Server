@@ -94,22 +94,16 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
         List<RoomPost> posts = roomPostRepository.findPostsForInfiniteScroll(roomBoard.getId(), lastCreatedAt, pageable);
 
         // 조회된 게시물 엔티티를 DTO로 변환하여 반환
-        return posts.stream()
-                .map(this::convertToPostSummaryDto)
-                .collect(Collectors.toList());
+        return RoomPostConverter.toPostSummaryDtoList(posts);
+
     }
 
-    // RoomPost 엔티티를 PostSummaryDto로 변환하는 메서드
-    private RoomPostResponseDto.PostSummaryDto convertToPostSummaryDto(RoomPost post) {
-        return new RoomPostResponseDto.PostSummaryDto(
-                post.getId(),                           // 게시물 ID
-                post.getTitle(),                        // 게시물 제목
-                post.getStudyMate().getUser().getNickname(), // 작성자 닉네임
-                post.getCreatedAt(),                    // 게시물 생성 시간
-                post.getViewCount(),                    // 조회수
-                post.getPostCommentList().size()        // 댓글 수
-        );
-    }
+
+
+
+
+
+
 
     // TODO: id 로 roomPost 찾기
     @Override
@@ -146,7 +140,7 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
 
         Page<RoomPostResponseDto.CommentWithRepliesDTO> comments = getCommentsWithReplies(postId, PageRequest.of(page, size));
 
-        return RoomPostConverter.toroomPostDetailDTO(post,studyMate,comments);
+        return RoomPostConverter.toRoomPostDetailDTO(post,studyMate,comments);
     }
 
     // TODO: 댓글 조회 기능 구현
