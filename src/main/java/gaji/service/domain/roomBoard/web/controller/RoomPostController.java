@@ -187,11 +187,7 @@ public class RoomPostController {
             @PathVariable @Parameter(description = "스터디룸 ID") Long roomId,
             @RequestParam @Parameter(description = "마지막으로 로드된 게시글 ID") Long lastPostId,
             @RequestParam(defaultValue = "10") @Parameter(description = "조회할 게시글 수") int size) {
-
-
-        // 게시글 조회
-        List<RoomPostResponseDto.PostSummaryDto> posts =
-                roomPostQueryService.getNextPosts(roomId, lastPostId, size);
+        List<RoomPostResponseDto.PostSummaryDto> posts = roomPostQueryService.getNextPosts(roomId, lastPostId, size);
         return BaseResponse.onSuccess(posts);
     }
 

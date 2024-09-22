@@ -10,6 +10,8 @@ import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 public class RoomPostConverter {
 
@@ -74,5 +76,25 @@ public class RoomPostConverter {
         return RoomPostResponseDto.toWriteCommentDto.builder()
                 .commentId(newComment.getId())
                 .build();
+    }
+
+    public static RoomPostResponseDto.RoomPostDetailDTO toroomPostDetailDTO(RoomPost post, StudyMate studyMate,Page<RoomPostResponseDto.CommentWithRepliesDTO> comments ){
+        RoomPostResponseDto.RoomPostDetailDTO dto = new RoomPostResponseDto.RoomPostDetailDTO();
+        dto.setId(post.getId());
+        dto.setTitle(post.getTitle());
+        dto.setBody(post.getBody());
+        dto.setAuthorName(post.getStudyMate().getUser().getName());
+        dto.setCreatedAt(post.getCreatedAt());
+        dto.setViewCount(post.getViewCount());
+        dto.setLikeCount(post.getLikeCount());
+        dto.setBookmarkCount(post.getBookmarkCount());
+        dto.setLiked(post.getRoomPostLikesList().stream()
+                .anyMatch(like -> like.getStudyMate().getId().equals(studyMate.getId())));
+        dto.setBookmarked(post.getRoomPostBookmarkList().stream()
+                .anyMatch(bookmark -> bookmark.getStudyMate().getId().equals(studyMate.getId())));
+
+        dto.setComments(comments);
+
+        return dto;
     }
 }
