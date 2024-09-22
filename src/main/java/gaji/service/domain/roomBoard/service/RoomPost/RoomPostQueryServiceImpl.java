@@ -2,6 +2,7 @@ package gaji.service.domain.roomBoard.service.RoomPost;
 
 import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
+import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
@@ -67,10 +68,9 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
         return posts;
     }
 
-    // TODO: 무한 스크롤 기능 구현
+    // TODO: 게시글 무한 스크롤
     @Override
     public List<RoomPostResponseDto.PostSummaryDto> getNextPosts(Long roomId, Long lastPostId, int size) {
-
         // 주어진 roomId와 ROOM_POST 타입에 해당하는 RoomBoard를 찾음
         // 찾지 못할 경우 RestApiException 발생
         RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_POST)
@@ -90,8 +90,25 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
         // 페이지네이션 설정: 요청된 크기만큼 가져오며, 생성일 및 ID 기준 내림차순 정렬
         Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt", "id"));
 
-        // 무한 스크롤을 위한 다음 게시물 목록을 조회하여 반환
-        return roomPostRepository.findPostSummariesForInfiniteScroll(roomBoard.getId(), lastCreatedAt, pageable);
+        // 무한 스크롤을 위한 다음 게시물 목록을 조회
+        List<RoomPost> posts = roomPostRepository.findPostsForInfiniteScroll(roomBoard.getId(), lastCreatedAt, pageable);
+
+        // 조회된 게시물 엔티티를 DTO로 변환하여 반환
+        return posts.stream()
+                .map(this::convertToPostSummaryDto)
+                .collect(Collectors.toList());
+    }
+
+    // RoomPost 엔티티를 PostSummaryDto로 변환하는 메서드
+    private RoomPostResponseDto.PostSummaryDto convertToPostSummaryDto(RoomPost post) {
+        return new RoomPostResponseDto.PostSummaryDto(
+                post.getId(),                           // 게시물 ID
+                post.getTitle(),                        // 게시물 제목
+                post.getStudyMate().getUser().getNickname(), // 작성자 닉네임
+                post.getCreatedAt(),                    // 게시물 생성 시간
+                post.getViewCount(),                    // 조회수
+                post.getPostCommentList().size()        // 댓글 수
+        );
     }
 
     // TODO: id 로 roomPost 찾기
@@ -121,43 +138,15 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     @Override
     @Transactional
     public RoomPostResponseDto.RoomPostDetailDTO getPostDetail(Long postId, Long userId, int page, int size) {
-        // 주어진 postId로 게시물을 찾음. 없으면 예외 발생
         RoomPost post = roomPostRepository.findById(postId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
 
-        // userId와 게시물의 방 ID로 StudyMate 정보를 조회
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, post.getRoomBoard().getRoom().getId());
-
-        // 게시물 조회수 증가
         post.increaseViewCnt();
 
-        // 게시물 상세 정보를 담을 DTO 객체 생성
-        RoomPostResponseDto.RoomPostDetailDTO dto = new RoomPostResponseDto.RoomPostDetailDTO();
-
-        // DTO에 게시물 정보 설정
-        dto.setId(post.getId());
-        dto.setTitle(post.getTitle());
-        dto.setBody(post.getBody());
-        dto.setAuthorName(post.getStudyMate().getUser().getName());
-        dto.setCreatedAt(post.getCreatedAt());
-        dto.setViewCount(post.getViewCount());
-        dto.setLikeCount(post.getLikeCount());
-        dto.setBookmarkCount(post.getBookmarkCount());
-
-        // 현재 사용자가 게시물에 좋아요를 눌렀는지 확인
-        dto.setLiked(post.getRoomPostLikesList().stream()
-                .anyMatch(like -> like.getStudyMate().getId().equals(studyMate.getId())));
-
-        // 현재 사용자가 게시물을 북마크했는지 확인
-        dto.setBookmarked(post.getRoomPostBookmarkList().stream()
-                .anyMatch(bookmark -> bookmark.getStudyMate().getId().equals(studyMate.getId())));
-
-        // 게시물의 댓글과 대댓글을 페이지네이션하여 조회
         Page<RoomPostResponseDto.CommentWithRepliesDTO> comments = getCommentsWithReplies(postId, PageRequest.of(page, size));
-        dto.setComments(comments);
 
-        // 완성된 DTO 반환
-        return dto;
+        return RoomPostConverter.toroomPostDetailDTO(post,studyMate,comments);
     }
 
     // TODO: 댓글 조회 기능 구현

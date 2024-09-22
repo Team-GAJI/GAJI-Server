@@ -15,12 +15,10 @@ import java.util.Optional;
 
 @Repository
 public interface RoomPostRepository extends JpaRepository<RoomPost, Long> {
-    @Query("SELECT new gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto$PostSummaryDto(" +
-            "r.id, r.title, r.studyMate.user.nickname, r.createdAt, r.viewCount, SIZE(r.postCommentList)) " +
-            "FROM RoomPost r " +
+    @Query("SELECT r FROM RoomPost r " +
             "WHERE r.roomBoard.id = :boardId AND r.createdAt <= :lastCreatedAt " +
             "ORDER BY r.createdAt DESC, r.id DESC")
-    List<PostSummaryDto> findPostSummariesForInfiniteScroll(
+    List<RoomPost> findPostsForInfiniteScroll(
             @Param("boardId") Long boardId,
             @Param("lastCreatedAt") LocalDateTime lastCreatedAt,
             Pageable pageable);

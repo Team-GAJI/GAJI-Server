@@ -1,8 +1,11 @@
 package gaji.service.domain.roomBoard.web.dto;
 
+import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
+import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.global.converter.DateConverter;
 import lombok.*;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
