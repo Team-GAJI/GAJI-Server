@@ -13,6 +13,9 @@ import gaji.service.domain.studyMate.entity.StudyMate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class RoomPostConverter {
 
     public static RoomPost toRoomPost(RoomPostRequestDto.RoomPostDto requestDto, StudyMate studyMate, RoomBoard roomBoard) {
@@ -67,9 +70,9 @@ public class RoomPostConverter {
                 .build();
     }
 
-    public static RoomPostResponseDto.toWriteCommentDto toWritePostCommentDto(PostComment newComment) {
+    public static RoomPostResponseDto.toWriteCommentDto toWritePostCommentDto(Long newCommentId) {
         return RoomPostResponseDto.toWriteCommentDto.builder()
-                .commentId(newComment.getId())
+                .commentId(newCommentId)
                 .build();
     }
     public static RoomPostResponseDto.toWriteCommentDto toWriteInfoPostCommentDto(InfoPostComment newComment) {
@@ -78,7 +81,7 @@ public class RoomPostConverter {
                 .build();
     }
 
-    public static RoomPostResponseDto.RoomPostDetailDTO toroomPostDetailDTO(RoomPost post, StudyMate studyMate,Page<RoomPostResponseDto.CommentWithRepliesDTO> comments ){
+    public static RoomPostResponseDto.RoomPostDetailDTO toRoomPostDetailDTO(RoomPost post, StudyMate studyMate,Page<RoomPostResponseDto.CommentWithRepliesDTO> comments ){
         RoomPostResponseDto.RoomPostDetailDTO dto = new RoomPostResponseDto.RoomPostDetailDTO();
         dto.setId(post.getId());
         dto.setTitle(post.getTitle());
@@ -97,4 +100,18 @@ public class RoomPostConverter {
 
         return dto;
     }
+
+    public static List<RoomPostResponseDto.PostSummaryDto> toPostSummaryDtoList(List<RoomPost> posts){
+        return posts.stream()
+                .map(post -> new RoomPostResponseDto.PostSummaryDto(
+                        post.getId(),                           // 게시물 ID
+                        post.getTitle(),                        // 게시물 제목
+                        post.getStudyMate().getUser().getNickname(), // 작성자 닉네임
+                        post.getCreatedAt(),                    // 게시물 생성 시간
+                        post.getViewCount(),                    // 조회수
+                        post.getPostCommentList().size()        // 댓글 수
+                ))
+                .collect(Collectors.toList());
+    }
+
 }
