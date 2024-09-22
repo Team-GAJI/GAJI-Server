@@ -40,8 +40,8 @@ public class RoomPostController {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
 
         // 게시글 생성
-        RoomPost roomPost = roomPostCommandService.createRoomPost(roomId, userId, requestDto);
-        return BaseResponse.onSuccess(new RoomPostResponseDto.toCreateRoomPostIdDTO(roomPost.getId()));
+        RoomPostResponseDto.toCreateRoomPostIdDTO roomPostId = roomPostCommandService.createRoomPost(roomId, userId, requestDto);
+        return BaseResponse.onSuccess(roomPostId);
     }
 
     @PutMapping("/post/{postId}")

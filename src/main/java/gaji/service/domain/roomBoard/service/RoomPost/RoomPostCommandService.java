@@ -7,10 +7,8 @@ import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
 
-import java.util.Optional;
-
 public interface RoomPostCommandService {
-    RoomPost createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto);
+    RoomPostResponseDto.toCreateRoomPostIdDTO createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto);
     void updatePost(Long postId, Long userId, RoomPostRequestDto.RoomPostDto requestDto);
 
     void deletePost(Long postId, Long userId);

@@ -4,7 +4,6 @@ import gaji.service.domain.enums.RoomPostType;
 import gaji.service.domain.room.entity.Room;
 import gaji.service.domain.room.service.RoomQueryService;
 import gaji.service.domain.roomBoard.code.RoomPostErrorStatus;
-import gaji.service.domain.roomBoard.converter.RoomPostConverter;
 import gaji.service.domain.roomBoard.entity.RoomBoard;
 import gaji.service.domain.roomBoard.entity.RoomPost.PostComment;
 import gaji.service.domain.roomBoard.entity.RoomPost.RoomPost;
@@ -18,6 +17,7 @@ import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
 import gaji.service.domain.roomBoard.service.postCommon.PostCommonCommandService;
 import gaji.service.domain.roomBoard.service.postCommon.PostCommonQueryService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
+import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.repository.StudyMateRepository;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
@@ -27,8 +27,6 @@ import gaji.service.global.exception.RestApiException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +47,7 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
 
     // TODO: 게시글 생성
     @Override
-    public RoomPost createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
+    public RoomPostResponseDto.toCreateRoomPostIdDTO createRoomPost(Long roomId, Long userId, RoomPostRequestDto.RoomPostDto requestDto) {
         User user = userQueryService.findUserById(userId);
         Room room = roomQueryService.findRoomById(roomId);
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
@@ -66,10 +64,16 @@ public class RoomPostCommandServiceImpl implements RoomPostCommandService {
                 });
 
         // RoomPost 생성 및 저장
-        RoomPost roomPost = RoomPostConverter.toRoomPost(requestDto, studyMate, roomBoard);
+        RoomPost roomPost = RoomPost.builder()
+                .studyMate(studyMate)
+                .title(requestDto.getTitle())
+                .body(requestDto.getBody())
+                .roomBoard(roomBoard)
+                .build();
+
         saveRoomPost(roomPost);
 
-        return roomPost;
+        return new RoomPostResponseDto.toCreateRoomPostIdDTO(roomPost.getId());
     }
 
     // TODO: 게시글 수정
