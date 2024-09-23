@@ -86,9 +86,8 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     //TODO: 정보나눔게시글 수정
     @Override
     public void updateInfoPost(Long postId, Long userId, RoomPostRequestDto.RoomInfoPostDto requestDto) {
-        // 게시글 찾기
-        RoomInfoPost post = roomInfoPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        // 게시글 조회
+        RoomInfoPost post = roomInfoPostQueryService.findInfoPostById(postId);
 
         // 게시글 작성자와 수정자가 일치하는지 검증
         if (!post.isAuthor(userId)) {
@@ -102,9 +101,8 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     //TODO: 정보나눔게시글 삭제
     @Override
     public void deleteInfoPost(Long postId, Long userId) {
-        // 게시글 찾기
-        RoomInfoPost post = roomInfoPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        // 게시글 조회
+        RoomInfoPost post = roomInfoPostQueryService.findInfoPostById(postId);
 
         // 게시글 작성자와 삭제하려는 사람이 일치하는지 검증
         if (!post.isAuthor(userId)) {
@@ -203,8 +201,7 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     public void addLike(Long postId, Long userId, Long roomId) {
 
         // 게시글 조회
-        RoomInfoPost post = roomInfoPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        RoomInfoPost post = roomInfoPostQueryService.findInfoPostById(postId);
 
         //스터디룸에 참여하고 있는 유저인지 검증
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
@@ -237,9 +234,8 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     @Override
     public void removeLike(Long postId, Long userId, Long roomId) {
 
-        //게시글 삭제
-        RoomInfoPost post = roomInfoPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        // 게시글 조회
+        RoomInfoPost post = roomInfoPostQueryService.findInfoPostById(postId);
 
         //스터디룸에 참여하고 있는 유저인지 검증
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
@@ -259,9 +255,8 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     @Override
     public void addBookmark(Long postId, Long userId, Long roomId) {
 
-        // 게시글 찾기
-        RoomInfoPost post = roomInfoPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        // 게시글 조회
+        RoomInfoPost post = roomInfoPostQueryService.findInfoPostById(postId);
 
         //스터디룸에 참여하고 있는 유저인지 검증
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
@@ -286,10 +281,8 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     //TODO: 북마크 제거하기
     @Override
     public void removeBookmark(Long postId, Long userId, Long roomId) {
-
         // 게시글 조회
-        RoomInfoPost post = roomInfoPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        RoomInfoPost post = roomInfoPostQueryService.findInfoPostById(postId);
 
         //스터디룸에 참여하고 있는 유저인지 검증
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, roomId);
