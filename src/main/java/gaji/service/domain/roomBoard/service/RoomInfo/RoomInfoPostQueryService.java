@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface RoomInfoPostQueryService {
+    InfoPostComment findInfoParentComment(Long commentId);
+
     RoomInfoPost findInfoPostById(Long PostId);
 
     InfoPostComment findCommentByCommentId(Long commentId);

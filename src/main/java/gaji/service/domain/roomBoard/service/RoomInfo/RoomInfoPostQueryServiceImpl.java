@@ -30,6 +30,12 @@ public class RoomInfoPostQueryServiceImpl implements RoomInfoPostQueryService{
     private final InfoPostCommentRepository infoPostCommentRepository;
     private final StudyMateQueryService studyMateQueryService;
     private final RoomBoardRepository roomBoardRepository;
+
+    @Override
+    public InfoPostComment findInfoParentComment(Long commentId){
+        return infoPostCommentRepository.findById(commentId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+    }
     @Override
     public RoomInfoPost findInfoPostById(Long PostId){
         return roomInfoPostRepository.findById(PostId)
