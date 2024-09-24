@@ -141,7 +141,7 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     public void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto) {
 
         // 댓글 찾기
-        InfoPostComment comment = roomInfoPostQueryService.findCommentByCommentId(commentId);
+        InfoPostComment comment = roomInfoPostQueryService.findInfoParentComment(commentId);
 
         // 댓글 작성자와 수정자가 일치하는지 검사
         if (!comment.isAuthor(userId)){
