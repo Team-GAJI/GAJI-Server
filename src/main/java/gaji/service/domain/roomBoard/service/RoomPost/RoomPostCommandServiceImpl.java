@@ -35,7 +35,6 @@ import org.springframework.stereotype.Service;
 public class RoomPostCommandServiceImpl implements RoomPostCommandService {
     private final RoomPostRepository roomPostRepository;
     private final RoomBoardRepository roomBoardRepository;
-    private final StudyMateRepository studyMateRepository;
     private final UserQueryService userQueryService;
     private final RoomQueryService roomQueryService;
     private final StudyMateQueryService studyMateQueryService;

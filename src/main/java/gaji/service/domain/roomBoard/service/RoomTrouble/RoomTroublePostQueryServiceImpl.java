@@ -122,4 +122,24 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
         dto.setCommentWriteDate(reply.getCreatedAt());
         return dto;
     }
+
+
+
+
+
+
+
+
+    @Override
+    public TroublePostComment findPostCommentById(Long commentId){
+        return troublePostCommentRepository.findById(commentId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+
+    }
+    @Override
+    public RoomTroublePost findTroublePostById(Long postId){
+        return roomTroublePostRepository.findById(postId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+
+    }
 }
