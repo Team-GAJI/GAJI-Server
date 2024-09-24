@@ -13,8 +13,6 @@ public interface RoomInfoPostQueryService {
 
     RoomInfoPost findInfoPostById(Long PostId);
 
-    InfoPostComment findCommentByCommentId(Long commentId);
-
     InfoPostComment findPostCommentById(Long troublePostId);
 
     List<RoomPostResponseDto.InfoPostSummaryDto> getNextPosts(Long boardId, Long lastPostId, int size);

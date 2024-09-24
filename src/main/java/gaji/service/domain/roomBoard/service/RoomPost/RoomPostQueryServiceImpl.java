@@ -100,40 +100,11 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
 
 
 
-
-
-
-
-
-    // TODO: id 로 roomPost 찾기
-    @Override
-    public RoomPost findPostById(Long PostId){
-        return roomPostRepository.findById(PostId)
-                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._POST_NOT_FOUND));
-    }
-
-    // TODO: id로 roomPost 북마크 조회
-    @Override
-    public RoomPostBookmark findRoomPostBookmarkByRoomPostAndStudyMate(RoomPost post, StudyMate studyMate){
-        return roomPostBookmarkRepository.findByRoomPostAndStudyMate(post, studyMate)
-                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._POST_BOOKMARKED_NOT_FOUND));
-
-    }
-
-    // TODO: 게시글 댓글 조회
-    @Override
-    public PostComment findPostCommentById(Long troublePostId) {
-        return postCommentRepository.findById(troublePostId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
-    }
-
-
     // TODO: 게시물 상세 조회
     @Override
     @Transactional
     public RoomPostResponseDto.RoomPostDetailDTO getPostDetail(Long postId, Long userId, int page, int size) {
-        RoomPost post = roomPostRepository.findById(postId)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
+        RoomPost post = findRoomPostById(postId);
 
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, post.getRoomBoard().getRoom().getId());
         post.increaseViewCnt();
@@ -196,6 +167,15 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
         return dto;
     }
 
+
+
+
+
+
+
+
+
+
     // TODO: roomPost 조회
     @Override
     public RoomPost findRoomPostById(Long roomPostId){
@@ -204,5 +184,28 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
         return post;
     }
+
+    // TODO: id 로 roomPost 찾기
+    @Override
+    public RoomPost findPostById(Long PostId){
+        return roomPostRepository.findById(PostId)
+                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._POST_NOT_FOUND));
+    }
+
+    // TODO: id로 roomPost 북마크 조회
+    @Override
+    public RoomPostBookmark findRoomPostBookmarkByRoomPostAndStudyMate(RoomPost post, StudyMate studyMate){
+        return roomPostBookmarkRepository.findByRoomPostAndStudyMate(post, studyMate)
+                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._POST_BOOKMARKED_NOT_FOUND));
+
+    }
+
+    // TODO: 게시글 댓글 조회
+    @Override
+    public PostComment findPostCommentById(Long troublePostId) {
+        return postCommentRepository.findById(troublePostId)
+                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
+    }
+
 
 }
