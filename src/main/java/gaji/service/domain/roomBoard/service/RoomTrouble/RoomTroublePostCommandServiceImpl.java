@@ -16,6 +16,7 @@ import gaji.service.domain.roomBoard.repository.RoomTrouble.RoomTroublePostBookm
 import gaji.service.domain.roomBoard.repository.RoomTrouble.RoomTroublePostLikeRepository;
 import gaji.service.domain.roomBoard.repository.RoomTrouble.RoomTroublePostRepository;
 import gaji.service.domain.roomBoard.repository.RoomTrouble.TroublePostCommentRepository;
+import gaji.service.domain.roomBoard.service.postCommon.PostCommonQueryService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
@@ -42,6 +43,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     private final TroublePostCommentRepository troublePostCommentRepository;
     private final RoomTroublePostBookmarkRepository roomTroublePostBookmarkRepository;
     private final RoomTroublePostQueryService roomTroublePostQueryService;
+    private final PostCommonQueryService postCommonQueryService;
 
     //TODO: 트러블슈팅 게시글에 댓글 작성
     @Override
@@ -79,16 +81,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
 
         // 스터디룸 게시판 확인 또는 생성
-        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId , RoomPostType.ROOM_TROUBLE_POST)
-                //게시판이 없다면 생성
-                .orElseGet(() -> {
-                    RoomBoard newRoomBoard = RoomBoard.builder()
-                            .room(room)
-                            .roomPostType(RoomPostType.ROOM_TROUBLE_POST)
-                            .name(room.getName())
-                            .build();
-                    return roomBoardRepository.save(newRoomBoard);
-                });
+        RoomBoard roomBoard = postCommonQueryService.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_TROUBLE_POST);
 
         //객체로 변환
         RoomTroublePost roomTroublePost = RoomPostConverter.toRoomTroublePost(requestDto, studyMate,roomBoard);
@@ -232,7 +225,7 @@ public class RoomTroublePostCommandServiceImpl implements RoomTroublePostCommand
     @Override
     public void updateComment(Long commentId, Long userId, RoomPostRequestDto.RoomTroubleCommentDto requestDto) {
         //댓글 조회
-        TroublePostComment comment = roomTroublePostQueryService.findCommentByCommentId(commentId);
+        TroublePostComment comment = roomTroublePostQueryService.findTroublePostCommentById(commentId);
 
         //댓글 작성자와 수정자가 같은지 점검
         if (!comment.isAuthor(userId)){

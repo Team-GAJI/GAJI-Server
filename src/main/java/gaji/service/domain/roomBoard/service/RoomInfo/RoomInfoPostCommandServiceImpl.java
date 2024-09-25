@@ -16,6 +16,7 @@ import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostBookmarkRep
 import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostLikesRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostLikesRepository;
+import gaji.service.domain.roomBoard.service.postCommon.PostCommonQueryService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostRequestDto;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
@@ -43,6 +44,7 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
     private final RoomPostLikesRepository roomPostLikesRepository;
     private final RoomInfoPostLikesRepository roomInfoPostLikesRepository;
     private final RoomInfoPostBookmarkRepository roomInfoPostBookmarkRepository;
+    private final PostCommonQueryService postCommonQueryService;
 
     // TODO: 정보나눔 게시판 작성
     @Override
@@ -50,22 +52,11 @@ public class RoomInfoPostCommandServiceImpl implements RoomInfoPostCommandServic
         //user 찾기
         User user = userQueryService.findUserById(userId);
 
-        //스터디룸 찾기
-        Room room = roomQueryService.findRoomById(roomId);
-
         // 스터디룸에서 사용자 찾기
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(user.getId(), roomId);
 
         // 스터디룸 게시판 확인 또는 생성
-        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_INFORMATION_POST)
-                .orElseGet(() -> {
-                    RoomBoard newRoomBoard = RoomBoard.builder()
-                            .room(room)
-                            .roomPostType(RoomPostType.ROOM_INFORMATION_POST)
-                            .name(room.getName())
-                            .build();
-                    return roomBoardRepository.save(newRoomBoard);
-                });
+        RoomBoard roomBoard = postCommonQueryService.findRoomBoardByRoomIdAndRoomPostType(roomId,  RoomPostType.ROOM_INFORMATION_POST);
 
 
         //RoomInfoPost 생성

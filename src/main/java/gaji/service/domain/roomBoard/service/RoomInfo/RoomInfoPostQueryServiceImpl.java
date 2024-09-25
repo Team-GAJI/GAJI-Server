@@ -10,6 +10,7 @@ import gaji.service.domain.roomBoard.entity.RoomInfo.RoomInfoPost;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.InfoPostCommentRepository;
 import gaji.service.domain.roomBoard.repository.RoomInfo.RoomInfoPostRepository;
+import gaji.service.domain.roomBoard.service.postCommon.PostCommonQueryService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
@@ -32,14 +33,14 @@ public class RoomInfoPostQueryServiceImpl implements RoomInfoPostQueryService{
     private final InfoPostCommentRepository infoPostCommentRepository;
     private final StudyMateQueryService studyMateQueryService;
     private final RoomBoardRepository roomBoardRepository;
+    private final PostCommonQueryService postCommonQueryService;
 
 
     @Override
     public List<RoomPostResponseDto.InfoPostSummaryDto> getNextPosts(Long roomId, Long lastPostId, int size) {
         // 주어진 roomId와 ROOM_POST 타입에 해당하는 RoomBoard를 찾음
         // 찾지 못할 경우 RestApiException 발생
-        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_INFORMATION_POST)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._ROOM_BOARD_NOT_FOUND));
+        RoomBoard roomBoard = postCommonQueryService.findRoomBoardByRoomId(roomId);
 
         LocalDateTime lastCreatedAt;
         // 첫 요청일 경우 현재 시간을 기준으로 함

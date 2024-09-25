@@ -12,6 +12,7 @@ import gaji.service.domain.roomBoard.repository.RoomPost.PostCommentRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostBookmarkRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostQueryRepository;
 import gaji.service.domain.roomBoard.repository.RoomPost.RoomPostRepository;
+import gaji.service.domain.roomBoard.service.postCommon.PostCommonQueryService;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
@@ -37,6 +38,7 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     private final StudyMateQueryService studyMateQueryService;
     private final RoomBoardRepository roomBoardRepository;
     private final RoomPostBookmarkRepository roomPostBookmarkRepository;
+    private final PostCommonQueryService postCommonQueryService;
 
     @Override
     public List<RoomPostResponseDto.PostListDto> getTop3RecentPosts(Long roomId) {
@@ -52,8 +54,7 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
 
         // 주어진 roomId와 ROOM_POST 타입에 해당하는 RoomBoard를 찾음
         // 찾지 못할 경우 RestApiException 발생
-        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_POST)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._ROOM_BOARD_NOT_FOUND));
+        RoomBoard roomBoard = postCommonQueryService.findRoomBoardByRoomId(roomId);
 
         // 찾은 RoomBoard의 ID를 사용하여 최신 게시물 요약 정보를 가져옴
         List<RoomPostResponseDto.MainPostSummaryDto> posts = roomPostRepository.findLatestPostsSummary(roomBoard.getId(), pageable);
@@ -73,9 +74,7 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     public List<RoomPostResponseDto.PostSummaryDto> getNextPosts(Long roomId, Long lastPostId, int size) {
         // 주어진 roomId와 ROOM_POST 타입에 해당하는 RoomBoard를 찾음
         // 찾지 못할 경우 RestApiException 발생
-        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_POST)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._ROOM_BOARD_NOT_FOUND));
-
+        RoomBoard roomBoard = postCommonQueryService.findRoomBoardByRoomId(roomId);
         LocalDateTime lastCreatedAt;
         if (lastPostId == 0) {
             // 첫 요청일 경우 현재 시간을 기준으로 함
