@@ -8,6 +8,7 @@ import gaji.service.domain.roomBoard.entity.RoomTrouble.TroublePostComment;
 import gaji.service.domain.roomBoard.repository.RoomBoardRepository;
 import gaji.service.domain.roomBoard.repository.RoomTrouble.RoomTroublePostRepository;
 import gaji.service.domain.roomBoard.repository.RoomTrouble.TroublePostCommentRepository;
+import gaji.service.domain.roomBoard.service.postCommon.PostCommonQueryServiceImpl;
 import gaji.service.domain.roomBoard.web.dto.RoomPostResponseDto;
 import gaji.service.domain.studyMate.entity.StudyMate;
 import gaji.service.domain.studyMate.service.StudyMateQueryService;
@@ -30,23 +31,19 @@ public class RoomTroublePostQueryServiceImpl implements RoomTroublePostQueryServ
     private final RoomTroublePostRepository roomTroublePostRepository;
     private final StudyMateQueryService studyMateQueryService;
     private final RoomBoardRepository roomBoardRepository;
+    private final PostCommonQueryServiceImpl postCommonQueryServiceImpl;
 
+    //TODO: 댓글 조회
     @Override
-    public TroublePostComment findCommentByCommentId(Long commentId){
+    public TroublePostComment findTroublePostCommentById(Long commentId) {
         return troublePostCommentRepository.findById(commentId)
-                .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._NOT_FOUND_COMMENT));
-    }
-
-    @Override
-    public TroublePostComment findTroublePostCommentById(Long troublePostId) {
-        return troublePostCommentRepository.findById(troublePostId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._NOT_FOUND_COMMENT));
     }
 
+    //TODO: 다음 게시글 가져오기
     @Override
     public List<RoomPostResponseDto.TroublePostSummaryDto> getNextTroublePosts(Long roomId, Long lastPostId, int size) {
-        RoomBoard roomBoard = roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_TROUBLE_POST)
-                .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._ROOM_BOARD_NOT_FOUND));
+        RoomBoard roomBoard = postCommonQueryServiceImpl.findRoomBoardByRoomId(roomId);
 
         LocalDateTime lastCreatedAt;
         if (lastPostId == 0) {

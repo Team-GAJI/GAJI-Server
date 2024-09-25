@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface RoomTroublePostQueryService {
-    TroublePostComment findCommentByCommentId(Long commentId);
 
     TroublePostComment findTroublePostCommentById(Long troublePostId);
 
