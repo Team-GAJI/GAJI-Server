@@ -48,8 +48,8 @@ public class CommunityPostRestController {
     public BaseResponse<CommunityPostResponseDTO.PostIdResponseDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
                                                                                @RequestBody @Valid CommunityPostRequestDTO.UploadPostRequestDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        CommnuityPost newPost = communityPostCommandService.uploadPost(userId, request);
-        return BaseResponse.onSuccess(CommunityPostConverter.toPostIdResponseDTO(newPost));
+        CommunityPostResponseDTO.PostIdResponseDTO newPost = communityPostCommandService.uploadPost(userId, request);
+        return BaseResponse.onSuccess(newPost);
     }
 
     @PutMapping("/{postId}")
@@ -58,8 +58,8 @@ public class CommunityPostRestController {
                                                                              @RequestBody @Valid CommunityPostRequestDTO.EditPostRequestDTO request,
                                                                              @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        CommnuityPost editedCommnuityPost = communityPostCommandService.editPost(userId, postId, request);
-        return BaseResponse.onSuccess(CommunityPostConverter.toPostIdResponseDTO(editedCommnuityPost));
+        CommunityPostResponseDTO.PostIdResponseDTO editedCommnuityPost = communityPostCommandService.editPost(userId, postId, request);
+        return BaseResponse.onSuccess(editedCommnuityPost);
     }
 
     @DeleteMapping("/{postId}")
@@ -82,9 +82,7 @@ public class CommunityPostRestController {
     public BaseResponse<CommunityPostResponseDTO.PostDetailDTO> getPostDetail(@Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
                                                                               @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
         Long userId = (authorizationHeader == null) ? null : tokenProviderService.getUserIdFromToken(authorizationHeader);
-        CommnuityPost post = communityPostQueryService.getPostDetail(postId);
-        SelectCategory category = categoryService.findByEntityIdAndType(post.getId(), post.getType());
-        return BaseResponse.onSuccess(communityPostConverter.toPostDetailDTO(post, userId, category));
+        return BaseResponse.onSuccess(communityPostQueryService.getPostDetail(userId, postId));
     }
 
     @GetMapping("/preivew")
@@ -111,8 +109,7 @@ public class CommunityPostRestController {
                                                                                         @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                         @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
-        Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(keyword, lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, category, sortType, filter, page, size);
-        return BaseResponse.onSuccess(communityPostConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
+        return BaseResponse.onSuccess(communityPostQueryService.getPostList(keyword, lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, category, sortType, filter, page, size));
     }
 
     @PostMapping("/{postId}/comments")

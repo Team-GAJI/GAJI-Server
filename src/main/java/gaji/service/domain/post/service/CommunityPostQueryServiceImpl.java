@@ -1,21 +1,29 @@
 package gaji.service.domain.post.service;
 
+import gaji.service.domain.common.entity.SelectCategory;
+import gaji.service.domain.common.entity.SelectHashtag;
 import gaji.service.domain.common.service.CategoryService;
+import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.post.code.CommunityPostErrorStatus;
+import gaji.service.domain.post.converter.CommunityPostConverter;
 import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.post.repository.CommunityPostBookmarkRepository;
 import gaji.service.domain.post.repository.CommunityPostJpaRepository;
 import gaji.service.domain.post.repository.CommunityPostLikesRepository;
+import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +34,16 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
     private final CommunityPostBookmarkRepository postBookmarkRepository;
 
     private final CategoryService categoryService;
+    private final HashtagService hashtagService;
+    private final CommunityPostBookMarkService postBookMarkService;
+    private final CommunityPostLikesService postLikesService;
+    private final CommunityPostQueryService communityPostQueryService;
+
+    private final CommunityPostConverter communityPostConverter;
+
 
     @Override
-    public Slice<CommnuityPost> getPostList(String keyword,
+    public CommunityPostResponseDTO.PostPreviewListDTO getPostList(String keyword,
                                    Integer lastPopularityScore,
                                    Long lastPostId,
                                    Integer lastLikeCnt,
@@ -48,7 +63,7 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
             categoryId=categoryService.findAllByCategory(CategoryEnum.fromValue(category)).get(0).getId();
         }
 
-        return communityPostJpaRepository.findAllFetchJoinWithUser(keyword,
+        Slice<CommnuityPost> postSlice = communityPostJpaRepository.findAllFetchJoinWithUser(keyword,
                 lastPopularityScore,
                 lastPostId,
                 lastLikeCnt,
@@ -58,17 +73,41 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
                 categoryId,
                 sortType,
                 pageRequest);
+
+        List<CommunityPostResponseDTO.PostPreviewDTO> postPreviewDTOList = new ArrayList<>();
+
+        for (CommnuityPost post : postSlice.getContent()) {
+            List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(post.getId(), post.getType());
+            postPreviewDTOList.add(CommunityPostConverter.toPostPreviewDTO(post, selectHashtagList));
+        }
+
+        return CommunityPostResponseDTO.PostPreviewListDTO.builder()
+                .postList(postPreviewDTOList)
+                .hasNext(postSlice.hasNext())
+                .build();
+//        return CommunityPostConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext(), selectHashtagList);
     }
 
     @Override
-    public CommnuityPost getPostDetail(Long postId) {
+    public CommunityPostResponseDTO.PostDetailDTO getPostDetail(Long userId, Long postId) {
         CommnuityPost findPost = communityPostJpaRepository.findByIdFetchJoinWithUser(postId);
         if (findPost == null) {
             throw new RestApiException(CommunityPostErrorStatus._POST_NOT_FOUND);
         }
+
+        boolean isBookmarked = (userId == null) ? false : postBookMarkService.existsByUserAndPost(userId, findPost);
+        boolean isLiked = (userId == null) ? false : postLikesService.existsByUserAndPost(userId, findPost);
+        boolean isWriter = (userId == null) ? false : communityPostQueryService.isPostWriter(userId, findPost);
+
+        SelectCategory category = categoryService.findByEntityIdAndType(findPost.getId(), findPost.getType());
+
+        List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(findPost.getId(), findPost.getType());
+
+        CommunityPostResponseDTO.PostDetailDTO postDetailDTO = CommunityPostConverter.toPostDetailDTO(findPost, category, selectHashtagList, isBookmarked, isLiked, isWriter);
+
         findPost.increaseHitCnt();
         findPost.increasePopularityScoreByHit();
-        return findPost;
+        return postDetailDTO;
     }
 
     @Override
