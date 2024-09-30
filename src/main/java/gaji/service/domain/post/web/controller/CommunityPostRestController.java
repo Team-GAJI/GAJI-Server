@@ -7,8 +7,6 @@ import gaji.service.domain.enums.SortType;
 import gaji.service.domain.post.converter.CommunityCommentConverter;
 import gaji.service.domain.post.converter.CommunityPostConverter;
 import gaji.service.domain.post.entity.CommunityComment;
-import gaji.service.domain.post.entity.PostBookmark;
-import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.service.CommunityCommentService;
 import gaji.service.domain.post.service.CommunityPostCommandService;
 import gaji.service.domain.post.service.CommunityPostQueryService;
@@ -36,7 +34,6 @@ public class CommunityPostRestController {
     private final CommunityPostQueryService communityPostQueryService;
     private final CommunityCommentService commentService;
     private final TokenProviderService tokenProviderService;
-    private final CommunityPostConverter communityPostConverter;
     private final CommunityCommentConverter communityCommentConverter;
 
     private final CategoryService categoryService;
@@ -121,8 +118,7 @@ public class CommunityPostRestController {
                                                                                                              @Min(value = 1, message = "parentCommentId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long parentCommentId,
                                                                                                              @RequestBody @Valid CommunityPostRequestDTO.WriteCommentRequestDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        CommunityComment newComment = communityPostCommandService.writeCommentOnCommunityPost(userId, postId, parentCommentId, request);
-        return BaseResponse.onSuccess(CommunityCommentConverter.toWriteCommentResponseDTO(newComment));
+        return BaseResponse.onSuccess(communityPostCommandService.writeCommentOnCommunityPost(userId, postId, parentCommentId, request));
     }
 
     @DeleteMapping("/comments/{commentId}")
@@ -145,10 +141,8 @@ public class CommunityPostRestController {
                                                                                            @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                            @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) // 페이지 크기 (기본값 10))
     {
-        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        Slice<CommunityComment> commentSlice = commentService.getCommentListByPost(postId, lastGroupNum, page, size);
-        CommunityPostCommentResponseDTO.PostCommentListDTO postCommentDTOList = communityCommentConverter.toPostCommentListDTO(commentSlice.getContent(), commentSlice.hasNext(), userId);
-        return BaseResponse.onSuccess(postCommentDTOList);
+        Long userId = (authorizationHeader == null) ? null : tokenProviderService.getUserIdFromToken(authorizationHeader);
+        return BaseResponse.onSuccess(commentService.getCommentListByPost(userId, postId, lastGroupNum, page, size));
     }
 
     @PostMapping("/{postId}/bookmarks")
@@ -159,9 +153,7 @@ public class CommunityPostRestController {
     public BaseResponse<CommunityPostResponseDTO.PostBookmarkIdDTO> bookmarkCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
                                                                                           @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        PostBookmark newPostBookmark = communityPostCommandService.bookmarkCommunityPost(userId, postId);
-
-        return BaseResponse.onSuccess(CommunityPostConverter.toPostBookmarkIdDTO(newPostBookmark));
+        return BaseResponse.onSuccess(communityPostCommandService.bookmarkCommunityPost(userId, postId));
     }
 
     @DeleteMapping("/{postId}/bookmarks")
@@ -184,8 +176,7 @@ public class CommunityPostRestController {
     public BaseResponse<CommunityPostResponseDTO.PostLikesIdDTO> likeCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
                                                                                    @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        PostLikes newPostLikes = communityPostCommandService.likeCommunityPost(userId, postId);
-        return BaseResponse.onSuccess(CommunityPostConverter.toPostLikesIdDTO(newPostLikes));
+        return BaseResponse.onSuccess(communityPostCommandService.likeCommunityPost(userId, postId));
     }
 
     @DeleteMapping("/{postId}/likes")

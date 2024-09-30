@@ -1,11 +1,14 @@
 package gaji.service.domain.post.service;
 
 import gaji.service.domain.post.code.CommunityCommentErrorStatus;
+import gaji.service.domain.post.converter.CommunityCommentConverter;
 import gaji.service.domain.post.converter.CommunityPostConverter;
 import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.post.entity.CommunityComment;
 import gaji.service.domain.post.repository.CommunityCommentJpaRepository;
+import gaji.service.domain.post.web.dto.CommunityPostCommentResponseDTO;
 import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
+import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,10 +51,22 @@ public class CommunityCommentServiceImpl implements CommunityCommentService {
     }
 
     @Override
-    public Slice<CommunityComment> getCommentListByPost(Long postId, Integer lastGroupNum, int page, int size) {
+    public CommunityPostCommentResponseDTO.PostCommentListDTO getCommentListByPost(Long userId, Long postId, Integer lastGroupNum, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
-        return communityCommentJpaRepository.findBySliceAndPostFetchJoinWithUser(lastGroupNum, findPost, pageRequest);
+        Slice<CommunityComment> commentSlice = communityCommentJpaRepository.findBySliceAndPostFetchJoinWithUser(lastGroupNum, findPost, pageRequest);
+
+        List<CommunityPostCommentResponseDTO.PostCommentDTO> postCommentDTOList = new ArrayList<>();
+
+        for (CommunityComment communityComment : commentSlice.getContent()) {
+            boolean isWriter = (userId == null) ? false : isCommentWriter(userId, communityComment);
+            postCommentDTOList.add(CommunityCommentConverter.toPostCommentDTO(communityComment, isWriter));
+        }
+
+        return CommunityPostCommentResponseDTO.PostCommentListDTO.builder()
+                .commentList(postCommentDTOList)
+                .hasNext(commentSlice.hasNext())
+                .build();
     }
 
     @Override

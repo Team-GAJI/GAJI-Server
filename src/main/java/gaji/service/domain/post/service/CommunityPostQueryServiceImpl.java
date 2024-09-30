@@ -83,7 +83,6 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
                 .postList(postPreviewDTOList)
                 .hasNext(postSlice.hasNext())
                 .build();
-//        return CommunityPostConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext(), selectHashtagList);
     }
 
     @Override
@@ -101,11 +100,9 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
 
         List<SelectHashtag> selectHashtagList = hashtagService.findAllFetchJoinWithHashtagByEntityIdAndPostType(findPost.getId(), findPost.getType());
 
-        CommunityPostResponseDTO.PostDetailDTO postDetailDTO = CommunityPostConverter.toPostDetailDTO(findPost, category, selectHashtagList, isBookmarked, isLiked, isWriter);
-
         findPost.increaseHitCnt();
         findPost.increasePopularityScoreByHit();
-        return postDetailDTO;
+        return CommunityPostConverter.toPostDetailDTO(findPost, category, selectHashtagList, isBookmarked, isLiked, isWriter);
     }
 
     @Override
