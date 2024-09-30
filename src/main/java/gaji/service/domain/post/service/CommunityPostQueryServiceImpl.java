@@ -37,9 +37,7 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
     private final HashtagService hashtagService;
     private final CommunityPostBookMarkService postBookMarkService;
     private final CommunityPostLikesService postLikesService;
-    private final CommunityPostQueryService communityPostQueryService;
 
-    private final CommunityPostConverter communityPostConverter;
 
 
     @Override
@@ -97,7 +95,7 @@ public class CommunityPostQueryServiceImpl implements CommunityPostQueryService 
 
         boolean isBookmarked = (userId == null) ? false : postBookMarkService.existsByUserAndPost(userId, findPost);
         boolean isLiked = (userId == null) ? false : postLikesService.existsByUserAndPost(userId, findPost);
-        boolean isWriter = (userId == null) ? false : communityPostQueryService.isPostWriter(userId, findPost);
+        boolean isWriter = (userId == null) ? false : isPostWriter(userId, findPost);
 
         SelectCategory category = categoryService.findByEntityIdAndType(findPost.getId(), findPost.getType());
 
