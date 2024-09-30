@@ -1,13 +1,11 @@
 package gaji.service.domain.post.web.controller;
 
-import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.post.converter.CommunityCommentConverter;
 import gaji.service.domain.post.converter.CommunityPostConverter;
-import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.post.entity.CommunityComment;
 import gaji.service.domain.post.entity.PostBookmark;
 import gaji.service.domain.post.entity.PostLikes;
@@ -97,7 +95,7 @@ public class CommunityPostRestController {
             @Parameter(name = "sortType", description = "정렬 유형(hot, recent, like, hit)"),
             @Parameter(name = "filter", description = "게시글의 상태(모집중, 모집완료, 미완료질문, 해결완료)"),
     })
-    public BaseResponse<CommunityPostResponseDTO.PostPreviewListDTO> getPostPreivewList(@RequestParam(required = false) String keyword,
+    public BaseResponse<CommunityPostResponseDTO.PostPreviewListDTO> getPostPreviewList(@RequestParam(required = false) String keyword,
                                                                                         @Min(value = 0, message = "lastPopularityScore는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastPopularityScore,
                                                                                         @Min(value = 1, message = "lastPostId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long lastPostId,
                                                                                         @Min(value = 0, message = "lastLikeCnt는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastLikeCnt,
