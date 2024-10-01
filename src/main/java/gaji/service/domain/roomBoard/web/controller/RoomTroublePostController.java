@@ -27,6 +27,7 @@ public class RoomTroublePostController {
     private final TokenProviderService tokenProviderService;
     private final RoomTroublePostCommandService roomTroublePostCommandService;
     private final RoomTroublePostQueryService roomTroublePostQueryService;
+
     @PostMapping("/trouble/{roomId}")
     @Operation(summary = "스터디룸 트러블슈팅 게시판 등록 API")
     public BaseResponse<RoomPostResponseDto.toCreateRoomTroublePostIdDTO> TroublePostController(
@@ -34,7 +35,6 @@ public class RoomTroublePostController {
             @RequestBody @Valid RoomPostRequestDto.RoomTroubloePostDto requestDto,
             @PathVariable Long roomId
     ){
-
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
         RoomPostResponseDto.toCreateRoomTroublePostIdDTO roomTroublePostIdDTO = roomTroublePostCommandService.createRoomTroublePost(roomId, userId, requestDto);
         return BaseResponse.onSuccess(roomTroublePostIdDTO);
@@ -155,8 +155,8 @@ public class RoomTroublePostController {
             @RequestBody @Valid RoomPostRequestDto.RoomTroubleCommentDto requestDto
     ) {
         Long userId = tokenProviderService.getUserIdFromToken(authorization);
-        TroublePostComment replyComment = roomTroublePostCommandService.addReply(commentId, userId, requestDto);
-        return BaseResponse.onSuccess(RoomPostConverter.toWriteCommentDto(replyComment));
+        RoomPostResponseDto.toWriteCommentDto replyComment = roomTroublePostCommandService.addReply(commentId, userId, requestDto);
+        return BaseResponse.onSuccess(replyComment);
     }
 
     @GetMapping("/{roomId}/trouble/list")

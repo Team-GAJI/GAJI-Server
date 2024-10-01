@@ -23,12 +23,14 @@ public class PostCommonQueryServiceImpl implements PostCommonQueryService{
     private final RoomBoardRepository roomBoardRepository;
     private final RoomRepository roomRepository;
 
+    //TODO: 댓글 조회
     @Override
     public PostComment findCommentByCommentId(Long commentId){
         return postCommentRepository.findById(commentId)
                 .orElseThrow(() ->new RestApiException( RoomPostErrorStatus._NOT_FOUND_COMMENT));
     }
 
+    //TODO: 스터디룸에 따른 게시판 찾기
     @Override
     public RoomBoard findRoomBoardByRoomId(Long roomId){
         return roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, RoomPostType.ROOM_TROUBLE_POST)
@@ -36,10 +38,7 @@ public class PostCommonQueryServiceImpl implements PostCommonQueryService{
 
     }
 
-    public Room findRoomByRoomId(Long roomId){
-        return roomRepository.findById(roomId)
-                 .orElseThrow( () -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
-    }
+    //TODO: 게시글 종류와 스터디룸으로 RoomBoard 찾기
     @Override
     public RoomBoard findRoomBoardByRoomIdAndRoomPostType(Long roomId, RoomPostType roomPostType){
         return roomBoardRepository.findRoomBoardByRoomIdAndRoomPostType(roomId, roomPostType)
@@ -51,5 +50,12 @@ public class PostCommonQueryServiceImpl implements PostCommonQueryService{
                             .build();
                     return roomBoardRepository.save(newRoomBoard);
                 });
+    }
+
+
+    // 스터디룸 찾기
+    private Room findRoomByRoomId(Long roomId){
+        return roomRepository.findById(roomId)
+                .orElseThrow( () -> new RestApiException(RoomErrorStatus._ROOM_NOT_FOUND));
     }
 }

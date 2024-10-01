@@ -141,6 +141,7 @@ public class RoomInfoPostQueryServiceImpl implements RoomInfoPostQueryService{
     }
 
 
+    //TODO: 정보나눔 게시글 찾기
     @Override
     public InfoPostComment findPostCommentById(Long troublePostId) {
         return infoPostCommentRepository.findById(troublePostId)
