@@ -160,9 +160,9 @@ public class RoomPostResponseDto {
     @Setter
     public static class CommentWithRepliesDTO {
         private Long id;
-        private String authorName;
-        private String body;
-        private LocalDateTime createdAt;
+        private String userNickName;
+        private String commentBody;
+        private LocalDateTime commentWriteDate;
         private List<CommentDTO> replies;
     }
 
@@ -170,9 +170,9 @@ public class RoomPostResponseDto {
     @Setter
     public static class CommentDTO {
         private Long id;
-        private String authorName;
-        private String body;
-        private LocalDateTime createdAt;
+        private String userNickName;
+        private String commentBody;
+        private LocalDateTime commentWriteDate;
     }
 
     @Getter

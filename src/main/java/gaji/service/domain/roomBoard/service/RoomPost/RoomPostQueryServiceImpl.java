@@ -17,6 +17,7 @@ import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -89,11 +90,13 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     }
 
     @Override
+    @Transactional
     public RoomPostResponseDto.RoomPostDetailDTO getPostDetail(Long postId, Long userId, int page, int size) {
         RoomPost post = roomPostRepository.findById(postId)
                 .orElseThrow(() -> new RestApiException(RoomPostErrorStatus._POST_NOT_FOUND));
 
         StudyMate studyMate = studyMateQueryService.findByUserIdAndRoomId(userId, post.getRoomBoard().getRoom().getId());
+        post.increaseViewCnt();
 
         RoomPostResponseDto.RoomPostDetailDTO dto = new RoomPostResponseDto.RoomPostDetailDTO();
         dto.setId(post.getId());
@@ -129,9 +132,9 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     private RoomPostResponseDto.CommentWithRepliesDTO convertToCommentWithRepliesDTO(PostComment comment) {
         RoomPostResponseDto.CommentWithRepliesDTO dto = new RoomPostResponseDto.CommentWithRepliesDTO();
         dto.setId(comment.getId());
-        dto.setAuthorName(comment.getUser().getName());
-        dto.setBody(comment.getBody());
-        dto.setCreatedAt(comment.getCreatedAt());
+        dto.setUserNickName(comment.getUser().getName());
+        dto.setCommentBody(comment.getBody());
+        dto.setCommentWriteDate(comment.getCreatedAt());
         dto.setReplies(comment.getReplies().stream()
                 .sorted(Comparator.comparing(PostComment::getCreatedAt))
                 .map(this::convertToCommentDTO)
@@ -142,9 +145,9 @@ public class RoomPostQueryServiceImpl implements RoomPostQueryService {
     private RoomPostResponseDto.CommentDTO convertToCommentDTO(PostComment reply) {
         RoomPostResponseDto.CommentDTO dto = new RoomPostResponseDto.CommentDTO();
         dto.setId(reply.getId());
-        dto.setAuthorName(reply.getUser().getName());
-        dto.setBody(reply.getBody());
-        dto.setCreatedAt(reply.getCreatedAt());
+        dto.setUserNickName(reply.getUser().getName());
+        dto.setCommentBody(reply.getBody());
+        dto.setCommentWriteDate(reply.getCreatedAt());
         return dto;
     }
 
