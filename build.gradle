@@ -73,6 +73,10 @@ dependencies {
 	//RabbitMQ 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
+	//WebSocket 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
 }
 
 def querydslSrcDir = 'src/main/generated'
