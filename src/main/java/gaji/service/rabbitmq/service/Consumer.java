@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class Consumer {
     @RabbitHandler
-    public void receiveMessage(final MessageDTO message) {
+    public void receiveMessage(MessageDTO message) {
         log.info("메세지 수신 성공! " + message.getSenderId() + ": " + message.getContent());
     }
 }

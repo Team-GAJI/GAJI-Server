@@ -77,6 +77,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	//Thymeleaf 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// https://mvnrepository.com/artifact/org.webjars/stomp-websocket
+	implementation 'org.webjars:stomp-websocket:2.3.4'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-reactor-netty
+	implementation 'org.springframework.boot:spring-boot-starter-reactor-netty:2.6.4'
+	// https://mvnrepository.com/artifact/org.webjars/sockjs-client
+	implementation 'org.webjars:sockjs-client:1.5.1'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp
+	implementation 'org.springframework.boot:spring-boot-starter-amqp:2.6.4'
+
 }
 
 def querydslSrcDir = 'src/main/generated'

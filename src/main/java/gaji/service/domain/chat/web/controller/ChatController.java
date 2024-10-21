@@ -8,12 +8,16 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RestController
+@Controller
+//@RestController
 @Log4j2
 public class ChatController {
 
@@ -21,16 +25,29 @@ public class ChatController {
 
     private final Producer producer;
 
-    @PostMapping("/chat")
-    public void sendMessage(@RequestBody MessageDTO message) {
-        producer.sendMessage(message);
+//    @PostMapping("/chat")
+//    public void sendMessage(@RequestBody MessageDTO message) {
+//        producer.sendMessage(message);
+//    }
+//
+//    @MessageMapping("/chatroom/{id}")
+//    public void sendMessage(@DestinationVariable("id") Long id, ChatDTO chat) {
+//        simpMessageSendingOperations.convertAndSend
+//                ("/sub/chatroom/" + chat.getChatRoomId(), chat);
+//        log.info("메세지 전송 성공");
+//        //chatMessageService.saveMessage(chatMessageReq);
+//    }
+
+    @GetMapping("/rooms")
+    public String getRooms() {
+        return "rooms";
     }
 
-    @MessageMapping("/chatroom/{id}")
-    public void sendMessage(@DestinationVariable("id") Long id, ChatDTO chat) {
-        simpMessageSendingOperations.convertAndSend
-                ("/sub/chatroom/" + chat.getChatRoomId(), chat);
-        log.info("메세지 전송 성공");
-        //chatMessageService.saveMessage(chatMessageReq);
+    @GetMapping("/room")
+    public String getRoom(Long chatRoomId, String nickname, Model model) {
+        model.addAttribute("chatRoomId", chatRoomId);
+        model.addAttribute("nickname", nickname);
+        return "room";
     }
+
 }
