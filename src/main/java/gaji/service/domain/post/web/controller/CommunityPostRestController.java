@@ -1,16 +1,12 @@
 package gaji.service.domain.post.web.controller;
 
-import gaji.service.domain.common.entity.SelectCategory;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.enums.PostStatusEnum;
 import gaji.service.domain.enums.PostTypeEnum;
 import gaji.service.domain.enums.SortType;
 import gaji.service.domain.post.converter.CommunityCommentConverter;
 import gaji.service.domain.post.converter.CommunityPostConverter;
-import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.post.entity.CommunityComment;
-import gaji.service.domain.post.entity.PostBookmark;
-import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.service.CommunityCommentService;
 import gaji.service.domain.post.service.CommunityPostCommandService;
 import gaji.service.domain.post.service.CommunityPostQueryService;
@@ -38,18 +34,27 @@ public class CommunityPostRestController {
     private final CommunityPostQueryService communityPostQueryService;
     private final CommunityCommentService commentService;
     private final TokenProviderService tokenProviderService;
-    private final CommunityPostConverter communityPostConverter;
     private final CommunityCommentConverter communityCommentConverter;
 
     private final CategoryService categoryService;
 
     @PostMapping
     @Operation(summary = "커뮤니티 게시글 업로드 API", description = "커뮤니티의 게시글을 업로드하는 API입니다. 게시글 유형과 제목, 본문 내용을 검증합니다.")
-    public BaseResponse<CommunityPostResponseDTO.UploadPostResponseDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
-                                                                                   @RequestBody @Valid CommunityPostRequestDTO.UploadPostRequestDTO request) {
+    public BaseResponse<CommunityPostResponseDTO.PostIdResponseDTO> uploadPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                               @RequestBody @Valid CommunityPostRequestDTO.UploadPostRequestDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        CommnuityPost newPost = communityPostCommandService.uploadPost(userId, request);
-        return BaseResponse.onSuccess(CommunityPostConverter.toUploadPostResponseDTO(newPost));
+        CommunityPostResponseDTO.PostIdResponseDTO newPost = communityPostCommandService.uploadPost(userId, request);
+        return BaseResponse.onSuccess(newPost);
+    }
+
+    @PutMapping("/{postId}")
+    @Operation(summary = "커뮤니티 게시글 수정 API", description = "커뮤니티 게시글을 수정 API입니다.")
+    public BaseResponse<CommunityPostResponseDTO.PostIdResponseDTO> editPost(@RequestHeader("Authorization") String authorizationHeader,
+                                                                             @RequestBody @Valid CommunityPostRequestDTO.EditPostRequestDTO request,
+                                                                             @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
+        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
+        CommunityPostResponseDTO.PostIdResponseDTO editedCommnuityPost = communityPostCommandService.editPost(userId, postId, request);
+        return BaseResponse.onSuccess(editedCommnuityPost);
     }
 
     @DeleteMapping("/{postId}")
@@ -72,9 +77,7 @@ public class CommunityPostRestController {
     public BaseResponse<CommunityPostResponseDTO.PostDetailDTO> getPostDetail(@Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId,
                                                                               @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
         Long userId = (authorizationHeader == null) ? null : tokenProviderService.getUserIdFromToken(authorizationHeader);
-        CommnuityPost post = communityPostQueryService.getPostDetail(postId);
-        SelectCategory category = categoryService.findByEntityIdAndType(post.getId(), post.getType());
-        return BaseResponse.onSuccess(communityPostConverter.toPostDetailDTO(post, userId, category));
+        return BaseResponse.onSuccess(communityPostQueryService.getPostDetail(userId, postId));
     }
 
     @GetMapping("/preivew")
@@ -89,7 +92,7 @@ public class CommunityPostRestController {
             @Parameter(name = "sortType", description = "정렬 유형(hot, recent, like, hit)"),
             @Parameter(name = "filter", description = "게시글의 상태(모집중, 모집완료, 미완료질문, 해결완료)"),
     })
-    public BaseResponse<CommunityPostResponseDTO.PostPreviewListDTO> getPostPreivewList(@RequestParam(required = false) String keyword,
+    public BaseResponse<CommunityPostResponseDTO.PostPreviewListDTO> getPostPreviewList(@RequestParam(required = false) String keyword,
                                                                                         @Min(value = 0, message = "lastPopularityScore는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastPopularityScore,
                                                                                         @Min(value = 1, message = "lastPostId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long lastPostId,
                                                                                         @Min(value = 0, message = "lastLikeCnt는 0 이상 이어야 합니다.") @RequestParam(required = false) Integer lastLikeCnt,
@@ -101,8 +104,7 @@ public class CommunityPostRestController {
                                                                                         @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                         @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) {
 
-        Slice<CommnuityPost> postSlice = communityPostQueryService.getPostList(keyword, lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, category, sortType, filter, page, size);
-        return BaseResponse.onSuccess(communityPostConverter.toPostPreviewListDTO(postSlice.getContent(), postSlice.hasNext()));
+        return BaseResponse.onSuccess(communityPostQueryService.getPostList(keyword, lastPopularityScore, lastPostId, lastLikeCnt, lastHit, postType, category, sortType, filter, page, size));
     }
 
     @PostMapping("/{postId}/comments")
@@ -116,8 +118,7 @@ public class CommunityPostRestController {
                                                                                                              @Min(value = 1, message = "parentCommentId는 1 이상 이어야 합니다.") @RequestParam(required = false) Long parentCommentId,
                                                                                                              @RequestBody @Valid CommunityPostRequestDTO.WriteCommentRequestDTO request) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        CommunityComment newComment = communityPostCommandService.writeCommentOnCommunityPost(userId, postId, parentCommentId, request);
-        return BaseResponse.onSuccess(CommunityCommentConverter.toWriteCommentResponseDTO(newComment));
+        return BaseResponse.onSuccess(communityPostCommandService.writeCommentOnCommunityPost(userId, postId, parentCommentId, request));
     }
 
     @DeleteMapping("/comments/{commentId}")
@@ -140,10 +141,8 @@ public class CommunityPostRestController {
                                                                                            @Min(value = 0, message = "page는 0 이상 이어야 합니다.") @RequestParam(defaultValue = "0") int page,
                                                                                            @Min(value = 1, message = "size는 1 이상 이어야 합니다.") @RequestParam(defaultValue = "10") int size) // 페이지 크기 (기본값 10))
     {
-        Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        Slice<CommunityComment> commentSlice = commentService.getCommentListByPost(postId, lastGroupNum, page, size);
-        CommunityPostCommentResponseDTO.PostCommentListDTO postCommentDTOList = communityCommentConverter.toPostCommentListDTO(commentSlice.getContent(), commentSlice.hasNext(), userId);
-        return BaseResponse.onSuccess(postCommentDTOList);
+        Long userId = (authorizationHeader == null) ? null : tokenProviderService.getUserIdFromToken(authorizationHeader);
+        return BaseResponse.onSuccess(commentService.getCommentListByPost(userId, postId, lastGroupNum, page, size));
     }
 
     @PostMapping("/{postId}/bookmarks")
@@ -154,9 +153,7 @@ public class CommunityPostRestController {
     public BaseResponse<CommunityPostResponseDTO.PostBookmarkIdDTO> bookmarkCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
                                                                                           @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        PostBookmark newPostBookmark = communityPostCommandService.bookmarkCommunityPost(userId, postId);
-
-        return BaseResponse.onSuccess(CommunityPostConverter.toPostBookmarkIdDTO(newPostBookmark));
+        return BaseResponse.onSuccess(communityPostCommandService.bookmarkCommunityPost(userId, postId));
     }
 
     @DeleteMapping("/{postId}/bookmarks")
@@ -179,8 +176,7 @@ public class CommunityPostRestController {
     public BaseResponse<CommunityPostResponseDTO.PostLikesIdDTO> likeCommunityPost(@RequestHeader("Authorization") String authorizationHeader,
                                                                                    @Min(value = 1, message = "postId는 1 이상 이어야 합니다.") @PathVariable Long postId) {
         Long userId = tokenProviderService.getUserIdFromToken(authorizationHeader);
-        PostLikes newPostLikes = communityPostCommandService.likeCommunityPost(userId, postId);
-        return BaseResponse.onSuccess(CommunityPostConverter.toPostLikesIdDTO(newPostLikes));
+        return BaseResponse.onSuccess(communityPostCommandService.likeCommunityPost(userId, postId));
     }
 
     @DeleteMapping("/{postId}/likes")
