@@ -9,6 +9,8 @@ import gaji.service.domain.common.entity.SelectHashtag;
 import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.enums.CategoryEnum;
+import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.post.converter.CommunityCommentConverter;
 import gaji.service.domain.post.converter.CommunityPostConverter;
 import gaji.service.domain.post.entity.CommnuityPost;
 import gaji.service.domain.post.entity.CommunityComment;
@@ -17,7 +19,9 @@ import gaji.service.domain.post.entity.PostLikes;
 import gaji.service.domain.post.repository.CommunityPostBookmarkRepository;
 import gaji.service.domain.post.repository.CommunityPostJpaRepository;
 import gaji.service.domain.post.repository.CommunityPostLikesRepository;
+import gaji.service.domain.post.web.dto.CommunityPostCommentResponseDTO;
 import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
+import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +46,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
 
 
     @Override
-    public CommnuityPost uploadPost(Long userId, CommunityPostRequestDTO.UploadPostRequestDTO request) {
+    public CommunityPostResponseDTO.PostIdResponseDTO uploadPost(Long userId, CommunityPostRequestDTO.UploadPostRequestDTO request) {
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost post = CommunityPostConverter.toPost(request, findUser);
         CommnuityPost newPost = communityPostJpaRepository.save(post);
@@ -53,7 +57,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
             List<String> hashtagStringList = request.getHashtagList();
             List<Hashtag> hashtagEntityList = hashtagService.createHashtagEntityList(hashtagStringList);
 
-            List<SelectHashtag> selectHashtagList = HashtagConverter.toSelectHashtagList(hashtagEntityList, post.getId(), request.getType());
+            List<SelectHashtag> selectHashtagList = HashtagConverter.toSelectHashtagList(hashtagEntityList, post.getId(), PostTypeEnum.from(request.getType()));
             hashtagService.saveAllSelectHashtag(selectHashtagList);
         }
 
@@ -67,11 +71,24 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
             categoryService.saveSelectCategory(selectCategory);
         }
 
-        return newPost;
+        return CommunityPostConverter.toPostIdResponseDTO(newPost);
     }
 
     @Override
-    public CommunityComment writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, CommunityPostRequestDTO.WriteCommentRequestDTO request) {
+    public CommunityPostResponseDTO.PostIdResponseDTO editPost(Long userId, Long postId, CommunityPostRequestDTO.EditPostRequestDTO request) {
+        // 조회
+        CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
+
+        // 작성자 검증
+        communityPostQueryService.validPostWriter(userId, findPost);
+
+
+
+        return null;
+    }
+
+    @Override
+    public CommunityPostCommentResponseDTO.WriteCommentResponseDTO writeCommentOnCommunityPost(Long userId, Long postId, Long parentCommentId, CommunityPostRequestDTO.WriteCommentRequestDTO request) {
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
@@ -82,7 +99,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
 
         // 게시글의 댓글 수 증가
         newComment.getPost().increaseCommentCnt();
-        return newComment;
+        return CommunityCommentConverter.toWriteCommentResponseDTO(newComment);
     }
 
     @Override
@@ -113,7 +130,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
     }
 
     @Override
-    public PostBookmark bookmarkCommunityPost(Long userId, Long postId) {
+    public CommunityPostResponseDTO.PostBookmarkIdDTO bookmarkCommunityPost(Long userId, Long postId) {
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
@@ -125,7 +142,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
 
         // 게시글 북마크 수 증가
         newPostBookmark.getPost().increaseBookmarkCnt();
-        return newPostBookmark;
+        return CommunityPostConverter.toPostBookmarkIdDTO(newPostBookmark);
     }
 
     @Override
@@ -144,7 +161,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
     }
 
     @Override
-    public PostLikes likeCommunityPost(Long userId, Long postId) {
+    public CommunityPostResponseDTO.PostLikesIdDTO likeCommunityPost(Long userId, Long postId) {
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
@@ -157,7 +174,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         // 좋아요 수, 인기점수 증가
         findPost.increaseLikeCnt();
         findPost.increasePopularityScoreByLike();
-        return newPostLikes;
+        return CommunityPostConverter.toPostLikesIdDTO(newPostLikes);
     }
 
     @Override
@@ -165,8 +182,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
-        // 검증
-        communityPostQueryService.validPostWriter(findUser.getId(), findPost);
+        // TODO: like owner인지 검증
 
         // 삭제
         postLikesRepository.deleteByUserAndPost(findUser, findPost);
