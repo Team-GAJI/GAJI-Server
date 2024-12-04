@@ -182,8 +182,7 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
-        // 검증
-        communityPostQueryService.validPostWriter(findUser.getId(), findPost);
+        // TODO: like owner인지 검증
 
         // 삭제
         postLikesRepository.deleteByUserAndPost(findUser, findPost);
