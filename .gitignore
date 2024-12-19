@@ -41,3 +41,6 @@ out/
 
 ### application files ###
 application.yml
+
+### firebase_key
+**/firebase_service_key.json
