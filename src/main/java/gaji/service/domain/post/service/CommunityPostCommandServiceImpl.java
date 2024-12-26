@@ -10,6 +10,7 @@ import gaji.service.domain.common.service.CategoryService;
 import gaji.service.domain.common.service.HashtagService;
 import gaji.service.domain.enums.CategoryEnum;
 import gaji.service.domain.enums.PostTypeEnum;
+import gaji.service.domain.post.code.CommunityPostErrorStatus;
 import gaji.service.domain.post.converter.CommunityCommentConverter;
 import gaji.service.domain.post.converter.CommunityPostConverter;
 import gaji.service.domain.post.entity.CommnuityPost;
@@ -24,6 +25,7 @@ import gaji.service.domain.post.web.dto.CommunityPostRequestDTO;
 import gaji.service.domain.post.web.dto.CommunityPostResponseDTO;
 import gaji.service.domain.user.entity.User;
 import gaji.service.domain.user.service.UserQueryService;
+import gaji.service.global.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,8 +83,6 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
 
         // 작성자 검증
         communityPostQueryService.validPostWriter(userId, findPost);
-
-
 
         return null;
     }
@@ -150,14 +150,15 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
-        // 검증
-        communityPostQueryService.validPostWriter(findUser.getId(), findPost);
-
         // 삭제
         postBookmarkRepository.deleteByUserAndPost(findUser, findPost);
 
         // 게시글 북마크 수 감소
         findPost.decreaseBookmarkCnt();
+
+        if (findPost.getBookmarkCnt() < 0) {
+            throw new RestApiException(CommunityPostErrorStatus._BOOKMARK_CNT_NEGATIVE);
+        }
     }
 
     @Override
@@ -182,13 +183,19 @@ public class CommunityPostCommandServiceImpl implements CommunityPostCommandServ
         User findUser = userQueryService.findUserById(userId);
         CommnuityPost findPost = communityPostQueryService.findPostByPostId(postId);
 
-        // TODO: like owner인지 검증
-
         // 삭제
         postLikesRepository.deleteByUserAndPost(findUser, findPost);
 
         // 좋아요 수, 인기점수 감소
         findPost.decreaseLikeCnt();
         findPost.decreasePopularityScoreByLike();
+
+        if (findPost.getBookmarkCnt() < 0) {
+            throw new RestApiException(CommunityPostErrorStatus._LIKE_CNT_NEGATIVE);
+        }
+
+        if (findPost.getPopularityScore() < 0) {
+            throw new RestApiException(CommunityPostErrorStatus._LIKE_CNT_NEGATIVE);
+        }
     }
 }
