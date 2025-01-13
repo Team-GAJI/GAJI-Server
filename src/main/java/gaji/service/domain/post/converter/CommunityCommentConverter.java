@@ -26,7 +26,7 @@ public class CommunityCommentConverter {
         return CommunityPostCommentResponseDTO.PostCommentDTO.builder()
                 .commentId(comment.getId())
                 .userId(comment.getUser().getId())
-                .userNickName(comment.getUser().getName())
+                .userNickName(comment.getUser().getNickname())
                 .commentBody(comment.getBody())
                 .groupNum(comment.getGroupNum())
                 .depth(comment.getDepth())
