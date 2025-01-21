@@ -11,6 +11,7 @@ import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/study-rooms")
+@Tag(name = "스터디룸 트러블슈팅 게시판 APi", description = "스터디룸 트러블슈팅 게시판 API")
 public class RoomTroublePostController {
 
     private final TokenProviderService tokenProviderService;

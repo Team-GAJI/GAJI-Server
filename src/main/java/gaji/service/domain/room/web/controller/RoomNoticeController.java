@@ -11,6 +11,7 @@ import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/api/study-rooms")
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "스터디룸 공지 APi", description = "스터디룸 공지 API")
 public class RoomNoticeController {
 
 

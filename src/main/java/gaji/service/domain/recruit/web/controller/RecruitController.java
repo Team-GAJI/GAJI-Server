@@ -11,6 +11,7 @@ import gaji.service.domain.recruit.web.dto.RecruitResponseDTO;
 import gaji.service.global.base.BaseResponse;
 import gaji.service.jwt.service.TokenProviderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/study-recruit-posts")
+@Tag(name = "스터디 APi", description = "스터디 관련 API")
 public class RecruitController {
 
     private final TokenProviderService tokenProviderService;
