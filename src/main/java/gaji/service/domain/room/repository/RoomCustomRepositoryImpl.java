@@ -23,6 +23,7 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
     private final QRoom room = QRoom.room;
     private final QStudyMate studyMate = QStudyMate.studyMate;
 
+    // 쿼리에서 필요한 칼럼만 반환하기 위해 Tuple 타입 사용
     public Slice<Tuple> findAllOngoingRoomsByUser(User user, LocalDate cursorDate, Long cursorId, Pageable pageable) {
         List<Long> userRoomIds = jpaQueryFactory
                 .select(studyMate.room.id)

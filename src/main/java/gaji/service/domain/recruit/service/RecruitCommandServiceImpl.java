@@ -1,5 +1,6 @@
 package gaji.service.domain.recruit.service;
 
+import gaji.service.domain.chat.service.ChatCommandService;
 import gaji.service.domain.common.converter.CategoryConverter;
 import gaji.service.domain.common.entity.Category;
 import gaji.service.domain.common.entity.SelectCategory;
@@ -50,6 +51,7 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
     private final RecruitPostLikesRepository recruitPostLikesRepository;
     private final RecruitPostBookmarkRepository recruitPostBookmarkRepository;
     private final StudyCommentCommandService studyCommentCommandService;
+    private final ChatCommandService chatCommandService;
 
     @Override
     @Transactional
@@ -240,6 +242,9 @@ public class RecruitCommandServiceImpl implements RecruitCommandService {
 
         StudyMate studyMate = RecruitConverter.toStudyMate(user, room, Role.MEMBER);
         studyMateCommandService.saveStudyMate(studyMate);
+
+        //채팅방 가입 로직
+        //chatCommandService.registerUserToChatRoom(userId, roomId);
 
         return RecruitConverter.toJoinStudyResponseDTO(roomId);
     }

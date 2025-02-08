@@ -5,8 +5,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class ChatDTO {
+public class ChatMessageDTO {
     private String content;
-    private Long senderId;
-    private Long chatRoomId;
+    private String imageURL;
 }

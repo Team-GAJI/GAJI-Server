@@ -37,6 +37,7 @@
 <form>
     <input type="text" id="message">
     <input type="submit" value="전송" class="btn-send">
+    <button type="button" class="btn-exit">Exit</button>
 </form>
 
 <div class="chats">
@@ -51,6 +52,7 @@
     const chats = document.querySelector('.chats');
     const messageContent = document.querySelector('#message');
     const btnSend = document.querySelector('.btn-send');
+    const btnExit = document.querySelector('.btn-exit');
 
     const chatRoomId = [[${chatRoomId}]];
     const nickname = [[${nickname}]];
@@ -110,11 +112,23 @@
         const message = messageContent.value;
         messageContent.value = '';
 
-        stomp.send(`/pub/chat.message.${chatRoomId}`, {}, JSON.stringify({
-            message: message,
+        stomp.send(`/pub/chat.send.${chatRoomId}`, {}, JSON.stringify({
+            content: message,
+            senderId: 1,
+            nickname: nickname
+        }));
+    });
+
+    // Exit 버튼 click
+    btnExit.addEventListener('click', () => {
+        stomp.send(`/pub/chat.exit.${chatRoomId}`, {}, JSON.stringify({
             memberId: 1,
             nickname: nickname
         }));
+
+        // 채팅방을 나간 후 페이지를 리다이렉트하거나 다른 처리를 할 수 있습니다.
+        alert('You have exited the chat room.');
+        // 예: window.location.href = '/somewhere';
     });
 </script>
 </body>

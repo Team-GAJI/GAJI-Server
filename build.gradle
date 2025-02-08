@@ -73,6 +73,9 @@ dependencies {
 	//RabbitMQ 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
+	//MongoDB 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
 	//WebSocket 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
